@@ -1,5 +1,6 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -19,19 +20,33 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
+import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.interfaces.ProfileInterface;
+import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 
 public class MainActivity extends AppCompatActivity {
 
     //private TextView mTextMessage;
     String HOME_FRAGMENT = "HomeFragment";
+    String authToken = null;
+    Profile profile = null;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -71,8 +86,46 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getProfileFromServer();
+    }
+
+    private void getProfileFromServer() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        ProfileInterface providerApiInterface =
+                retrofit.create(ProfileInterface.class);
+
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+        Call<ApiResponse<Profile>> call =
+                providerApiInterface.getProfileFromServer(authToken);
+        call.enqueue(new Callback<ApiResponse<Profile>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Profile>> call, Response<ApiResponse<Profile>> response) {
+                int code = response.code();
+                if (code == 200) {
+                    ApiResponse<Profile> user = response.body();
+                    profile=user.getMessage();
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(profile);
+                    prefsEditor.putString(PROFILE, json);
+                    prefsEditor.commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Profile>> call, Throwable t) {
+
+            }
+        });
 
     }
+
+
 
 
 }

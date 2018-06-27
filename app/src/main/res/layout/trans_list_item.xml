@@ -33,119 +33,45 @@
             android:layout_height="wrap_content"
             android:layout_margin="7dp">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"
-                android:id="@+id/ic_item"
-                android:layout_alignParentRight="true" />
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/item_name_textview"
+                android:id="@+id/store_name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="90dp"
                 android:textSize="18sp"
-                android:layout_toStartOf="@+id/ic_item"
-                android:text="نام کالا"
-                android:layout_marginLeft="90dp"
-                android:layout_toLeftOf="@+id/ic_item" />
+                android:text="نام کالا" />
 
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/album1"
+                    android:layout_margin="5dp"
+                    android:id="@+id/ic_item" />
 
+            </LinearLayout>
             <TextView
-                android:id="@+id/item_brand_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/item_name_textview"
-                android:layout_below="@+id/item_name_textview"
-                android:layout_margin="6dp"
-                android:layout_marginStart="90dp"
-                android:textSize="14sp"
-                android:text="نام برند"
-                android:layout_alignRight="@+id/item_name_textview"
-                android:layout_marginLeft="90dp" />
-
-
-            <TextView
-                android:id="@+id/item_price_textview"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/visitor_price"
+                android:id="@+id/total_price"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/item_name_textview"
                 android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/paytype"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/total_price"
+                android:layout_centerVertical="true" />
+
         </RelativeLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:id="@+id/desc_layout"
-            android:gravity="end"
-            android:layout_gravity="end"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/item_description_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textDirection="rtl"
-                />
-
-
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"
-                android:id="@+id/ic_supplier"
-                android:layout_alignParentRight="true" />
-
-            <TextView
-                android:id="@+id/supplier_name_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="90dp"
-                android:textSize="10sp"
-                android:layout_toStartOf="@+id/ic_supplier"
-                android:text="نام تامین کننده"
-                android:layout_marginLeft="90dp"
-                android:layout_toLeftOf="@+id/ic_supplier" />
-
-
-
-
-            <TextView
-                android:id="@+id/supplier_phone_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/supplier_name_textview"
-                android:layout_below="@+id/supplier_name_textview"
-                android:layout_margin="6dp"
-                android:layout_marginStart="90dp"
-                android:textSize="8sp"
-                android:text="اطلاعات تماس تامین‌ کننده"
-                android:layout_alignRight="@+id/supplier_name_textview"
-                android:layout_marginLeft="90dp" />
-
-        </RelativeLayout>
-
-<!--
+        <!--
         <View
             android:layout_width="match_parent"
             android:background="@color/separator"

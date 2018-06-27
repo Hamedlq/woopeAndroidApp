@@ -1,6 +1,7 @@
 package ir.woope.woopeapp.ui.Fragments;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,9 @@ import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.TransactionModel;
+import ir.woope.woopeapp.ui.Activities.CashPayActivity;
+import ir.woope.woopeapp.ui.Activities.CreditPayActivity;
+import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +34,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOTAL_PRICE;
 
 /**
  * Created by alireza on 3/26/18.
@@ -41,7 +47,7 @@ public class TransListFragment extends Fragment {
     /*private List<ItemModel> userOrderModelList;*/
     private TransactionListAdapter adapter;
     private String authToken;
-    private CancelOrderTouchListener cancelOrderTouchListener;
+    private PayTransactionTouchListener payTransactionTouchListener;
     private ProgressBar progressBar;
 
     @Nullable
@@ -53,18 +59,30 @@ public class TransListFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         ordersList = view.findViewById(R.id.orders_list);
         orderModelList = new ArrayList<>();
-        adapter = new TransactionListAdapter(orderModelList, cancelOrderTouchListener);
+        adapter = new TransactionListAdapter(orderModelList, payTransactionTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         ordersList.setLayoutManager(mLayoutManager);
 
         ordersList.setAdapter(adapter);
         getOrderListFromServer();
 
-        cancelOrderTouchListener = new CancelOrderTouchListener() {
+        payTransactionTouchListener = new PayTransactionTouchListener() {
             @Override
             public void onBtnClick(View view, int position) {
                 TransactionModel model = (TransactionModel) orderModelList.get(position);
-                //cancelOrder(authToken, model);
+                if(model.payType==1){
+                    //go to cash pay
+                    gotoPayCash(model.storeName);
+                }else {
+                    //go to credit pay
+                    gotoCreditCash(model.storeName);
+                }
+
+                /*Intent myIntent = new Intent(getActivity(), PayActivity.class);
+                myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
+                myIntent.putExtra(TOTAL_PRICE, model.totalPrice); //Optional parameters
+                getActivity().startActivity(myIntent);*/
+
             }
         };
         return view;
@@ -94,12 +112,9 @@ public class TransListFragment extends Fragment {
                 int code = response.code();
                 if (code == 200) {
                     orderModelList = response.body();
-                    for (TransactionModel item : orderModelList) {
-
-                    }
                     adapter.notifyDataSetChanged();
 
-                    adapter = new TransactionListAdapter(orderModelList, cancelOrderTouchListener);
+                    adapter = new TransactionListAdapter(orderModelList, payTransactionTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     ordersList.setAdapter(adapter);
@@ -132,7 +147,19 @@ public class TransListFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
     }
 
-    public interface CancelOrderTouchListener {
+    public interface PayTransactionTouchListener {
         public void onBtnClick(View view, int position);
+    }
+
+    public void gotoPayCash(String storeName){
+        Intent myIntent = new Intent(getActivity(), CashPayActivity.class);
+        myIntent.putExtra("StoreName", storeName); //Optional parameters
+        this.startActivity(myIntent);
+    }
+
+    public void gotoCreditCash(String storeName){
+        Intent myIntent = new Intent(getActivity(), CreditPayActivity.class);
+        myIntent.putExtra("StoreName", storeName); //Optional parameters
+        this.startActivity(myIntent);
     }
 }

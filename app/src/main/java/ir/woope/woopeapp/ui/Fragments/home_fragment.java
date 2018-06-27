@@ -1,11 +1,13 @@
 package ir.woope.woopeapp.ui.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,14 +20,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
+import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
+import ir.woope.woopeapp.ui.Activities.TransactionActivity;
+
+import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 
 /**
  * Created by Hamed on 6/11/2018.
@@ -39,6 +49,7 @@ public class home_fragment extends Fragment {
     private RecyclerView recyclerView;
     private StoresAdapter adapter;
     ItemTouchListener itemTouchListener;
+    FloatingActionButton fab;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -57,7 +68,14 @@ public class home_fragment extends Fragment {
             @Override
             public void onCardViewTap(View view, int position) {
                 Store s = albumList.get(position);
+                final SharedPreferences prefs =
+                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = prefs.getString(PROFILE, "");
+                Profile obj = gson.fromJson(json, Profile.class);
                 Intent myIntent = new Intent(getActivity(), PayActivity.class);
+                Intent i = new Intent();
+                i.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra("StoreName", s.getName()); //Optional parameters
                 getActivity().startActivity(myIntent);
                 //open activity
@@ -67,7 +85,14 @@ public class home_fragment extends Fragment {
         };
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-
+        fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
+                getActivity().startActivity(myIntent);
+            }
+        });
         initCollapsingToolbar();
 
         albumList = new ArrayList<>();
