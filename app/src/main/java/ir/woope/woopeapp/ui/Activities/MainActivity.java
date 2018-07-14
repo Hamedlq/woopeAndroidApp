@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
                             .commit();
 
                     return true;
-                case R.id.navigation_‌search:
+                case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
-                case R.id.navigation_profile:
+                case R.id.navigation_notifications:
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
@@ -87,11 +87,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getProfileFromServer();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
-                .commit();
-
     }
 
     private void getProfileFromServer() {
@@ -105,15 +100,15 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
-        Call<Profile> call =
+        Call<ApiResponse<Profile>> call =
                 providerApiInterface.getProfileFromServer(authToken);
-        call.enqueue(new Callback<Profile>() {
+        call.enqueue(new Callback<ApiResponse<Profile>>() {
             @Override
-            public void onResponse(Call<Profile> call, Response<Profile> response) {
+            public void onResponse(Call<ApiResponse<Profile>> call, Response<ApiResponse<Profile>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    Profile user = response.body();
-                    //profile=user.getMessage();
+                    ApiResponse<Profile> user = response.body();
+                    profile=user.getMessage();
                     SharedPreferences.Editor prefsEditor = prefs.edit();
                     Gson gson = new Gson();
                     String json = gson.toJson(profile);
@@ -123,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Profile> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Profile>> call, Throwable t) {
 
             }
         });

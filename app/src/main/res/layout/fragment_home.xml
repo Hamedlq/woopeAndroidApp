@@ -29,7 +29,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/ic_shopping_cart"
+                        app:backgroundTint="#ffffff"
+                        app:elevation="4dp"/>
 
                     <ImageView
                         android:id="@+id/backdrop"
@@ -62,29 +71,6 @@
                             android:textSize="@dimen/backdrop_subtitle" />
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:orientation="horizontal">
-
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/fab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:src="@drawable/ic_shopping_cart"
-                            app:backgroundTint="#ffffff"
-                            app:elevation="4dp"/>
-
-
-                    </LinearLayout>
-
-
                 </RelativeLayout>
 
                 <android.support.v7.widget.Toolbar

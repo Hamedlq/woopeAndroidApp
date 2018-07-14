@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,217 +7,69 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_centerInParent="true">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/backdrop"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/album1"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/StoreName"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="نام فروشگاه" />
+
+
+        <TextView
+            android:id="@+id/payAmount"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200,000" />
+
+        <EditText
+            android:id="@+id/pointText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:hint="تعداد پوینت" />
+
+        <Button
+            android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:padding="5dp"
+            android:text="تایید پرداخت" />
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="10dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="10dp"
-                app:contentPaddingLeft="15dp"
-                app:contentPaddingRight="15dp">
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:padding="5dp"
+            android:text="لغو" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layoutDirection="rtl"
-                    android:orientation="horizontal"
-                    android:textDirection="rtl">
-
-                    <ImageView
-                        android:id="@+id/backdrop"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/album1" />
-
-                    <TextView
-                        android:id="@+id/StoreName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginStart="20dp"
-                        android:text="نام فروشگاه" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <!--<View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="10dp"
-                android:background="@color/colorPrimary"/>-->
-
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="10dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="10dp"
-                app:contentPaddingLeft="15dp"
-                app:contentPaddingRight="15dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:text="اعتبار ریالی" />
-
-                        <TextView
-                            android:id="@+id/toman_credit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="200 تومان" />
-                    </LinearLayout>
-
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorPrimary" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:text="مبلغ خرید" />
-
-                        <TextView
-                            android:id="@+id/payAmount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2000" />
-                    </LinearLayout>
-
-
-
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="10dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="10dp"
-                app:contentPaddingLeft="15dp"
-                app:contentPaddingRight="15dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:text="اعتبار ووپی" />
-
-                    <TextView
-                        android:id="@+id/woope_credit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="20 ووپ" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:background="@color/colorPrimary" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/pointText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:hint="تعداد ووپ‍"
-                        android:inputType="number" />
-                </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
-                android:padding="5dp"
-                android:text="تایید پرداخت" />
-
-            <Button
-                android:id="@+id/cancelBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:text="لغو" />
-
-        </LinearLayout>
+    </LinearLayout>
 
     </ScrollView>
 </RelativeLayout>

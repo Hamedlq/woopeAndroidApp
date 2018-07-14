@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -29,18 +28,10 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
-import ir.woope.woopeapp.interfaces.StoreInterface;
-import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
-import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
@@ -55,12 +46,10 @@ public class home_fragment extends Fragment {
     private View mRecycler;
     private List<Store> albumList;
     String ALBUM_FRAGMENT = "AlbumFragment";
-    String authToken;
     private RecyclerView recyclerView;
     private StoresAdapter adapter;
     ItemTouchListener itemTouchListener;
     FloatingActionButton fab;
-    ProgressBar progressBar;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -84,18 +73,16 @@ public class home_fragment extends Fragment {
                 Gson gson = new Gson();
                 String json = prefs.getString(PROFILE, "");
                 Profile obj = gson.fromJson(json, Profile.class);
-                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, json);
-                myIntent.putExtra("StoreName", s.storeName); //Optional parameters
+                Intent myIntent = new Intent(getActivity(), PayActivity.class);
+                Intent i = new Intent();
+                i.putExtra(PREF_PROFILE, obj);
+                myIntent.putExtra("StoreName", s.getName()); //Optional parameters
                 getActivity().startActivity(myIntent);
-
                 //open activity
                 //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
 
             }
         };
-
-        progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
         fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
@@ -117,9 +104,7 @@ public class home_fragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        //prepareAlbums();
-
-        getOrderListFromServer();
+        prepareAlbums();
 
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
@@ -186,7 +171,7 @@ public class home_fragment extends Fragment {
                 R.drawable.album10,
                 R.drawable.album11};
 
-        /*Store a = new Store("آدیداس","هر ۱۰۰ هزار تومان ۵ ووپ", 7, covers[0]);
+        Store a = new Store("آدیداس","هر ۱۰۰ هزار تومان ۵ ووپ", 7, covers[0]);
         albumList.add(a);
 
         a = new Store("نایک","هر ۱۰ هزار تومان ۱ ووپ", 10, covers[1]);
@@ -214,56 +199,9 @@ public class home_fragment extends Fragment {
         albumList.add(a);
 
         a = new Store("آدیداس","هر ۸۰ هزار تومان ۵ ووپ", 15, covers[9]);
-        albumList.add(a);*/
+        albumList.add(a);
 
         adapter.notifyDataSetChanged();
-    }
-
-    private void getOrderListFromServer() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .build();
-        StoreInterface providerApiInterface =
-                retrofit.create(StoreInterface.class);
-
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
-
-        showProgreeBar();
-        Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer(authToken);
-
-
-        call.enqueue(new Callback<List<Store>>() {
-            @Override
-            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                hideProgreeBar();
-                int code = response.code();
-                if (code == 200) {
-                    albumList = response.body();
-                    //adapter.notifyDataSetChanged();
-
-                    adapter = new StoresAdapter(getActivity(),albumList, itemTouchListener);
-                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-                    ordersList.setLayoutManager(mLayoutManager);*/
-                    recyclerView.setAdapter(adapter);
-
-
-
-                    //prepareAlbums();
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Store>> call, Throwable t) {
-                Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
-                hideProgreeBar();
-            }
-        });
-
     }
 
     /**
@@ -315,15 +253,5 @@ public class home_fragment extends Fragment {
     public interface ItemTouchListener {
         public void onCardViewTap(View view, int position);
     }
-
-
-    public void showProgreeBar() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgreeBar() {
-        progressBar.setVisibility(View.GONE);
-    }
-
 
 }
