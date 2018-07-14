@@ -24,12 +24,12 @@ public interface TransactionInterface {
     @FormUrlEncoded
     @POST("api/Transaction/GetConfirmCode")
     Call<PayListModel> GetConfirmCode(@Field("token") String authtoken,
-                                                   @Field("Id") long paylistId,
-                                                   @Field("Woope") String pointPay);
+                                                   @Field("PayListId") long paylistId,
+                                                   @Field("PointPay") String pointPay);
 
     @FormUrlEncoded
     @POST("api/Transaction/SendConfirmCode")
     Call<ApiResponse> SendConfirmCode(@Field("token") String authtoken,
-                                      @Field("id") long payListId,
-                                      @Field("code") String confirmationCode);
+                                      @Field("Id") long payListId,
+                                      @Field("ConfirmationCode") String confirmationCode);
 }

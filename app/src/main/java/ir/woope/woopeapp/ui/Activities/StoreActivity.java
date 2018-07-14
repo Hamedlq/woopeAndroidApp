@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
                             .commit();
 
                     return true;
-                case R.id.navigation_‌search:
+                case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_dashboard);
                     return true;
-                case R.id.navigation_profile:
+                case R.id.navigation_notifications:
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
@@ -87,11 +87,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getProfileFromServer();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
-                .commit();
-
     }
 
     private void getProfileFromServer() {
