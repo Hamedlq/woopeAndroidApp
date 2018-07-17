@@ -132,18 +132,7 @@ public class ConfirmPayActivity extends AppCompatActivity {
                 int code = response.code();
                 if (code == 200) {
                     PayListModel trans = response.body();
-                    //payListModel =trans.getMessage();
-                    Gson gson = new Gson();
-                    String transModel = gson.toJson(trans);
-
-                    //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
-
-                    Intent myIntent = new Intent(ConfirmPayActivity.this, PayCodeActivity.class);
-                    myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
-                    //myIntent.putExtra(STORE_NAME, storeName); //Optional parameters
-                    //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
-                    myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
-                    startActivity(myIntent);
+                    gotoPayCodeActivity(trans);
                 }
             }
 
@@ -155,6 +144,19 @@ public class ConfirmPayActivity extends AppCompatActivity {
 
     }
 
+    public void gotoPayCodeActivity(PayListModel trans){
+        //payListModel =trans.getMessage();
+        Gson gson = new Gson();
+        String transModel = gson.toJson(trans);
+        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
+        Intent myIntent = new Intent(ConfirmPayActivity.this, PayCodeActivity.class);
+        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
+        //myIntent.putExtra(STORE_NAME, storeName); //Optional parameters
+        //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
+        startActivity(myIntent);
+        this.finish();
+    }
 
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);

@@ -141,6 +141,7 @@ public class CashPayActivity extends AppCompatActivity {
                     ApiResponse res = response.body();
                     String x=res.getMessage();
                     Toast.makeText(CashPayActivity.this,x,Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
 
@@ -148,6 +149,7 @@ public class CashPayActivity extends AppCompatActivity {
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 hideProgreeBar();
             }
+
         });
 
     }

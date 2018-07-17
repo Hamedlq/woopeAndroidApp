@@ -16,6 +16,7 @@ import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 
 public class CreditPayActivity extends AppCompatActivity {
@@ -26,12 +27,13 @@ public class CreditPayActivity extends AppCompatActivity {
     String transactionString;
 Profile profile;
 PayListModel payListModel;
+    EditText pointText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_pay);
-        EditText pointText = findViewById(R.id.pointText);
+        pointText = findViewById(R.id.pointText);
         TextView payAmount = findViewById(R.id.payAmount);
         TextView toman_credit = findViewById(R.id.toman_credit);
         TextView woope_credit = findViewById(R.id.woope_credit);
@@ -59,7 +61,9 @@ PayListModel payListModel;
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                gotoConfirmCreditPay();
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    gotoConfirmCreditPay();
+                }
                 return false;
             }
         });
@@ -100,7 +104,10 @@ PayListModel payListModel;
         Intent myIntent = new Intent(CreditPayActivity.this, ConfirmPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, transactionString); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profileString);
+        String st= pointText.getText().toString();
+        myIntent.putExtra(POINTS_PAYED, st);
         //myIntent.putExtra("StoreName", storeName); //Optional parameters
         this.startActivity(myIntent);
+        this.finish();
     }
 }

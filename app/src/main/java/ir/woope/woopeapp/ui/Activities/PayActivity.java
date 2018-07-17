@@ -123,6 +123,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
         this.startActivity(myIntent);
+        this.finish();
     }
 
     public void gotoCreditCash(PayListModel model) {
@@ -136,6 +137,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
         this.startActivity(myIntent);
+        this.finish();
     }
 
 

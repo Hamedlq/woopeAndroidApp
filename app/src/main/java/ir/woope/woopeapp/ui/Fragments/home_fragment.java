@@ -9,11 +9,17 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,6 +51,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 
 /**
  * Created by Hamed on 6/11/2018.
@@ -73,7 +80,7 @@ public class home_fragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         mRecycler = inflater.inflate(R.layout.fragment_home, null);
-
+        setHasOptionsMenu(true);
         itemTouchListener = new ItemTouchListener() {
 
             @Override
@@ -86,7 +93,7 @@ public class home_fragment extends Fragment {
                 Profile obj = gson.fromJson(json, Profile.class);
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, json);
-                myIntent.putExtra("StoreName", s.storeName); //Optional parameters
+                myIntent.putExtra(STORE_NAME, s.storeName); //Optional parameters
                 getActivity().startActivity(myIntent);
 
                 //open activity
@@ -98,22 +105,27 @@ public class home_fragment extends Fragment {
         progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-        fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
+        /*fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 getActivity().startActivity(myIntent);
             }
-        });
-        initCollapsingToolbar();
+        });*/
+        //initCollapsingToolbar();
+
+        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
         adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
+        //recyclerView.setLayoutManager(mLayoutManager);
+        //recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -134,14 +146,35 @@ public class home_fragment extends Fragment {
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_navigation, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_store:
+                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
+                getActivity().startActivity(myIntent);
+
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
     /**
      * Initializing collapsing toolbar
      * Will show and hide the toolbar title on scroll
      */
-    private void initCollapsingToolbar() {
+/*    private void initCollapsingToolbar() {
         final CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout)mRecycler.findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(" ");
@@ -167,7 +200,7 @@ public class home_fragment extends Fragment {
                 }
             }
         });
-    }
+    }*/
 
     /**
      * Adding few albums for testing
@@ -249,11 +282,7 @@ public class home_fragment extends Fragment {
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
-
-
-
                     //prepareAlbums();
-
                 }
             }
 

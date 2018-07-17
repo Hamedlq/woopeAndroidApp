@@ -7,17 +7,17 @@ import java.io.Serializable;
  * Created by Hamed on 6/10/2018.
  */
 
-public class TransactionModel implements Serializable {
+public class PayListModel extends ApiResponse implements Serializable {
 
-    public long Id;
+    public long id;
     public String storeName;
     public long pointPay;
     public long totalPrice;
     public long returnPoints;
     public int payType;
-    public String confirmCode;
+    public String confirmationCode;
 
-    public TransactionModel() {
+    public PayListModel() {
 
     }
 

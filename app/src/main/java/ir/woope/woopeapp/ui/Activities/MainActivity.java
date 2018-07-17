@@ -33,6 +33,7 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import ir.woope.woopeapp.ui.Fragments.search_fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,10 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
     //private TextView mTextMessage;
     String HOME_FRAGMENT = "HomeFragment";
+    String SEARCH_FRAGMENT = "SearchFragment";
     String authToken = null;
     Profile profile = null;
 
-
+    FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -57,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     //mTextMessage.setText(R.string.title_home);
-                    FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
+                            .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                             .commit();
-
                     return true;
                 case R.id.navigation_‌search:
-                    //mTextMessage.setText(R.string.title_dashboard);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
+                            .commit();
                     return true;
                 case R.id.navigation_profile:
                     //mTextMessage.setText(R.string.title_notifications);
@@ -84,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
         getProfileFromServer();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
+                .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                 .commit();
 
     }

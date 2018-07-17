@@ -9,9 +9,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,20 +22,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.adapters.StoreSearchAdapter;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
-import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
@@ -50,17 +54,19 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
  * Created by Hamed on 6/11/2018.
  */
 
-public class home_fragment extends Fragment {
+public class search_fragment extends Fragment {
 
     private View mRecycler;
     private List<Store> albumList;
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
     private RecyclerView recyclerView;
-    private StoresAdapter adapter;
+    private StoreSearchAdapter adapter;
+    private FloatingSearchView floatingSearchView;
     ItemTouchListener itemTouchListener;
     FloatingActionButton fab;
     ProgressBar progressBar;
+    boolean searchInProgress=false;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -72,7 +78,7 @@ public class home_fragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
-        mRecycler = inflater.inflate(R.layout.fragment_home, null);
+        mRecycler = inflater.inflate(R.layout.fragment_search, null);
 
         itemTouchListener = new ItemTouchListener() {
 
@@ -98,18 +104,33 @@ public class home_fragment extends Fragment {
         progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-        fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        //fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 getActivity().startActivity(myIntent);
             }
+        });*/
+        //initCollapsingToolbar();
+
+        floatingSearchView=(FloatingSearchView)mRecycler.findViewById(R.id.floating_search_view);
+        floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+                if(newQuery.length()>2){
+                    Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
+                    findStores(newQuery);
+                }
+            }
         });
-        initCollapsingToolbar();
 
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
+        adapter = new StoreSearchAdapter(getActivity(), albumList,itemTouchListener);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -245,7 +266,7 @@ public class home_fragment extends Fragment {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoresAdapter(getActivity(),albumList, itemTouchListener);
+                    adapter = new StoreSearchAdapter(getActivity(),albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
@@ -265,6 +286,58 @@ public class home_fragment extends Fragment {
         });
 
     }
+
+    private void findStores(String storeQuery ) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+        if(!searchInProgress) {
+            searchInProgress = true;
+            Call<List<Store>> call =
+                    providerApiInterface.FindStore(authToken, storeQuery);
+
+
+            call.enqueue(new Callback<List<Store>>() {
+                @Override
+                public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                    hideProgreeBar();
+                    searchInProgress = false;
+                    int code = response.code();
+                    if (code == 200) {
+                        albumList = response.body();
+                        //adapter.notifyDataSetChanged();
+
+                        adapter = new StoreSearchAdapter(getActivity(), albumList, itemTouchListener);
+                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+                    ordersList.setLayoutManager(mLayoutManager);*/
+                        recyclerView.setAdapter(adapter);
+
+
+                        //prepareAlbums();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Store>> call, Throwable t) {
+                    searchInProgress = false;
+                    Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                    hideProgreeBar();
+                }
+            });
+        }
+    }
+
+
 
     /**
      * RecyclerView item decoration - give equal margin around grid item

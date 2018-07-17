@@ -25,18 +25,19 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import ir.woope.woopeapp.ui.Fragments.search_fragment;
 
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
-public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHolder> {
+public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.MyViewHolder> {
     private static final int MAX_CLICK_DURATION = 200;
     private Context mContext;
     private List<Store> albumList;
     private long startClickTime;
     private float mDownX;
     private float mDownY;
-    private home_fragment.ItemTouchListener onItemTouchListener;
+    private search_fragment.ItemTouchListener onItemTouchListener;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -95,7 +96,7 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
     }
 
 
-    public StoresAdapter(Context mContext, List<Store> albumList, home_fragment.ItemTouchListener onItemTouchListener) {
+    public StoreSearchAdapter(Context mContext, List<Store> albumList, search_fragment.ItemTouchListener onItemTouchListener) {
         this.mContext = mContext;
         this.albumList = albumList;
         this.onItemTouchListener = onItemTouchListener;
@@ -104,7 +105,7 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.store_card, parent, false);
+                .inflate(R.layout.search_card, parent, false);
 
         return new MyViewHolder(itemView);
     }

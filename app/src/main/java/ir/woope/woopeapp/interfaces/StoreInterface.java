@@ -4,32 +4,20 @@ import java.util.List;
 
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
-public interface TransactionInterface {
-    @FormUrlEncoded
-    @POST("api/Transaction/GetUserAllActivePaylists")
-    Call<List<PayListModel>> getTransactionsFromServer(@Field("token") String authtoken);
+public interface StoreInterface {
+    @GET("api/Store/GetStores")
+    Call<List<Store>> getStoreFromServer(@Query("token") String authtoken);
 
-    @FormUrlEncoded
-    @POST("api/Transaction/InsertUserPayList")
-    Call<PayListModel> InsertTransaction(@Field("token") String authtoken,
-                                                      @Field("StoreId") String StoreId,
-                                                      @Field("TotalPrice") String Amount,
-                                                      @Field("PayType") int payType);
+    @GET("api/Store/FindStore")
+    Call<List<Store>> FindStore(@Query("token") String authtoken,
+                                @Query("query") String query);
 
-    @FormUrlEncoded
-    @POST("api/Transaction/GetConfirmCode")
-    Call<PayListModel> GetConfirmCode(@Field("token") String authtoken,
-                                                   @Field("PayListId") long paylistId,
-                                                   @Field("PointPay") String pointPay);
-
-    @FormUrlEncoded
-    @POST("api/Transaction/SendConfirmCode")
-    Call<ApiResponse> SendConfirmCode(@Field("token") String authtoken,
-                                      @Field("Id") long payListId,
-                                      @Field("ConfirmationCode") String confirmationCode);
 }
