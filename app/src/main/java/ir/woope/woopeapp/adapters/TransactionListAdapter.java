@@ -4,13 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.TransactionModel;
 import ir.woope.woopeapp.ui.Fragments.TransListFragment;
 
 /**
@@ -23,7 +24,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     private TextView total_price;
     private TextView paytype;
 
-    private List<PayListModel> orderModels;
+    private List<TransactionModel> orderModels;
 
     private TransListFragment.PayTransactionTouchListener payTransactionTouchListener;
 
@@ -31,12 +32,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     private static final int MAX_CLICK_DURATION = 200;
 
 
-    public TransactionListAdapter(List<PayListModel> list) {
+    public TransactionListAdapter(List< TransactionModel> list) {
         this.orderModels = list;
     }
 
 
-    public TransactionListAdapter(List<PayListModel> list, TransListFragment.PayTransactionTouchListener payTransactionTouchListener) {
+    public TransactionListAdapter(List<TransactionModel> list,TransListFragment.PayTransactionTouchListener payTransactionTouchListener) {
         this.orderModels = list;
         this.payTransactionTouchListener=payTransactionTouchListener;
     }
@@ -74,9 +75,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         total_price.setText(String.valueOf(orderModels.get(position).totalPrice)+" تومان ");
         name_tv.setText(orderModels.get(position).storeName);
         if(orderModels.get(position).payType==1){
-            paytype.setText("نقدی");
-        }else{
             paytype.setText("اعتباری");
+        }else{
+            paytype.setText("نقدی");
         }
 
     }

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Hamed on 6/10/2018.
  */
 
-public class Profile extends ApiResponse implements Serializable{
+public class Profile implements Serializable{
     private String name;
     private String family;
     private int woopeCredit;
@@ -43,12 +43,6 @@ public class Profile extends ApiResponse implements Serializable{
         return credit;
     }
 
-    public String getCreditString() {
-        return String.valueOf(credit);
-    }
-    public String getWoopeCreditString() {
-        return String.valueOf(woopeCredit);
-    }
     public void setCredit(int credit) {
         this.credit = credit;
     }
