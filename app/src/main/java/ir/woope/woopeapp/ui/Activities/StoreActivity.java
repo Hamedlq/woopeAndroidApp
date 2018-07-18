@@ -55,6 +55,7 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
+        
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
