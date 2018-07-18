@@ -1,33 +1,31 @@
 package ir.woope.woopeapp.models;
 
-import java.util.List;
-
 /**
  * Created by Hamed on 6/10/2018.
  */
 
-public class ApiResponse {
+public class ApiResponse<T> {
 
-    private List<String> error;
-    private String message;
+    private String error;
+    private T message;
 
     public ApiResponse() {
 
     }
 
-    public List<String> getError() {
+    public String getError() {
         return error;
     }
 
-    public void setError(List<String> error) {
+    public void setError(String error) {
         this.error = error;
     }
 
-    public String getMessage() {
+    public T getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(T message) {
         this.message = message;
     }
 }
