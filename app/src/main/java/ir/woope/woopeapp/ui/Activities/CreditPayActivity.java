@@ -1,9 +1,7 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,8 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.models.PayState;
+import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.PayListModel;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
@@ -20,7 +21,13 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 
 public class CreditPayActivity extends AppCompatActivity {
 
-    String storeName;
+    //String storeName;
+    //String buyAmount;
+    String profileString;
+    String transactionString;
+Profile profile;
+PayListModel payListModel;
+    EditText pointText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +35,27 @@ public class CreditPayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_credit_pay);
         pointText = findViewById(R.id.pointText);
         TextView payAmount = findViewById(R.id.payAmount);
+        TextView toman_credit = findViewById(R.id.toman_credit);
+        TextView woope_credit = findViewById(R.id.woope_credit);
+
+
+
         Intent intent = getIntent();
-        storeName = intent.getStringExtra("StoreName");
+        //storeName = intent.getStringExtra(STORE_NAME);
+        profileString = intent.getStringExtra(PREF_PROFILE);
+        transactionString = intent.getStringExtra(PAY_LIST_ITEM);
+
+        Gson gson = new Gson();
+        profile = (Profile) gson.fromJson(profileString, Profile.class);
+        payListModel = (PayListModel) gson.fromJson(transactionString, PayListModel.class);
+        //buyAmount = intent.getStringExtra(BUY_AMOUNT);
+        payAmount.setText(String.valueOf(payListModel.totalPrice));
+        toman_credit.setText(profile.getCreditString());
+        woope_credit.setText(profile.getWoopeCreditString());
+
+
         TextView StoreName_tv=findViewById(R.id.StoreName);
-        StoreName_tv.setText(storeName);
+        StoreName_tv.setText(String.valueOf(payListModel.storeName));
 
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnTouchListener(new View.OnTouchListener() {
@@ -43,6 +67,8 @@ public class CreditPayActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
 
         //Intent intent = getIntent();
         /*String storeName = intent.getStringExtra("StoreName");
@@ -74,14 +100,13 @@ public class CreditPayActivity extends AppCompatActivity {
 
     }
 
-    public void gotoPayCash(){
+    public void gotoConfirmCreditPay(){
         Intent myIntent = new Intent(CreditPayActivity.this, ConfirmPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, transactionString); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profileString);
         String st= pointText.getText().toString();
         myIntent.putExtra(POINTS_PAYED, st);
         //myIntent.putExtra("StoreName", storeName); //Optional parameters
-        myIntent.putExtra("StoreName", storeName); //Optional parameters
         this.startActivity(myIntent);
         this.finish();
     }

@@ -21,12 +21,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.Activities.PayActivity"/>
-        <activity android:name=".ui.Activities.CashPayActivity"/>
-        <activity android:name=".ui.Activities.PayCodeActivity"/>
-        <activity android:name=".ui.Activities.ConfirmPayActivity"/>
-        <activity android:name=".ui.Activities.CreditPayActivity"/>
-        <activity android:name=".ui.Activities.TransactionActivity"/>
+        <activity android:name=".ui.Activities.PayActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.CashPayActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.PayCodeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.ConfirmPayActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.CreditPayActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.TransactionActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.StoreActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

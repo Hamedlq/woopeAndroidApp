@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
 
@@ -48,6 +49,27 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
+            thumbnail.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if (clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onCardViewTap(v, getPosition());
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
             view.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -90,11 +112,11 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Store album = albumList.get(position);
-        holder.title.setText(album.getPoint());
-        holder.count.setText(album.getNumOfSongs() + "٪ تخفیف");
+        holder.title.setText(album.storeName);
+        holder.count.setText(album.discountPercent + "٪ تخفیف");
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        Glide.with(mContext).load(Constants.GlobalConstants.IMAGE_URL + album.imageUId).into(holder.thumbnail);
 
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
@@ -130,10 +152,10 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.action_add_favourite:
+                case R.id.action_buy:
                     Toast.makeText(mContext, "خرید", Toast.LENGTH_SHORT).show();
                     return true;
-                case R.id.action_play_next:
+                case R.id.action_store:
                     Toast.makeText(mContext, "اطلاعات فروشگاه", Toast.LENGTH_SHORT).show();
                     return true;
                 default:

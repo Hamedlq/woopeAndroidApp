@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
                             .commit();
                     return true;
-                case R.id.navigation_notifications:
+                case R.id.navigation_profile:
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
@@ -107,15 +107,15 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
-        Call<ApiResponse<Profile>> call =
+        Call<Profile> call =
                 providerApiInterface.getProfileFromServer(authToken);
-        call.enqueue(new Callback<ApiResponse<Profile>>() {
+        call.enqueue(new Callback<Profile>() {
             @Override
-            public void onResponse(Call<ApiResponse<Profile>> call, Response<ApiResponse<Profile>> response) {
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
                 int code = response.code();
                 if (code == 200) {
-                    ApiResponse<Profile> user = response.body();
-                    profile=user.getMessage();
+                    Profile user = response.body();
+                    //profile=user.getMessage();
                     SharedPreferences.Editor prefsEditor = prefs.edit();
                     Gson gson = new Gson();
                     String json = gson.toJson(profile);
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<Profile>> call, Throwable t) {
+            public void onFailure(Call<Profile> call, Throwable t) {
 
             }
         });

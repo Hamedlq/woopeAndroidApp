@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +24,9 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
-import ir.woope.woopeapp.models.TransactionModel;
+import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.ui.Activities.CashPayActivity;
 import ir.woope.woopeapp.ui.Activities.CreditPayActivity;
-import ir.woope.woopeapp.ui.Activities.PayActivity;
-import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,8 +34,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOTAL_PRICE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 
 /**
  * Created by alireza on 3/26/18.
@@ -43,7 +44,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOTAL_PRICE;
 
 public class TransListFragment extends Fragment {
     private RecyclerView ordersList;
-    private List<TransactionModel> orderModelList;
+    private List<PayListModel> orderModelList;
     /*private List<ItemModel> userOrderModelList;*/
     private TransactionListAdapter adapter;
     private String authToken;
@@ -69,13 +70,13 @@ public class TransListFragment extends Fragment {
         payTransactionTouchListener = new PayTransactionTouchListener() {
             @Override
             public void onBtnClick(View view, int position) {
-                TransactionModel model = (TransactionModel) orderModelList.get(position);
+                PayListModel model = (PayListModel) orderModelList.get(position);
                 if(model.payType==1){
                     //go to cash pay
-                    gotoPayCash(model.storeName);
+                    gotoPayCash(model);
                 }else {
                     //go to credit pay
-                    gotoCreditCash(model.storeName);
+                    gotoCreditCash(model);
                 }
 
                 /*Intent myIntent = new Intent(getActivity(), PayActivity.class);
@@ -87,6 +88,7 @@ public class TransListFragment extends Fragment {
         };
         return view;
     }
+
 
     private void getOrderListFromServer() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -101,13 +103,13 @@ public class TransListFragment extends Fragment {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        Call<List<TransactionModel>> call =
+        Call<List<PayListModel>> call =
                 providerApiInterface.getTransactionsFromServer(authToken);
 
 
-        call.enqueue(new Callback<List<TransactionModel>>() {
+        call.enqueue(new Callback<List<PayListModel>>() {
             @Override
-            public void onResponse(Call<List<TransactionModel>> call, Response<List<TransactionModel>> response) {
+            public void onResponse(Call<List<PayListModel>> call, Response<List<PayListModel>> response) {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
@@ -122,7 +124,7 @@ public class TransListFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<TransactionModel>> call, Throwable t) {
+            public void onFailure(Call<List<PayListModel>> call, Throwable t) {
                 Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
             }
@@ -151,15 +153,39 @@ public class TransListFragment extends Fragment {
         public void onBtnClick(View view, int position);
     }
 
-    public void gotoPayCash(String storeName){
+    public void gotoPayCash(PayListModel model){
+        final SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String json = prefs.getString(PROFILE, "");
+
+        Gson gson = new Gson();
+        String transModel = gson.toJson(model);
+
         Intent myIntent = new Intent(getActivity(), CashPayActivity.class);
-        myIntent.putExtra("StoreName", storeName); //Optional parameters
+        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
+        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
+        //myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, json);
         this.startActivity(myIntent);
     }
 
-    public void gotoCreditCash(String storeName){
+    public void gotoCreditCash(PayListModel model){
+
+        final SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String json = prefs.getString(PROFILE, "");
+
+        Gson gson = new Gson();
+        String transModel = gson.toJson(model);
+
         Intent myIntent = new Intent(getActivity(), CreditPayActivity.class);
-        myIntent.putExtra("StoreName", storeName); //Optional parameters
+        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
+        //myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
+
+        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
+
+        myIntent.putExtra(PREF_PROFILE, json);
+
         this.startActivity(myIntent);
     }
 }
