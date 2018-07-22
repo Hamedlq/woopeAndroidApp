@@ -16,11 +16,7 @@
             android:name=".ui.Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.Activities.PayActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -36,6 +32,23 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.StoreActivity"
             android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.MobileFormActivity" />
+
+        <activity android:name=".ui.Activities.SmsVerificationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.Activities.UserRegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.ForgotPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

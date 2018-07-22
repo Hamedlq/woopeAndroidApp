@@ -30,7 +30,6 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 
 public class ConfirmPayActivity extends AppCompatActivity {
 
-
     //String storeName;
     String profileString;
     String transactionString;
