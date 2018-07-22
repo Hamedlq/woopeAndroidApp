@@ -16,7 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.List;
@@ -117,7 +118,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         holder.count.setText(album.discountPercent + "٪ تخفیف");
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(Constants.GlobalConstants.IMAGE_URL + album.imageUId).into(holder.thumbnail);
+        Picasso.with(mContext).load(Constants.GlobalConstants.IMAGE_URL + album.imageUId).into(holder.thumbnail);
 
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {

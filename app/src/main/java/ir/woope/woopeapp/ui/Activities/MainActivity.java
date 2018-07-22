@@ -1,5 +1,6 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -18,13 +19,16 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
@@ -33,6 +37,7 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     //private TextView mTextMessage;
     String HOME_FRAGMENT = "HomeFragment";
     String SEARCH_FRAGMENT = "SearchFragment";
+    String PROFILE_FRAGMENT = "ProfileFragment";
     String authToken = null;
     Profile profile = null;
 
@@ -70,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_profile:
                     //mTextMessage.setText(R.string.title_notifications);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
+                            .commit();
                     return true;
             }
             return false;
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //ButterKnife.bind(this);
 
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -88,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
+        sendRegistrationToServer();
         getProfileFromServer();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -132,7 +143,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void sendRegistrationToServer() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        ProfileInterface profileInterface =
+                retrofit.create(ProfileInterface.class);
 
+        SharedPreferences prefs = getSharedPreferences(
+                Constants.GlobalConstants.MY_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "");
 
+        OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+        String oneSignalToken=status.getSubscriptionStatus().getUserId();
 
+        Call<ApiResponse> call =
+                profileInterface.sendOneSignalToken(authToken, oneSignalToken);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                //Toast.makeText(MainActivity.this, "do", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

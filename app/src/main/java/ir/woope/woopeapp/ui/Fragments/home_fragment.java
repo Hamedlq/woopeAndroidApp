@@ -26,8 +26,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +134,7 @@ public class home_fragment extends Fragment {
         getOrderListFromServer();
 
         try {
-            Glide.with(this).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
+            Picasso.with(getActivity()).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
         } catch (Exception e) {
             e.printStackTrace();
         }

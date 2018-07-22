@@ -19,4 +19,9 @@ public interface ProfileInterface {
                                         @Field("StoreId") String StoreId,
                                         @Field("TotalPrice") String Amount,
                                         @Field("PayType") int payType);
+
+    @FormUrlEncoded
+    @POST("api/Profile/sendOneSignalToken")
+    Call<ApiResponse> sendOneSignalToken(@Field("token") String authtoken,
+                                        @Field("OneSignalToken") String oneSignalToken);
 }
