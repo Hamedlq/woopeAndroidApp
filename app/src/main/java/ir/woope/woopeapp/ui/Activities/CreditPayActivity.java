@@ -25,8 +25,8 @@ public class CreditPayActivity extends AppCompatActivity {
     //String buyAmount;
     String profileString;
     String transactionString;
-Profile profile;
-PayListModel payListModel;
+    Profile profile;
+    PayListModel payListModel;
     EditText pointText;
 
     @Override

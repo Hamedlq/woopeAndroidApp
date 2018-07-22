@@ -5,11 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by Hamed on 6/10/2018.
- */
+public class Splash {
 
-public class ApiResponse {
+    @SerializedName("username")
+    @Expose
+    private String username;
+
+    @SerializedName("mobile")
+    @Expose
+    private String mobile;
 
     @SerializedName("errors")
     @Expose
@@ -29,8 +33,14 @@ public class ApiResponse {
 
     @SerializedName("status")
     @Expose
-    public int status;
+    private int status;
 
+    public String getUsername() {
+        return username;
+    }
+    public String getMobile() {
+        return mobile;
+    }
     public List<String> getErrors() { return errors; }
     public String getWarnings() {
         return warnings;
@@ -41,8 +51,6 @@ public class ApiResponse {
     public String getMessage() {
         return message;
     }
-    public int getStatus() {
-        return status;
-    }
+    public int getStatus() { return status; }
 
 }
