@@ -32,6 +32,9 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
+
 public class LoginActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
 
@@ -76,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         //sets the statusbar and navbar colors
 
         wplogologin = findViewById(R.id.imgbx_logo_login);
-        final MediaPlayer mp = new MediaPlayer();
+        /*final MediaPlayer mp = new MediaPlayer();
         wplogologin.setSoundEffectsEnabled(false);
         wplogologin.setOnClickListener(new View.OnClickListener() {
 
@@ -103,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
         TextView forgetpass = (TextView) findViewById(R.id.txt_forget_pass);
 
@@ -152,9 +155,9 @@ public class LoginActivity extends AppCompatActivity {
                             response.body(); // have your all data
                             String tk =response.body().getAccessToken();
 
-                            SharedPreferences settings = getApplicationContext().getSharedPreferences("token", 0);
+                            SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, 0);
                             SharedPreferences.Editor editor = settings.edit();
-                            editor.putString("token", tk);
+                            editor.putString(TOKEN, tk);
                             // Apply the edits!
                             editor.apply();
 
@@ -164,14 +167,12 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             Intent goto_mainpage = new Intent(LoginActivity.this,
                                     MainActivity.class);
-                            startActivity(goto_mainpage);
-                            {
 
                                 goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 finish();
                                 startActivity(goto_mainpage);
 
-                            }
+
                         }
                         else{
                             Toast.makeText(

@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -49,6 +51,8 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    boolean doubleBackToExitPressedOnce = false;
     //private TextView mTextMessage;
     String HOME_FRAGMENT = "HomeFragment";
     String SEARCH_FRAGMENT = "SearchFragment";
@@ -99,12 +103,26 @@ public class MainActivity extends AppCompatActivity {
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
         sendRegistrationToServer();
-        getProfileFromServer();
+        //getProfileFromServer();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                 .commit();
 
+    }
+
+    public Profile getUserProfile() {
+        Gson gson = new Gson();
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String profileString= prefs.getString(Constants.GlobalConstants.PROFILE, null);
+        if(profileString != null){
+            profile = (Profile) gson.fromJson(profileString, Profile.class);
+            return  profile;
+        }else {
+            getProfileFromServer();
+        }
+        return  null;
     }
 
     private void getProfileFromServer() {
@@ -131,7 +149,12 @@ public class MainActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     String json = gson.toJson(profile);
                     prefsEditor.putString(PROFILE, json);
-                    prefsEditor.commit();
+                    prefsEditor.apply();
+                    Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+                    if(fragment !=null){
+                        ((profile_fragment) fragment).setValues(user);
+                    }
+
                 }
             }
 
@@ -172,5 +195,25 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            System.exit(1);
+            return;
+        }
+        Toast.makeText(MainActivity.this, R.string.press_again_to_exit , Toast.LENGTH_LONG).show();
+        this.doubleBackToExitPressedOnce = true;
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 4000);
     }
 }
