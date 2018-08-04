@@ -36,9 +36,7 @@
         <activity android:name=".ui.Activities.MobileFormActivity" />
 
         <activity android:name=".ui.Activities.SmsVerificationActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.UserRegisterActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.LoginActivity"

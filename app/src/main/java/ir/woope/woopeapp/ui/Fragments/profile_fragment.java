@@ -28,6 +28,7 @@ import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -48,6 +49,7 @@ import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,11 +87,19 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     //@BindView(R.id.vUserDetails)
     View vUserDetails;
     //@BindView(R.id.btnFollow)
-    Button btnFollow;
+    Button btnEdit;
     //@BindView(R.id.vUserStats)
     View vUserStats;
     //@BindView(R.id.vUserProfileRoot)
     View vUserProfileRoot;
+
+    TextView userNameFamily;
+    TextView username;
+    TextView userBio;
+    TextView cashCredit;
+    TextView woopeCredit;
+    TextView useNumber;
+
 
     private int avatarSize;
     private String profilePhoto;
@@ -98,7 +108,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
 
@@ -108,11 +117,18 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         mRecycler = inflater.inflate(R.layout.fragment_user_profile, container,false);
         //mUnbinder=ButterKnife.bind(this,mRecycler);
         vRevealBackground=mRecycler.findViewById(R.id.vRevealBackground);
+        userNameFamily=mRecycler.findViewById(R.id.userNameFamily);
+        username=mRecycler.findViewById(R.id.username);
+        userBio=mRecycler.findViewById(R.id.userBio);
+        cashCredit=mRecycler.findViewById(R.id.cashCredit);
+        woopeCredit=mRecycler.findViewById(R.id.woope_credit);
+        useNumber=mRecycler.findViewById(R.id.useNumber);
+
         rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto=mRecycler.findViewById(R.id.ivUserProfilePhoto);
         tlUserProfileTabs=mRecycler.findViewById(R.id.tlUserProfileTabs);
         vUserDetails=mRecycler.findViewById(R.id.vUserDetails);
-        btnFollow=mRecycler.findViewById(R.id.btnFollow);
+        btnEdit=mRecycler.findViewById(R.id.btnEdit);
         vUserStats=mRecycler.findViewById(R.id.vUserStats);
         vUserProfileRoot=mRecycler.findViewById(R.id.vUserProfileRoot);
         return mRecycler;
@@ -122,6 +138,22 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Profile pp=((MainActivity)getActivity()).getUserProfile();
+        if(pp==null){
+            userNameFamily.setText("");
+            username.setText("");
+            userBio.setText("");
+            cashCredit.setText("0");
+            woopeCredit.setText("0");
+            useNumber.setText("0");
+        }else {
+            userNameFamily.setText(pp.getName()+" "+pp.getFamily());
+            username.setText(pp.getUsername());
+            userBio.setText(pp.getUserBio());
+            cashCredit.setText(pp.getCreditString());
+            woopeCredit.setText(pp.getWoopeCreditString());
+            useNumber.setText(pp.getUseNumberString());
+        }
     }
 
     @Override
@@ -146,9 +178,9 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
 
     private void setupTabs() {
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
+        //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
+        //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_label_white));
     }
 
@@ -214,5 +246,14 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         ivUserProfilePhoto.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
         vUserDetails.animate().translationY(0).setDuration(300).setStartDelay(200).setInterpolator(INTERPOLATOR);
         vUserStats.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
+    }
+
+    public void setValues(Profile pp) {
+        userNameFamily.setText(pp.getName()+" "+pp.getFamily());
+        username.setText(pp.getUsername());
+        userBio.setText(pp.getUserBio());
+        cashCredit.setText(pp.getCreditString());
+        woopeCredit.setText(pp.getWoopeCreditString());
+        useNumber.setText(pp.getUseNumberString());
     }
 }

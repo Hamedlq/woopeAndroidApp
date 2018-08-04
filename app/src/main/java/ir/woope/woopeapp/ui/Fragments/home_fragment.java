@@ -288,7 +288,7 @@ public class home_fragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Store>> call, Throwable t) {
-                Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
             }
         });
