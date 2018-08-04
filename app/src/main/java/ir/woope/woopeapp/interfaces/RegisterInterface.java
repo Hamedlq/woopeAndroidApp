@@ -12,7 +12,12 @@ public interface RegisterInterface {
         @FormUrlEncoded
         Call<ApiResponse> send_info(@Field("username") String username, @Field("mobile") String mobile, @Field("password") String password);
 
-        @POST("/Account/RegisterApp")
+        @POST("/Account/ConfirmCode")
         @FormUrlEncoded
         Call<ApiResponse> send_verif_code(@Field("Mobile") String mobile, @Field("VerifyCode") String code);
+
+        @POST("/Account/SendForgetPassCode")
+        @FormUrlEncoded
+        Call<ApiResponse> send_code(@Field("Mobile") String mobile);
+
 }

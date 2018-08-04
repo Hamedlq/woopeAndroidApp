@@ -9,7 +9,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="300dp"
-        android:layout_height="309dp"
+        android:layout_height="295dp"
         android:layout_marginTop="68dp"
         android:background="@drawable/button_border"
         android:orientation="vertical"
@@ -21,7 +21,7 @@
             android:id="@+id/usernamelayout_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="21dp"
             android:gravity="center_horizontal"
             android:textColor="@color/darkwhite"
             android:textColorHint="@color/darkwhite"
@@ -35,8 +35,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
-                android:drawableEnd="@drawable/round_perm_identity_24"
+                android:drawableRight="@drawable/round_perm_identity_24"
+                android:ellipsize="start"
                 android:ems="10"
+                android:gravity="center_horizontal"
                 android:hint="@string/username"
                 android:inputType="textPersonName"
                 android:textColor="@color/white"
@@ -52,7 +54,6 @@
             android:id="@+id/passwordlayout_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:textColor="@color/darkwhite"
             android:textColorHint="@color/darkwhite"
@@ -67,7 +68,9 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
                 android:drawableEnd="@drawable/round_lock_24"
+                android:ellipsize="start"
                 android:ems="10"
+                android:gravity="center_horizontal"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:textColor="@color/white"
@@ -80,10 +83,9 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/emaillayout_reg"
+            android:id="@+id/phonenumberlayout_reg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:textColor="@color/darkwhite"
             android:textColorHint="@color/darkwhite"
@@ -99,7 +101,9 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
                 android:drawableEnd="@drawable/round_call_24"
+                android:ellipsize="start"
                 android:ems="10"
+                android:gravity="center_horizontal"
                 android:hint="@string/phonenumber"
                 android:inputType="phone"
                 android:textColor="@color/white"
@@ -115,15 +119,27 @@
             android:id="@+id/btn_accept_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="29dp"
             android:background="@drawable/button_border"
             android:text="@string/accept"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emaillayout_reg" />
+            app:layout_constraintTop_toBottomOf="@+id/phonenumberlayout_reg" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_userinfo"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="84dp"
+        android:indeterminateDrawable="@drawable/progress"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

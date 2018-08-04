@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.models.AccessToken;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,15 +45,6 @@ public class LoginActivity extends AppCompatActivity {
 
         rotateonceAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_once);
         wplogologin.startAnimation(rotateonceAnim);
-
-    }
-
-    public interface login_api {
-
-        @POST("/connect/token")
-        @FormUrlEncoded
-        Call<AccessToken> send_info(@Field("username") String userphone, @Field("password") String password, @Field("grant_type") String grant_type);
-        // Call<result> token(@Field("access_token") String token);
 
     }
 
@@ -82,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
                 rotationAnimation();
-                //arg0.playSoundEffect(android.view.SoundEffectConstants.CLICK);
 
                 if(mp.isPlaying())
                 {
@@ -111,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
                 Intent goto_forgetpass = new Intent(LoginActivity.this,
-                        ForgotPasswordActivity.class);
+                        SendNumber_ChangePassActivity.class);
                 startActivity(goto_forgetpass);
             }
         });
@@ -136,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        final login_api login = retrofit_login.create(login_api.class);
+        final LoginInterface login = retrofit_login.create(LoginInterface.class);
 
         enter.setOnClickListener(new View.OnClickListener() {
 
