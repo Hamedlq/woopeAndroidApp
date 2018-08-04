@@ -1,5 +1,6 @@
 package ir.woope.woopeapp.ui.Fragments;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -12,20 +13,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -33,16 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.adapters.StoresAdapter;
+import ir.woope.woopeapp.adapters.BrandsAdapter;
+import ir.woope.woopeapp.adapters.StoreSearchAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
-import ir.woope.woopeapp.interfaces.TransactionInterface;
-import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
-import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,24 +47,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 /**
  * Created by Hamed on 6/11/2018.
  */
 
-public class home_fragment extends Fragment {
+public class brands_fragment extends Fragment {
 
     private View mRecycler;
     private List<Store> albumList;
     String ALBUM_FRAGMENT = "AlbumFragment";
-    String authToken;
     private RecyclerView recyclerView;
-    private StoresAdapter adapter;
-    ItemTouchListener itemTouchListener;
-    FloatingActionButton fab;
-    ProgressBar progressBar;
+    private BrandsAdapter adapter;
+    private FloatingActionButton fab;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -81,66 +72,23 @@ public class home_fragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
-        mRecycler = inflater.inflate(R.layout.fragment_home, null);
-        setHasOptionsMenu(true);
-        itemTouchListener = new ItemTouchListener() {
-
-            @Override
-            public void onCardViewTap(View view, int position) {
-                Store s = albumList.get(position);
-                final SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = prefs.getString(PROFILE, "");
-                Profile obj = gson.fromJson(json, Profile.class);
-                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, json);
-                myIntent.putExtra(STORE_NAME, s.storeName); //Optional parameters
-                getActivity().startActivity(myIntent);
-
-                //open activity
-                //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onFollowTap(View view, int position) {
-                Store s = albumList.get(position);
-                followStore(s);
-            }
-
-        };
-
-        progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
+        mRecycler = inflater.inflate(R.layout.fragment_brands, null);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-        /*fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
-                getActivity().startActivity(myIntent);
-            }
-        });*/
-        //initCollapsingToolbar();
 
-        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.app_name);
+
+        initCollapsingToolbar();
 
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        adapter = new BrandsAdapter(getActivity(), albumList);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        //recyclerView.setLayoutManager(mLayoutManager);
-        //recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        //prepareAlbums();
-
-        getOrderListFromServer();
+        prepareAlbums();
 
         try {
             Picasso.with(getActivity()).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
@@ -152,69 +100,17 @@ public class home_fragment extends Fragment {
         return mRecycler;
     }
 
-    private void followStore(Store s) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .build();
-        StoreInterface providerApiInterface =
-                retrofit.create(StoreInterface.class);
-
-        final SharedPreferences settings = getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = settings.getString(TOKEN, null);
-
-        Call<ApiResponse> call =
-                providerApiInterface.followStore("bearer "+authToken,s.storeId);
-
-
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                int code = response.code();
-                if (code == 200) {
-                    ApiResponse ar = response.body();
-                    Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), "خطا در تغییر علاقمندی‌ها", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_navigation, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_store:
-                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
-                getActivity().startActivity(myIntent);
-
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
     /**
      * Initializing collapsing toolbar
      * Will show and hide the toolbar title on scroll
      */
-/*    private void initCollapsingToolbar() {
+    private void initCollapsingToolbar() {
         final CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout)mRecycler.findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(" ");
@@ -240,7 +136,7 @@ public class home_fragment extends Fragment {
                 }
             }
         });
-    }*/
+    }
 
     /**
      * Adding few albums for testing
@@ -259,7 +155,7 @@ public class home_fragment extends Fragment {
                 R.drawable.album10,
                 R.drawable.album11};
 
-        /*Store a = new Store("آدیداس","هر ۱۰۰ هزار تومان ۵ ووپ", 7, covers[0]);
+        Store a = new Store("آدیداس","هر ۱۰۰ هزار تومان ۵ ووپ", 7, covers[0]);
         albumList.add(a);
 
         a = new Store("نایک","هر ۱۰ هزار تومان ۱ ووپ", 10, covers[1]);
@@ -287,52 +183,9 @@ public class home_fragment extends Fragment {
         albumList.add(a);
 
         a = new Store("آدیداس","هر ۸۰ هزار تومان ۵ ووپ", 15, covers[9]);
-        albumList.add(a);*/
+        albumList.add(a);
 
         adapter.notifyDataSetChanged();
-    }
-
-    private void getOrderListFromServer() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .build();
-        StoreInterface providerApiInterface =
-                retrofit.create(StoreInterface.class);
-
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
-
-        showProgreeBar();
-        Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer(authToken);
-
-
-        call.enqueue(new Callback<List<Store>>() {
-            @Override
-            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                hideProgreeBar();
-                int code = response.code();
-                if (code == 200) {
-                    albumList = response.body();
-                    //adapter.notifyDataSetChanged();
-
-                    adapter = new StoresAdapter(getActivity(),albumList, itemTouchListener);
-                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-                    ordersList.setLayoutManager(mLayoutManager);*/
-                    recyclerView.setAdapter(adapter);
-                    //prepareAlbums();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Store>> call, Throwable t) {
-                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
-                hideProgreeBar();
-            }
-        });
-
     }
 
     /**
@@ -380,12 +233,6 @@ public class home_fragment extends Fragment {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-
-    public interface ItemTouchListener {
-        public void onCardViewTap(View view, int position);
-        public void onFollowTap(View view, int position);
-    }
-
 
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);

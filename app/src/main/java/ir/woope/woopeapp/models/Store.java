@@ -7,6 +7,17 @@ import java.io.Serializable;
  */
 
 public class Store extends ApiResponse implements Serializable {
+
+    public Store() {
+    }
+
+    public Store(String name,String point, int numOfSongs, int thumbnail) {
+        this.storeName = name;
+        this.returnPoint = point;
+        this.thumbnail = thumbnail;
+        isFollowed=false;
+    }
+
     public String storeId;
     public String storeName;
     public String storeDescription;
@@ -16,4 +27,6 @@ public class Store extends ApiResponse implements Serializable {
     public String discountPercent;
     public String imageUId;
     public String thumbnailUId;
+    public int thumbnail;
+    public boolean isFollowed;
 }

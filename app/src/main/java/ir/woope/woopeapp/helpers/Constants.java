@@ -33,6 +33,13 @@ public final class Constants {
         public static final String PREF_PROFILE = "preferences_profile";
         public static final String POINTS_PAYED = "pointsPaid";
         public static final String IMAGE_URL =BASE_URL + "api/Store/getImageByUid?uid=";
+        public static final int REQUEST_CAMERA =0;
+        public static final int SELECT_FILE =1;
     }
 
+    public final class Actions {
+        public static final String PARAM_AUTHORIZATION = "Authorization";
+        public static final String FOLLOW_STORE = "api/Store/FollowStore";
+        public static final String GET_FOLLOW_STORE = "api/Store/GetFollowingStores";
+    }
 }

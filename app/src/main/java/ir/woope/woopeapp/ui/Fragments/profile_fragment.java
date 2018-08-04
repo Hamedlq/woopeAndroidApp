@@ -1,23 +1,21 @@
 package ir.woope.woopeapp.ui.Fragments;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Rect;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,48 +25,38 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
-import ir.woope.woopeapp.adapters.StoreSearchAdapter;
-import ir.woope.woopeapp.helpers.Constants;
-import ir.woope.woopeapp.interfaces.StoreInterface;
+import ir.woope.woopeapp.adapters.ProfilePageAdapter;
 import ir.woope.woopeapp.models.Profile;
-import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
-import ir.woope.woopeapp.ui.Activities.StoreActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.content.Context.MODE_PRIVATE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 
 /**
  * Created by Hamed on 6/11/2018.
  */
 
-public class profile_fragment extends Fragment implements RevealBackgroundView.OnStateChangeListener{
+public class profile_fragment extends Fragment implements TabLayout.OnTabSelectedListener, RevealBackgroundView.OnStateChangeListener{
 
     private View mRecycler;
     public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
+
+    private String userChoosenTask;
+    boolean isImageUploaded=false;
 
     private static final int USER_OPTIONS_ANIMATION_DELAY = 300;
     private static final Interpolator INTERPOLATOR = new DecelerateInterpolator();
@@ -77,10 +65,12 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     //@BindView(R.id.vRevealBackground)
     RevealBackgroundView vRevealBackground;
     //@BindView(R.id.rvUserProfile)
-    RecyclerView rvUserProfile;
+    //RecyclerView rvUserProfile;
 
     //@BindView(R.id.tlUserProfileTabs)
     TabLayout tlUserProfileTabs;
+    //This is our viewPager
+    private ViewPager viewPager;
 
     //@BindView(R.id.ivUserProfilePhoto)
     ImageView ivUserProfilePhoto;
@@ -103,7 +93,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     private int avatarSize;
     private String profilePhoto;
-    //private UserProfileAdapter userPhotosAdapter;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -124,13 +113,15 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         woopeCredit=mRecycler.findViewById(R.id.woope_credit);
         useNumber=mRecycler.findViewById(R.id.useNumber);
 
-        rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
+        //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto=mRecycler.findViewById(R.id.ivUserProfilePhoto);
         tlUserProfileTabs=mRecycler.findViewById(R.id.tlUserProfileTabs);
         vUserDetails=mRecycler.findViewById(R.id.vUserDetails);
         btnEdit=mRecycler.findViewById(R.id.btnEdit);
         vUserStats=mRecycler.findViewById(R.id.vUserStats);
         vUserProfileRoot=mRecycler.findViewById(R.id.vUserProfileRoot);
+        //Initializing viewPager
+        viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
         return mRecycler;
     }
 
@@ -164,29 +155,58 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         //this.profilePhoto = getString(R.string.user_profile_photo);
 
         Picasso.with(getActivity())
-                .load(R.drawable.album1)
+                .load(R.drawable.album2)
                 .placeholder(R.drawable.img_circle_placeholder)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
                 .transform(new CircleTransformation())
                 .into(ivUserProfilePhoto);
 
+        ivUserProfilePhoto.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                selectImage();
+                return true;
+            }
+        });
+
         setupTabs();
         setupUserProfileGrid();
+
+
         setupRevealBackground(savedInstanceState);
     }
 
 
     private void setupTabs() {
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_bookmark));
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_label_white));
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
     }
 
     private void setupUserProfileGrid() {
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        rvUserProfile.setLayoutManager(layoutManager);
+
+        //Creating our pager adapter
+        ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
+
+        //Adding adapter to pager
+        viewPager.setAdapter(adapter);
+
+        //Adding onTabSelectedListener to swipe views
+        tlUserProfileTabs.setOnTabSelectedListener(this);
+
+        /*final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        rvUserProfile.setLayoutManager(layoutManager);*/
+
+        //rvUserProfile.setAdapter(profileTabAdapter);
+        /*rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                profileTabAdapter.setLockedAnimations(true);
+            }
+        });*/
+
         /*rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -194,6 +214,45 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
             }
         });*/
     }
+
+    private void selectImage() {
+        final CharSequence[] items = {"با دوربین", "انتخاب از گالری",
+                "نه فعلا"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("افزودن عکس");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result = ir.aronapp.supplierapp.Helpers.Utility.checkPermission(getActivity());
+                if (items[item].equals("با دوربین")) {
+                    userChoosenTask = "با دوربین";
+                    if (result)
+                        cameraIntent();
+                } else if (items[item].equals("انتخاب از گالری")) {
+                    userChoosenTask = "انتخاب از گالری";
+                    if (result)
+                        galleryIntent();
+                } else if (items[item].equals("نه فعلا")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "انتخاب عکس محصول"), SELECT_FILE);
+    }
+
+    private void cameraIntent() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+
 
     private void setupRevealBackground(Bundle savedInstanceState) {
         vRevealBackground.setOnStateChangeListener(this);
@@ -210,23 +269,22 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
             });
         } else {
             vRevealBackground.setToFinishedFrame();
-            //userPhotosAdapter.setLockedAnimations(true);
         }
     }
 
     @Override
     public void onStateChange(int state) {
         if (RevealBackgroundView.STATE_FINISHED == state) {
-            rvUserProfile.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.VISIBLE);
             tlUserProfileTabs.setVisibility(View.VISIBLE);
             vUserProfileRoot.setVisibility(View.VISIBLE);
-            //userPhotosAdapter = new UserProfileAdapter(this);
-            //rvUserProfile.setAdapter(userPhotosAdapter);
+            ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
+            viewPager.setAdapter(adapter);
             animateUserProfileOptions();
             animateUserProfileHeader();
         } else {
             tlUserProfileTabs.setVisibility(View.INVISIBLE);
-            rvUserProfile.setVisibility(View.INVISIBLE);
+            viewPager.setVisibility(View.INVISIBLE);
             vUserProfileRoot.setVisibility(View.INVISIBLE);
         }
     }
@@ -256,4 +314,25 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         woopeCredit.setText(pp.getWoopeCreditString());
         useNumber.setText(pp.getUseNumberString());
     }
+
+    public void setPhoto(Bitmap bitmap){
+        ivUserProfilePhoto.setImageBitmap(bitmap);
+        isImageUploaded=true;
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
 }

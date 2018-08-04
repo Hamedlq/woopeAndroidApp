@@ -1,11 +1,18 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
@@ -27,6 +34,11 @@ import com.google.gson.Gson;
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +60,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     String PROFILE_FRAGMENT = "ProfileFragment";
     String authToken = null;
     Profile profile = null;
+    private int CROP = 2;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -216,4 +231,113 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 4000);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
+            else if (requestCode == CROP) {
+                File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
+                if (file.exists()) {
+                    String filePath = file.getPath();
+                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                    Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+                    if(fragment !=null){
+                        ((profile_fragment) fragment).setPhoto(bitmap);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    @SuppressWarnings("deprecation")
+    private void onSelectFromGalleryResult(Intent data) {
+        Bitmap bm = null;
+        if (data != null) {
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                File destination = new File(getExternalCacheDir(), "tempItemFile.jpg");
+                FileOutputStream fo;
+
+                destination.createNewFile();
+                fo = new FileOutputStream(destination);
+                fo.write(bytes.toByteArray());
+                fo.close();
+                Uri uri = Uri.fromFile(destination);
+                doCrop(uri);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        //imgView.setImageBitmap(bm);
+    }
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(getExternalCacheDir(), "tempItemFile.jpg");
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+            Uri uri = Uri.fromFile(destination);
+            doCrop(uri);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //imgView.setImageBitmap(thumbnail);
+    }
+
+    private void doCrop(Uri picFileUri) {
+        try {
+//            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+//                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent photoPickerIntent = new Intent("com.android.camera.action.CROP");
+            photoPickerIntent.setDataAndType(picFileUri, "image/*");
+            //photoPickerIntent.setType("image/*");
+            photoPickerIntent.putExtra("crop", "true");
+            photoPickerIntent.putExtra("aspectX", 1);
+            photoPickerIntent.putExtra("aspectY", 1);
+            photoPickerIntent.putExtra("outputX", 512);
+            photoPickerIntent.putExtra("outputY", 512);
+            photoPickerIntent.putExtra("return-data", true);
+            photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, picFileUri);
+            photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+            startActivityForResult(photoPickerIntent, CROP);
+
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "امکان آپلود عکس در گوشی شما وجود ندارد";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        catch (Exception e) {
+            // display an error message
+            String errorMessage = "خطایی رخ داده است";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
 }

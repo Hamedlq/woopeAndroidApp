@@ -5,13 +5,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -33,14 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.adapters.ProfileBookmarkAdapter;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
-import ir.woope.woopeapp.interfaces.TransactionInterface;
-import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
@@ -53,21 +47,20 @@ import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 /**
  * Created by Hamed on 6/11/2018.
  */
 
-public class home_fragment extends Fragment {
+public class profileBookmarkFragment extends Fragment {
 
     private View mRecycler;
     private List<Store> albumList;
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
     private RecyclerView recyclerView;
-    private StoresAdapter adapter;
-    ItemTouchListener itemTouchListener;
+    private ProfileBookmarkAdapter adapter;
+    BookmarkTouchListener itemTouchListener;
     FloatingActionButton fab;
     ProgressBar progressBar;
 
@@ -81,9 +74,9 @@ public class home_fragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
-        mRecycler = inflater.inflate(R.layout.fragment_home, null);
+        mRecycler = inflater.inflate(R.layout.fragment_bookmark, null);
         setHasOptionsMenu(true);
-        itemTouchListener = new ItemTouchListener() {
+        itemTouchListener = new BookmarkTouchListener() {
 
             @Override
             public void onCardViewTap(View view, int position) {
@@ -102,13 +95,6 @@ public class home_fragment extends Fragment {
                 //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
 
             }
-
-            @Override
-            public void onFollowTap(View view, int position) {
-                Store s = albumList.get(position);
-                followStore(s);
-            }
-
         };
 
         progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
@@ -124,12 +110,8 @@ public class home_fragment extends Fragment {
         });*/
         //initCollapsingToolbar();
 
-        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.app_name);
-
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
+        adapter = new ProfileBookmarkAdapter(getActivity(), albumList,itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
@@ -152,41 +134,10 @@ public class home_fragment extends Fragment {
         return mRecycler;
     }
 
-    private void followStore(Store s) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .build();
-        StoreInterface providerApiInterface =
-                retrofit.create(StoreInterface.class);
-
-        final SharedPreferences settings = getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = settings.getString(TOKEN, null);
-
-        Call<ApiResponse> call =
-                providerApiInterface.followStore("bearer "+authToken,s.storeId);
-
-
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                int code = response.code();
-                if (code == 200) {
-                    ApiResponse ar = response.body();
-                    Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), "خطا در تغییر علاقمندی‌ها", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
     }
 
 
@@ -306,7 +257,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer(authToken);
+                providerApiInterface.getFollowStore("bearer "+authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {
@@ -318,7 +269,7 @@ public class home_fragment extends Fragment {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoresAdapter(getActivity(),albumList, itemTouchListener);
+                    adapter = new ProfileBookmarkAdapter(getActivity(),albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
@@ -381,9 +332,8 @@ public class home_fragment extends Fragment {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    public interface ItemTouchListener {
+    public interface BookmarkTouchListener {
         public void onCardViewTap(View view, int position);
-        public void onFollowTap(View view, int position);
     }
 
 
