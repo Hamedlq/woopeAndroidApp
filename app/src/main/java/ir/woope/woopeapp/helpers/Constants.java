@@ -15,11 +15,7 @@ public final class Constants {
         public HTTP() {
 
         }
-        public static final String BASE_URL = "http://localhost:58795/";
 
-//        public static final String BASE_URL = "http://aronapp.ir:8080/";
-//        public static final String BASE_URL = "http://aronapp.ir:8880/";
-// test
         public static final String BASE_URL = "http://192.168.100.5:8090/";
 //        public static final String BASE_URL = "http://localhost/";
     }
