@@ -25,8 +25,11 @@ import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.CashPayActivity;
 import ir.woope.woopeapp.ui.Activities.CreditPayActivity;
+import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 /**
  * Created by alireza on 3/26/18.
@@ -55,6 +59,7 @@ public class TransListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_transaction_list, null, false);
+
 
         //((TransactionActivity) getActivity()).setToolbarTitle(getString(R.string.transaction_list));
         progressBar = view.findViewById(R.id.progressBar);
@@ -154,38 +159,19 @@ public class TransListFragment extends Fragment {
     }
 
     public void gotoPayCash(PayListModel model){
-        final SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        String json = prefs.getString(PROFILE, "");
 
-        Gson gson = new Gson();
-        String transModel = gson.toJson(model);
-
+        Profile profile=((TransactionActivity)getActivity()).getProfile();
         Intent myIntent = new Intent(getActivity(), CashPayActivity.class);
-        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
-        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
-        //myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, json);
+        myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
         this.startActivity(myIntent);
     }
 
     public void gotoCreditCash(PayListModel model){
-
-        final SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        String json = prefs.getString(PROFILE, "");
-
-        Gson gson = new Gson();
-        String transModel = gson.toJson(model);
-
+        Profile profile=((TransactionActivity)getActivity()).getProfile();
         Intent myIntent = new Intent(getActivity(), CreditPayActivity.class);
-        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
-        //myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
-
-        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
-
-        myIntent.putExtra(PREF_PROFILE, json);
-
+        myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
         this.startActivity(myIntent);
     }
 }

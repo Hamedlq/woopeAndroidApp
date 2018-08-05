@@ -14,17 +14,16 @@ import com.google.gson.Gson;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.Store;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class CreditPayActivity extends AppCompatActivity {
 
-    //String storeName;
-    //String buyAmount;
     String profileString;
-    String transactionString;
     Profile profile;
     PayListModel payListModel;
     EditText pointText;
@@ -33,21 +32,17 @@ public class CreditPayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_pay);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+        }
+
         pointText = findViewById(R.id.pointText);
         TextView payAmount = findViewById(R.id.payAmount);
         TextView toman_credit = findViewById(R.id.toman_credit);
         TextView woope_credit = findViewById(R.id.woope_credit);
 
 
-
-        Intent intent = getIntent();
-        //storeName = intent.getStringExtra(STORE_NAME);
-        profileString = intent.getStringExtra(PREF_PROFILE);
-        transactionString = intent.getStringExtra(PAY_LIST_ITEM);
-
-        Gson gson = new Gson();
-        profile = (Profile) gson.fromJson(profileString, Profile.class);
-        payListModel = (PayListModel) gson.fromJson(transactionString, PayListModel.class);
         //buyAmount = intent.getStringExtra(BUY_AMOUNT);
         payAmount.setText(String.valueOf(payListModel.totalPrice));
         toman_credit.setText(profile.getCreditString());
@@ -102,8 +97,8 @@ public class CreditPayActivity extends AppCompatActivity {
 
     public void gotoConfirmCreditPay(){
         Intent myIntent = new Intent(CreditPayActivity.this, ConfirmPayActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, transactionString); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, profileString);
+        myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
         String st= pointText.getText().toString();
         myIntent.putExtra(POINTS_PAYED, st);
         //myIntent.putExtra("StoreName", storeName); //Optional parameters

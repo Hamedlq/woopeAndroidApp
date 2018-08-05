@@ -8,17 +8,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import java.security.PublicKey;
+
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.TransListFragment;
 
-public class TransactionActivity extends AppCompatActivity {
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
+public class TransactionActivity extends AppCompatActivity {
+    Profile profile;
+    //Store store;
     String LIST_FRAGMENT = "HomeFragment";
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            //store = (Store) getIntent().getExtras().getSerializable(STORE);
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,6 +53,10 @@ public class TransactionActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public Profile getProfile() {
+        return profile;
     }
 
 }

@@ -201,7 +201,14 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
+                final SharedPreferences prefs =
+                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = prefs.getString(PROFILE, "");
+                Profile obj = gson.fromJson(json, Profile.class);
+
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
+                myIntent.putExtra(PREF_PROFILE, obj);
                 getActivity().startActivity(myIntent);
 
                 break;

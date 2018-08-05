@@ -29,6 +29,7 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.PayState;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class CashPayActivity extends AppCompatActivity {
 
@@ -48,7 +50,6 @@ public class CashPayActivity extends AppCompatActivity {
     Profile profile;
     PayListModel payListModel;
 
-
     ProgressBar progressBar;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -57,15 +58,11 @@ public class CashPayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_pay);
 
-        Intent intent = getIntent();
-        //storeName = intent.getStringExtra(STORE_NAME);
-        profileString = intent.getStringExtra(PREF_PROFILE);
-        transactionString = intent.getStringExtra(PAY_LIST_ITEM);
-        payedPoints = intent.getStringExtra(POINTS_PAYED);
-
-        Gson gson = new Gson();
-        profile = (Profile) gson.fromJson(profileString, Profile.class);
-        payListModel = (PayListModel) gson.fromJson(transactionString, PayListModel.class);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            payedPoints = getIntent().getStringExtra(POINTS_PAYED);
+        }
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
@@ -83,37 +80,6 @@ public class CashPayActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
-
-        //Intent intent = getIntent();
-        /*String storeName = intent.getStringExtra("StoreName");
-        TextView StoreName_tv=findViewById(R.id.StoreName);
-        StoreName_tv.setText(storeName);*/
-        //Switch mSwitch=findViewById(R.id.switchBtn);
-        /*mSwitch.setTrackDrawable(new SwitchDrawable(this,
-                R.string.right_switch, R.string.left_switch));*/
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-        // Spinner element
-        //Spinner spinner = (Spinner) findViewById(R.id.spinnerBtn);
-
-        //PayState[] states = new PayState[] { new PayState("اعتباری", "0"),  };
-        /*List<PayState> states= new ArrayList<PayState>();
-        states.add(new PayState("پرداخت اعتباری", "0"));
-        states.add(new PayState("پرداخت نقدی","0") );
-        ArrayAdapter adapter = new PayArrayAdapter(this, states);
-        //adapter.setDropDownViewResource(R.layout.spinner_row);
-       *//* String arr[] = { "1", "2", "3" };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                PayActivity.this, R.layout.spinner_row, R.id.credit,arr);*//*
-        spinner.setAdapter(adapter);
-
-*/
-
 
     }
 

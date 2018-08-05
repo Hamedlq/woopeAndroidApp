@@ -18,6 +18,7 @@ import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,10 +28,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class ConfirmPayActivity extends AppCompatActivity {
 
-    //String storeName;
     String profileString;
     String transactionString;
     String payedPoints;
@@ -45,15 +46,10 @@ public class ConfirmPayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_pay);
 
-        Intent intent = getIntent();
-        //storeName = intent.getStringExtra(STORE_NAME);
-        profileString = intent.getStringExtra(PREF_PROFILE);
-        transactionString = intent.getStringExtra(PAY_LIST_ITEM);
-        payedPoints = intent.getStringExtra(POINTS_PAYED);
-
-        Gson gson = new Gson();
-        profile = (Profile) gson.fromJson(profileString, Profile.class);
-        payListModel = (PayListModel) gson.fromJson(transactionString, PayListModel.class);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+        }
 
         TextView pointText = findViewById(R.id.pointText);
         TextView payAmount = findViewById(R.id.payAmount);
@@ -74,37 +70,6 @@ public class ConfirmPayActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
-
-        //Intent intent = getIntent();
-        /*String storeName = intent.getStringExtra("StoreName");
-        TextView StoreName_tv=findViewById(R.id.StoreName);
-        StoreName_tv.setText(storeName);*/
-        //Switch mSwitch=findViewById(R.id.switchBtn);
-        /*mSwitch.setTrackDrawable(new SwitchDrawable(this,
-                R.string.right_switch, R.string.left_switch));*/
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-        // Spinner element
-        //Spinner spinner = (Spinner) findViewById(R.id.spinnerBtn);
-
-        //PayState[] states = new PayState[] { new PayState("اعتباری", "0"),  };
-        /*List<PayState> states= new ArrayList<PayState>();
-        states.add(new PayState("پرداخت اعتباری", "0"));
-        states.add(new PayState("پرداخت نقدی","0") );
-        ArrayAdapter adapter = new PayArrayAdapter(this, states);
-        //adapter.setDropDownViewResource(R.layout.spinner_row);
-       *//* String arr[] = { "1", "2", "3" };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                PayActivity.this, R.layout.spinner_row, R.id.credit,arr);*//*
-        spinner.setAdapter(adapter);
-
-*/
-
 
     }
 
@@ -144,15 +109,10 @@ public class ConfirmPayActivity extends AppCompatActivity {
     }
 
     public void gotoPayCodeActivity(PayListModel trans){
-        //payListModel =trans.getMessage();
-        Gson gson = new Gson();
-        String transModel = gson.toJson(trans);
-        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
+
         Intent myIntent = new Intent(ConfirmPayActivity.this, PayCodeActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
-        //myIntent.putExtra(STORE_NAME, storeName); //Optional parameters
-        //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
+        myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
         startActivity(myIntent);
         this.finish();
     }

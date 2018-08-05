@@ -98,16 +98,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     public void gotoPayCash(PayListModel model) {
-        Gson gson = new Gson();
-        String transModel = gson.toJson(model);
-
-        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
-
         Intent myIntent = new Intent(PayActivity.this, CashPayActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
-        //myIntent.putExtra(STORE_NAME, storeName); //Optional parameters
-        //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
+        myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile); //Optional parameters
         this.startActivity(myIntent);
         this.finish();
     }
@@ -118,10 +111,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
         Intent myIntent = new Intent(PayActivity.this, CreditPayActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, transModel); //Optional parameters
-        //myIntent.putExtra(STORE_NAME, storeName); //Optional parameters
-        //myIntent.putExtra(BUY_AMOUNT, amount.getText().toString()); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, profileString); //Optional parameters
+        myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile); //Optional parameters
         this.startActivity(myIntent);
         this.finish();
     }
