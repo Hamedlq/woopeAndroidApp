@@ -12,9 +12,9 @@ public class Profile extends ApiResponse implements Serializable{
     private String username;
     private String userBio;
     private String imageUid;
-    private int woopeCredit=0;
-    private int credit=0;
-    private int useNumber=0;
+    private int woopeCredit =0;
+    private int tomanCredit =0;
+    private int transactionCount =0;
 
     public Profile() {
     }
@@ -49,30 +49,30 @@ public class Profile extends ApiResponse implements Serializable{
         this.woopeCredit = woopeCredit;
     }
 
-    public int getCredit() {
-        return credit;
+    public int getTomanCredit() {
+        return tomanCredit;
     }
 
     public String getCreditString() {
-        if(credit>0){
-            return String.valueOf(credit);
+        if(tomanCredit >0){
+            return String.valueOf(tomanCredit);
         }
         return "0";
     }
     public String getWoopeCreditString() {
-        if(woopeCredit>0){
+        if(woopeCredit >0){
             return String.valueOf(woopeCredit);
         }
         return "0";
     }
     public String getUseNumberString() {
-        if(useNumber>0){
-            return String.valueOf(useNumber);
+        if(transactionCount >0){
+            return String.valueOf(transactionCount);
         }
         return "0";
     }
-    public void setCredit(int credit) {
-        this.credit = credit;
+    public void setTomanCredit(int tomanCredit) {
+        this.tomanCredit = tomanCredit;
     }
 
     public String getUsername() {
@@ -91,11 +91,11 @@ public class Profile extends ApiResponse implements Serializable{
         this.userBio = userBio;
     }
 
-    public int getUseNumber() {
-        return useNumber;
+    public int getTransactionCount() {
+        return transactionCount;
     }
 
-    public void setUseNumber(int useNumber) {
-        this.useNumber = useNumber;
+    public void setTransactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
     }
 }

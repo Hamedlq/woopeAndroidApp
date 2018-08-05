@@ -15,10 +15,12 @@ import com.google.gson.Gson;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.Store;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 
 public class StoreActivity extends AppCompatActivity {
@@ -27,7 +29,7 @@ public class StoreActivity extends AppCompatActivity {
     String STORE_FRAGMENT = "StoreFragment";
     String authToken = null;
     Profile profile = null;
-    String storeName;
+    Store store;
     String profileString;
     ProgressBar progressBar;
 
@@ -37,12 +39,11 @@ public class StoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
 
-        Intent intent = getIntent();
-        storeName = intent.getStringExtra(STORE_NAME);
-        //totalPrice = intent.getLongExtra(TOTAL_PRICE, 0);
-        profileString = intent.getStringExtra(PREF_PROFILE);
-        Gson gson = new Gson();
-        profile = (Profile) gson.fromJson(profileString, Profile.class);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            store = (Store) getIntent().getExtras().getSerializable(STORE);
+        }
+
 
         Button payBtn = (Button) findViewById(R.id.payBtn);
         payBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -63,15 +64,15 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     public void goToPaying() {
-        final SharedPreferences prefs =
+        /*final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString(PROFILE, "");
 
-        Profile obj = gson.fromJson(json, Profile.class);
+        Profile obj = gson.fromJson(json, Profile.class);*/
         Intent myIntent = new Intent(this, PayActivity.class);
-        myIntent.putExtra(PREF_PROFILE, profileString);
-        myIntent.putExtra(STORE_NAME, storeName); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
+        myIntent.putExtra(STORE, store); //Optional parameters
         this.startActivity(myIntent);
         this.finish();
     }

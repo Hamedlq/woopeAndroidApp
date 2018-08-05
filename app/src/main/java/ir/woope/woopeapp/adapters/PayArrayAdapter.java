@@ -65,7 +65,7 @@ public class PayArrayAdapter  extends ArrayAdapter<PayState> {
         TextView label=(TextView)row.findViewById(R.id.mode);
         label.setText(items.get(position).getMode());
 
-        TextView sub=(TextView)row.findViewById(R.id.credit);
+        TextView sub=(TextView)row.findViewById(R.id.tomanCredit);
         sub.setText( " اعتبار "+items.get(position).getCredit());
 
         /*ImageView icon=(ImageView)row.findViewById(R.id.image);

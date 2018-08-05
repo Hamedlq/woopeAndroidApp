@@ -111,7 +111,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         userBio=mRecycler.findViewById(R.id.userBio);
         cashCredit=mRecycler.findViewById(R.id.cashCredit);
         woopeCredit=mRecycler.findViewById(R.id.woope_credit);
-        useNumber=mRecycler.findViewById(R.id.useNumber);
+        useNumber=mRecycler.findViewById(R.id.transactionCount);
 
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto=mRecycler.findViewById(R.id.ivUserProfilePhoto);
@@ -241,15 +241,11 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     private void galleryIntent() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "انتخاب عکس محصول"), SELECT_FILE);
+        ((MainActivity)getActivity()).galleryIntent();
     }
 
     private void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+        ((MainActivity)getActivity()).cameraIntent();
     }
 
 

@@ -52,6 +52,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
@@ -94,8 +95,8 @@ public class home_fragment extends Fragment {
                 String json = prefs.getString(PROFILE, "");
                 Profile obj = gson.fromJson(json, Profile.class);
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, json);
-                myIntent.putExtra(STORE_NAME, s.storeName); //Optional parameters
+                myIntent.putExtra(PREF_PROFILE, obj);
+                myIntent.putExtra(STORE, s); //Optional parameters
                 getActivity().startActivity(myIntent);
 
                 //open activity

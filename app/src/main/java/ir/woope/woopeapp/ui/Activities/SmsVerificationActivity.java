@@ -29,6 +29,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
+
 public class SmsVerificationActivity extends AppCompatActivity {
 
     Retrofit retrofit_sms_verif, retrofit_login;
@@ -167,9 +170,9 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                                     if (response.message().toString().equals("OK")) {
 
-                                        SharedPreferences settings = getApplicationContext().getSharedPreferences("token", 0);
+                                        SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
                                         SharedPreferences.Editor editor = settings.edit();
-                                        editor.putString("token", response.body().getAccessToken()).apply();
+                                        editor.putString(TOKEN, response.body().getAccessToken()).apply();
 
                                         Toast.makeText(
                                                 SmsVerificationActivity.this

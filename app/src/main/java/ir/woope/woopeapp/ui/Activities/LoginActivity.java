@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                             response.body(); // have your all data
                             String tk =response.body().getAccessToken();
 
-                            SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, 0);
+                            SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putString(TOKEN, tk);
                             // Apply the edits!

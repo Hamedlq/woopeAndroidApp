@@ -23,6 +23,7 @@ import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,11 +32,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 
 public class PayActivity extends AppCompatActivity implements View.OnTouchListener {
     //@BindView(R.id.StoreName) TextView StoreName_tv;
-    String storeName;
+    Store store;
     long totalPrice;
     //Spinner spinner;
     EditText amount;
@@ -58,42 +60,26 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
         ButterKnife.bind(this);
-        Intent intent = getIntent();
-        storeName = intent.getStringExtra(STORE_NAME);
-        //totalPrice = intent.getLongExtra(TOTAL_PRICE, 0);
-        profileString = intent.getStringExtra(PREF_PROFILE);
-        Gson gson = new Gson();
-        profile = (Profile) gson.fromJson(profileString, Profile.class);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            store = (Store) getIntent().getExtras().getSerializable(STORE);
+        }
         TextView StoreName_tv = findViewById(R.id.StoreName);
         amount = findViewById(R.id.amount);
-        StoreName_tv.setText(storeName);
+        StoreName_tv.setText(store.storeName);
         if (totalPrice != 0) {
             amount.setText(String.valueOf(totalPrice));
         }
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
-            woope_credit.setText(String.valueOf(profile.getWoopeCredit()));
+            woope_credit.setText(String.valueOf(profile.getWoopeCreditString()));
 
             toman_credit = (TextView) findViewById(R.id.toman_credit);
-            toman_credit.setText(String.valueOf(profile.getCredit()));
-
+            toman_credit.setText(String.valueOf(profile.getCreditString()));
         }
 
-
-        // Spinner element
-        //spinner = (Spinner) findViewById(R.id.spinnerBtn);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
-        //PayState[] states = new PayState[] { new PayState("اعتباری", "0"),  };
-        /*List<PayState> states = new ArrayList<PayState>();
-        states.add(new PayState("پرداخت اعتباری", "20 ووپ"));
-        states.add(new PayState("پرداخت نقدی", "0 ووپ"));
-        ArrayAdapter adapter = new PayArrayAdapter(this, states);*/
-        //adapter.setDropDownViewResource(R.layout.spinner_row);
-       /* String arr[] = { "1", "2", "3" };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                PayActivity.this, R.layout.spinner_row, R.id.credit,arr);*/
-        //spinner.setAdapter(adapter);
 
         btn = (Button) findViewById(R.id.button);
         btn.setOnTouchListener(this);

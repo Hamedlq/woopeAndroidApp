@@ -168,7 +168,7 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.IMAGE_URL + store.imageUId).into(holder.thumbnail);
 
-        if(!store.isFollowed){
+        if(store.isFollowed){
             store.isFollowed=true;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
         }else {
