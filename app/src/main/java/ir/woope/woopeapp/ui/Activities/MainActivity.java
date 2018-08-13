@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         ProfileInterface providerApiInterface =
                 retrofit.create(ProfileInterface.class);
 

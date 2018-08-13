@@ -40,13 +40,13 @@ public class UserRegisterActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_user_register);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
+//
+//        }
 
         username = (EditText) findViewById(R.id.txtbx_username_register);
         password = (EditText) findViewById(R.id.txtbx_password_register);
@@ -148,10 +148,10 @@ public class UserRegisterActivity extends AppCompatActivity {
                             }
 
 
-                                Toast.makeText(
-                                        UserRegisterActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                            Toast.makeText(
+                                    UserRegisterActivity.this
+                                    , response.body().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
 
                         }
 

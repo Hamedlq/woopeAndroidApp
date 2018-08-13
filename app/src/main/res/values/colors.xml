@@ -13,6 +13,7 @@
     <color name="wgreen">#43a047</color>
     <color name="darkwgreen">#2E7D32</color>
     <color name="darkwhite">#80ffffff</color>
+    <color name="edittext_hint">#c6c6c6</color>
 
     <color name="btn_send_normal">#02c754</color>
     <color name="btn_send_pressed">#006633</color>

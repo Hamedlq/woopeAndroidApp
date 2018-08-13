@@ -83,4 +83,8 @@ dependencies {
 
     implementation 'com.onesignal:OneSignal:3.9.3'
 
+    implementation 'com.github.ceryle:RadioRealButton:v2.1.1'
+
+    implementation 'com.unstoppable:submitbutton:1.1.3'
+
 }

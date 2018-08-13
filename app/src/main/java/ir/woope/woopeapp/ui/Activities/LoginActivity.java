@@ -62,11 +62,11 @@ public class LoginActivity extends AppCompatActivity {
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
+//        }
 
         //sets the statusbar and navbar colors
 

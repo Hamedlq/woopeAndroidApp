@@ -31,11 +31,11 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sendnumber_changepass);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
+//        }
 
         final EditText number = (EditText) findViewById(R.id.txtbx_sendnumber_changepass);
         final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar_sendnumber_changepass);

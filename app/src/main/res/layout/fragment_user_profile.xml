@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -51,61 +52,76 @@
                     android:paddingTop="64dp"
                     app:layout_collapseMode="parallax">
 
-                    <LinearLayout
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/profileLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="204dp"
                         android:clipChildren="false">
 
                         <ImageView
                             android:id="@+id/ivUserProfilePhoto"
-                            android:layout_width="@dimen/user_profile_avatar_size"
-                            android:layout_height="@dimen/user_profile_avatar_size"
-                            android:layout_marginRight="16dp" />
+                            android:layout_width="95dp"
+                            android:layout_height="95dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <LinearLayout
+                        <android.support.constraint.ConstraintLayout
                             android:id="@+id/vUserDetails"
-                            android:layout_width="wrap_content"
+                            android:layout_width="216dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ivUserProfilePhoto">
 
                             <TextView
                                 android:id="@+id/userNameFamily"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center"
                                 android:text="سامان قاسمی"
                                 android:textColor="#ffffff"
-                                android:textSize="24sp" />
+                                android:textSize="24sp"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/username"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
                                 android:text="\@ghasemi"
                                 android:textColor="#bbbbbb"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                app:layout_constraintTop_toBottomOf="@+id/userNameFamily" />
 
                             <TextView
                                 android:id="@+id/userBio"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center_vertical|center"
                                 android:text="کله طلایی"
                                 android:textColor="#ffffff"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                app:layout_constraintTop_toBottomOf="@+id/username" />
 
                             <Button
-                                android:id="@+id/btnEdit"
+                                android:id="@+id/btnEditProfile"
                                 android:layout_width="match_parent"
                                 android:layout_height="24dp"
-                                android:layout_marginRight="24dp"
                                 android:layout_marginTop="8dp"
                                 android:background="@drawable/btn_following"
                                 android:text="ویرایش پروفایل"
                                 android:textColor="#ffffff"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                app:layout_constraintTop_toBottomOf="@+id/userBio" />
 
-                        </LinearLayout>
-                    </LinearLayout>
+                        </android.support.constraint.ConstraintLayout>
+                    </android.support.constraint.ConstraintLayout>
 
                     <LinearLayout
                         android:id="@+id/vUserStats"

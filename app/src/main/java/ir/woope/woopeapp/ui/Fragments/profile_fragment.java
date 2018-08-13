@@ -41,7 +41,10 @@ import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
 import ir.woope.woopeapp.adapters.ProfilePageAdapter;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.ui.Activities.EditProfileActivity;
+import ir.woope.woopeapp.ui.Activities.LoginActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
+import ir.woope.woopeapp.ui.Activities.SplashActivity;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
@@ -97,6 +100,8 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
 
@@ -113,11 +118,12 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         woopeCredit=mRecycler.findViewById(R.id.woope_credit);
         useNumber=mRecycler.findViewById(R.id.transactionCount);
 
+
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto=mRecycler.findViewById(R.id.ivUserProfilePhoto);
         tlUserProfileTabs=mRecycler.findViewById(R.id.tlUserProfileTabs);
         vUserDetails=mRecycler.findViewById(R.id.vUserDetails);
-        btnEdit=mRecycler.findViewById(R.id.btnEdit);
+        btnEdit=mRecycler.findViewById(R.id.btnEditProfile);
         vUserStats=mRecycler.findViewById(R.id.vUserStats);
         vUserProfileRoot=mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager
@@ -128,6 +134,17 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0){
+
+                Intent goto_edit = new Intent(getActivity(),
+                        EditProfileActivity.class);
+                startActivity(goto_edit);
+
+            }
+        });
 
         Profile pp=((MainActivity)getActivity()).getUserProfile();
         if(pp==null){
@@ -146,6 +163,8 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             useNumber.setText(pp.getUseNumberString());
         }
     }
+
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

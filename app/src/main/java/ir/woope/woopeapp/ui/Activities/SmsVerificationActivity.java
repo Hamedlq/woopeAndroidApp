@@ -42,11 +42,11 @@ public class SmsVerificationActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_register);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
+//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
+//        }
 
         final TextView countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final String recieved_code = getIntent().getStringExtra("validation_code");

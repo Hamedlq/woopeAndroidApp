@@ -43,12 +43,14 @@ public class SplashActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_splash);
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
         }
-*/
+        */
+
         retry = (Button) findViewById(R.id.btn_retry);
         err = (TextView) findViewById(R.id.txt_errorconnection);
         progress = (ProgressBar) findViewById(R.id.progressBar_splash);
@@ -56,7 +58,6 @@ public class SplashActivity extends AppCompatActivity {
 
         View splashLayout = findViewById(R.id.activity_splash);
         GetProfileFromServer();
-
 
 
         retry.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,7 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    public void GetProfileFromServer(){
+    public void GetProfileFromServer() {
         retrofit_splash = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -84,7 +85,7 @@ public class SplashActivity extends AppCompatActivity {
         final SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         final String token = settings.getString(TOKEN, null);
 
-        splash.check_connection("bearer "+token).enqueue(new Callback<Profile>() {
+        splash.check_connection("bearer " + token).enqueue(new Callback<Profile>() {
 
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {

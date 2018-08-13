@@ -15,9 +15,13 @@ public final class Constants {
         public HTTP() {
 
         }
+<<<<<<< Updated upstream
 
         public static final String BASE_URL = "http://192.168.100.5:8090/";
 //        public static final String BASE_URL = "http://localhost/";
+=======
+        public static final String BASE_URL = "http://192.168.100.2:8090";
+>>>>>>> Stashed changes
     }
 
     public final class GlobalConstants{
