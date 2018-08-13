@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
@@ -32,6 +33,7 @@ public class StoreActivity extends AppCompatActivity {
     Store store;
     String profileString;
     ProgressBar progressBar;
+    ImageView backdrop;
 
 
     @Override
@@ -61,6 +63,8 @@ public class StoreActivity extends AppCompatActivity {
         hideProgreeBar();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
     }
 
     public void goToPaying() {

@@ -193,6 +193,7 @@ public class home_fragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_navigation, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -218,88 +219,6 @@ public class home_fragment extends Fragment {
         return true;
     }
 
-    /**
-     * Initializing collapsing toolbar
-     * Will show and hide the toolbar title on scroll
-     */
-/*    private void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout)mRecycler.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) mRecycler.findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
-    }*/
-
-    /**
-     * Adding few albums for testing
-     */
-    private void prepareAlbums() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        /*Store a = new Store("آدیداس","هر ۱۰۰ هزار تومان ۵ ووپ", 7, covers[0]);
-        albumList.add(a);
-
-        a = new Store("نایک","هر ۱۰ هزار تومان ۱ ووپ", 10, covers[1]);
-        albumList.add(a);
-
-        a = new Store("LC WAIKIKI","هر ۲۰ هزار تومان ۲ ووپ", 10, covers[2]);
-        albumList.add(a);
-
-        a = new Store("ecco","هر ۳۰ هزار تومان ۱۰ ووپ", 15, covers[3]);
-        albumList.add(a);
-
-        a = new Store("پرپروک","هر ۱۰۰ هزار تومان ۵ ووپ", 10, covers[4]);
-        albumList.add(a);
-
-        a = new Store("سیب۳۶۰","هر ۳۰ هزار تومان ۱۰ ووپ", 10, covers[5]);
-        albumList.add(a);
-
-        a = new Store("شیلا","هر ۵۰ هزار تومان ۷ ووپ", 5, covers[6]);
-        albumList.add(a);
-
-        a = new Store("پدرخوب","هر ۳۰ هزار تومان ۱۰ ووپ", 10, covers[7]);
-        albumList.add(a);
-
-        a = new Store("در ب در","هر ۱۰۰ هزار تومان ۵ ووپ", 15, covers[8]);
-        albumList.add(a);
-
-        a = new Store("آدیداس","هر ۸۰ هزار تومان ۵ ووپ", 15, covers[9]);
-        albumList.add(a);*/
-
-        adapter.notifyDataSetChanged();
-    }
-
     private void getOrderListFromServer() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -314,7 +233,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer(authToken);
+                providerApiInterface.getStoreFromServer("bearer "+authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {

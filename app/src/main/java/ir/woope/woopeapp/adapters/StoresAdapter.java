@@ -126,10 +126,10 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
                                 }else {
                                     store.isFollowed=false;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
                                 }
                             }
                             break;
@@ -166,14 +166,14 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
         holder.count.setText(store.discountPercent + "٪ تخفیف");
 
         // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.IMAGE_URL + store.imageUId).into(holder.thumbnail);
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
         }else {
             store.isFollowed=false;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
         }
        /* holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override

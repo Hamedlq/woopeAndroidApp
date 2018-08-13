@@ -29,6 +29,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
@@ -180,14 +181,10 @@ public class SmsVerificationActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                         Intent goto_mainpage = new Intent(SmsVerificationActivity.this,
                                                 MainActivity.class);
+                                        goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
+                                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        finish();
                                         startActivity(goto_mainpage);
-                                        {
-
-                                            goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            finish();
-                                            startActivity(goto_mainpage);
-
-                                        }
                                     } else {
                                         Toast.makeText(
                                                 SmsVerificationActivity.this

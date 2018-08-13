@@ -46,7 +46,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.trans_list_item, parent, false);
+                .inflate(R.layout.pay_list_item, parent, false);
 
         return new MyViewHolder(itemView);
 //        return null;

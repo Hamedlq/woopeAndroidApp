@@ -26,7 +26,7 @@ public class Store extends ApiResponse implements Serializable {
     public String returnPoint;
     public String discountPercent;
     public String imageUId;
-    public String thumbnailUId;
+    public String logoSrc;
     public int thumbnail;
     public boolean isFollowed;
 }

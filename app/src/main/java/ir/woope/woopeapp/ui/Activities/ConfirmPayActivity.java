@@ -49,13 +49,23 @@ public class ConfirmPayActivity extends AppCompatActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            payedPoints= getIntent().getStringExtra(POINTS_PAYED);
         }
 
         TextView pointText = findViewById(R.id.pointText);
+
+
         TextView payAmount = findViewById(R.id.payAmount);
+        payAmount.setText(payedPoints);
+
+        TextView total_price = findViewById(R.id.total_price);
+        total_price.setText(String.valueOf(payListModel.totalPrice));
 
         TextView StoreName_tv=findViewById(R.id.StoreName);
         StoreName_tv.setText(payListModel.storeName);
+
+        TextView return_woope_credit=findViewById(R.id.return_woope_credit);
+        return_woope_credit.setText(String.valueOf(payListModel.returnPoints));
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
@@ -111,7 +121,7 @@ public class ConfirmPayActivity extends AppCompatActivity {
     public void gotoPayCodeActivity(PayListModel trans){
 
         Intent myIntent = new Intent(ConfirmPayActivity.this, PayCodeActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
+        myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
         startActivity(myIntent);
         this.finish();

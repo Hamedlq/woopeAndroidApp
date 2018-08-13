@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 
 public interface StoreInterface {
     @GET("api/Store/GetStores")
-    Call<List<Store>> getStoreFromServer(@Query("token") String authtoken);
+    Call<List<Store>> getStoreFromServer(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
     @GET("api/Store/FindStore")
     Call<List<Store>> FindStore(@Query("token") String authtoken,

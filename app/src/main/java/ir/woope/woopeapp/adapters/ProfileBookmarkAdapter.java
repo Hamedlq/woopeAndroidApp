@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,14 +44,14 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, count;
-        public ImageView thumbnail, overflow;
+        public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -62,7 +63,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
                         case MotionEvent.ACTION_UP: {
                             long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                             if (clickDuration < MAX_CLICK_DURATION) {
-                                onItemTouchListener.onCardViewTap(v, getPosition());
+                                onItemTouchListener.onCardViewTap(getPosition());
                             }
                             break;
                         }
@@ -83,7 +84,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
                         case MotionEvent.ACTION_UP: {
                             long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                             if (clickDuration < MAX_CLICK_DURATION) {
-                                onItemTouchListener.onCardViewTap(v, getPosition());
+                                onItemTouchListener.onCardViewTap(getPosition());
                             }
                             break;
                         }
@@ -117,16 +118,16 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
         holder.title.setText(album.storeName);
         holder.count.setText(album.discountPercent + "٪ تخفیف");
 
-        // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.IMAGE_URL + album.imageUId).into(holder.thumbnail);
+// loading album cover using Glide library
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + album.logoSrc).into(holder.thumbnail);
 
 
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
+       /* holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(holder.overflow);
             }
-        });
+        });*/
 
 
     }
@@ -153,11 +154,14 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem
+                    .getMenuInfo();
             switch (menuItem.getItemId()) {
                 case R.id.action_buy:
                     Toast.makeText(mContext, "خرید", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.action_store:
+                    //onItemTouchListener.onCardViewTap(v, getPosition());
                     Toast.makeText(mContext, "اطلاعات فروشگاه", Toast.LENGTH_SHORT).show();
                     return true;
                 default:

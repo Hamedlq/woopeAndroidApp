@@ -109,7 +109,7 @@ public class TransListFragment extends Fragment {
 
         showProgreeBar();
         Call<List<PayListModel>> call =
-                providerApiInterface.getTransactionsFromServer(authToken);
+                providerApiInterface.getTransactionsFromServer("bearer " + authToken);
 
 
         call.enqueue(new Callback<List<PayListModel>>() {

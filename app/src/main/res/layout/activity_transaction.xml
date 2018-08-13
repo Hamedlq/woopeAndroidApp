@@ -11,6 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:theme="@style/ToolbarStyle"
         android:background="@color/colorPrimary" >
 
         <TextView
@@ -18,6 +19,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="20sp"
+            android:textColor="@color/white"
+
             android:text="لیست پرداخت‌ها"/>
 
     </android.support.v7.widget.Toolbar>

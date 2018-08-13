@@ -54,12 +54,16 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
+import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,9 +71,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.aronapp.supplierapp.Helpers.Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     String HOME_FRAGMENT = "HomeFragment";
     String SEARCH_FRAGMENT = "SearchFragment";
     String PROFILE_FRAGMENT = "ProfileFragment";
+    boolean getProfileFromServer = false;
     String authToken = null;
     Profile profile = null;
     private int CROP = 2;
@@ -118,7 +125,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //ButterKnife.bind(this);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            getProfileFromServer = getIntent().getBooleanExtra(GET_PROFILE_FROM_SERVER, false);
+        }
+        if (getProfileFromServer) {
+            getProfileFromServer();
+        } else {
+            getUserProfile();
+        }
 
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -140,14 +154,14 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        String profileString= prefs.getString(Constants.GlobalConstants.PROFILE, null);
-        if(profileString != null){
+        String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
+        if (profileString != null) {
             profile = (Profile) gson.fromJson(profileString, Profile.class);
-            return  profile;
-        }else {
+            return profile;
+        } else {
             getProfileFromServer();
         }
-        return  null;
+        return null;
     }
 
     private void getProfileFromServer() {
@@ -163,12 +177,14 @@ public class MainActivity extends AppCompatActivity {
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
         Call<Profile> call =
-                providerApiInterface.getProfileFromServer(authToken);
+                providerApiInterface.getProfileFromServer("bearer " + authToken);
         call.enqueue(new Callback<Profile>() {
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {
                 int code = response.code();
                 if (code == 200) {
+
+
                     Profile user = response.body();
                     //profile=user.getMessage();
                     SharedPreferences.Editor prefsEditor = prefs.edit();
@@ -177,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                     prefsEditor.putString(PROFILE, json);
                     prefsEditor.apply();
                     Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
-                    if(fragment !=null){
+                    if (fragment != null) {
                         ((profile_fragment) fragment).setValues(user);
                     }
 
@@ -205,10 +221,10 @@ public class MainActivity extends AppCompatActivity {
         String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "");
 
         OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-        String oneSignalToken=status.getSubscriptionStatus().getUserId();
+        String oneSignalToken = status.getSubscriptionStatus().getUserId();
 
         Call<ApiResponse> call =
-                profileInterface.sendOneSignalToken(authToken, oneSignalToken);
+                profileInterface.sendOneSignalToken("bearer "+ authToken, oneSignalToken);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -224,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -232,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
             System.exit(1);
             return;
         }
-        Toast.makeText(MainActivity.this, R.string.press_again_to_exit , Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, R.string.press_again_to_exit, Toast.LENGTH_LONG).show();
         this.doubleBackToExitPressedOnce = true;
         new Handler().postDelayed(new Runnable() {
 
@@ -272,15 +287,16 @@ public class MainActivity extends AppCompatActivity {
                 if (file.exists()) {
                     String filePath = file.getPath();
                     Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                    Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
-                    if(fragment !=null){
+                    //Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+                    sendPicToServer(bitmap,filePath);
+                    /*if(fragment !=null){
                         ((profile_fragment) fragment).setPhoto(bitmap);
-                    }
+                    }*/
+
                 }
             }
         }
     }
-
 
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -357,8 +373,7 @@ public class MainActivity extends AppCompatActivity {
             String errorMessage = "امکان آپلود عکس در گوشی شما وجود ندارد";
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // display an error message
             String errorMessage = "خطایی رخ داده است";
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
@@ -376,14 +391,14 @@ public class MainActivity extends AppCompatActivity {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(
                         (Activity) context,
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    showDialog("External storage", context,
+                    showDialog("ذخیره خارجی", context,
                             Manifest.permission.READ_EXTERNAL_STORAGE);
 
                 } else {
                     ActivityCompat
                             .requestPermissions(
                                     (Activity) context,
-                                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
                 }
                 return false;
@@ -406,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ActivityCompat.requestPermissions((Activity) context,
-                                new String[] { permission },
+                                new String[]{permission},
                                 MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
                     }
                 });
@@ -430,5 +445,50 @@ public class MainActivity extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
         }
+    }
+
+
+    private void sendPicToServer(final Bitmap bitmap, final String filePath) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        ProfileInterface profileInterface =
+                retrofit.create(ProfileInterface.class);
+
+        SharedPreferences prefs = this.getSharedPreferences(
+                Constants.GlobalConstants.MY_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "");
+
+        File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+
+        Call<ApiResponse> call =
+                profileInterface.updateImage(body, "bearer " +authToken);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                int code = response.code();
+                if (code == 200) {
+                    ApiResponse i = response.body();
+                    Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+                    if (fragment != null) {
+                        ((profile_fragment) fragment).setPhoto(i.getMessage());
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

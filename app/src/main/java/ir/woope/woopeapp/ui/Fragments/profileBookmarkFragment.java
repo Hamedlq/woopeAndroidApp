@@ -46,6 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 
 /**
@@ -79,7 +80,7 @@ public class profileBookmarkFragment extends Fragment {
         itemTouchListener = new BookmarkTouchListener() {
 
             @Override
-            public void onCardViewTap(View view, int position) {
+            public void onCardViewTap( int position) {
                 Store s = albumList.get(position);
                 final SharedPreferences prefs =
                         getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
@@ -87,12 +88,10 @@ public class profileBookmarkFragment extends Fragment {
                 String json = prefs.getString(PROFILE, "");
                 Profile obj = gson.fromJson(json, Profile.class);
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, json);
-                myIntent.putExtra(STORE_NAME, s.storeName); //Optional parameters
+                myIntent.putExtra(PREF_PROFILE, obj);
+                myIntent.putExtra(STORE, s); //Optional parameters
                 getActivity().startActivity(myIntent);
 
-                //open activity
-                //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
 
             }
         };
@@ -333,7 +332,7 @@ public class profileBookmarkFragment extends Fragment {
     }
 
     public interface BookmarkTouchListener {
-        public void onCardViewTap(View view, int position);
+        public void onCardViewTap(int position);
     }
 
 

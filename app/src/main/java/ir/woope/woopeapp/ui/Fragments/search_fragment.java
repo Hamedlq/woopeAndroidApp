@@ -122,7 +122,7 @@ public class search_fragment extends Fragment {
         floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                if(newQuery.length()>2){
+                if(newQuery.length()>0){
                     Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
                     findStores(newQuery);
                 }
@@ -254,7 +254,7 @@ public class search_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer(authToken);
+                providerApiInterface.getStoreFromServer("bearer "+authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {

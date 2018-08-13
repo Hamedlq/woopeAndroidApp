@@ -63,6 +63,8 @@ public class CashPayActivity extends AppCompatActivity {
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
             payedPoints = getIntent().getStringExtra(POINTS_PAYED);
         }
+        TextView StoreName=(TextView) findViewById(R.id.StoreName);
+        StoreName.setText(payListModel.storeName);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();

@@ -26,6 +26,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
@@ -102,6 +103,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     Intent goto_main = new Intent(SplashActivity.this,
                             MainActivity.class);
+                    goto_main.putExtra(GET_PROFILE_FROM_SERVER, false);
                     goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(goto_main);

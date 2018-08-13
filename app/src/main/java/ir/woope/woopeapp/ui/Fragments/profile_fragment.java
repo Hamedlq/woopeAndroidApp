@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +41,7 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
 import ir.woope.woopeapp.adapters.ProfilePageAdapter;
+import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.ui.Activities.EditProfileActivity;
 import ir.woope.woopeapp.ui.Activities.LoginActivity;
@@ -184,20 +186,25 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         ivUserProfilePhoto.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                selectImage();
+                if(event.getAction() == KeyEvent.ACTION_UP){
+                    selectImage();
+                }
                 return true;
             }
         });
 
-        setupTabs();
         setupUserProfileGrid();
 
+        setupTabs();
 
         setupRevealBackground(savedInstanceState);
     }
 
 
     private void setupTabs() {
+
+        tlUserProfileTabs.setupWithViewPager(viewPager);
+
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_bookmark));
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
@@ -212,8 +219,10 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         //Adding adapter to pager
         viewPager.setAdapter(adapter);
 
+
         //Adding onTabSelectedListener to swipe views
-        tlUserProfileTabs.setOnTabSelectedListener(this);
+
+        tlUserProfileTabs.setOnTabSelectedListener(this) ;
 
         /*final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         rvUserProfile.setLayoutManager(layoutManager);*/
@@ -295,6 +304,8 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             vUserProfileRoot.setVisibility(View.VISIBLE);
             ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
             viewPager.setAdapter(adapter);
+            tlUserProfileTabs.getTabAt(0).setIcon(R.drawable.ic_bookmark);
+            tlUserProfileTabs.getTabAt(1).setIcon(R.drawable.ic_list_white);
             animateUserProfileOptions();
             animateUserProfileHeader();
         } else {
@@ -330,8 +341,15 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         useNumber.setText(pp.getUseNumberString());
     }
 
-    public void setPhoto(Bitmap bitmap){
-        ivUserProfilePhoto.setImageBitmap(bitmap);
+    public void setPhoto(String filePath){
+        //ivUserProfilePhoto.setImageBitmap(bitmap);
+        Picasso.with(getActivity())
+                .load(Constants.GlobalConstants.LOGO_URL + filePath)
+                .placeholder(R.drawable.img_circle_placeholder)
+                .resize(avatarSize, avatarSize)
+                .centerCrop()
+                .transform(new CircleTransformation())
+                .into(ivUserProfilePhoto);
         isImageUploaded=true;
     }
 

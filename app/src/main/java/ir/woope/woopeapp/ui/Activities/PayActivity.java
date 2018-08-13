@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -151,7 +152,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
-                    PayListModel model=response.body();
+                    PayListModel model = response.body();
                     //PayState sp = (PayState) spinner.getSelectedItem();
                     if (cash_radio.isChecked()) {
                         //go to cash pay
@@ -184,29 +185,31 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (v.getId()) {
-            case R.id.credit_layout:
-            case R.id.credit_radio:
-                credit_radio.setChecked(true);
-                cash_radio.setChecked(false);
-                credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-                cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
+        if (event.getAction() == KeyEvent.ACTION_UP) {
+            switch (v.getId()) {
+                case R.id.credit_layout:
+                case R.id.credit_radio:
+                    credit_radio.setChecked(true);
+                    cash_radio.setChecked(false);
+                    credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
+                    cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
 
-                break;
-            case R.id.cash_layout:
-            case R.id.cash_radio:
-                cash_radio.setChecked(true);
-                credit_radio.setChecked(false);
-                cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-                credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
+                    break;
+                case R.id.cash_layout:
+                case R.id.cash_radio:
+                    cash_radio.setChecked(true);
+                    credit_radio.setChecked(false);
+                    cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
+                    credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
 
-                break;
-            case R.id.button:
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    saveTransaction();
-                    return true;
-                }
-                break;
+                    break;
+                case R.id.button:
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        saveTransaction();
+                        return true;
+                    }
+                    break;
+            }
         }
         return false;
     }

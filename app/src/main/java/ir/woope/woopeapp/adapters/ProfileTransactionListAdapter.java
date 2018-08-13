@@ -10,6 +10,7 @@ import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.TransactionModel;
 import ir.woope.woopeapp.ui.Fragments.ProfileTransactionListFragment;
 import ir.woope.woopeapp.ui.Fragments.TransListFragment;
 
@@ -22,8 +23,9 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
     private TextView name_tv;
     private TextView total_price;
     private TextView paytype;
+    private TextView return_woop;
 
-    private List<PayListModel> orderModels;
+    private List<TransactionModel> orderModels;
 
     private ProfileTransactionListFragment.ProfileTransactionTouchListener payTransactionTouchListener;
 
@@ -31,12 +33,12 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
     private static final int MAX_CLICK_DURATION = 200;
 
 
-    public ProfileTransactionListAdapter(List<PayListModel> list) {
+    public ProfileTransactionListAdapter(List<TransactionModel> list) {
         this.orderModels = list;
     }
 
 
-    public ProfileTransactionListAdapter(List<PayListModel> list, ProfileTransactionListFragment.ProfileTransactionTouchListener payTransactionTouchListener) {
+    public ProfileTransactionListAdapter(List<TransactionModel> list, ProfileTransactionListFragment.ProfileTransactionTouchListener payTransactionTouchListener) {
         this.orderModels = list;
         this.payTransactionTouchListener=payTransactionTouchListener;
     }
@@ -60,6 +62,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
             total_price = view.findViewById(R.id.total_price);
             name_tv= view.findViewById(R.id.store_name_textview);
             paytype= view.findViewById(R.id.paytype);
+            return_woop=view.findViewById(R.id.return_woop);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,12 +76,12 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
     public void onBindViewHolder(ProfileTransactionListAdapter.MyViewHolder holder, int position) {
         total_price.setText(String.valueOf(orderModels.get(position).totalPrice)+" تومان ");
         name_tv.setText(orderModels.get(position).storeName);
+        return_woop.setText(orderModels.get(position).returnWoop);
         if(orderModels.get(position).payType==1){
             paytype.setText("نقدی");
         }else{
             paytype.setText("اعتباری");
         }
-
     }
 
     @Override

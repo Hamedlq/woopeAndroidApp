@@ -25,6 +25,7 @@ import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.TransactionModel;
 import ir.woope.woopeapp.ui.Activities.CashPayActivity;
 import ir.woope.woopeapp.ui.Activities.CreditPayActivity;
 import retrofit2.Call;
@@ -44,7 +45,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 
 public class ProfileTransactionListFragment extends Fragment {
     private RecyclerView ordersList;
-    private List<PayListModel> orderModelList;
+    private List<TransactionModel> orderModelList;
     /*private List<ItemModel> userOrderModelList;*/
     private ProfileTransactionListAdapter adapter;
     private String authToken;
@@ -70,14 +71,7 @@ public class ProfileTransactionListFragment extends Fragment {
         payTransactionTouchListener = new ProfileTransactionTouchListener() {
             @Override
             public void onBtnClick(View view, int position) {
-                PayListModel model = (PayListModel) orderModelList.get(position);
-                if(model.payType==1){
-                    //go to cash pay
-                    gotoPayCash(model);
-                }else {
-                    //go to credit pay
-                    gotoCreditCash(model);
-                }
+                TransactionModel model = (TransactionModel) orderModelList.get(position);
 
                 /*Intent myIntent = new Intent(getActivity(), PayActivity.class);
                 myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
@@ -103,13 +97,13 @@ public class ProfileTransactionListFragment extends Fragment {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        Call<List<PayListModel>> call =
-                providerApiInterface.getTransactionsFromServer(authToken);
+        Call<List<TransactionModel>> call =
+                providerApiInterface.getUserTransactionsFromServer("bearer "+authToken);
 
 
-        call.enqueue(new Callback<List<PayListModel>>() {
+        call.enqueue(new Callback<List<TransactionModel>>() {
             @Override
-            public void onResponse(Call<List<PayListModel>> call, Response<List<PayListModel>> response) {
+            public void onResponse(Call<List<TransactionModel>> call, Response<List<TransactionModel>> response) {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
@@ -124,8 +118,8 @@ public class ProfileTransactionListFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<PayListModel>> call, Throwable t) {
-                Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<TransactionModel>> call, Throwable t) {
+                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
             }
         });

@@ -11,7 +11,7 @@ public class Profile extends ApiResponse implements Serializable{
     private String family;
     private String username;
     private String userBio;
-    private String imageUid;
+    private String imageSrc;
     private int woopeCredit =0;
     private int tomanCredit =0;
     private int transactionCount =0;

@@ -38,10 +38,11 @@ public class ProfilePageAdapter  extends FragmentStatePagerAdapter {
         //Returning the current tabs
         switch (position) {
             case 0:
-                ProfileTransactionListFragment tab1 = new ProfileTransactionListFragment();
+                profileBookmarkFragment tab1 = new profileBookmarkFragment();
                 return tab1;
             case 1:
-                profileBookmarkFragment tab2 = new profileBookmarkFragment();
+
+                ProfileTransactionListFragment tab2 = new ProfileTransactionListFragment();
                 return tab2;
             default:
                 return null;
