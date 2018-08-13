@@ -46,7 +46,7 @@ public class EditProfileActivity extends AppCompatActivity {
         name = findViewById(R.id.txtbx_name_editprofile);
         family = findViewById(R.id.txtbx_family_editprofile);
         age = findViewById(R.id.txtbx_age_editprofile);
-        phonenumber = findViewById(R.id.txtbx_phonenumber_editprofile);
+
         email = findViewById(R.id.txtbx_email_editprofile);
         bio = findViewById(R.id.txtbx_userbio_editprofile);
         editprogress = findViewById(R.id.progressBar_editprofile);
