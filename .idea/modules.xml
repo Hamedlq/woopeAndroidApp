@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidWoope.iml" filepath="$PROJECT_DIR$/AndroidWoope.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/woopeAndroid.iml" filepath="$PROJECT_DIR$/woopeAndroid.iml" />
     </modules>
   </component>
 </project>
