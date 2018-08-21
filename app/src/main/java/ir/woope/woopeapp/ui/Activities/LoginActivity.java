@@ -3,11 +3,13 @@ package ir.woope.woopeapp.ui.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +26,12 @@ import java.io.IOException;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.LoginInterface;
+import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.AccessToken;
+import ir.woope.woopeapp.models.Profile;
+import me.toptas.fancyshowcase.AnimationListener;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,12 +46,11 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREF
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class LoginActivity extends AppCompatActivity {
+
     boolean doubleBackToExitPressedOnce = false;
 
     Animation rotateonceAnim;
     ImageView wplogologin;
-
-
 
     private void rotationAnimation() {
 
@@ -60,8 +67,83 @@ public class LoginActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_login);
 
+
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
+
+        final FancyShowCaseView passwordcase = new FancyShowCaseView.Builder(this)
+                .focusOn(password)
+                .title("گذرواژه خود را وارد کنید")
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(10)
+                .focusBorderColor(Color.WHITE)
+                .focusBorderSize(10)
+                .backgroundColor(getResources().getColor(R.color.fancyshowcase))
+                .titleStyle(R.style.MyTitleStyle, Gravity.BOTTOM | Gravity.CENTER)
+                .animationListener(new AnimationListener() {
+                    @Override
+                    public void onEnterAnimationEnd() {
+
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.fancyshowcase));
+//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.fancyshowcase));
+//                        }
+
+                    }
+
+                    @Override
+                    public void onExitAnimationEnd() {
+
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+//                        }
+
+
+                    }
+                })
+                .build();
+
+
+        new FancyShowCaseView.Builder(this)
+                .focusOn(username)
+                .title("نام کاربری خود را وارد کنید")
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(40)
+                .focusBorderColor(Color.WHITE)
+                .focusBorderSize(10)
+                .backgroundColor(getResources().getColor(R.color.fancyshowcase))
+                .titleStyle(R.style.MyTitleStyle, Gravity.BOTTOM | Gravity.CENTER)
+                .animationListener(new AnimationListener() {
+                    @Override
+                    public void onEnterAnimationEnd() {
+
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.fancyshowcase));
+//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.fancyshowcase));
+//                        }
+
+                    }
+
+                    @Override
+                    public void onExitAnimationEnd() {
+
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+//                        }
+
+                        passwordcase.show();
+
+                    }
+                })
+                .build()
+                .show();
+
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -124,49 +206,102 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button enter = (Button) findViewById(R.id.btn_enter_login);
+        final Button enter = (Button) findViewById(R.id.btn_enter_login);
 
         retrofit_login = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        Retrofit retrofit_getProf = new Retrofit.Builder()
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         final LoginInterface login = retrofit_login.create(LoginInterface.class);
+        final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
+        final ProgressBar enterprogress = (ProgressBar) findViewById(R.id.enter_progressbar_login);
 
         enter.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
-                login.send_info(username.getText().toString(),password.getText().toString(), "password").enqueue(new Callback<AccessToken>() {
+                enter.setVisibility(View.GONE);
+                enterprogress.setVisibility(View.VISIBLE);
+
+                login.send_info(username.getText().toString(), password.getText().toString(), "password").enqueue(new Callback<AccessToken>() {
                     @Override
                     public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
 
-                        if(response.message().toString().equals("OK"))
-                        {
+                        if (response.code() == 200) {
 
-                            response.body(); // have your all data
-                            String tk =response.body().getAccessToken();
+//                            enterprogress.setVisibility(View.GONE);
+//                            enter.setVisibility(View.VISIBLE);
 
-                            SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = settings.edit();
-                            editor.putString(TOKEN, tk);
-                            // Apply the edits!
-                            editor.apply();
+                            final String tk = response.body().getAccessToken();
 
-                            Toast.makeText(
-                                    LoginActivity.this
-                                    , "ورود موفق!",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent goto_mainpage = new Intent(LoginActivity.this,
-                                    MainActivity.class);
-                            goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
-                                goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                startActivity(goto_mainpage);
+                            getProfile.getProfileFromServer("bearer " + tk).enqueue(new Callback<Profile>() {
+                                @Override
+                                public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+                                    if (response.code() == 200) {
+
+                                        if (response.body().getConfirmed() == false) {
+
+                                            enterprogress.setVisibility(View.VISIBLE);
+
+                                            Toast.makeText(
+                                                    LoginActivity.this
+                                                    , "شماره موبایل خود را تایید کنید",
+                                                    Toast.LENGTH_SHORT).show();
+
+                                            Intent goto_verifphone = new Intent(LoginActivity.this,
+                                                    VerifyPhoneActivity.class);
+                                            goto_verifphone.putExtra("token",tk);
+                                            startActivity(goto_verifphone);
+
+                                        } else {
+
+                                            SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = settings.edit();
+                                            editor.putString(TOKEN, tk);
+                                            editor.apply();
+
+                                            Toast.makeText(
+                                                    LoginActivity.this
+                                                    , "ورود موفق!",
+                                                    Toast.LENGTH_SHORT).show();
+                                            Intent goto_mainpage = new Intent(LoginActivity.this,
+                                                    MainActivity.class);
+                                            goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
+                                            goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            finish();
+                                            startActivity(goto_mainpage);
+
+                                        }
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<Profile> call, Throwable t) {
+
+                                    Toast.makeText(
+                                            LoginActivity.this
+                                            , "خطای اتصال!",
+                                            Toast.LENGTH_SHORT).show();
+
+                                    enter.setVisibility(View.VISIBLE);
+                                    enterprogress.setVisibility(View.GONE);
+                                }
+                            });
 
 
-                        }
-                        else{
+                        } else {
+
+                            enterprogress.setVisibility(View.GONE);
+                            enter.setVisibility(View.VISIBLE);
+
                             Toast.makeText(
                                     LoginActivity.this
                                     , "نام کاربری یا رمز عبور نامعتبر!",
@@ -182,6 +317,9 @@ public class LoginActivity extends AppCompatActivity {
                                 LoginActivity.this
                                 , "خطا!",
                                 Toast.LENGTH_SHORT).show();
+
+                        enter.setVisibility(View.VISIBLE);
+                        enterprogress.setVisibility(View.GONE);
                     }
                 });
 
@@ -206,7 +344,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }

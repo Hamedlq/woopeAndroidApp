@@ -33,12 +33,6 @@ public class ChangePassActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_changepass);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-        }
-
         final EditText newpass = (EditText) findViewById(R.id.txtbx_newpass_changepass);
         final EditText code = (EditText) findViewById(R.id.txtbx_confirm_code_changepass);
         final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar_changepass);
@@ -57,6 +51,7 @@ public class ChangePassActivity extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 progress.setVisibility(View.VISIBLE);
+                accept.setVisibility(View.GONE);
 
                 changepass.change_pass(getIntent().getExtras().getString("phonenumber"), newpass.getText().toString(), code.getText().toString()).enqueue(new Callback<ApiResponse>() {
                     @Override
@@ -81,6 +76,7 @@ public class ChangePassActivity extends AppCompatActivity {
                         } else {
 
                             progress.setVisibility(View.GONE);
+                            accept.setVisibility(View.VISIBLE);
 
                             Toast.makeText(
                                     ChangePassActivity.this
@@ -99,6 +95,7 @@ public class ChangePassActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                         progress.setVisibility(View.GONE);
+                        accept.setVisibility(View.VISIBLE);
 
                         Toast.makeText(
                                 ChangePassActivity.this
@@ -135,4 +132,11 @@ public class ChangePassActivity extends AppCompatActivity {
         }.start();
 
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
 }

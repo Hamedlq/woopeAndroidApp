@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -48,8 +49,11 @@ import ir.woope.woopeapp.ui.Activities.LoginActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.SplashActivity;
 
+import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 /**
  * Created by Hamed on 6/11/2018.
@@ -83,6 +87,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     View vUserDetails;
     //@BindView(R.id.btnFollow)
     Button btnEdit;
+    Button btnlogout;
     //@BindView(R.id.vUserStats)
     View vUserStats;
     //@BindView(R.id.vUserProfileRoot)
@@ -99,9 +104,12 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     private int avatarSize;
     private String profilePhoto;
 
+    SharedPreferences settings;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
 
     }
@@ -126,6 +134,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         tlUserProfileTabs=mRecycler.findViewById(R.id.tlUserProfileTabs);
         vUserDetails=mRecycler.findViewById(R.id.vUserDetails);
         btnEdit=mRecycler.findViewById(R.id.btnEditProfile);
+        btnlogout=mRecycler.findViewById(R.id.btn_logout_editprofile);
         vUserStats=mRecycler.findViewById(R.id.vUserStats);
         vUserProfileRoot=mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager
@@ -144,6 +153,23 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 Intent goto_edit = new Intent(getActivity(),
                         EditProfileActivity.class);
                 startActivity(goto_edit);
+
+            }
+        });
+
+        btnlogout.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0){
+
+                SharedPreferences settings = getContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(TOKEN, null);
+                editor.apply();
+
+                Intent goto_splash = new Intent(getActivity(),
+                        SplashActivity.class);
+                getActivity().finish();
+                startActivity(goto_splash);
 
             }
         });

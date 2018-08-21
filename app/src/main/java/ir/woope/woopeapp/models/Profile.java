@@ -11,7 +11,11 @@ public class Profile extends ApiResponse implements Serializable{
     private String family;
     private String username;
     private String userBio;
+    private String age;
+    private String email;
     private String imageSrc;
+    private String mobile;
+    private boolean phoneNumberConfirmed;
     private int woopeCredit =0;
     private int tomanCredit =0;
     private int transactionCount =0;
@@ -97,5 +101,19 @@ public class Profile extends ApiResponse implements Serializable{
 
     public void setTransactionCount(int transactionCount) {
         this.transactionCount = transactionCount;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean getConfirmed() { return phoneNumberConfirmed; }
+
+    public String getMobile() {
+        return mobile;
     }
 }

@@ -4,11 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#C5cae9</color>
 
+    <color name="fancyshowcase">#ec303f9f</color>
+
     <color name="viewBg">#f1f5f8</color>
     <color name="album_title">#4c4c4c</color>
     <color name="choice_selected">#eeeeee</color>
     <color name="choice_not_selected">#ffffff</color>
-    <color name="wpp">#000033</color>
+    <color name="wpp">#0606ff</color>
     <color name="white">#ffffff</color>
     <color name="wgreen">#43a047</color>
     <color name="darkwgreen">#2E7D32</color>
@@ -18,5 +20,7 @@
     <color name="btn_send_normal">#02c754</color>
     <color name="btn_send_pressed">#006633</color>
 
+    <color name="btn_logout_normal">#c70209</color>
+    <color name="btn_logout_pressed">#660002</color>
 
 </resources>

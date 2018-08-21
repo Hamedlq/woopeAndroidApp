@@ -13,6 +13,10 @@ public class AccessToken {
     private String title;
     private String body;
 
+    @SerializedName("status")
+    @Expose
+    public int status;
+
     public String getAccessToken() {
         return accessToken;
     }
@@ -39,5 +43,8 @@ public class AccessToken {
     }
     public void setBody(String body) {
         this.body = body;
+    }public int getStatus() {
+        return status;
     }
+
 }

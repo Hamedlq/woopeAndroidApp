@@ -12,5 +12,4 @@ public interface LoginInterface {
     @FormUrlEncoded
     Call<AccessToken> send_info(@Field("username") String userphone, @Field("password") String password, @Field("grant_type") String grant_type);
 
-
 }

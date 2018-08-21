@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
 import co.ceryle.radiorealbutton.RadioRealButton;
@@ -17,14 +18,19 @@ import co.ceryle.radiorealbutton.RadioRealButtonGroup;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.EditProfileInterface;
+import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.RegisterInterface;
+import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.Profile;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 
@@ -36,6 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
     Retrofit retrofit_editprofile;
     private String gender;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -46,7 +53,6 @@ public class EditProfileActivity extends AppCompatActivity {
         name = findViewById(R.id.txtbx_name_editprofile);
         family = findViewById(R.id.txtbx_family_editprofile);
         age = findViewById(R.id.txtbx_age_editprofile);
-
         email = findViewById(R.id.txtbx_email_editprofile);
         bio = findViewById(R.id.txtbx_userbio_editprofile);
         editprogress = findViewById(R.id.progressBar_editprofile);
@@ -65,6 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        final SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        final String token = settings.getString(TOKEN, null);
 
         retrofit_editprofile = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -73,17 +81,37 @@ public class EditProfileActivity extends AppCompatActivity {
 
         final EditProfileInterface edit = retrofit_editprofile.create(EditProfileInterface.class);
 
-        final SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        final String token = settings.getString(TOKEN, null);
+        edit.getProfileFromServer("bearer " + token).enqueue(new Callback<Profile>() {
 
-        sendedit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+                if (response.code() == 200) {
+                    name.setText(response.body().getName());
+                    family.setText(response.body().getFamily());
+                    age.setText(response.body().getAge());
+                    email.setText(response.body().getEmail());
+                    bio.setText(response.body().getUserBio());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+
+            }
+        });
+
+        sendedit.setOnClickListener(new View.OnClickListener()
+
+        {
 
             public void onClick(View arg0) {
 
                 editprogress.setVisibility(View.VISIBLE);
                 sendedit.setVisibility(View.GONE);
 
-                edit.send_edit("bearer " + token,name.getText().toString(),family.getText().toString(),bio.getText().toString(),email.getText().toString(),gender,age.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                edit.send_edit("bearer " + token, name.getText().toString(), family.getText().toString(), bio.getText().toString(), email.getText().toString(), gender, age.getText().toString()).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 

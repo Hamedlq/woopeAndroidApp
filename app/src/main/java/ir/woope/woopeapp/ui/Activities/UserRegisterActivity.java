@@ -72,6 +72,7 @@ public class UserRegisterActivity extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 progress.setVisibility(View.VISIBLE);
+                register.setVisibility(View.GONE);
 
                 reg.send_info(username.getText().toString(), phonenumber.getText().toString(), password.getText().toString()).enqueue(new Callback<ApiResponse>() {
                     @Override
@@ -111,6 +112,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                     } else {
 
                                         progress.setVisibility(View.GONE);
+                                        register.setVisibility(View.VISIBLE);
 
                                         Toast.makeText(
                                                 UserRegisterActivity.this
@@ -124,7 +126,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<ApiResponse> call, Throwable t) {
                                     progress.setVisibility(View.GONE);
-
+                                    register.setVisibility(View.VISIBLE);
                                     Toast.makeText(
                                             UserRegisterActivity.this
                                             , "خطای اتصال",
@@ -136,6 +138,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                         } else {
 
                             progress.setVisibility(View.GONE);
+                            register.setVisibility(View.VISIBLE);
 
                             if (username.getText().toString() == "") {
                                 usernamelayout.setError("نام کاربری را وارد کنید");
@@ -166,6 +169,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                         progress.setVisibility(View.GONE);
+                        register.setVisibility(View.VISIBLE);
 
                         Toast.makeText(
                                 UserRegisterActivity.this

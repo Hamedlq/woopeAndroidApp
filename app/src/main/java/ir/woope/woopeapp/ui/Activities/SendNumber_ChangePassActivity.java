@@ -53,6 +53,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 progress.setVisibility(View.VISIBLE);
+                send.setVisibility(View.GONE);
 
                 changepass.send_mobile(number.getText().toString()).enqueue(new Callback<ApiResponse>() {
                     @Override
@@ -75,6 +76,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                         } else {
 
                             progress.setVisibility(View.GONE);
+                            send.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(
                                         SendNumber_ChangePassActivity.this
@@ -93,6 +95,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                         progress.setVisibility(View.GONE);
+                        send.setVisibility(View.VISIBLE);
 
                         Toast.makeText(
                                 SendNumber_ChangePassActivity.this

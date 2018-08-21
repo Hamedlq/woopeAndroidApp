@@ -15,6 +15,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ProfileInterface {
+
     @POST("api/Profile/GetProfile")
     Call<Profile> getProfileFromServer(@Header("Authorization")String auth);
 

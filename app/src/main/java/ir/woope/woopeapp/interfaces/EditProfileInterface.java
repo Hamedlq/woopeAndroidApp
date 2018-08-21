@@ -14,4 +14,6 @@ public interface EditProfileInterface {
         @FormUrlEncoded
         Call<ApiResponse> send_edit(@Header("Authorization")String auth,@Field("Name") String name,@Field("Family") String family,@Field("UserBio") String userbio,@Field("Email") String email,@Field("Gender") String gender,@Field("Age") String age);
 
+        @POST("api/Profile/GetProfile")
+        Call<Profile> getProfileFromServer(@Header("Authorization")String auth);
 }

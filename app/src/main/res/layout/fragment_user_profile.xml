@@ -77,6 +77,19 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ivUserProfilePhoto">
 
+                            <Button
+                                android:id="@+id/btn_logout_editprofile"
+                                android:layout_width="107dp"
+                                android:layout_height="24dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/btn_logout"
+                                android:text="خروج از حساب کاربری"
+                                android:textColor="#ffffff"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toStartOf="@+id/btnEditProfile"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/userBio" />
+
                             <TextView
                                 android:id="@+id/userNameFamily"
                                 android:layout_width="match_parent"
@@ -111,13 +124,14 @@
 
                             <Button
                                 android:id="@+id/btnEditProfile"
-                                android:layout_width="match_parent"
+                                android:layout_width="107dp"
                                 android:layout_height="24dp"
                                 android:layout_marginTop="8dp"
                                 android:background="@drawable/btn_following"
                                 android:text="ویرایش پروفایل"
                                 android:textColor="#ffffff"
                                 android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/userBio" />
 
                         </android.support.constraint.ConstraintLayout>
