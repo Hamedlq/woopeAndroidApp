@@ -38,6 +38,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.UserRegisterActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.BankActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.SplashActivity"

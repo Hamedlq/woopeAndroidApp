@@ -16,17 +16,21 @@ public class Store extends ApiResponse implements Serializable {
         this.returnPoint = point;
         this.thumbnail = thumbnail;
         isFollowed=false;
+        isCashPayAllowed=true;
     }
 
     public String storeId;
     public String storeName;
     public String storeDescription;
-    public String basePrices;
     public String basePrice;
     public String returnPoint;
     public String discountPercent;
     public String imageUId;
     public String logoSrc;
+    public String coverSrc;
     public int thumbnail;
     public boolean isFollowed;
+    public String firstPhone;
+    public String secondPhone;
+    public boolean isCashPayAllowed;
 }

@@ -2,38 +2,21 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.adapters.PayArrayAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
-import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayListModel;
-import ir.woope.woopeapp.models.PayState;
 import ir.woope.woopeapp.models.Profile;
-import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,55 +26,49 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
-public class CashPayActivity extends AppCompatActivity {
-
-    @BindView(R.id.backdrop)
-    protected ImageView backdrop;
-    String authToken;
+public class BankActivity extends AppCompatActivity {
+    @BindView(R.id.button)
+    protected Button btn;
+    @BindView(R.id.progressBar)
+    protected ProgressBar progressBar;
     String profileString;
     String transactionString;
-    String payedPoints;
+    //String payedPoints;
     Profile profile;
+    String authToken;
     PayListModel payListModel;
 
-    ProgressBar progressBar;
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cash_pay);
+        setContentView(R.layout.activity_bank);
         ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
-            payedPoints = getIntent().getStringExtra(POINTS_PAYED);
+            //payedPoints = getIntent().getStringExtra(POINTS_PAYED);
         }
-        TextView StoreName=(TextView) findViewById(R.id.StoreName);
-        StoreName.setText(payListModel.storeName);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
 
-
-        final EditText ConfirmCode=findViewById(R.id.ConfirmCode);
-        Button btn=findViewById(R.id.button);
-
+        Button btn = (Button) findViewById(R.id.button);
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ConfirmPayment(ConfirmCode.getText().toString());
+                    ConfirmPayment();
                 }
                 return false;
             }
         });
-        Picasso.with(CashPayActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).into(backdrop);
+
+
     }
 
-    public void ConfirmPayment(String confirmCode){
+
+
+
+    public void ConfirmPayment(){
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -104,31 +81,27 @@ public class CashPayActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        Call<ApiResponse> call =
-                providerApiInterface.SendConfirmCode("bearer "+authToken, payListModel.id,confirmCode);
-        call.enqueue(new Callback<ApiResponse>() {
+        Call<PayListModel> call =
+                providerApiInterface.GetConfirmCode("Bearer "+authToken, payListModel.id,payListModel.pointPayString());
+        call.enqueue(new Callback<PayListModel>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
-                    ApiResponse res = response.body();
-                    String x=res.getMessage();
-                    Toast.makeText(CashPayActivity.this,x,Toast.LENGTH_LONG).show();
-                    Intent i=getIntent();
-                    setResult(RESULT_OK, i);
-                    finish();
+                    PayListModel trans = response.body();
+                    gotoPayCodeActivity(trans);
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(Call<PayListModel> call, Throwable t) {
                 hideProgreeBar();
             }
-
         });
 
     }
+
 
 
     public void showProgreeBar() {
@@ -139,4 +112,14 @@ public class CashPayActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
+    public void gotoPayCodeActivity(PayListModel trans){
+
+        Intent myIntent = new Intent(BankActivity.this, PayCodeActivity.class);
+        payListModel.confirmationCode=trans.confirmationCode;
+        myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
+        //myIntent.putExtra(POINTS_PAYED, payedPoints);
+        startActivity(myIntent);
+        this.finish();
+    }
 }

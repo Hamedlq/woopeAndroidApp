@@ -43,14 +43,25 @@
                     android:textSize="@dimen/album_title" />
 
                 <TextView
-                    android:id="@+id/count"
-                    android:layout_below="@+id/title"
+                android:id="@+id/count"
+                android:layout_below="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:textSize="@dimen/discount_size" />
+
+
+                <TextView
+                    android:id="@+id/points"
+                    android:layout_below="@+id/count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/songs_count_padding_bottom"
                     android:paddingLeft="@dimen/album_title_padding"
                     android:paddingRight="@dimen/album_title_padding"
-                    android:textSize="@dimen/discount_size" />
+                    android:textSize="@dimen/point_size" />
 
                 <LinearLayout
                     android:id="@+id/action_layout"

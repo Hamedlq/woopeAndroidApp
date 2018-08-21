@@ -40,6 +40,7 @@ import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
@@ -52,6 +53,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
@@ -97,7 +99,7 @@ public class home_fragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra(STORE, s); //Optional parameters
-                getActivity().startActivity(myIntent);
+                getActivity().startActivityForResult(myIntent,RELOAD_LIST);
 
                 //open activity
                 //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
@@ -202,11 +204,12 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
-                final SharedPreferences prefs =
+                /*final SharedPreferences prefs =
                         getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
                 Gson gson = new Gson();
                 String json = prefs.getString(PROFILE, "");
-                Profile obj = gson.fromJson(json, Profile.class);
+                Profile obj = gson.fromJson(json, Profile.class);*/
+                Profile obj =((MainActivity)getActivity()).getUserProfile();
 
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);

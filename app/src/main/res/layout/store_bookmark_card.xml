@@ -59,15 +59,33 @@
 
         </LinearLayout>
 
-           <!-- <ImageView
-                android:id="@+id/overflow"
-                android:layout_width="@dimen/ic_album_overflow_width"
-                android:layout_height="@dimen/ic_album_overflow_height"
-                android:layout_alignParentLeft="true"
+            <LinearLayout
+                android:id="@+id/action_layout"
+                android:layout_width="match_parent"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_dots" />-->
+                android:gravity="right"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/follow"
+
+                    android:layout_width="@dimen/ic_album_overflow_width"
+                    android:layout_height="@dimen/ic_album_overflow_height"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_bookmark_border_black"/>
+
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"
+                android:layout_above="@+id/action_layout"/>
 
         </RelativeLayout>
 

@@ -30,4 +30,9 @@ public interface StoreInterface {
     @GET(Constants.Actions.GET_FOLLOW_STORE)
     Call<List<Store>> getFollowStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
+    @POST(Constants.Actions.GET_STORE)
+    @FormUrlEncoded
+    Call<Store> getStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                  @Field("storeId") String s);
+
 }

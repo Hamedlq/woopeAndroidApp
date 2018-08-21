@@ -18,6 +18,14 @@ public final class Constants {
 
         public static final String BASE_URL = "http://192.168.100.4:8090";
 
+        
+//        public static final String BASE_URL = "http://localhost/";
+
+        public static final String BASE_URL = "http://localhost:58795/";
+
+       // public static final String BASE_URL = "http://192.168.100.5:8090/";
+         //public static final String BASE_URL = "http://localhost:58795/";
+//        public static final String BASE_URL = "http://test.mywoope.com/";
     }
 
     public final class GlobalConstants{
@@ -38,7 +46,7 @@ public final class Constants {
 
         public static final String GET_PROFILE_FROM_SERVER = "getProfileFromServer";
         public static final String LOGO_URL = BASE_URL ;
-
+        public static final int RELOAD_LIST = 8735 ;
         public static final int REQUEST_CAMERA =2356;
         public static final int SELECT_FILE =8596;
     }
@@ -47,5 +55,6 @@ public final class Constants {
         public static final String PARAM_AUTHORIZATION = "Authorization";
         public static final String FOLLOW_STORE = "api/Store/FollowStore";
         public static final String GET_FOLLOW_STORE = "api/Store/GetFollowingStores";
+        public static final String GET_STORE = "api/Store/GetUserStore";
     }
 }

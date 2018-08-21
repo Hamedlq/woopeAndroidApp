@@ -1,17 +1,25 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Store;
@@ -23,6 +31,10 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class CreditPayActivity extends AppCompatActivity {
 
+    @BindView(R.id.backdrop)
+    protected ImageView backdrop;
+    @BindView(R.id.cancelBtn)
+    protected Button cancelBtn;
     String profileString;
     Profile profile;
     PayListModel payListModel;
@@ -32,6 +44,7 @@ public class CreditPayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_pay);
+        ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
@@ -41,7 +54,7 @@ public class CreditPayActivity extends AppCompatActivity {
         TextView payAmount = findViewById(R.id.payAmount);
         TextView toman_credit = findViewById(R.id.toman_credit);
         TextView woope_credit = findViewById(R.id.woope_credit);
-
+        //pointText.setText(profile.getWoopeCreditString());
 
         //buyAmount = intent.getStringExtra(BUY_AMOUNT);
         payAmount.setText(String.valueOf(payListModel.totalPrice));
@@ -49,7 +62,7 @@ public class CreditPayActivity extends AppCompatActivity {
         woope_credit.setText(profile.getWoopeCreditString());
 
 
-        TextView StoreName_tv=findViewById(R.id.StoreName);
+        TextView StoreName_tv = findViewById(R.id.StoreName);
         StoreName_tv.setText(String.valueOf(payListModel.storeName));
 
         Button btn = (Button) findViewById(R.id.button);
@@ -62,47 +75,69 @@ public class CreditPayActivity extends AppCompatActivity {
                 return false;
             }
         });
+        cancelBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Intent i = getIntent();
+                    setResult(RESULT_OK, i);
+                    finish();
+                }
+                return false;
+            }
+        });
 
-
-
-        //Intent intent = getIntent();
-        /*String storeName = intent.getStringExtra("StoreName");
-        TextView StoreName_tv=findViewById(R.id.StoreName);
-        StoreName_tv.setText(storeName);*/
-        //Switch mSwitch=findViewById(R.id.switchBtn);
-        /*mSwitch.setTrackDrawable(new SwitchDrawable(this,
-                R.string.right_switch, R.string.left_switch));*/
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-        // Spinner element
-        //Spinner spinner = (Spinner) findViewById(R.id.spinnerBtn);
-
-        //PayState[] states = new PayState[] { new PayState("اعتباری", "0"),  };
-        /*List<PayState> states= new ArrayList<PayState>();
-        states.add(new PayState("پرداخت اعتباری", "0"));
-        states.add(new PayState("پرداخت نقدی","0") );
-        ArrayAdapter adapter = new PayArrayAdapter(this, states);
-        //adapter.setDropDownViewResource(R.layout.spinner_row);
-       *//* String arr[] = { "1", "2", "3" };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                PayActivity.this, R.layout.spinner_row, R.id.credit,arr);*//*
-        spinner.setAdapter(adapter);
-
-*/
+        Picasso.with(CreditPayActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).into(backdrop);
 
 
     }
 
-    public void gotoConfirmCreditPay(){
-        Intent myIntent = new Intent(CreditPayActivity.this, ConfirmPayActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, profile);
-        String st= pointText.getText().toString();
-        myIntent.putExtra(POINTS_PAYED, st);
-        //myIntent.putExtra("StoreName", storeName); //Optional parameters
-        this.startActivity(myIntent);
-        this.finish();
+    public void gotoConfirmCreditPay() {
+        if (!TextUtils.isEmpty(pointText.getText())) {
+            String value = pointText.getText().toString();
+            int finalValue = Integer.parseInt(value);
+            if (finalValue > profile.getWoopeCredit()) {
+                showPointOverload();
+                pointText.setText(profile.getWoopeCreditString());
+            } else {
+                payListModel.pointPay = finalValue;
+                Intent myIntent = new Intent(CreditPayActivity.this, ConfirmPayActivity.class);
+                myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
+                myIntent.putExtra(PREF_PROFILE, profile);
+                //myIntent.putExtra(POINTS_PAYED, value);
+                //myIntent.putExtra("StoreName", storeName); //Optional parameters
+                this.startActivity(myIntent);
+                Intent i = getIntent();
+                setResult(RESULT_OK, i);
+                this.finish();
+            }
+        } else {
+            showFillError();
+        }
     }
+
+    private void showFillError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("لطفا تعداد ووپی که می‌خواهید برای این خرید استفاده کنید را وارد کنید").setPositiveButton("باشه", ConfirmDialogClickListener).show();
+    }
+
+    private void showPointOverload() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("تعداد ووپ درخواستی نمی‌تواند بیشتر از اعتبار ووپ باشد").setPositiveButton("باشه", ConfirmDialogClickListener).show();
+    }
+
+    DialogInterface.OnClickListener ConfirmDialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    dialog.dismiss();
+                    break;
+/*                case DialogInterface.BUTTON_NEGATIVE:د
+                    goToMainActivity();
+                    dialog.dismiss();
+                    break;*/
+            }
+        }
+    };
 }

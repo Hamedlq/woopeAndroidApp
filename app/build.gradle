@@ -8,7 +8,8 @@ buildscript {
     }
     dependencies {
 
-        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.11.0, 0.99.99]'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
+        //classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.11.2'
 
     }
 }
@@ -18,7 +19,7 @@ repositories {
 
 }
 
-apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+//apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 android {
 
@@ -58,6 +59,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
 
+    //implementation 'com.google.android.gms:play-services-tagmanager:16.0.1'
+    //implementation 'com.google.firebase:firebase-core:11.0.4'
     //card View
 
     implementation 'com.github.brnunes:swipeablerecyclerview:1.0.2'
@@ -74,6 +77,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     /*testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

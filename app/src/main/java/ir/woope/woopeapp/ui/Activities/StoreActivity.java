@@ -5,18 +5,29 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
@@ -26,14 +37,30 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 
 public class StoreActivity extends AppCompatActivity {
 
-    //private TextView mTextMessage;
+    @BindView(R.id.logo)
+    protected ImageView logo;
+    @BindView(R.id.backdrop)
+    protected ImageView backdrop;
+    @BindView(R.id.store_name)
+    protected TextView store_name;
+    @BindView(R.id.store_desc)
+    protected TextView store_desc;
+    @BindView(R.id.progressBar)
+    protected ProgressBar progressBar;
+    @BindView(R.id.store_point)
+    protected TextView store_point;
+    @BindView(R.id.store_discount)
+    protected TextView store_discount;
+    @BindView(R.id.store_phones)
+    protected TextView store_phones;
+
+
     String STORE_FRAGMENT = "StoreFragment";
     String authToken = null;
     Profile profile = null;
     Store store;
     String profileString;
-    ProgressBar progressBar;
-    ImageView backdrop;
+    //ProgressBar progressBar;
 
 
     @Override
@@ -41,10 +68,14 @@ public class StoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
 
+        ButterKnife.bind(this);
+
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             store = (Store) getIntent().getExtras().getSerializable(STORE);
         }
+
+        getStore(store.storeId);
 
 
         Button payBtn = (Button) findViewById(R.id.payBtn);
@@ -58,11 +89,69 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
-        
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        store_phones.setVisibility(View.GONE);
+
+    }
+
+    private void getStore(String storeId) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs = getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+        Call<Store> call =
+                providerApiInterface.getStore("bearer " + authToken, storeId);
+
+
+        call.enqueue(new Callback<Store>() {
+            @Override
+            public void onResponse(Call<Store> call, Response<Store> response) {
+                hideProgreeBar();
+                int code = response.code();
+                if (code == 200) {
+                    store = response.body();
+                    Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(logo);
+                    Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.coverSrc).into(backdrop);
+                    store_name.setText(store.storeName);
+                    store_desc.setText(store.storeDescription);
+                    String phones="";
+                    if (!TextUtils.isEmpty(store.firstPhone)){
+                        store_phones.setVisibility(View.VISIBLE);
+                        phones = store.firstPhone;
+                    }
+                    if (!TextUtils.isEmpty(store.secondPhone)){
+                        store_phones.setVisibility(View.VISIBLE);
+                        phones += " - "+store.secondPhone;
+                    }
+                    store_phones.setText(phones);
+                    if (!TextUtils.isEmpty(store.discountPercent)){
+                        store_discount.setVisibility(View.VISIBLE);
+                        store_discount.setText(store.discountPercent + " درصد تخفیف ");
+                    }
+                    if (!TextUtils.isEmpty(store.basePrice)){
+                        store_point.setVisibility(View.VISIBLE);
+                        store_point.setText("به ازای هر "+store.basePrice+" تومان خرید "+store.returnPoint+" ووپ دریافت می‌کنید" );
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Store> call, Throwable t) {
+                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                hideProgreeBar();
+            }
+        });
 
 
     }

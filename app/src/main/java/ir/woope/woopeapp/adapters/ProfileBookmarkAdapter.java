@@ -5,6 +5,7 @@ package ir.woope.woopeapp.adapters;
  */
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,12 +47,16 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, count;
         public ImageView thumbnail;
+        public ImageView followIcon;
+        public LinearLayout action_layout;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            followIcon = (ImageView) view.findViewById(R.id.follow);
+            action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -94,6 +100,48 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
                     return true;
                 }
             });
+
+            action_layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+                }
+            });
+            followIcon.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if (clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onFollowTap(getPosition());
+                                Store store = albumList.get(getPosition());
+                               /* Drawable fDraw = followIcon.getBackground();
+                                Drawable sDraw = getResources().getDrawable(R.drawable.twt_hover);
+
+                                Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
+                                Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
+*/
+                                if(!store.isFollowed){
+                                    store.isFollowed=true;
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+                                }else {
+                                    store.isFollowed=false;
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+                                }
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -114,14 +162,20 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Store album = albumList.get(position);
-        holder.title.setText(album.storeName);
-        holder.count.setText(album.discountPercent + "٪ تخفیف");
+        Store store = albumList.get(position);
+        holder.title.setText(store.storeName);
+        holder.count.setText(store.discountPercent + "٪ تخفیف");
 
 // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + album.logoSrc).into(holder.thumbnail);
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
 
-
+        if(store.isFollowed){
+            store.isFollowed=true;
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+        }else {
+            store.isFollowed=false;
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+        }
        /* holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

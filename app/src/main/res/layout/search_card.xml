@@ -46,15 +46,35 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:textSize="@dimen/discount_size" />
 
-           <!-- <ImageView
-                android:id="@+id/overflow"
-                android:layout_width="@dimen/ic_album_overflow_width"
-                android:layout_height="@dimen/ic_album_overflow_height"
+            <TextView
+                android:id="@+id/point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/count"
+                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:textSize="@dimen/discount_size" />
+
+            <LinearLayout
+                android:id="@+id/action_layout"
+                android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@id/thumbnail"
-                android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_dots" />-->
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/follow"
+                    android:layout_width="@dimen/ic_album_overflow_width"
+                    android:layout_height="@dimen/ic_album_overflow_height"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_bookmark_border_black"/>
+
+
+            </LinearLayout>
 
         </RelativeLayout>
 

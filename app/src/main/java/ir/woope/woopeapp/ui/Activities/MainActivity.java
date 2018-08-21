@@ -73,6 +73,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ir.aronapp.supplierapp.Helpers.Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
@@ -150,21 +151,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public Profile getUserProfile() {
-        Gson gson = new Gson();
-        final SharedPreferences prefs =
-                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
-        if (profileString != null) {
-            profile = (Profile) gson.fromJson(profileString, Profile.class);
-            return profile;
+        if (profile == null) {
+            Gson gson = new Gson();
+            final SharedPreferences prefs =
+                    this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+            String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
+            if (profileString != null) {
+                profile = (Profile) gson.fromJson(profileString, Profile.class);
+                return profile;
+            } else {
+                return new Profile();
+            }
         } else {
-            getProfileFromServer();
+            return profile;
         }
-        return null;
     }
 
-    private void getProfileFromServer() {
+    public void getProfileFromServer() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -185,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 if (code == 200) {
 
 
-                    Profile user = response.body();
+                    profile = response.body();
                     //profile=user.getMessage();
                     SharedPreferences.Editor prefsEditor = prefs.edit();
                     Gson gson = new Gson();
@@ -194,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     prefsEditor.apply();
                     Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
                     if (fragment != null) {
-                        ((profile_fragment) fragment).setValues(user);
+                        ((profile_fragment) fragment).setValues(profile);
                     }
 
                 }
@@ -224,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         String oneSignalToken = status.getSubscriptionStatus().getUserId();
 
         Call<ApiResponse> call =
-                profileInterface.sendOneSignalToken("bearer "+ authToken, oneSignalToken);
+                profileInterface.sendOneSignalToken("bearer " + authToken, oneSignalToken);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -288,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     String filePath = file.getPath();
                     Bitmap bitmap = BitmapFactory.decodeFile(filePath);
                     //Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
-                    sendPicToServer(bitmap,filePath);
+                    sendPicToServer(bitmap, filePath);
                     /*if(fragment !=null){
                         ((profile_fragment) fragment).setPhoto(bitmap);
                     }*/
@@ -468,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
 
         Call<ApiResponse> call =
-                profileInterface.updateImage(body, "bearer " +authToken);
+                profileInterface.updateImage(body, "bearer " + authToken);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override

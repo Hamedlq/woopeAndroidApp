@@ -7,11 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
@@ -32,9 +36,15 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class ConfirmPayActivity extends AppCompatActivity {
 
+    @BindView(R.id.backdrop)
+    protected ImageView backdrop;
+    @BindView(R.id.return_woope_credit)
+    protected TextView return_woope_credit;
+    @BindView(R.id.cancelBtn)
+    protected Button cancelBtn;
     String profileString;
     String transactionString;
-    String payedPoints;
+    //String payedPoints;
     Profile profile;
     String authToken;
     PayListModel payListModel;
@@ -45,94 +55,58 @@ public class ConfirmPayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_pay);
-
+        ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
-            payedPoints= getIntent().getStringExtra(POINTS_PAYED);
+            //payedPoints= getIntent().getStringExtra(POINTS_PAYED);
         }
 
         TextView pointText = findViewById(R.id.pointText);
-
+        return_woope_credit.setText(String.valueOf(payListModel.returnWoope));
 
         TextView payAmount = findViewById(R.id.payAmount);
-        payAmount.setText(payedPoints);
+        payAmount.setText(payListModel.pointPayString());
+
 
         TextView total_price = findViewById(R.id.total_price);
-        total_price.setText(String.valueOf(payListModel.totalPrice));
+        total_price.setText(payListModel.getWoopePriceString());
 
         TextView StoreName_tv=findViewById(R.id.StoreName);
         StoreName_tv.setText(payListModel.storeName);
 
-        TextView return_woope_credit=findViewById(R.id.return_woope_credit);
-        return_woope_credit.setText(String.valueOf(payListModel.returnPoints));
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        hideProgreeBar();
 
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    ConfirmPayment();
+                    gotoBankActivity();
                 }
                 return false;
             }
         });
 
-    }
-
-
-    public void ConfirmPayment(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .build();
-        TransactionInterface providerApiInterface =
-                retrofit.create(TransactionInterface.class);
-
-        final SharedPreferences prefs =
-                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
-
-        showProgreeBar();
-        Call<PayListModel> call =
-                providerApiInterface.GetConfirmCode(authToken, payListModel.id,payedPoints);
-        call.enqueue(new Callback<PayListModel>() {
+        cancelBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
-                hideProgreeBar();
-                int code = response.code();
-                if (code == 200) {
-                    PayListModel trans = response.body();
-                    gotoPayCodeActivity(trans);
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    finish();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<PayListModel> call, Throwable t) {
-                hideProgreeBar();
+                return false;
             }
         });
+        Picasso.with(ConfirmPayActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).into(backdrop);
 
     }
 
-    public void gotoPayCodeActivity(PayListModel trans){
-
-        Intent myIntent = new Intent(ConfirmPayActivity.this, PayCodeActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
+    public void gotoBankActivity(){
+        //Intent myIntent = new Intent(ConfirmPayActivity.this, PayCodeActivity.class);
+        Intent myIntent = new Intent(ConfirmPayActivity.this, BankActivity.class);
+        myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
+        //myIntent.putExtra(POINTS_PAYED, payedPoints);
         startActivity(myIntent);
         this.finish();
     }
-
-    public void showProgreeBar() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgreeBar() {
-        progressBar.setVisibility(View.GONE);
-    }
-
 }

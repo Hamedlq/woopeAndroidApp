@@ -44,7 +44,7 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
+        public TextView title, count,points;
         public ImageView thumbnail;
         public ImageView followIcon;
         public LinearLayout action_layout;
@@ -53,6 +53,7 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
+            points = (TextView) view.findViewById(R.id.points);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             followIcon = (ImageView) view.findViewById(R.id.follow);
             action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
@@ -164,6 +165,7 @@ public class StoresAdapter extends RecyclerView.Adapter<StoresAdapter.MyViewHold
         Store store = albumList.get(position);
         holder.title.setText(store.storeName);
         holder.count.setText(store.discountPercent + "٪ تخفیف");
+        holder.points.setText("به ازای هر "+store.basePrice +" تومان خرید "+ store.returnPoint +" عدد ووپ هدیه بگیرید");
 
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);

@@ -1,14 +1,18 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -16,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
@@ -38,6 +44,8 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 
 public class PayActivity extends AppCompatActivity implements View.OnTouchListener {
     //@BindView(R.id.StoreName) TextView StoreName_tv;
+    @BindView(R.id.backdrop)
+    protected ImageView backdrop;
     Store store;
     long totalPrice;
     //Spinner spinner;
@@ -94,7 +102,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         credit_radio.setOnTouchListener(this);
         cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
         cash_radio.setChecked(true);
-
+        Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(backdrop);
 
     }
 
@@ -106,7 +114,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         this.finish();
     }
 
-    public void gotoCreditCash(PayListModel model) {
+    public void gotoCreditPay(PayListModel model) {
         Gson gson = new Gson();
         String transModel = gson.toJson(model);
 
@@ -143,7 +151,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.InsertTransaction(authToken, "1", amount.getText().toString(), pt);
+                providerApiInterface.InsertTransaction("bearer "+authToken, store.storeId, amount.getText().toString(), pt);
 
 
         call.enqueue(new Callback<PayListModel>() {
@@ -159,7 +167,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         gotoPayCash(model);
                     } else {
                         //go to credit pay
-                        gotoCreditCash(model);
+                        gotoCreditPay(model);
                     }
                 }
             }
@@ -197,15 +205,20 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     break;
                 case R.id.cash_layout:
                 case R.id.cash_radio:
-                    cash_radio.setChecked(true);
-                    credit_radio.setChecked(false);
-                    cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-                    credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
-
+                    if(store.isCashPayAllowed) {
+                        cash_radio.setChecked(true);
+                        credit_radio.setChecked(false);
+                        cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
+                        credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
+                    }
                     break;
                 case R.id.button:
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        saveTransaction();
+                        if (!TextUtils.isEmpty(amount.getText())) {
+                            saveTransaction();
+                        }else {
+                            showFillError();
+                        }
                         return true;
                     }
                     break;
@@ -213,4 +226,19 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         }
         return false;
     }
+
+    private void showFillError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("لطفا مبلغ خرید را وارد کنید").setPositiveButton("باشه", ConfirmDialogClickListener).show();
+    }
+    DialogInterface.OnClickListener ConfirmDialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    dialog.dismiss();
+                    break;
+            }
+        }
+    };
 }

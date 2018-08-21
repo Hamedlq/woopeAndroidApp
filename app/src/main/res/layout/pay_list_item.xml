@@ -51,8 +51,7 @@
                     android:id="@+id/ic_item"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/album1" />
+                    android:layout_margin="5dp" />
 
 
             </LinearLayout>

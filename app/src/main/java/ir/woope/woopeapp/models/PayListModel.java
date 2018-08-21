@@ -14,12 +14,24 @@ public class PayListModel extends ApiResponse implements Serializable {
     public long storeId;
     public long pointPay;
     public long totalPrice;
-    public long returnPoints;
+    public long returnWoope;
     public int payType;
     public String confirmationCode;
+    public String logoSrc;
 
     public PayListModel() {
 
     }
 
+    public String getWoopePriceString() {
+        long wprice = totalPrice - (pointPay*1000);
+        return String.valueOf(wprice);
+    }
+
+    public String pointPayString() {
+        if (pointPay > 0) {
+            return String.valueOf(pointPay);
+        }
+        return "0";
+    }
 }

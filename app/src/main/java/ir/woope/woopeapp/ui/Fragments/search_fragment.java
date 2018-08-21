@@ -36,6 +36,7 @@ import ir.woope.woopeapp.adapters.StoreSearchAdapter;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
+import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
@@ -49,6 +50,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 /**
  * Created by Hamed on 6/11/2018.
@@ -91,13 +95,16 @@ public class search_fragment extends Fragment {
                 String json = prefs.getString(PROFILE, "");
                 Profile obj = gson.fromJson(json, Profile.class);
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, json);
-                myIntent.putExtra("StoreName", s.storeName); //Optional parameters
-                getActivity().startActivity(myIntent);
+                myIntent.putExtra(PREF_PROFILE, obj);
+                myIntent.putExtra(STORE, s); //Optional parameters
+                getActivity().startActivityForResult(myIntent,RELOAD_LIST);
 
-                //open activity
-                //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
+            }
 
+            @Override
+            public void onFollowTap(int position) {
+                Store s = albumList.get(position);
+                followStore(s);
             }
         };
 
@@ -122,10 +129,10 @@ public class search_fragment extends Fragment {
         floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                if(newQuery.length()>0){
-                    Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
+                //if(newQuery.length()>0){
+                    //Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
                     findStores(newQuery);
-                }
+                //}
             }
         });
 
@@ -157,87 +164,36 @@ public class search_fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    private void followStore(Store s) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
 
-    /**
-     * Initializing collapsing toolbar
-     * Will show and hide the toolbar title on scroll
-     */
-    private void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout)mRecycler.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) mRecycler.findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
+        final SharedPreferences settings = getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = settings.getString(TOKEN, null);
 
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
+        Call<ApiResponse> call =
+                providerApiInterface.followStore("bearer "+authToken,s.storeId);
 
+
+        call.enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                int code = response.code();
+                if (code == 200) {
+                    ApiResponse ar = response.body();
+                    Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "خطا در تغییر علاقمندی‌ها", Toast.LENGTH_LONG).show();
+            }
         });
-    }
-
-    /**
-     * Adding few albums for testing
-     */
-    private void prepareAlbums() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        /*Store a = new Store("آدیداس","هر ۱۰۰ هزار تومان ۵ ووپ", 7, covers[0]);
-        albumList.add(a);
-
-        a = new Store("نایک","هر ۱۰ هزار تومان ۱ ووپ", 10, covers[1]);
-        albumList.add(a);
-
-        a = new Store("LC WAIKIKI","هر ۲۰ هزار تومان ۲ ووپ", 10, covers[2]);
-        albumList.add(a);
-
-        a = new Store("ecco","هر ۳۰ هزار تومان ۱۰ ووپ", 15, covers[3]);
-        albumList.add(a);
-
-        a = new Store("پرپروک","هر ۱۰۰ هزار تومان ۵ ووپ", 10, covers[4]);
-        albumList.add(a);
-
-        a = new Store("سیب۳۶۰","هر ۳۰ هزار تومان ۱۰ ووپ", 10, covers[5]);
-        albumList.add(a);
-
-        a = new Store("شیلا","هر ۵۰ هزار تومان ۷ ووپ", 5, covers[6]);
-        albumList.add(a);
-
-        a = new Store("پدرخوب","هر ۳۰ هزار تومان ۱۰ ووپ", 10, covers[7]);
-        albumList.add(a);
-
-        a = new Store("در ب در","هر ۱۰۰ هزار تومان ۵ ووپ", 15, covers[8]);
-        albumList.add(a);
-
-        a = new Store("آدیداس","هر ۸۰ هزار تومان ۵ ووپ", 15, covers[9]);
-        albumList.add(a);*/
-
-        adapter.notifyDataSetChanged();
     }
 
     private void getOrderListFromServer() {
@@ -330,7 +286,7 @@ public class search_fragment extends Fragment {
                 @Override
                 public void onFailure(Call<List<Store>> call, Throwable t) {
                     searchInProgress = false;
-                    Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                     hideProgreeBar();
                 }
             });
@@ -387,6 +343,7 @@ public class search_fragment extends Fragment {
 
     public interface ItemTouchListener {
         public void onCardViewTap(View view, int position);
+        public void onFollowTap( int position);
     }
 
 

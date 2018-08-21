@@ -17,6 +17,7 @@ public class TransactionModel extends ApiResponse implements Serializable {
     public long pointPay;
     public int storeId;
     public int payType;
+    public String logoSrc;
     public String returnWoop;
     public TransactionModel() {
 

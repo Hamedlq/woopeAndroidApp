@@ -202,7 +202,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         //this.profilePhoto = getString(R.string.user_profile_photo);
 
         Picasso.with(getActivity())
-                .load(R.drawable.album2)
+                .load(R.drawable.ic_person_black)
                 .placeholder(R.drawable.img_circle_placeholder)
                 .resize(avatarSize, avatarSize)
                 .centerCrop()
@@ -213,7 +213,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == KeyEvent.ACTION_UP){
-                    selectImage();
+                    //selectImage();
                 }
                 return true;
             }
@@ -224,6 +224,8 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         setupTabs();
 
         setupRevealBackground(savedInstanceState);
+
+        ((MainActivity)getActivity()).getProfileFromServer();
     }
 
 

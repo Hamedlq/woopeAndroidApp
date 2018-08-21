@@ -61,7 +61,7 @@ public class ProfileTransactionListFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         ordersList = view.findViewById(R.id.orders_list);
         orderModelList = new ArrayList<>();
-        adapter = new ProfileTransactionListAdapter(orderModelList, payTransactionTouchListener);
+        adapter = new ProfileTransactionListAdapter(getActivity(),orderModelList, payTransactionTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         ordersList.setLayoutManager(mLayoutManager);
 
@@ -110,7 +110,7 @@ public class ProfileTransactionListFragment extends Fragment {
                     orderModelList = response.body();
                     adapter.notifyDataSetChanged();
 
-                    adapter = new ProfileTransactionListAdapter(orderModelList, payTransactionTouchListener);
+                    adapter = new ProfileTransactionListAdapter(getActivity(),orderModelList, payTransactionTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     ordersList.setAdapter(adapter);

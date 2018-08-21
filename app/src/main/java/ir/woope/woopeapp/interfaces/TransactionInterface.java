@@ -20,21 +20,21 @@ public interface TransactionInterface {
 
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
-    Call<PayListModel> InsertTransaction(@Field("token") String authtoken,
+    Call<PayListModel> InsertTransaction(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                       @Field("StoreId") String StoreId,
                                                       @Field("TotalPrice") String Amount,
                                                       @Field("PayType") int payType);
 
     @FormUrlEncoded
     @POST("api/Transaction/GetConfirmCode")
-    Call<PayListModel> GetConfirmCode(@Field("token") String authtoken,
+    Call<PayListModel> GetConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                    @Field("Id") long paylistId,
                                                    @Field("Woope") String pointPay);
 
     @FormUrlEncoded
-    @POST("api/Transaction/SendConfirmCode")
-    Call<ApiResponse> SendConfirmCode(@Field("token") String authtoken,
-                                      @Field("id") long payListId,
+    @POST("api/Transaction/SubmitUserBillTransaction")
+    Call<ApiResponse> SendConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Field("paylistId") long payListId,
                                       @Field("code") String confirmationCode);
 
 

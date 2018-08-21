@@ -40,6 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 /**
@@ -65,12 +66,12 @@ public class TransListFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         ordersList = view.findViewById(R.id.orders_list);
         orderModelList = new ArrayList<>();
-        adapter = new TransactionListAdapter(orderModelList, payTransactionTouchListener);
+        adapter = new TransactionListAdapter(getActivity(),orderModelList, payTransactionTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         ordersList.setLayoutManager(mLayoutManager);
 
         ordersList.setAdapter(adapter);
-        getOrderListFromServer();
+        getPayListFromServer();
 
         payTransactionTouchListener = new PayTransactionTouchListener() {
             @Override
@@ -95,7 +96,7 @@ public class TransListFragment extends Fragment {
     }
 
 
-    private void getOrderListFromServer() {
+    public void getPayListFromServer() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -121,7 +122,7 @@ public class TransListFragment extends Fragment {
                     orderModelList = response.body();
                     adapter.notifyDataSetChanged();
 
-                    adapter = new TransactionListAdapter(orderModelList, payTransactionTouchListener);
+                    adapter = new TransactionListAdapter(getActivity(),orderModelList, payTransactionTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     ordersList.setAdapter(adapter);
@@ -164,7 +165,7 @@ public class TransListFragment extends Fragment {
         Intent myIntent = new Intent(getActivity(), CashPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
-        this.startActivity(myIntent);
+        getActivity().startActivityForResult(myIntent,RELOAD_LIST);
     }
 
     public void gotoCreditCash(PayListModel model){
@@ -172,6 +173,6 @@ public class TransListFragment extends Fragment {
         Intent myIntent = new Intent(getActivity(), CreditPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
-        this.startActivity(myIntent);
+        getActivity().startActivityForResult(myIntent,RELOAD_LIST);
     }
 }

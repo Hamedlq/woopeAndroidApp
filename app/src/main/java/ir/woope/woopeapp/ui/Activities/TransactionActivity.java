@@ -1,8 +1,11 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,12 +19,13 @@ import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.TransListFragment;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class TransactionActivity extends AppCompatActivity {
     Profile profile;
     //Store store;
-    String LIST_FRAGMENT = "HomeFragment";
+    String LIST_FRAGMENT = "ListFragment";
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,20 @@ public class TransactionActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == RELOAD_LIST){
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = fragmentManager.findFragmentByTag(LIST_FRAGMENT);
+                if (fragment != null) {
+                    ((TransListFragment) fragment).getPayListFromServer();
+                }
+            }
+        }
     }
 
     public Profile getProfile() {
