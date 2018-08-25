@@ -16,14 +16,14 @@ public final class Constants {
 
         }
 
-        public static final String BASE_URL = "http://192.168.100.4:8090";
+        //public static final String BASE_URL = "http://192.168.100.4:8090";
 
         
 //        public static final String BASE_URL = "http://localhost/";
 
-        public static final String BASE_URL = "http://localhost:58795/";
+       //public static final String BASE_URL = "http://localhost:58795/";
 
-       // public static final String BASE_URL = "http://192.168.100.5:8090/";
+        public static final String BASE_URL = "http://192.168.100.4:8090/";
          //public static final String BASE_URL = "http://localhost:58795/";
 //        public static final String BASE_URL = "http://test.mywoope.com/";
     }

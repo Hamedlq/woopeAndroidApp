@@ -18,6 +18,7 @@
             android:layout_height="match_parent">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_alignParentRight="true"
@@ -61,15 +62,16 @@
 
             <LinearLayout
                 android:id="@+id/action_layout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_alignParentBottom="true"
+
+                android:layout_alignParentRight="true"
                 android:gravity="right"
                 android:layout_height="wrap_content">
 
 
                 <ImageView
                     android:id="@+id/follow"
-
                     android:layout_width="@dimen/ic_album_overflow_width"
                     android:layout_height="@dimen/ic_album_overflow_height"
                     android:layout_marginRight="12dp"
@@ -82,8 +84,9 @@
 
             </LinearLayout>
             <View
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="1dp"
+                android:layout_alignParentRight="true"
                 android:background="@color/colorPrimary"
                 android:layout_above="@+id/action_layout"/>
 

@@ -42,8 +42,8 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_register);
 
-        final SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        final String token = settings.getString(TOKEN, null);
+
+        final String token = getIntent().getStringExtra(TOKEN);
 
         final TextView countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final EditText code = (EditText) findViewById(R.id.txtbx_confirm_code_register);

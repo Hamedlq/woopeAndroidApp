@@ -91,4 +91,5 @@ dependencies {
 
     implementation 'com.unstoppable:submitbutton:1.1.3'
 
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.1'
 }
