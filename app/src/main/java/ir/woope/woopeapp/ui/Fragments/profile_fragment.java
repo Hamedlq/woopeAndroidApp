@@ -22,8 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fxn.pix.Pix;
-import com.fxn.utility.PermUtil;
+import com.google.gson.Gson;
 import com.nguyenhoanglam.imagepicker.model.Config;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
@@ -40,9 +39,11 @@ import ir.woope.woopeapp.Utils.RevealBackgroundView;
 import ir.woope.woopeapp.adapters.ProfilePageAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
+import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.ui.Activities.EditProfileActivity;
+import ir.woope.woopeapp.ui.Activities.LoginActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.SplashActivity;
 import okhttp3.MediaType;
@@ -55,7 +56,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 
@@ -232,17 +235,17 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 //                        .build();
 //                singleSelectionPicker.show(getFragmentManager(), "picker");
 
-                ImagePicker.with(profile_fragment.this)                         //  Initialize ImagePicker with activity or fragment context
+                ImagePicker.with(profile_fragment.this) //  Initialize ImagePicker with activity or fragment context
                         .setProgressBarColor("#4CAF50")     //  ProgressBar color
                         .setBackgroundColor("#212121")      //  Background color
                         .setCameraOnly(false)               //  Camera mode
-                        .setMultipleMode(false)              //  Select multiple images or single image
+                        .setMultipleMode(false)             //  Select multiple images or single image
                         .setFolderMode(true)                //  Folder mode
                         .setShowCamera(true)                //  Show camera button
-                        .setFolderTitle("")           //  Folder title (works with FolderMode = true)
-                        .setImageTitle("")         //  Image title (works with FolderMode = false)
-                        .setDoneTitle("انتخاب")               //  Done button title
-                        .setMaxSize(1)                     //  Max images can be selected
+                        .setFolderTitle("")                 //  Folder title (works with FolderMode = true)
+                        .setImageTitle("")                  //  Image title (works with FolderMode = false)
+                        .setDoneTitle("انتخاب")             //  Done button title
+                        .setMaxSize(1)                      //  Max images can be selected
                         .setSavePath("ImagePicker")         //  Image capture folder name
                         .setAlwaysShowDoneButton(true)      //  Set always show done button in multiple mode
                         .setKeepScreenOn(true)              //  Keep screen on when selecting images
@@ -282,25 +285,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         }
         super.onActivityResult(requestCode, resultCode, data);  // You MUST have this line to be here
         // so ImagePicker can work with fragment mode
-
     }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Pix.start(profile_fragment.this, requestCode);
-                } else {
-                    Toast.makeText(this.getContext(), "Approve permissions to open Pix ImagePicker", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-        }
-    }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -309,21 +294,13 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         //this.profilePhoto = getString(R.string.user_profile_photo);
 
-        Picasso.with(getActivity())
-                .load(R.drawable.ic_person_black)
-                .placeholder(R.drawable.img_circle_placeholder)
-                .resize(avatarSize, avatarSize)
-                .centerCrop()
-                .transform(new CircleTransformation())
-                .into(ivUserProfilePhoto);
-
         setupUserProfileGrid();
 
         setupTabs();
 
         setupRevealBackground(savedInstanceState);
 
-        ((MainActivity) getActivity()).getProfileFromServer();
+        GetProfilePicture();
     }
 
     private void setupTabs() {
@@ -433,6 +410,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
     public void setPhoto(String filePath) {
         //ivUserProfilePhoto.setImageBitmap(bitmap);
+
         Picasso.with(getActivity())
                 .load(Constants.GlobalConstants.LOGO_URL + filePath)
                 .placeholder(R.drawable.img_circle_placeholder)
@@ -440,6 +418,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 .centerCrop()
                 .transform(new CircleTransformation())
                 .into(ivUserProfilePhoto);
+
         isImageUploaded = true;
     }
 
@@ -490,6 +469,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                             getActivity()
                             , "آپلود شد",
                             Toast.LENGTH_SHORT).show();
+                    GetProfilePicture();
                 } else {
                     Toast.makeText(
                             getActivity()
@@ -514,6 +494,45 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 .setAspectRatio(1,1)
                 .setAllowFlipping(false)
                 .start(getContext(), this);
+    }
+
+    public void GetProfilePicture() {
+
+        Retrofit getProfile;
+
+        getProfile = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        final SplashInterface splash = getProfile.create(SplashInterface.class);
+
+        splash.check_connection("bearer " + token).enqueue(new Callback<Profile>() {
+
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+                if (response.code() == 200) {
+
+                    if(!response.body().getImageSrc().equals("")) {
+                        String imagesrc = response.body().getImageSrc();
+                        setPhoto(imagesrc);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+
+                Toast.makeText(
+                        getContext()
+                        , t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
+
     }
 
 

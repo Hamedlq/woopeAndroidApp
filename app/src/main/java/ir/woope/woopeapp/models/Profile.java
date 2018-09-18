@@ -123,4 +123,8 @@ public class Profile extends ApiResponse implements Serializable{
     public String getMobile() {
         return mobile;
     }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
 }

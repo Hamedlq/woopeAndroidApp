@@ -45,8 +45,6 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String token = intent.getStringExtra("token");
 
-        final String token = getIntent().getStringExtra(TOKEN);
-
         final TextView countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final EditText code = (EditText) findViewById(R.id.txtbx_confirm_code_register);
         final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar_sms_verif_register);
