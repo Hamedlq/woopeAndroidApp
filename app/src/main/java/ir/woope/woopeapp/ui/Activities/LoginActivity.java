@@ -257,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             Intent goto_verifphone = new Intent(LoginActivity.this,
                                                     VerifyPhoneActivity.class);
-                                            goto_verifphone.putExtra("token",tk);
+                                            goto_verifphone.putExtra(TOKEN,tk);
                                             startActivity(goto_verifphone);
 
                                         } else {
