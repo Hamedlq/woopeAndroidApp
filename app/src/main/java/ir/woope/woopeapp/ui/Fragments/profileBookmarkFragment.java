@@ -228,7 +228,6 @@ public class profileBookmarkFragment extends Fragment {
                 if (code == 200) {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
-
                     adapter = new ProfileBookmarkAdapter(getActivity(),albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
@@ -252,7 +251,6 @@ public class profileBookmarkFragment extends Fragment {
         public void onFollowTap(int position);
     }
 
-
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -260,6 +258,5 @@ public class profileBookmarkFragment extends Fragment {
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
     }
-
 
 }

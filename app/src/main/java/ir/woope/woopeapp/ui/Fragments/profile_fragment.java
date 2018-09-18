@@ -1,25 +1,17 @@
 package ir.woope.woopeapp.ui.Fragments;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -30,42 +22,54 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fxn.pix.Pix;
+import com.fxn.utility.PermUtil;
+import com.nguyenhoanglam.imagepicker.model.Config;
+import com.nguyenhoanglam.imagepicker.model.Image;
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
 import ir.woope.woopeapp.adapters.ProfilePageAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.interfaces.ProfileInterface;
+import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.ui.Activities.EditProfileActivity;
-import ir.woope.woopeapp.ui.Activities.LoginActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.SplashActivity;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
+
 
 /**
  * Created by Hamed on 6/11/2018.
  */
 
-public class profile_fragment extends Fragment implements TabLayout.OnTabSelectedListener, RevealBackgroundView.OnStateChangeListener{
+public class profile_fragment extends Fragment implements TabLayout.OnTabSelectedListener, RevealBackgroundView.OnStateChangeListener {
 
     private View mRecycler;
     public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
 
     private String userChoosenTask;
-    boolean isImageUploaded=false;
+    boolean isImageUploaded = false;
 
     private static final int USER_OPTIONS_ANIMATION_DELAY = 300;
     private static final Interpolator INTERPOLATOR = new DecelerateInterpolator();
@@ -105,38 +109,57 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     private String profilePhoto;
 
     SharedPreferences settings;
+    String token;
+
+    Retrofit uploader;
+
+    private Context context;
+
+
+
+    private ArrayList<Image> list = new ArrayList<Image>();
+
+    public void addImage(ArrayList<Image> list) {
+        this.list.clear();
+        this.list.addAll(list);
+
+    }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
-
+//        contextOfApplication = getApplicationContext();
+        settings=getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        token = settings.getString(TOKEN, null);
 
     }
+
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
-        mRecycler = inflater.inflate(R.layout.fragment_user_profile, container,false);
+        mRecycler = inflater.inflate(R.layout.fragment_user_profile, container, false);
         //mUnbinder=ButterKnife.bind(this,mRecycler);
-        vRevealBackground=mRecycler.findViewById(R.id.vRevealBackground);
-        userNameFamily=mRecycler.findViewById(R.id.userNameFamily);
-        username=mRecycler.findViewById(R.id.username);
-        userBio=mRecycler.findViewById(R.id.userBio);
-        cashCredit=mRecycler.findViewById(R.id.cashCredit);
-        woopeCredit=mRecycler.findViewById(R.id.woope_credit);
-        useNumber=mRecycler.findViewById(R.id.transactionCount);
+        vRevealBackground = mRecycler.findViewById(R.id.vRevealBackground);
+        userNameFamily = mRecycler.findViewById(R.id.userNameFamily);
+        username = mRecycler.findViewById(R.id.username);
+        userBio = mRecycler.findViewById(R.id.userBio);
+        cashCredit = mRecycler.findViewById(R.id.cashCredit);
+        woopeCredit = mRecycler.findViewById(R.id.woope_credit);
+        useNumber = mRecycler.findViewById(R.id.transactionCount);
 
 
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
-        ivUserProfilePhoto=mRecycler.findViewById(R.id.ivUserProfilePhoto);
-        tlUserProfileTabs=mRecycler.findViewById(R.id.tlUserProfileTabs);
-        vUserDetails=mRecycler.findViewById(R.id.vUserDetails);
-        btnEdit=mRecycler.findViewById(R.id.btnEditProfile);
-        btnlogout=mRecycler.findViewById(R.id.btn_logout_editprofile);
-        vUserStats=mRecycler.findViewById(R.id.vUserStats);
-        vUserProfileRoot=mRecycler.findViewById(R.id.vUserProfileRoot);
+        ivUserProfilePhoto = mRecycler.findViewById(R.id.ivUserProfilePhoto);
+        tlUserProfileTabs = mRecycler.findViewById(R.id.tlUserProfileTabs);
+        vUserDetails = mRecycler.findViewById(R.id.vUserDetails);
+        btnEdit = mRecycler.findViewById(R.id.btnEditProfile);
+        btnlogout = mRecycler.findViewById(R.id.btn_logout_editprofile);
+        vUserStats = mRecycler.findViewById(R.id.vUserStats);
+        vUserProfileRoot = mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager
         viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
         return mRecycler;
@@ -148,7 +171,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View arg0){
+            public void onClick(View arg0) {
 
                 Intent goto_edit = new Intent(getActivity(),
                         EditProfileActivity.class);
@@ -159,7 +182,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         btnlogout.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View arg0){
+            public void onClick(View arg0) {
 
                 SharedPreferences settings = getContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
@@ -174,24 +197,109 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             }
         });
 
-        Profile pp=((MainActivity)getActivity()).getUserProfile();
-        if(pp==null){
+        Profile pp = ((MainActivity) getActivity()).getUserProfile();
+        if (pp == null) {
             userNameFamily.setText("");
             username.setText("");
             userBio.setText("");
             cashCredit.setText("0");
             woopeCredit.setText("0");
             useNumber.setText("0");
-        }else {
-            userNameFamily.setText(pp.getName()+" "+pp.getFamily());
+        } else {
+            userNameFamily.setText(pp.getName() + " " + pp.getFamily());
             username.setText(pp.getUsername());
             userBio.setText(pp.getUserBio());
             cashCredit.setText(pp.getCreditString());
             woopeCredit.setText(pp.getWoopeCreditString());
             useNumber.setText(pp.getUseNumberString());
         }
+
+        final int requestcode = 1151;
+
+        ivUserProfilePhoto.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+
+//                Pix.start(profile_fragment.this, requestcode);
+
+//                final BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.woope.woopeapp.fileprovider")
+//                        .setMaximumDisplayingImages(24) //Default: Integer.MAX_VALUE. Don't worry about performance :)
+//                        .setSpanCount(5) //Default: 3. This is the number of columns
+//                        .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
+//                        .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of the dialog.
+//                        .hideCameraTile() //Default: show. Set this if you don't want user to take photo.
+//                        .hideGalleryTile()//Default: show. Set this if you don't want to further let user select from a gallery app. In such case, I suggest you to set maximum     displaying    images to Integer.MAX_VALUE.
+//                        .build();
+//                singleSelectionPicker.show(getFragmentManager(), "picker");
+
+                ImagePicker.with(profile_fragment.this)                         //  Initialize ImagePicker with activity or fragment context
+                        .setProgressBarColor("#4CAF50")     //  ProgressBar color
+                        .setBackgroundColor("#212121")      //  Background color
+                        .setCameraOnly(false)               //  Camera mode
+                        .setMultipleMode(false)              //  Select multiple images or single image
+                        .setFolderMode(true)                //  Folder mode
+                        .setShowCamera(true)                //  Show camera button
+                        .setFolderTitle("")           //  Folder title (works with FolderMode = true)
+                        .setImageTitle("")         //  Image title (works with FolderMode = false)
+                        .setDoneTitle("انتخاب")               //  Done button title
+                        .setMaxSize(1)                     //  Max images can be selected
+                        .setSavePath("ImagePicker")         //  Image capture folder name
+                        .setAlwaysShowDoneButton(true)      //  Set always show done button in multiple mode
+                        .setKeepScreenOn(true)              //  Keep screen on when selecting images
+                        .start();                           //  Start ImagePicker
+
+            }
+        });
     }
 
+    private Bitmap bitmap;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+//        if (requestCode == 1151) {
+//            ArrayList<String> returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+//            addImage(returnValue);
+//            File f = new File(list.get(0));
+//            cropimage(Uri.fromFile(f));
+//
+//        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+                uploadFile(result.getUri());
+
+        }
+
+        if (requestCode == Config.RC_PICK_IMAGES && data != null) {
+            ArrayList<Image> images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
+            final Image image = images.get(0);
+            File f = new File(image.getPath());
+            cropimage(Uri.fromFile(f));
+        }
+        super.onActivityResult(requestCode, resultCode, data);  // You MUST have this line to be here
+        // so ImagePicker can work with fragment mode
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Pix.start(profile_fragment.this, requestCode);
+                } else {
+                    Toast.makeText(this.getContext(), "Approve permissions to open Pix ImagePicker", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
 
 
     @Override
@@ -209,25 +317,14 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 .transform(new CircleTransformation())
                 .into(ivUserProfilePhoto);
 
-        ivUserProfilePhoto.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_UP){
-                    //selectImage();
-                }
-                return true;
-            }
-        });
-
         setupUserProfileGrid();
 
         setupTabs();
 
         setupRevealBackground(savedInstanceState);
 
-        ((MainActivity)getActivity()).getProfileFromServer();
+        ((MainActivity) getActivity()).getProfileFromServer();
     }
-
 
     private void setupTabs() {
 
@@ -250,7 +347,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         //Adding onTabSelectedListener to swipe views
 
-        tlUserProfileTabs.setOnTabSelectedListener(this) ;
+        tlUserProfileTabs.setOnTabSelectedListener(this);
 
         /*final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         rvUserProfile.setLayoutManager(layoutManager);*/
@@ -271,46 +368,11 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         });*/
     }
 
-    private void selectImage() {
-        final CharSequence[] items = {"با دوربین", "انتخاب از گالری",
-                "نه فعلا"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("افزودن عکس");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result = ir.aronapp.supplierapp.Helpers.Utility.checkPermission(getActivity());
-                if (items[item].equals("با دوربین")) {
-                    userChoosenTask = "با دوربین";
-                    if (result)
-                        cameraIntent();
-                } else if (items[item].equals("انتخاب از گالری")) {
-                    userChoosenTask = "انتخاب از گالری";
-                    if (result)
-                        galleryIntent();
-                } else if (items[item].equals("نه فعلا")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    private void galleryIntent() {
-        ((MainActivity)getActivity()).galleryIntent();
-    }
-
-    private void cameraIntent() {
-        ((MainActivity)getActivity()).cameraIntent();
-    }
-
-
-
     private void setupRevealBackground(Bundle savedInstanceState) {
         vRevealBackground.setOnStateChangeListener(this);
         if (savedInstanceState == null) {
             //final int[] startingLocation = getActivity().getIntent().getIntArrayExtra(ARG_REVEAL_START_LOCATION);
-            final int[] startingLocation ={0,0,0};
+            final int[] startingLocation = {0, 0, 0};
             vRevealBackground.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
@@ -361,7 +423,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     public void setValues(Profile pp) {
-        userNameFamily.setText(pp.getName()+" "+pp.getFamily());
+        userNameFamily.setText(pp.getName() + " " + pp.getFamily());
         username.setText(pp.getUsername());
         userBio.setText(pp.getUserBio());
         cashCredit.setText(pp.getCreditString());
@@ -369,7 +431,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         useNumber.setText(pp.getUseNumberString());
     }
 
-    public void setPhoto(String filePath){
+    public void setPhoto(String filePath) {
         //ivUserProfilePhoto.setImageBitmap(bitmap);
         Picasso.with(getActivity())
                 .load(Constants.GlobalConstants.LOGO_URL + filePath)
@@ -378,7 +440,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 .centerCrop()
                 .transform(new CircleTransformation())
                 .into(ivUserProfilePhoto);
-        isImageUploaded=true;
+        isImageUploaded = true;
     }
 
     @Override
@@ -395,5 +457,64 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+    private void uploadFile(Uri fileUri) {
+        // create upload service client
+
+        uploader = new Retrofit.Builder()
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final ProfileInterface uploadprofile = uploader.create(ProfileInterface.class);
+
+        // use the FileUtils to get the actual file by uri
+        File file = new File(fileUri.getPath());
+
+        // create RequestBody instance from file
+        RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("picture", file.getName(), fbody);
+
+        // finally, execute the request
+        Call<ApiResponse> call = uploadprofile.updateImage(body, "bearer " + token);
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call,
+                                   Response<ApiResponse> response) {
+
+                if (response.body().getStatus() == 101) {
+                    Toast.makeText(
+                            getActivity()
+                            , "آپلود شد",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(
+                            getActivity()
+                            , "آپلود نشد",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Toast.makeText(
+                        getActivity()
+                        , "خطای اتصال",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void cropimage(Uri imgUri){
+        CropImage.activity(imgUri)
+                .setCropMenuCropButtonTitle("برش")
+                .setAspectRatio(1,1)
+                .setAllowFlipping(false)
+                .start(getContext(), this);
+    }
+
 
 }

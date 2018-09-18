@@ -42,8 +42,8 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_register);
 
-        final SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        final String token = settings.getString(TOKEN, null);
+        Intent intent = getIntent();
+        final String token = intent.getStringExtra("token");
 
         final TextView countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final EditText code = (EditText) findViewById(R.id.txtbx_confirm_code_register);
@@ -101,6 +101,33 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
                     phoneNumber = response.body().getMobile();
 
+                    send.send_code(phoneNumber).enqueue(new Callback<ApiResponse>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+                            if (response.body().getStatus() == 101) {
+
+
+                                Toast.makeText(
+                                        VerifyPhoneActivity.this
+                                        , response.body().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                            Toast.makeText(
+                                    VerifyPhoneActivity.this
+                                    , "خطای اتصال",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 } else {
                     Toast.makeText(
 
@@ -125,32 +152,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         });
 
 
-        send.send_code(phoneNumber.toString()).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                if (response.body().getStatus() == 101) {
-
-
-                    Toast.makeText(
-                            VerifyPhoneActivity.this
-                            , response.body().getMessage(),
-                            Toast.LENGTH_SHORT).show();
-
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-
-                Toast.makeText(
-                        VerifyPhoneActivity.this
-                        , "خطای اتصال",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
         resend.setOnClickListener(new View.OnClickListener() {
 
@@ -159,7 +161,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                 resend.setVisibility(View.GONE);
                 progress.setVisibility(View.VISIBLE);
 
-                send.send_code(phoneNumber.toString()).enqueue(new Callback<ApiResponse>() {
+                send.send_code(phoneNumber).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
@@ -216,10 +218,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                        if (response.code() == 101) {
-
-                            Intent intent = getIntent();
-                            String token = intent.getStringExtra("token");
+                        if (response.body().getStatus() == 101) {
 
                             SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
                             SharedPreferences.Editor editor = settings.edit();

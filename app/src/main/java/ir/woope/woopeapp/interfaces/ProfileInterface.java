@@ -33,6 +33,7 @@ public interface ProfileInterface {
 
     @Multipart
     @POST("api/Profile/SetProfileImage")
-    Call<ApiResponse> updateImage(@Part MultipartBody.Part image,
+    Call<ApiResponse> updateImage(@Part MultipartBody.Part file,
                                   @Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
+
 }
