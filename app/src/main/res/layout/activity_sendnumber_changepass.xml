@@ -24,8 +24,8 @@
             android:layout_height="57dp"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:textColor="@color/darkwhite"
-            android:textColorHint="@color/darkwhite"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/textPrimary"
             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -44,7 +44,7 @@
                 android:inputType="phone"
                 android:maxLength="11"
                 android:textColor="@color/white"
-                android:textColorHint="@color/darkwhite"
+                android:textColorHint="@color/textPrimary"
                 android:textDirection="rtl"
                 android:textSize="18sp" />
 

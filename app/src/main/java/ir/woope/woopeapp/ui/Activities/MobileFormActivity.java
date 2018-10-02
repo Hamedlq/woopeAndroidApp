@@ -35,8 +35,8 @@ public class MobileFormActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
         }
 
         Button accept_phone_number = (Button) findViewById(R.id.btn_accept_number);

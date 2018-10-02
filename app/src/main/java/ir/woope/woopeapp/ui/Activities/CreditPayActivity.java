@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -35,6 +36,8 @@ public class CreditPayActivity extends AppCompatActivity {
     protected ImageView backdrop;
     @BindView(R.id.cancelBtn)
     protected Button cancelBtn;
+   /* @BindView(R.id.progressBar)
+    protected ProgressBar progressBar;*/
     String profileString;
     Profile profile;
     PayListModel payListModel;
@@ -49,7 +52,6 @@ public class CreditPayActivity extends AppCompatActivity {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
         }
-
         pointText = findViewById(R.id.pointText);
         TextView payAmount = findViewById(R.id.payAmount);
         TextView toman_credit = findViewById(R.id.toman_credit);

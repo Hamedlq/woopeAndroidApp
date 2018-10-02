@@ -5,6 +5,7 @@ import java.util.List;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.PayResponseModel;
 import ir.woope.woopeapp.models.TransactionModel;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -30,6 +31,11 @@ public interface TransactionInterface {
     Call<PayListModel> GetConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                    @Field("Id") long paylistId,
                                                    @Field("Woope") String pointPay);
+
+    @FormUrlEncoded
+    @POST("api/Pay/GetPayInfo")
+    Call<PayResponseModel> GetPayInfo(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Field("paylistId") long paylistId);
 
     @FormUrlEncoded
     @POST("api/Transaction/SubmitUserBillTransaction")

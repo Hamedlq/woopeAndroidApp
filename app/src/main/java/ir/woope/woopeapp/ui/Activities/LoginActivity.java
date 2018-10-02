@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 .roundRectRadius(10)
                 .focusBorderColor(Color.WHITE)
                 .focusBorderSize(10)
-                .backgroundColor(getResources().getColor(R.color.fancyshowcase))
+                .backgroundColor(getResources().getColor(R.color.colorPrimaryDark))
                 .titleStyle(R.style.MyTitleStyle, Gravity.BOTTOM | Gravity.CENTER)
                 .animationListener(new AnimationListener() {
                     @Override
@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 .roundRectRadius(40)
                 .focusBorderColor(Color.WHITE)
                 .focusBorderSize(10)
-                .backgroundColor(getResources().getColor(R.color.fancyshowcase))
+                .backgroundColor(getResources().getColor(R.color.colorPrimaryDark))
                 .titleStyle(R.style.MyTitleStyle, Gravity.BOTTOM | Gravity.CENTER)
                 .animationListener(new AnimationListener() {
                     @Override
