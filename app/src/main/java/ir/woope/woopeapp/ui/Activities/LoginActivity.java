@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
 
-        final FancyShowCaseView passwordcase = new FancyShowCaseView.Builder(this)
+        /*final FancyShowCaseView passwordcase = new FancyShowCaseView.Builder(this)
                 .focusOn(password)
                 .title("گذرواژه خود را وارد کنید")
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 })
                 .build()
-                .show();
+                .show();*/
 
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

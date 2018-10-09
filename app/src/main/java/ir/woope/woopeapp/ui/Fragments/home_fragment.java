@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -103,6 +104,16 @@ public class home_fragment extends Fragment {
 
                 //open activity
                 //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onAdvTap(View view, int position) {
+                Store s = albumList.get(position);
+                if(s.isAdvertise){
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s.website));
+                    startActivity(browserIntent);
+                }
 
             }
 
@@ -313,6 +324,7 @@ public class home_fragment extends Fragment {
 
     public interface ItemTouchListener {
         public void onCardViewTap(View view, int position);
+        public void onAdvTap(View view, int position);
         public void onFollowTap(View view, int position);
     }
 

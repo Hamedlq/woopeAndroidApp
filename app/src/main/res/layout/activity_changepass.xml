@@ -1,85 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#303F9F">
+    android:background="@color/colorPrimary">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/llLinearLayout"
-        android:layout_width="300dp"
-        android:layout_height="377dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/button_border"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
-
-        <!--<TextView-->
-        <!--android:id="@+id/txt_verification_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginEnd="130dp"-->
-        <!--android:layout_marginRight="130dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:text="@string/verification_code"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--<Button-->
-        <!--android:id="@+id/btn_save_verif_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:background="@drawable/button_border"-->
-        <!--android:text="@string/save"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/verification_code" />-->
-
-        <TextView
-            android:id="@+id/txt_countdown_changepass"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sms_validation_changepass_layout" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
 
-        <!--<android.support.v7.widget.AppCompatEditText-->
-        <!--android:id="@+id/txtbx_confirm_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:backgroundTint="@color/wgreen"-->
-        <!--android:ems="6"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:inputType="number"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/txt_verification_code"-->
-        <!--tools:text="" />-->
+            <ImageView
+                android:id="@+id/imgbx_logo_login"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:soundEffectsEnabled="true"
+                app:srcCompat="@drawable/woope_blue" />
+
+            <TextView
+                android:id="@+id/txt_countdown_changepass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/txt_verifphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="کد تایید و رمز عبور جدید را وارد کنید"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"/>
+
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/sms_validation_changepass_layout"
             android:layout_width="match_parent"
             android:layout_height="57dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:textColor="@color/textPrimary"
             android:textColorHint="@color/textPrimary"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_verifphone">
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
             <EditText
                 android:id="@+id/txtbx_confirm_code_changepass"
@@ -105,12 +79,7 @@
             android:gravity="center_horizontal"
             android:textColor="@color/textPrimary"
             android:textColorHint="@color/textPrimary"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@id/sms_validation_changepass_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_countdown_changepass">
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
             <EditText
                 android:id="@+id/txtbx_newpass_changepass"
@@ -127,18 +96,7 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:id="@+id/txt_verifphone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="40dp"
-            android:text="کد تایید و رمز عبور جدید را وارد کنید"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <Button
             android:id="@+id/btn_save_changepass"
@@ -147,14 +105,11 @@
             android:layout_marginTop="32dp"
             android:background="@drawable/button_border"
             android:text="@string/save"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newpass_changepass_layout" />
-
-    </android.support.constraint.ConstraintLayout>
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:textColor="@color/white" />
 
     <ProgressBar
         android:id="@+id/progressBar_changepass"
@@ -162,11 +117,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="38dp"
-        android:indeterminateDrawable="@drawable/progress"
+        android:indeterminateDrawable="@drawable/progress_white"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/llLinearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         tools:visibility="gone" />
-
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

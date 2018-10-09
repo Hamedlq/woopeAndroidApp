@@ -17,6 +17,7 @@ public class Store extends ApiResponse implements Serializable {
         this.thumbnail = thumbnail;
         isFollowed=false;
         isCashPayAllowed=true;
+        isAdvertise=false;
     }
 
     public String storeId;
@@ -33,4 +34,6 @@ public class Store extends ApiResponse implements Serializable {
     public String firstPhone;
     public String secondPhone;
     public boolean isCashPayAllowed;
+    public boolean isAdvertise;
+    public String website;
 }

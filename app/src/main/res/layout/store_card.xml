@@ -22,7 +22,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_width="@dimen/album_cover_width"
                 android:layout_height="@dimen/album_cover_height"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@mipmap/ic_redbag"
                 android:clickable="true"
                 android:scaleType="fitXY" />
 
@@ -47,6 +47,7 @@
                 android:layout_below="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                    android:textColor="@color/red"
                 android:paddingBottom="@dimen/songs_count_padding_bottom"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
@@ -103,7 +104,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorAccent"
                     android:layout_above="@+id/action_layout"/>
 
             </RelativeLayout>
