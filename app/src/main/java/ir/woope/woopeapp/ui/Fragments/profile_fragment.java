@@ -1,13 +1,31 @@
 package ir.woope.woopeapp.ui.Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,22 +35,24 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.nguyenhoanglam.imagepicker.model.Config;
-import com.nguyenhoanglam.imagepicker.model.Image;
-import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.woope.woopeapp.Manifest;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
@@ -49,13 +69,18 @@ import ir.woope.woopeapp.ui.Activities.SplashActivity;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
@@ -116,17 +141,32 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
     Retrofit uploader;
 
-    private Context context;
+    //keep track of camera capture intent
+    final int CAMERA_CAPTURE = 1;
+    //keep track of cropping intent
+    final int PIC_CROP = 2;
+    //captured picture uri
+    private Uri picUri;
+
+    private Uri mImageCaptureUri;
+    private ImageView mImageView;
+    private AlertDialog dialog;
+
+    private static final int PICK_FROM_CAMERA = 1;
+    private static final int CROP = 2;
+    private static final int PICK_FROM_FILE = 3;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+
+    File f;
 
 
-
-    private ArrayList<Image> list = new ArrayList<Image>();
-
-    public void addImage(ArrayList<Image> list) {
-        this.list.clear();
-        this.list.addAll(list);
-
-    }
+//    private ArrayList<Image> list = new ArrayList<Image>();
+//
+//    public void addImage(ArrayList<Image> list) {
+//        this.list.clear();
+//        this.list.addAll(list);
+//
+//    }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -134,12 +174,10 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         super.onCreate(savedInstanceState);
 
 //        contextOfApplication = getApplicationContext();
-        settings=getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        settings = getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         token = settings.getString(TOKEN, null);
 
     }
-
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -168,6 +206,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         return mRecycler;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -219,72 +258,160 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         final int requestcode = 1151;
 
+        ArrayList<String> pickImageDialogOptions = new ArrayList<>();
+        pickImageDialogOptions.add("انتخاب عکس از گالری");
+        pickImageDialogOptions.add("گرفتن عکس با دوربین");
+
         ivUserProfilePhoto.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
-//                Pix.start(profile_fragment.this, requestcode);
+                // setup the alert builder
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-//                final BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.woope.woopeapp.fileprovider")
-//                        .setMaximumDisplayingImages(24) //Default: Integer.MAX_VALUE. Don't worry about performance :)
-//                        .setSpanCount(5) //Default: 3. This is the number of columns
-//                        .setGridSpacing(Utils.dp2px(2)) //Default: 2dp. Remember to pass in a value in pixel.
-//                        .setPeekHeight(Utils.dp2px(360)) //Default: 360dp. This is the initial height of the dialog.
-//                        .hideCameraTile() //Default: show. Set this if you don't want user to take photo.
-//                        .hideGalleryTile()//Default: show. Set this if you don't want to further let user select from a gallery app. In such case, I suggest you to set maximum     displaying    images to Integer.MAX_VALUE.
-//                        .build();
-//                singleSelectionPicker.show(getFragmentManager(), "picker");
+// add a list
+                String[] options = {"انتخاب عکس از گالری", "گرفتن عکس با دوربین"};
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                ImagePicker.with(profile_fragment.this) //  Initialize ImagePicker with activity or fragment context
-                        .setProgressBarColor("#4CAF50")     //  ProgressBar color
-                        .setBackgroundColor("#212121")      //  Background color
-                        .setCameraOnly(false)               //  Camera mode
-                        .setMultipleMode(false)             //  Select multiple images or single image
-                        .setFolderMode(true)                //  Folder mode
-                        .setShowCamera(true)                //  Show camera button
-                        .setFolderTitle("")                 //  Folder title (works with FolderMode = true)
-                        .setImageTitle("")                  //  Image title (works with FolderMode = false)
-                        .setDoneTitle("انتخاب")             //  Done button title
-                        .setMaxSize(1)                      //  Max images can be selected
-                        .setSavePath("ImagePicker")         //  Image capture folder name
-                        .setAlwaysShowDoneButton(true)      //  Set always show done button in multiple mode
-                        .setKeepScreenOn(true)              //  Keep screen on when selecting images
-                        .start();                           //  Start ImagePicker
+                        switch (which) {
+
+                            case 0: {
+
+                                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                pickIntent.setType("image/*");
+                                startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICK_FROM_FILE);
+
+                                break;
+
+                            }
+
+                            case 1: {
+
+                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                    startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
+                                }
+
+                                break;
+
+                            }
+                        }
+                    }
+                });
+
+                //create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
             }
         });
     }
 
+
     private Bitmap bitmap;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
 
-//        if (requestCode == 1151) {
-//            ArrayList<String> returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
-//            addImage(returnValue);
-//            File f = new File(list.get(0));
-//            cropimage(Uri.fromFile(f));
+            if (requestCode == PICK_FROM_FILE) {
+
+                if (data != null) {
+                    Uri selectedImageUri = data.getData();
+                    doCrop(selectedImageUri);
+
+                }
+
+            } else if (requestCode == CROP) {
+
+                Uri selectedImageURI = data.getData();
+                File imageFile = new File(getRealPathFromURI(selectedImageURI));
+
+                uploadFile(Uri.fromFile(imageFile));
+
+                File file = FileUtils.getFile(this, fileUri);
+
+
+            } else if (requestCode == PICK_FROM_CAMERA) {
+
+                if (data != null) {
+
+                    Uri selectedImageUri = data.getData();
+                    doCrop(selectedImageUri);
+
+                }
+
+
+            }
+        }
+
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContext().getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
+
+
+
+
+        //    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == MY_CAMERA_PERMISSION_CODE) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(getContext(), "camera permission granted", Toast.LENGTH_LONG).show();
+//                Intent cameraIntent = new
+//                        Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+//            } else {
+//                Toast.makeText(getContext(), "camera permission denied", Toast.LENGTH_LONG).show();
+//            }
 //
 //        }
+    private void doCrop(Uri picUri) {
+        try {
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
-                uploadFile(result.getUri());
-
+            cropIntent.setDataAndType(picUri, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 128);
+            cropIntent.putExtra("outputY", 128);
+            cropIntent.putExtra("return-data", true);
+            startActivityForResult(cropIntent, CROP);
         }
-
-        if (requestCode == Config.RC_PICK_IMAGES && data != null) {
-            ArrayList<Image> images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
-            final Image image = images.get(0);
-            File f = new File(image.getPath());
-            cropimage(Uri.fromFile(f));
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
-        super.onActivityResult(requestCode, resultCode, data);  // You MUST have this line to be here
-        // so ImagePicker can work with fragment mode
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
     @Override
@@ -399,6 +526,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         vUserStats.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
     }
 
+    @SuppressLint("SetTextI18n")
     public void setValues(Profile pp) {
         userNameFamily.setText(pp.getName() + " " + pp.getFamily());
         username.setText(pp.getUsername());
@@ -482,19 +610,12 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Toast.makeText(
                         getActivity()
-                        , "خطای اتصال",
-                        Toast.LENGTH_SHORT).show();
+                        , t.getMessage(),
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void cropimage(Uri imgUri){
-        CropImage.activity(imgUri)
-                .setCropMenuCropButtonTitle("برش")
-                .setAspectRatio(1,1)
-                .setAllowFlipping(false)
-                .start(getContext(), this);
-    }
 
     public void GetProfilePicture() {
 
@@ -514,7 +635,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
                 if (response.code() == 200) {
 
-                    if(!response.body().getImageSrc().equals("")) {
+                    if (!response.body().getImageSrc().equals("")) {
                         String imagesrc = response.body().getImageSrc();
                         setPhoto(imagesrc);
                     }

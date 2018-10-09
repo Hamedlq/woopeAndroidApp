@@ -235,8 +235,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (response.code() == 200) {
 
-//                            enterprogress.setVisibility(View.GONE);
-//                            enter.setVisibility(View.VISIBLE);
+                            enterprogress.setVisibility(View.GONE);
+                            enter.setVisibility(View.VISIBLE);
 
                             final String tk = response.body().getAccessToken();
 
@@ -248,7 +248,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         if (response.body().getConfirmed() == false) {
 
-                                            enterprogress.setVisibility(View.VISIBLE);
+
 
                                             Toast.makeText(
                                                     LoginActivity.this
