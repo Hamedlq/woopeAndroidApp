@@ -349,11 +349,11 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     private void galleryIntent() {
-        ((MainActivity)getActivity()).galleryIntent();
+        ((MainActivity) getActivity()).galleryIntent();
     }
 
     private void cameraIntent() {
-        ((MainActivity)getActivity()).cameraIntent();
+        ((MainActivity) getActivity()).cameraIntent();
     }
 
     private Bitmap bitmap;
@@ -412,11 +412,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         return result;
     }
 
-
-
-
-
-        //    @Override
+    //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 //        if (requestCode == MY_CAMERA_PERMISSION_CODE) {
@@ -439,8 +435,8 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             cropIntent.putExtra("crop", "true");
             cropIntent.putExtra("aspectX", 1);
             cropIntent.putExtra("aspectY", 1);
-            cropIntent.putExtra("outputX", 128);
-            cropIntent.putExtra("outputY", 128);
+            cropIntent.putExtra("outputX", 512);
+            cropIntent.putExtra("outputY", 512);
             cropIntent.putExtra("return-data", true);
             startActivityForResult(cropIntent, CROP);
         }
@@ -682,15 +678,25 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 if (response.code() == 200) {
 
                     if (!response.body().getImageSrc().equals("")) {
+
                         String imagesrc = response.body().getImageSrc();
                         setPhoto(imagesrc);
-                    }
+
+
+                    } else
+                        Picasso.with(getActivity())
+                                .load(R.drawable.user)
+                                .placeholder(R.drawable.img_circle_placeholder)
+                                .resize(avatarSize, avatarSize)
+                                .centerCrop()
+                                .transform(new CircleTransformation())
+                                .into(ivUserProfilePhoto);
+
                 }
             }
 
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
-
 
                 Toast.makeText(
                         getContext()
