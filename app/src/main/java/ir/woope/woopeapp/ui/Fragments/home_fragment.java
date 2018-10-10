@@ -157,7 +157,7 @@ public class home_fragment extends Fragment {
         getOrderListFromServer();
 
         try {
-            Picasso.with(getActivity()).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
+            Picasso.with(getActivity()).load(R.drawable.woope_blue).into((ImageView) mRecycler.findViewById(R.id.backdrop));
         } catch (Exception e) {
             e.printStackTrace();
         }

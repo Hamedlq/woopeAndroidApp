@@ -1,9 +1,13 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,7 +21,9 @@ import com.google.gson.Gson;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.SplashInterface;
+import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Splash;
 import retrofit2.Call;
@@ -58,8 +64,8 @@ public class SplashActivity extends AppCompatActivity {
         wpelogo = (ImageView) findViewById(R.id.img_wplogo);
 
         View splashLayout = findViewById(R.id.activity_splash);
-        GetProfileFromServer();
-
+        checkVersion();
+        //GetProfileFromServer();
 
         retry.setOnClickListener(new View.OnClickListener() {
 
@@ -68,11 +74,89 @@ public class SplashActivity extends AppCompatActivity {
                 retry.setVisibility(View.GONE);
                 err.setVisibility(View.GONE);
                 progress.setVisibility(View.VISIBLE);
-                GetProfileFromServer();
+                //GetProfileFromServer();
+                checkVersion();
 
             }
         });
 
+    }
+
+    public int getVersion() {
+        int v = 1000;
+        try {
+            v = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return v;
+    }
+
+    private void checkVersion() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        ProfileInterface profileInterface =
+                retrofit.create(ProfileInterface.class);
+        Call<ApiResponse> call =
+                profileInterface.GetVersion("7");
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                int code = response.code();
+                if (code == 200) {
+                    ApiResponse res= response.body();
+                    int appVersion = Integer.valueOf(res.getMessage());
+                    if (appVersion > getVersion()) {
+                        showUpdateDialog();
+                    }else {
+                        GetProfileFromServer();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                retry.setVisibility(View.VISIBLE);
+                err.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void showUpdateDialog() {
+        retry.setVisibility(View.VISIBLE);
+        err.setVisibility(View.VISIBLE);
+        progress.setVisibility(View.GONE);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+        builder.setMessage("لطفا نسخه جدید را دانلود کنید").setPositiveButton("دانلود", dialogClickListener)
+                .setNegativeButton("بستن برنامه", dialogClickListener);
+        final AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        this.setFinishOnTouchOutside(false);
+        dialog.show();
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://woope.ir/app/app-release.apk"));
+                    startActivity(browserIntent);
+
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    finishIt();
+                    break;
+            }
+        }
+    };
+
+    private void finishIt() {
+        finish();
     }
 
     public void GetProfileFromServer() {
@@ -125,10 +209,10 @@ public class SplashActivity extends AppCompatActivity {
                 retry.setVisibility(View.VISIBLE);
                 err.setVisibility(View.VISIBLE);
                 progress.setVisibility(View.GONE);
-                Toast.makeText(
+               /* Toast.makeText(
                         SplashActivity.this
                         , t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
 
             }
         });

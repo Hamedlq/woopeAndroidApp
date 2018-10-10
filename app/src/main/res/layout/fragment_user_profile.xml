@@ -83,7 +83,7 @@
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent">
 
-                            <Button
+                          <!--  <Button
                                 android:id="@+id/btn_logout_editprofile"
                                 android:layout_width="107dp"
                                 android:layout_height="24dp"
@@ -94,7 +94,7 @@
                                 android:textSize="12sp"
                                 app:layout_constraintEnd_toStartOf="@+id/btnEditProfile"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/userBio" />
+                                app:layout_constraintTop_toBottomOf="@+id/userBio" />-->
 
                             <TextView
                                 android:id="@+id/userNameFamily"
@@ -129,9 +129,11 @@
                                 android:id="@+id/btnEditProfile"
                                 android:layout_width="107dp"
                                 android:layout_height="24dp"
+                                android:layout_marginEnd="92dp"
+                                android:layout_marginRight="92dp"
                                 android:layout_marginTop="8dp"
                                 android:background="@drawable/btn_following"
-                                android:text="ویرایش پروفایل"
+                                android:text="  پروفایل  "
                                 android:textColor="#ffffff"
                                 android:textSize="12sp"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -236,7 +238,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:scaleType="center"
-                        android:src="@drawable/ic_woop" />
+                        android:src="@drawable/woope_farsi" />
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.CollapsingToolbarLayout>

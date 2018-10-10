@@ -19,6 +19,10 @@ public interface ProfileInterface {
     @POST("api/Profile/GetProfile")
     Call<Profile> getProfileFromServer(@Header("Authorization")String auth);
 
+    @POST("api/Profile/AndroidVersion")
+    @FormUrlEncoded
+    Call<ApiResponse> GetVersion(@Field("UserId") String Id);
+
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
     Call<ApiResponse> InsertTransaction(@Field("token") String authtoken,

@@ -141,7 +141,7 @@ public class search_fragment extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(2), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(2), false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -150,12 +150,10 @@ public class search_fragment extends Fragment {
         //getOrderListFromServer();
 
         try {
-            Picasso.with(getActivity()).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
+            Picasso.with(getActivity()).load(R.drawable.woope_blue).into((ImageView) mRecycler.findViewById(R.id.backdrop));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return mRecycler;
     }
 
@@ -259,7 +257,7 @@ public class search_fragment extends Fragment {
         if(!searchInProgress) {
             searchInProgress = true;
             Call<List<Store>> call =
-                    providerApiInterface.FindStore(authToken, storeQuery);
+                    providerApiInterface.FindStore("bearer "+authToken, storeQuery);
 
 
             call.enqueue(new Callback<List<Store>>() {

@@ -30,6 +30,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -58,6 +59,7 @@ import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
 import ir.woope.woopeapp.adapters.ProfilePageAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
@@ -84,6 +86,8 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 
@@ -119,7 +123,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     View vUserDetails;
     //@BindView(R.id.btnFollow)
     Button btnEdit;
-    Button btnlogout;
+    //Button btnlogout;
     //@BindView(R.id.vUserStats)
     View vUserStats;
     //@BindView(R.id.vUserProfileRoot)
@@ -198,7 +202,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         tlUserProfileTabs = mRecycler.findViewById(R.id.tlUserProfileTabs);
         vUserDetails = mRecycler.findViewById(R.id.vUserDetails);
         btnEdit = mRecycler.findViewById(R.id.btnEditProfile);
-        btnlogout = mRecycler.findViewById(R.id.btn_logout_editprofile);
+        //btnlogout = mRecycler.findViewById(R.id.btn_logout_editprofile);
         vUserStats = mRecycler.findViewById(R.id.vUserStats);
         vUserProfileRoot = mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager
@@ -222,7 +226,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             }
         });
 
-        btnlogout.setOnClickListener(new View.OnClickListener() {
+        /*btnlogout.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
@@ -237,7 +241,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 startActivity(goto_splash);
 
             }
-        });
+        });*/
 
         Profile pp = ((MainActivity) getActivity()).getUserProfile();
         if (pp == null) {
@@ -258,11 +262,21 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         final int requestcode = 1151;
 
-        ArrayList<String> pickImageDialogOptions = new ArrayList<>();
+       /* ArrayList<String> pickImageDialogOptions = new ArrayList<>();
         pickImageDialogOptions.add("انتخاب عکس از گالری");
-        pickImageDialogOptions.add("گرفتن عکس با دوربین");
+        pickImageDialogOptions.add("گرفتن عکس با دوربین");*/
 
-        ivUserProfilePhoto.setOnClickListener(new View.OnClickListener() {
+        ivUserProfilePhoto.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                selectImage();
+                return false;
+            }
+        });
+
+
+
+        /*ivUserProfilePhoto.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
@@ -306,13 +320,45 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 dialog.show();
 
             }
-        });
+        });*/
     }
 
+    private void selectImage() {
+        final CharSequence[] items = {"با دوربین", "انتخاب از گالری",
+                "نه فعلا"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("افزودن عکس");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result = Utility.checkPermission(getActivity());
+                if (items[item].equals("با دوربین")) {
+                    userChoosenTask = "با دوربین";
+                    if (result)
+                        cameraIntent();
+                } else if (items[item].equals("انتخاب از گالری")) {
+                    userChoosenTask = "انتخاب از گالری";
+                    if (result)
+                        galleryIntent();
+                } else if (items[item].equals("نه فعلا")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void galleryIntent() {
+        ((MainActivity)getActivity()).galleryIntent();
+    }
+
+    private void cameraIntent() {
+        ((MainActivity)getActivity()).cameraIntent();
+    }
 
     private Bitmap bitmap;
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    /*@RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -333,7 +379,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
                 uploadFile(Uri.fromFile(imageFile));
 
-                File file = FileUtils.getFile(this, fileUri);
+                //File file = FileUtils.getFile(this, fileUri);
 
 
             } else if (requestCode == PICK_FROM_CAMERA) {
@@ -349,7 +395,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             }
         }
 
-    }
+    }*/
 
     private String getRealPathFromURI(Uri contentURI) {
         String result;

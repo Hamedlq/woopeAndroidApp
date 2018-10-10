@@ -41,7 +41,7 @@ public class TransactionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle(R.string.app_name);
+        //toolbar.setTitle(R.string.app_name);
         fragmentManager.beginTransaction()
                 .add(R.id.frame_layout, new TransListFragment(), LIST_FRAGMENT)
                 .commit();

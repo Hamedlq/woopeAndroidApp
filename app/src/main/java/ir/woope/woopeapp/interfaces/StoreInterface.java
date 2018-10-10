@@ -19,13 +19,13 @@ public interface StoreInterface {
     Call<List<Store>> getStoreFromServer(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
     @GET("api/Store/FindStore")
-    Call<List<Store>> FindStore(@Query("token") String authtoken,
+    Call<List<Store>> FindStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                 @Query("query") String query);
 
     @POST(Constants.Actions.FOLLOW_STORE)
     @FormUrlEncoded
     Call<ApiResponse> followStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                            @Field("storeId") String s);
+                            @Field("branchId") String s);
 
     @GET(Constants.Actions.GET_FOLLOW_STORE)
     Call<List<Store>> getFollowStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
