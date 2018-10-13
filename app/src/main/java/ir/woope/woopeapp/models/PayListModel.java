@@ -11,7 +11,7 @@ public class PayListModel extends ApiResponse implements Serializable {
 
     public long id;
     public String storeName;
-    public long storeId;
+    public long branchId;
     public long pointPay;
     public long totalPrice;
     public long returnWoope;

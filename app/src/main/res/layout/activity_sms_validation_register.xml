@@ -1,48 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#303F9F">
+    android:background="@color/colorPrimary">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/llLinearLayout"
-        android:layout_width="300dp"
-        android:layout_height="258dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/button_border"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
-        <!--<TextView-->
-        <!--android:id="@+id/txt_verification_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginEnd="130dp"-->
-        <!--android:layout_marginLeft="131dp"-->
-        <!--android:layout_marginRight="130dp"-->
-        <!--android:layout_marginStart="131dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:text="@string/verification_code"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
 
-        <!--<Button-->
-        <!--android:id="@+id/btn_save_verif_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:background="@drawable/button_border"-->
-        <!--android:text="@string/save"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/verification_code" />-->
+            <ImageView
+                android:id="@+id/imgbx_logo_login"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:soundEffectsEnabled="true"
+                app:srcCompat="@drawable/woope_blue" />
 
         <TextView
             android:id="@+id/txt_countdown_changepass"
@@ -127,7 +110,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/progressBar_sms_verif_register"
@@ -143,4 +125,6 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="gone" />
 
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

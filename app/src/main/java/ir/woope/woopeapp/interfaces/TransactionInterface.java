@@ -22,7 +22,7 @@ public interface TransactionInterface {
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
     Call<PayListModel> InsertTransaction(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                      @Field("StoreId") String StoreId,
+                                                      @Field("BranchId") String StoreId,
                                                       @Field("TotalPrice") String Amount,
                                                       @Field("PayType") int payType);
 

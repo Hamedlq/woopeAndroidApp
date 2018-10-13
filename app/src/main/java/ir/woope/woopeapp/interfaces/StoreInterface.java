@@ -33,6 +33,6 @@ public interface StoreInterface {
     @POST(Constants.Actions.GET_STORE)
     @FormUrlEncoded
     Call<Store> getStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                  @Field("storeId") String s);
+                                  @Field("branchId") String s);
 
 }
