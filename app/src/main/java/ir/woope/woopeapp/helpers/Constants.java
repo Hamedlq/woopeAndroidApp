@@ -26,7 +26,11 @@ public final class Constants {
 
         public static final String BASE_URL = "http://192.168.100.7:8090/";
 //         public static final String BASE_URL = "http://localhost:58795/";
+<<<<<<< HEAD
 //        public static final String BASE_URL = "http://test.mywoope.com/";
+=======
+        public static final String BASE_URL = "http://test.mywoope.com/";
+>>>>>>> master
 //        public static final String BASE_URL = "http://mywoope.com/";
     }
 

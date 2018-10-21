@@ -71,7 +71,7 @@
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/ic_bookmark_border_black"/>
+                    android:background="@drawable/ic_favorite_border"/>
 
 
             </LinearLayout>

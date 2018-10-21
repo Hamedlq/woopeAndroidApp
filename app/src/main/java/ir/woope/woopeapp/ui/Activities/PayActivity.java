@@ -8,9 +8,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+<<<<<<< HEAD
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+=======
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+>>>>>>> master
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +36,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,6 +133,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         payType = findViewById(R.id.radioGroup_payType);
 
         Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(backdrop);
+<<<<<<< HEAD
 
         cash_radio = findViewById(R.id.pay_cash_radio);
         credit_radio = findViewById(R.id.pay_credit_radio);
@@ -142,6 +151,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         return true;
+=======
+>>>>>>> master
     }
 
     public void gotoPayCash(PayListModel model) {
