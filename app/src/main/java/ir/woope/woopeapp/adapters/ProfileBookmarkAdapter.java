@@ -128,10 +128,10 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
                                 }else {
                                     store.isFollowed=false;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                                 }
                             }
                             break;
@@ -171,10 +171,10 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
         }else {
             store.isFollowed=false;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
        /* holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
