@@ -32,8 +32,8 @@ public interface ProfileInterface {
 
     @FormUrlEncoded
     @POST("api/Profile/sendOneSignalToken")
-    Call<ApiResponse> sendOneSignalToken(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                        @Field("OneSignalToken") String oneSignalToken);
+    Call<ApiResponse> sendPushNotificationTokens(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                        @Field("OneSignalToken") String oneSignalToken,@Field("PusheToken") String pusheToken);
 
     @Multipart
     @POST("api/Profile/SetProfileImage")

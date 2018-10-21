@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        android:gravity="center"
         app:elevation="@dimen/default_elevation"
         app:layout_collapseMode="pin"
         app:layout_scrollFlags="scroll|enterAlways"
@@ -18,11 +19,12 @@
 
         <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="center"
-            android:src="@drawable/woope_farsi" />
+            android:src="@drawable/woope_farsi"
+            tools:layout_editor_absoluteX="16dp" />
     </android.support.v7.widget.Toolbar>
 
     <!--<android.support.constraint.ConstraintLayout-->

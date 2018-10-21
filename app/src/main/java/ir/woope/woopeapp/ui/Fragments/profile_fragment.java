@@ -260,12 +260,6 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             useNumber.setText(pp.getUseNumberString());
         }
 
-        final int requestcode = 1151;
-
-       /* ArrayList<String> pickImageDialogOptions = new ArrayList<>();
-        pickImageDialogOptions.add("انتخاب عکس از گالری");
-        pickImageDialogOptions.add("گرفتن عکس با دوربین");*/
-
         ivUserProfilePhoto.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -274,53 +268,6 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             }
         });
 
-
-
-        /*ivUserProfilePhoto.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-
-                // setup the alert builder
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-// add a list
-                String[] options = {"انتخاب عکس از گالری", "گرفتن عکس با دوربین"};
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        switch (which) {
-
-                            case 0: {
-
-                                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                pickIntent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(pickIntent, "Select Picture"), PICK_FROM_FILE);
-
-                                break;
-
-                            }
-
-                            case 1: {
-
-                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                                    startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
-                                }
-
-                                break;
-
-                            }
-                        }
-                    }
-                });
-
-                //create and show the alert dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-            }
-        });*/
     }
 
     private void selectImage() {
@@ -480,6 +427,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_bookmark));
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
+
     }
 
     private void setupUserProfileGrid() {
@@ -677,7 +625,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
                 if (response.code() == 200) {
 
-                    if (!response.body().getImageSrc().equals("")) {
+                    if (!response.body().getImageSrc().equals("")&&response.body().getImageSrc().equals(null)) {
 
                         String imagesrc = response.body().getImageSrc();
                         setPhoto(imagesrc);
