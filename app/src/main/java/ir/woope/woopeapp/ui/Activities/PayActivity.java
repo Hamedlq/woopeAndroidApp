@@ -1,15 +1,26 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+<<<<<<< HEAD
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Gravity;
+=======
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+>>>>>>> master
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +58,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class PayActivity extends AppCompatActivity implements View.OnTouchListener {
     //@BindView(R.id.StoreName) TextView StoreName_tv;
@@ -67,11 +81,20 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     RadioButton credit_radio;
     String profileString;
 
+    RadioGroup payType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
+//        setSupportActionBar(toolbar);
+//        toolbar.setTitle("");
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
         ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
@@ -96,17 +119,40 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         btn = (Button) findViewById(R.id.button);
         btn.setOnTouchListener(this);
-        cash_layout = (LinearLayout) findViewById(R.id.cash_layout);
-        cash_radio = (RadioButton) findViewById(R.id.cash_radio);
-        credit_layout = (LinearLayout) findViewById(R.id.credit_layout);
-        credit_radio = (RadioButton) findViewById(R.id.credit_radio);
-        cash_layout.setOnTouchListener(this);
-        cash_radio.setOnTouchListener(this);
-        credit_layout.setOnTouchListener(this);
-        credit_radio.setOnTouchListener(this);
-        cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-        cash_radio.setChecked(true);
+//        cash_layout = (LinearLayout) findViewById(R.id.cash_layout);
+//        cash_radio = (RadioButton) findViewById(R.id.cash_radio);
+//        credit_layout = (LinearLayout) findViewById(R.id.credit_layout);
+//        credit_radio = (RadioButton) findViewById(R.id.credit_radio);
+//        cash_layout.setOnTouchListener(this);
+//        cash_radio.setOnTouchListener(this);
+//        credit_layout.setOnTouchListener(this);
+//        credit_radio.setOnTouchListener(this);
+//        cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
+//        cash_radio.setChecked(true);
+
+        payType = findViewById(R.id.radioGroup_payType);
+
         Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(backdrop);
+<<<<<<< HEAD
+
+        cash_radio = findViewById(R.id.pay_cash_radio);
+        credit_radio = findViewById(R.id.pay_credit_radio);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
+        setSupportActionBar(toolbar);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+        getMenuInflater().inflate(R.menu.pay_toolbar_items, menu);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        return true;
+=======
+>>>>>>> master
     }
 
     public void gotoPayCash(PayListModel model) {
@@ -131,23 +177,29 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
 
     private void saveTransaction() {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         TransactionInterface providerApiInterface =
                 retrofit.create(TransactionInterface.class);
+
         //PayState sp = (PayState) spinner.getSelectedItem();
+
+        int selectedId = payType.getCheckedRadioButtonId();
         int pt = 0;
         //String payType = sp.getMode();
-        if (cash_radio.isChecked()) {
+        if (selectedId==R.id.pay_cash_radio) {
             //go to cash pay
             //gotoPayCash();
             pt = 1;
-        } else {
+        } else if (selectedId==R.id.pay_credit_radio) {
             //go to credit pay
             pt = 2;
         }
+
         SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
@@ -168,7 +220,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     if (cash_radio.isChecked()) {
                         //go to cash pay
                         gotoPayCash(model);
-                    } else {
+                    } else if (credit_radio.isChecked()) {
                         //go to credit pay
                         gotoCreditPay(model);
                     }
@@ -198,23 +250,23 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == KeyEvent.ACTION_UP) {
             switch (v.getId()) {
-                case R.id.credit_layout:
-                case R.id.credit_radio:
-                    credit_radio.setChecked(true);
-                    cash_radio.setChecked(false);
-                    credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-                    cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
-
-                    break;
-                case R.id.cash_layout:
-                case R.id.cash_radio:
-                    if(store.isCashPayAllowed) {
-                        cash_radio.setChecked(true);
-                        credit_radio.setChecked(false);
-                        cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-                        credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
-                    }
-                    break;
+//                case R.id.credit_layout:
+//                case R.id.credit_radio:
+//                    credit_radio.setChecked(true);
+//                    cash_radio.setChecked(false);
+//                    credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
+//                    cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
+//
+//                    break;
+//                case R.id.cash_layout:
+//                case R.id.cash_radio:
+//                    if(store.isCashPayAllowed) {
+//                        cash_radio.setChecked(true);
+//                        credit_radio.setChecked(false);
+//                        cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
+//                        credit_layout.setBackgroundColor(getResources().getColor(R.color.choice_not_selected));
+//                    }
+//                    break;
                 case R.id.button:
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (!TextUtils.isEmpty(amount.getText())) {
@@ -234,6 +286,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("لطفا مبلغ خرید را وارد کنید").setPositiveButton("باشه", ConfirmDialogClickListener).show();
     }
+
     DialogInterface.OnClickListener ConfirmDialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -244,4 +297,17 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             }
         }
     };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        if (item.getItemId() == R.id.action_support) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

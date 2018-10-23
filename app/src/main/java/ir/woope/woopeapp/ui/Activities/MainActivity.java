@@ -78,6 +78,8 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
+import co.ronash.pushe.Pushe;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -142,12 +144,14 @@ public class MainActivity extends AppCompatActivity {
 
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-        sendRegistrationToServer();
+        //sendRegistrationToServer();
         //getProfileFromServer();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                 .commit();
+
+        Pushe.initialize(this,true);
 
     }
 
@@ -214,10 +218,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendRegistrationToServer() {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         ProfileInterface profileInterface =
                 retrofit.create(ProfileInterface.class);
 
@@ -227,9 +233,10 @@ public class MainActivity extends AppCompatActivity {
 
         OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
         String oneSignalToken = status.getSubscriptionStatus().getUserId();
+        String pusheToken = Pushe.getPusheId(this);
 
         Call<ApiResponse> call =
-                profileInterface.sendOneSignalToken("bearer " + authToken, oneSignalToken);
+                profileInterface.sendPushNotificationTokens("bearer " + authToken, oneSignalToken, pusheToken);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -262,129 +269,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 4000);
     }
-
-//    public void galleryIntent() {
-//
-//        if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);//
-//            startActivityForResult(Intent.createChooser(intent, "انتخاب عکس"), SELECT_FILE);
-//        }
-//    }
-//
-//    public void cameraIntent() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(intent, REQUEST_CAMERA);
-//    }
-//
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == SELECT_FILE)
-//                onSelectFromGalleryResult(data);
-//            else if (requestCode == REQUEST_CAMERA)
-//                onCaptureImageResult(data);
-//            else if (requestCode == CROP) {
-//                File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
-//                if (file.exists()) {
-//                    String filePath = file.getPath();
-//                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-//                    //Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
-//                    sendPicToServer(bitmap, filePath);
-//                    /*if(fragment !=null){
-//                        ((profile_fragment) fragment).setPhoto(bitmap);
-//                    }*/
-//
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    private void onSelectFromGalleryResult(Intent data) {
-//        Bitmap bm = null;
-//        if (data != null) {
-//            try {
-//                bm = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//                bm.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-//                File destination = new File(getExternalCacheDir(), "tempItemFile.jpg");
-//                FileOutputStream fo;
-//
-//                destination.createNewFile();
-//                fo = new FileOutputStream(destination);
-//                fo.write(bytes.toByteArray());
-//                fo.close();
-//                Uri uri = Uri.fromFile(destination);
-//                doCrop(uri);
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        //imgView.setImageBitmap(bm);
-//    }
-//
-//    private void onCaptureImageResult(Intent data) {
-//        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-//        File destination = new File(getExternalCacheDir(), "tempItemFile.jpg");
-//        FileOutputStream fo;
-//        try {
-//            destination.createNewFile();
-//            fo = new FileOutputStream(destination);
-//            fo.write(bytes.toByteArray());
-//            fo.close();
-//            Uri uri = Uri.fromFile(destination);
-//            doCrop(uri);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        //imgView.setImageBitmap(thumbnail);
-//    }
-//
-//    private void doCrop(Uri picFileUri) {
-//        try {
-////            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-////                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            Intent photoPickerIntent = new Intent("com.android.camera.action.CROP");
-//            photoPickerIntent.setDataAndType(picFileUri, "image/*");
-//            //photoPickerIntent.setType("image/*");
-//            photoPickerIntent.putExtra("crop", "true");
-//            photoPickerIntent.putExtra("aspectX", 1);
-//            photoPickerIntent.putExtra("aspectY", 1);
-//            photoPickerIntent.putExtra("outputX", 512);
-//            photoPickerIntent.putExtra("outputY", 512);
-//            photoPickerIntent.putExtra("return-data", true);
-//            photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, picFileUri);
-//            photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-//            startActivityForResult(photoPickerIntent, CROP);
-//
-//        }
-//        // respond to users whose devices do not support the crop action
-//        catch (ActivityNotFoundException anfe) {
-//            // display an error message
-//            String errorMessage = "امکان آپلود عکس در گوشی شما وجود ندارد";
-//            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-//            toast.show();
-//        } catch (Exception e) {
-//            // display an error message
-//            String errorMessage = "خطایی رخ داده است";
-//            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-//            toast.show();
-//        }
-//    }
 
     public void galleryIntent() {
 
@@ -425,7 +309,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;

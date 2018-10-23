@@ -13,6 +13,23 @@
         android:required="true" />
 
 
+    <uses-sdk
+        tools:overrideLibrary="co.ronash.pushe" />
+    <permission
+        android:name="ir.woope.woopeapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission
+        android:name="ir.woope.woopeapp.permission.C2D_MESSAGE" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Optional permissions -->
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+
+
+
     <application
         android:name=".WoopeApp"
         android:allowBackup="true"
@@ -20,24 +37,56 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data
+                    android:path="ir.woope.woopeapp"
+                    android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="ir.woope.woopeapp" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_442079978483"/>
+        <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
 
         <activity
             android:name=".ui.Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/app_name">
 
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="">
 
         </activity>
         <activity android:name=".ui.Activities.PayActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.CashPayActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.PayCodeActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.ConfirmPayActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.CreditPayActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.TransactionActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -65,13 +114,11 @@
         <activity android:name=".ui.Activities.ChangePassActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.EditProfileActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".ui.Activities.VerifyPhoneActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
 
     </application>
 
