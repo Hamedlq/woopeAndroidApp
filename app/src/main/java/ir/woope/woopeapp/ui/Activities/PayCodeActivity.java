@@ -90,6 +90,10 @@ public class PayCodeActivity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.action_support) {
 
+            Intent goto_verifphone = new Intent(this,
+                    ContactUsActivity.class);
+            startActivity(goto_verifphone);
+
         }
 
         return super.onOptionsItemSelected(item);

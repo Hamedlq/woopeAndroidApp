@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -65,7 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
         editprogress = findViewById(R.id.progressBar_editprofile);
         sendedit = findViewById(R.id.btn_send_editprofile);
 
-        RadioRealButtonGroup group = findViewById(R.id.realradiogroup_gender_editprofile);
+        final RadioRealButtonGroup group = findViewById(R.id.realradiogroup_gender_editprofile);
 
         // onClickButton listener detects any click performed on buttons by touch
         group.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
@@ -99,6 +100,11 @@ public class EditProfileActivity extends AppCompatActivity {
                     age.setText(response.body().getAge());
                     email.setText(response.body().getEmail());
                     bio.setText(response.body().getUserBio());
+                    group.setPosition(response.body().getGender());
+                    if (response.body().getGender() == 1)
+                        group.setPosition(0);
+                    else if (response.body().getGender() == 2)
+                        group.setPosition(1);
                 }
             }
 
@@ -115,51 +121,60 @@ public class EditProfileActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                editprogress.setVisibility(View.VISIBLE);
-                sendedit.setVisibility(View.GONE);
+                if (isValidEmail(email.getText())||TextUtils.isEmpty(email.getText())) {
 
-                edit.send_edit("bearer " + token, name.getText().toString(), family.getText().toString(), bio.getText().toString(), email.getText().toString(), gender, age.getText().toString()).enqueue(new Callback<ApiResponse>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    editprogress.setVisibility(View.VISIBLE);
+                    sendedit.setVisibility(View.GONE);
 
-                        if (response.body().getStatus() == 101) {
+                    edit.send_edit("bearer " + token, name.getText().toString(), family.getText().toString(), bio.getText().toString(), email.getText().toString(), gender, age.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                            editprogress.setVisibility(View.GONE);
+                            if (response.body().getStatus() == 101) {
 
-                            Toast.makeText(
-                                    EditProfileActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                                editprogress.setVisibility(View.GONE);
 
-                            finish();
+                                Toast.makeText(
+                                        EditProfileActivity.this
+                                        , response.body().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
 
-                        } else {
+                                finish();
+
+                            } else {
+
+                                editprogress.setVisibility(View.GONE);
+                                sendedit.setVisibility(View.VISIBLE);
+
+                                Toast.makeText(
+                                        EditProfileActivity.this
+                                        , response.body().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                             editprogress.setVisibility(View.GONE);
                             sendedit.setVisibility(View.VISIBLE);
 
                             Toast.makeText(
+
                                     EditProfileActivity.this
-                                    , response.body().getMessage(),
+                                    , "خطای اتصال",
                                     Toast.LENGTH_SHORT).show();
-
                         }
+                    });
+                } else {
+                    Toast.makeText(
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
-
-                        editprogress.setVisibility(View.GONE);
-                        sendedit.setVisibility(View.VISIBLE);
-
-                        Toast.makeText(
-
-                                EditProfileActivity.this
-                                , "خطای اتصال",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+                            EditProfileActivity.this
+                            , getResources().getString(R.string.invalid_email),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -174,4 +189,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (target == null)
+            return false;
+
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
 }

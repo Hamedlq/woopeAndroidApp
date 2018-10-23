@@ -81,39 +81,39 @@ public class LoginActivity extends AppCompatActivity {
         View usr= findViewById(R.id.txtbx_userphone_login);
         View pass = findViewById(R.id.txtbx_password_login);
 
-        SimpleTarget usernameTarget = new SimpleTarget.Builder(this)
-                .setPoint(usr)
-                .setShape(new Circle(200f))
-                .setTitle("نام کاربری")
-                .setDescription("نام کاربری خود را وارد کنید")
-                .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
-                    @Override
-                    public void onStarted(SimpleTarget target) {
-                        // do something
-                    }
-                    @Override
-                    public void onEnded(SimpleTarget target) {
-                        // do something
-                    }
-                })
-                .build();
-
-        SimpleTarget passwordTarget = new SimpleTarget.Builder(this)
-                .setPoint(pass)
-                .setShape(new Circle(200f))
-                .setTitle("رمز عبور")
-                .setDescription("رمز عبور خود را وارد کنید")
-                .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
-                    @Override
-                    public void onStarted(SimpleTarget target) {
-                        // do something
-                    }
-                    @Override
-                    public void onEnded(SimpleTarget target) {
-                        // do something
-                    }
-                })
-                .build();
+//        SimpleTarget usernameTarget = new SimpleTarget.Builder(this)
+//                .setPoint(usr)
+//                .setShape(new Circle(200f))
+//                .setTitle("نام کاربری")
+//                .setDescription("نام کاربری خود را وارد کنید")
+//                .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
+//                    @Override
+//                    public void onStarted(SimpleTarget target) {
+//                        // do something
+//                    }
+//                    @Override
+//                    public void onEnded(SimpleTarget target) {
+//                        // do something
+//                    }
+//                })
+//                .build();
+//
+//        SimpleTarget passwordTarget = new SimpleTarget.Builder(this)
+//                .setPoint(pass)
+//                .setShape(new Circle(200f))
+//                .setTitle("رمز عبور")
+//                .setDescription("رمز عبور خود را وارد کنید")
+//                .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
+//                    @Override
+//                    public void onStarted(SimpleTarget target) {
+//                        // do something
+//                    }
+//                    @Override
+//                    public void onEnded(SimpleTarget target) {
+//                        // do something
+//                    }
+//                })
+//                .build();
 
 //        Spotlight.with(this)
 //                .setOverlayColor(R.color.colorPrimary)

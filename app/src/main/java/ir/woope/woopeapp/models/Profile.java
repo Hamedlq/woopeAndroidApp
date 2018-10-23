@@ -14,6 +14,7 @@ public class Profile extends ApiResponse implements Serializable{
     private String userBio;
     private String age;
     private String email;
+    private int gender;
     private String imageSrc;
     private String mobile;
     private boolean phoneNumberConfirmed;
@@ -116,6 +117,10 @@ public class Profile extends ApiResponse implements Serializable{
 
     public String getEmail() {
         return email;
+    }
+
+    public int getGender() {
+        return gender;
     }
 
     public boolean getConfirmed() { return phoneNumberConfirmed; }
