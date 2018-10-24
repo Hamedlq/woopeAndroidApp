@@ -44,11 +44,12 @@
                     android:id="@+id/store_name_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="نام کالا"
+                    android:text=""
                     android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/ic_item"
+                    android:background="@mipmap/ic_redbag"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="5dp" />
@@ -60,7 +61,6 @@
                 android:id="@+id/return_woop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
                 android:textColor="@color/colorPrimary"
                 android:layout_centerHorizontal="true"
