@@ -24,12 +24,12 @@ public final class Constants {
 
        //public static final String BASE_URL = "http://localhost:58795/";
 
-        public static final String BASE_URL = "http://192.168.100.5:8090/";
+//        public static final String BASE_URL = "http://192.168.100.9:8090/";
 //         public static final String BASE_URL = "http://localhost:58795/";
 
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 
-//        public static final String BASE_URL = "http://test.mywoope.com/";
+        public static final String BASE_URL = "http://test.mywoope.com/";
 
 //        public static final String BASE_URL = "http://mywoope.com/";
     }
