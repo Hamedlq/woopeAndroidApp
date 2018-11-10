@@ -105,26 +105,6 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginStart="20dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:text="اعتبار ووپی" />
-
-                        <TextView
-                            android:id="@+id/woope_credit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="20 ووپ" />
-                    </LinearLayout>
 
                     <View
                         android:layout_width="1dp"
@@ -132,26 +112,7 @@
                         android:layout_margin="5dp"
                         android:background="@color/colorPrimary" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginStart="20dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:text="اعتبار تومانی" />
-
-                        <TextView
-                            android:id="@+id/toman_credit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="200 تومان" />
-                    </LinearLayout>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -195,70 +156,11 @@
                         android:textSize="12sp" />
 
 
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:padding="1dp"-->
-                    <!--android:background="@drawable/border"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<LinearLayout-->
-                    <!--android:id="@+id/credit_layout"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layoutDirection="rtl"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="3dp">-->
-
-                    <!--<RadioButton-->
-                    <!--android:id="@+id/credit_radio"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-
-                    <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="پرداخت اعتباری" />-->
-
-                    <!--</LinearLayout>-->
-                    <!--</LinearLayout>-->
-
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@drawable/border"-->
-                    <!--android:padding="1dp"-->
-                    <!--android:layout_marginBottom="20dp"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<LinearLayout-->
-                    <!--android:id="@+id/cash_layout"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layoutDirection="rtl"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="3dp">-->
-
-                    <!--<RadioButton-->
-
-                    <!--android:id="@+id/cash_radio"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-
-                    <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="پرداخت نقدی" />-->
-                    <!--</LinearLayout>-->
-                    <!--</LinearLayout>-->
-
                     <RadioGroup
                         android:id="@+id/radioGroup_payType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:background="@drawable/border"
-                        android:gravity="center">
+                        android:layout_marginBottom="15dp">
 
                         <LinearLayout
                             android:id="@+id/pay_credit_layout"
@@ -297,13 +199,66 @@
                     </RadioGroup>
 
 
-                    <!--<Spinner
-                        android:id="@+id/spinnerBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="20dp"
-                        android:switchTextAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="18sp" />-->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Switch
+                            android:id="@+id/switch_credit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:textSize="11sp"
+                            android:layout_height="wrap_content"
+                            android:text="استفاده از موجودی تومانی" />
+
+                        <TextView
+                            android:id="@+id/toman_credit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="200" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Switch
+                            android:id="@+id/switch_woope"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="11sp"
+                            android:text="استفاده از ووپ" />
+
+                        <TextView
+                            android:id="@+id/woope_credit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="20" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 

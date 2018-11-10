@@ -47,6 +47,7 @@ import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.GiftActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
@@ -149,19 +150,13 @@ public class home_fragment extends Fragment {
         progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-        /*fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
-                getActivity().startActivity(myIntent);
-            }
-        });*/
-        //initCollapsingToolbar();
 
-        toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
+
+        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//        toolbar.setTitle(R.string.app_name);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
         adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
@@ -240,17 +235,18 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
-                /*final SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = prefs.getString(PROFILE, "");
-                Profile obj = gson.fromJson(json, Profile.class);*/
                 Profile obj =((MainActivity)getActivity()).getUserProfile();
-
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 getActivity().startActivity(myIntent);
-
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                break;
+            case android.R.id.home:
+                Profile userobj =((MainActivity)getActivity()).getUserProfile();
+                Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
+                giftIntent.putExtra(PREF_PROFILE, userobj);
+                getActivity().startActivity(giftIntent);
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
                 break;
             default:
                 break;
@@ -299,52 +295,6 @@ public class home_fragment extends Fragment {
             }
         });
 
-    }
-
-    /**
-     * RecyclerView item decoration - give equal margin around grid item
-     */
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
-            }
-        }
-    }
-
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
     public interface ItemTouchListener {

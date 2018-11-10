@@ -102,6 +102,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.GiftActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

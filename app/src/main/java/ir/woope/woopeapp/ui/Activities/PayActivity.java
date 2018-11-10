@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     //@BindView(R.id.StoreName) TextView StoreName_tv;
     @BindView(R.id.backdrop)
     protected ImageView backdrop;
+    @BindView(R.id.switch_credit)
+    protected Switch switch_credit;
+    @BindView(R.id.switch_woope)
+    protected Switch switch_woope;
+
     Store store;
     long totalPrice;
     //Spinner spinner;
@@ -167,7 +173,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         return true;
-
     }
 
     public void gotoPayCash(PayListModel model) {
@@ -201,7 +206,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         TransactionInterface providerApiInterface =
                 retrofit.create(TransactionInterface.class);
 
-        //PayState sp = (PayState) spinner.getSelectedItem();
+
 
         int selectedId = payType.getCheckedRadioButtonId();
         int pt = 0;
@@ -221,7 +226,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.InsertTransaction("bearer " + authToken, store.storeId, amount.getText().toString(), pt);
+                providerApiInterface.InsertTransaction("bearer "+authToken, store.storeId, amount.getText().toString(), pt,switch_credit.isChecked(),switch_woope.isChecked());
 
 
         call.enqueue(new Callback<PayListModel>() {

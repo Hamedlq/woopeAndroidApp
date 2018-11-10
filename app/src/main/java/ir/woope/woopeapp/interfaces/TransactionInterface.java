@@ -24,7 +24,10 @@ public interface TransactionInterface {
     Call<PayListModel> InsertTransaction(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                       @Field("BranchId") String StoreId,
                                                       @Field("TotalPrice") String Amount,
-                                                      @Field("PayType") int payType);
+                                                      @Field("PayType") int payType,
+                                                      @Field("SwitchCredit") boolean switch_credit,
+                                                      @Field("SwitchWoope") boolean switch_woope
+                                         );
 
     @FormUrlEncoded
     @POST("api/Transaction/GetConfirmCode")
