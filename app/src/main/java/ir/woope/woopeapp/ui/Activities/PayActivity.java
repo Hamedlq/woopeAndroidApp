@@ -36,6 +36,8 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +58,8 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
+
 import android.widget.RelativeLayout.LayoutParams;
 
 public class PayActivity extends AppCompatActivity implements View.OnTouchListener {
@@ -102,9 +106,13 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             store = (Store) getIntent().getExtras().getSerializable(STORE);
+
         }
         TextView StoreName_tv = findViewById(R.id.StoreName);
+
         amount = findViewById(R.id.amount);
+        amount.addTextChangedListener(onTextChangedListener());
+
         StoreName_tv.setText(store.storeName);
         if (totalPrice != 0) {
             amount.setText(String.valueOf(totalPrice));
@@ -137,8 +145,19 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(backdrop);
 
+
         cash_radio = findViewById(R.id.pay_cash_radio);
         credit_radio = findViewById(R.id.pay_credit_radio);
+
+        if (!store.isCashPayAllowed) {
+
+            cash_radio.setEnabled(false);
+
+            Toast.makeText(
+                    this
+                    , getResources().getString(R.string.cashPayNotAllowed),
+                    Toast.LENGTH_LONG).show();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
         setSupportActionBar(toolbar);
@@ -191,11 +210,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         int selectedId = payType.getCheckedRadioButtonId();
         int pt = 0;
         //String payType = sp.getMode();
-        if (selectedId==R.id.pay_cash_radio) {
+        if (selectedId == R.id.pay_cash_radio) {
             //go to cash pay
             //gotoPayCash();
             pt = 1;
-        } else if (selectedId==R.id.pay_credit_radio) {
+        } else if (selectedId == R.id.pay_credit_radio) {
             //go to credit pay
             pt = 2;
         }
@@ -271,7 +290,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (!TextUtils.isEmpty(amount.getText())) {
                             saveTransaction();
-                        }else {
+                        } else {
                             showFillError();
                         }
                         return true;
@@ -306,8 +325,53 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         }
         if (item.getItemId() == R.id.action_support) {
 
+            Intent goto_verifphone = new Intent(this,
+                    ContactUsActivity.class);
+            startActivity(goto_verifphone);
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private TextWatcher onTextChangedListener() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                amount.removeTextChangedListener(this);
+
+                try {
+                    String originalString = s.toString();
+
+                    Long longval;
+                    if (originalString.contains(",")) {
+                        originalString = originalString.replaceAll(",", "");
+                    }
+                    longval = Long.parseLong(originalString);
+
+                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                    formatter.applyPattern("#,###,###,###");
+                    String formattedString = formatter.format(longval);
+
+                    //setting text after format to EditText
+                    amount.setText(formattedString);
+                    amount.setSelection(amount.getText().length());
+                } catch (NumberFormatException nfe) {
+                    nfe.printStackTrace();
+                }
+
+                amount.addTextChangedListener(this);
+            }
+        };
     }
 }

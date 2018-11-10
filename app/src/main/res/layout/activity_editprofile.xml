@@ -62,7 +62,7 @@
             android:ellipsize="start"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="نام خانوادگی"
+            android:hint="@string/familyName"
             android:inputType="textPersonName"
             android:textColor="@color/white"
             android:textColorHint="@color/edittext_hint"
@@ -93,7 +93,7 @@
             android:ellipsize="start"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="نام"
+            android:hint="@string/name"
             android:inputType="textPersonName"
             android:textColor="@color/white"
             android:textColorHint="@color/edittext_hint"
@@ -124,8 +124,8 @@
             android:ellipsize="start"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="ایمیل"
-            android:inputType="textPersonName"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
             android:textColor="@color/white"
             android:textColorHint="@color/edittext_hint"
             android:textDirection="ltr"
@@ -148,8 +148,8 @@
         app:rrbg_dividerColor="@color/white"
         app:rrbg_dividerSize="1dp"
         app:rrbg_radius="2dp"
-        app:rrbg_selectorColor="?attr/colorPrimary"
-        app:rrbg_selectorSize="6dp">
+        app:rrbg_selectorColor="@color/white"
+        app:rrbg_selectorSize="4dp">
 
         <co.ceryle.radiorealbutton.RadioRealButton
             android:id="@+id/realradiobutton_male_editprofile"
@@ -161,7 +161,7 @@
             app:rrb_drawableWidth="28dp"
             app:rrb_ripple="true"
             app:rrb_rippleColor="@color/black"
-            app:rrb_text="آقا"
+            app:rrb_text="@string/male"
             app:rrb_textColor="@color/white" />
 
         <co.ceryle.radiorealbutton.RadioRealButton
@@ -175,7 +175,7 @@
             app:rrb_drawableWidth="28dp"
             app:rrb_ripple="true"
             app:rrb_rippleColor="@color/black"
-            app:rrb_text="خانم"
+            app:rrb_text="@string/female"
             app:rrb_textColor="@color/white" />
     </co.ceryle.radiorealbutton.RadioRealButtonGroup>
 
@@ -186,7 +186,7 @@
         android:layout_marginEnd="68dp"
         android:layout_marginRight="68dp"
         android:layout_marginTop="6dp"
-        android:text="جنسیت"
+        android:text="@string/gender"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/namelayout_editprofile"
         app:layout_constraintTop_toBottomOf="@+id/familylayout_editprofile" />
@@ -213,7 +213,7 @@
             android:ellipsize="start"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="درباره شما"
+            android:hint="@string/bio"
             android:inputType="textMultiLine"
             android:textColor="@color/white"
             android:maxLines="2"
@@ -244,7 +244,7 @@
             android:ellipsize="start"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="سن"
+            android:hint="@string/age"
             android:inputType="textPersonName"
             android:maxLength="2"
             android:textColor="@color/white"
@@ -262,7 +262,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
         android:background="@drawable/button_border"
-        android:text="ثبت"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

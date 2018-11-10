@@ -122,6 +122,10 @@
         <activity android:name=".ui.Activities.VerifyPhoneActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".ui.Activities.ContactUsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""/>
+
     </application>
 
 </manifest>
