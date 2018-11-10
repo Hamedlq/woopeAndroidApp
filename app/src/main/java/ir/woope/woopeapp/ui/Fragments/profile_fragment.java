@@ -17,10 +17,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -42,6 +44,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -129,12 +134,12 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     //@BindView(R.id.vUserProfileRoot)
     View vUserProfileRoot;
 
-    TextView userNameFamily;
-    TextView username;
-    TextView userBio;
-    TextView cashCredit;
-    TextView woopeCredit;
-    TextView useNumber;
+    public TextView userNameFamily;
+    public TextView username;
+    public TextView userBio;
+    public TextView cashCredit;
+    public TextView woopeCredit;
+    public TextView useNumber;
 
 
     private int avatarSize;
@@ -171,6 +176,10 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 //        this.list.addAll(list);
 //
 //    }
+
+    Retrofit retrofit_splash;
+
+    TabLayout user_tabs;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -221,7 +230,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
                 Intent goto_edit = new Intent(getActivity(),
                         EditProfileActivity.class);
-                startActivity(goto_edit);
+                startActivityForResult(goto_edit, 110);
 
             }
         });
@@ -270,6 +279,16 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 110) {
+
+            UpdateProfileDetails();
+
+        }
+    }//onActivityResult
+
     private void selectImage() {
         final CharSequence[] items = {"با دوربین", "انتخاب از گالری",
                 "نه فعلا"};
@@ -305,45 +324,6 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
     private Bitmap bitmap;
 
-    /*@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (resultCode == RESULT_OK) {
-
-            if (requestCode == PICK_FROM_FILE) {
-
-                if (data != null) {
-                    Uri selectedImageUri = data.getData();
-                    doCrop(selectedImageUri);
-
-                }
-
-            } else if (requestCode == CROP) {
-
-                Uri selectedImageURI = data.getData();
-                File imageFile = new File(getRealPathFromURI(selectedImageURI));
-
-                uploadFile(Uri.fromFile(imageFile));
-
-                //File file = FileUtils.getFile(this, fileUri);
-
-
-            } else if (requestCode == PICK_FROM_CAMERA) {
-
-                if (data != null) {
-
-                    Uri selectedImageUri = data.getData();
-                    doCrop(selectedImageUri);
-
-                }
-
-
-            }
-        }
-
-    }*/
-
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContext().getContentResolver().query(contentURI, null, null, null, null);
@@ -359,20 +339,6 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         return result;
     }
 
-    //    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == MY_CAMERA_PERMISSION_CODE) {
-//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(getContext(), "camera permission granted", Toast.LENGTH_LONG).show();
-//                Intent cameraIntent = new
-//                        Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
-//            } else {
-//                Toast.makeText(getContext(), "camera permission denied", Toast.LENGTH_LONG).show();
-//            }
-//
-//        }
     private void doCrop(Uri picUri) {
         try {
 
@@ -404,7 +370,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
@@ -417,6 +383,97 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         setupRevealBackground(savedInstanceState);
 
         GetProfilePicture();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        SharedPreferences prefs =
+                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                        boolean isFirstRun = prefs.getBoolean("FIRSTRUNProfileFragment", true);
+                        if (isFirstRun)
+                        {
+                            // Code to run once
+
+                            showFavHint();
+
+                        }
+
+                    }
+                });
+
+            }
+        }, 2000);
+    }
+
+    private void showFavHint (){
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(((ViewGroup) tlUserProfileTabs.getChildAt(0)).getChildAt(0), "مورد علاقه ها", "در اینجا لیستی از مورد علاقه های خود را ببینید")
+                        // All options below are optional
+                        .outerCircleColor(R.color.colorAccent)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(60),                  // Specify the target radius (in dp)
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+
+                        showThHint();
+
+                    }
+                });
+    }
+
+    private void showThHint (){
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(((ViewGroup) tlUserProfileTabs.getChildAt(0)).getChildAt(1), "تاریخچه پرداخت ها", "در اینجا لیستی از پرداخت های اخیر خود را ببینید")
+                        // All options below are optional
+                        .outerCircleColor(R.color.colorAccent)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(60),                  // Specify the target radius (in dp)
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+
+                        SharedPreferences prefs =
+                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("FIRSTRUNProfileFragment", false);
+                        editor.commit();
+
+                    }
+                });
     }
 
     private void setupTabs() {
@@ -625,11 +682,10 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
                 if (response.code() == 200) {
 
-                    if (!response.body().getImageSrc().equals("")&&response.body().getImageSrc().equals(null)) {
+                    if (!response.body().getImageSrc().equals("") && response.body().getImageSrc().equals(null)) {
 
                         String imagesrc = response.body().getImageSrc();
                         setPhoto(imagesrc);
-
 
                     } else
                         Picasso.with(getActivity())
@@ -639,6 +695,50 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                                 .centerCrop()
                                 .transform(new CircleTransformation())
                                 .into(ivUserProfilePhoto);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+                Toast.makeText(
+                        getContext()
+                        , t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+    public void UpdateProfileDetails() {
+        retrofit_splash = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        final SplashInterface splash = retrofit_splash.create(SplashInterface.class);
+
+        final SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        final String token = settings.getString(TOKEN, null);
+
+        splash.check_connection("bearer " + token).enqueue(new Callback<Profile>() {
+
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+                if (response.code() == 200) {
+
+                    Profile user = response.body();
+
+
+                    userNameFamily.setText(user.getName() + " " + user.getFamily());
+                    username.setText(user.getUsername());
+                    userBio.setText(user.getUserBio());
+                    cashCredit.setText(user.getCreditString());
+                    woopeCredit.setText(user.getWoopeCreditString());
+                    useNumber.setText(user.getUseNumberString());
 
                 }
             }

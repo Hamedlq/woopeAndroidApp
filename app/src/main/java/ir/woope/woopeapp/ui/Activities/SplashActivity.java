@@ -121,6 +121,12 @@ public class SplashActivity extends AppCompatActivity {
                 retry.setVisibility(View.VISIBLE);
                 err.setVisibility(View.VISIBLE);
                 progress.setVisibility(View.GONE);
+
+                Toast.makeText(
+                        SplashActivity.this
+                        , t.getMessage()+"checkVersion",
+                        Toast.LENGTH_LONG).show();
+
             }
         });
     }
@@ -209,10 +215,10 @@ public class SplashActivity extends AppCompatActivity {
                 retry.setVisibility(View.VISIBLE);
                 err.setVisibility(View.VISIBLE);
                 progress.setVisibility(View.GONE);
-               /* Toast.makeText(
+                Toast.makeText(
                         SplashActivity.this
-                        , t.getMessage(),
-                        Toast.LENGTH_LONG).show();*/
+                        , t.getMessage()+"getProfile",
+                        Toast.LENGTH_LONG).show();
 
             }
         });

@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -37,6 +38,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.ViewTarget;
 import com.google.gson.Gson;
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
@@ -61,6 +64,7 @@ import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
+import me.toptas.fancyshowcase.FancyShowCaseView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -79,6 +83,8 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 import co.ronash.pushe.Pushe;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,6 +101,13 @@ public class MainActivity extends AppCompatActivity {
     Profile profile = null;
     private int CROP = 2;
 
+    public GuideView nav_store_showcase;
+    View nav_store;
+
+    private long mLastClickTime = 0;
+
+    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false;
+
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -103,22 +116,52 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
-                            .commit();
-                    return true;
+                    if (!IsOnHome) {
+                        //mTextMessage.setText(R.string.title_home);
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
+                                .commit();
+                        IsOnHome = true;
+                        IsOnSearch = false;
+                        IsOnProfile=false;
+                        return true;
+                    }
+                    else break;
                 case R.id.navigation_‌search:
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
-                            .commit();
-                    return true;
+                    if (!IsOnSearch) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
+                                .commit();
+                        IsOnSearch = true;
+                        IsOnHome = false;
+                        IsOnProfile = false;
+                        return true;
+                    }
+                    else break;
                 case R.id.navigation_profile:
-                    //mTextMessage.setText(R.string.title_notifications);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
-                            .commit();
-                    return true;
+                    if (!IsOnProfile) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        //mTextMessage.setText(R.string.title_notifications);
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
+                                .commit();
+                        IsOnProfile = true;
+                        IsOnHome= false;
+                        IsOnSearch=false;
+                        return true;
+                    }
+                    else break;
             }
             return false;
         }
@@ -151,7 +194,22 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                 .commit();
 
-        Pushe.initialize(this,true);
+        Pushe.initialize(this, true);
+
+//        nav_store = findViewById(R.id.nav_store);
+
+        Toolbar tb = (Toolbar) findViewById(R.id.home_fragment_toolbar);
+
+
+//
+
+
+//        nav_store_showcase = new FancyShowCaseView.Builder(this)
+//                .focusOn(findViewById(R.id.nav_store))
+//                .title("لیست پرداخت ها")
+//                .showOnce("id0")
+//                .build();
+
 
     }
 
@@ -300,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
                     String filePath = file.getPath();
                     Bitmap bitmap = BitmapFactory.decodeFile(filePath);
                     //Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
-                    sendPicToServer(bitmap,filePath);
+                    sendPicToServer(bitmap, filePath);
                     /*if(fragment !=null){
                         ((profile_fragment) fragment).setPhoto(bitmap);
                     }*/
@@ -479,7 +537,7 @@ public class MainActivity extends AppCompatActivity {
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
 
         Call<ApiResponse> call =
-                profileInterface.updateImage(body, "bearer " +authToken);
+                profileInterface.updateImage(body, "bearer " + authToken);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -502,4 +560,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

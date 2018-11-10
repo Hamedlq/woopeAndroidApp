@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,6 +29,7 @@ import ir.woope.woopeapp.interfaces.RegisterInterface;
 import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,11 +43,21 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    Retrofit retrofit_splash;
+
     EditText name, family, age, phonenumber, email, bio;
     ProgressBar editprogress;
     Button sendedit;
     Retrofit retrofit_editprofile;
     private String gender;
+    Profile profile = null;
+
+    public TextView userNameFamily;
+    public TextView username;
+    public TextView userBio;
+    public TextView cashCredit;
+    public TextView woopeCredit;
+    public TextView useNumber;
 
 
     @Override
@@ -180,6 +194,26 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+
+
+
+    public Profile getUserProfile() {
+        if (profile == null) {
+            Gson gson = new Gson();
+            final SharedPreferences prefs =
+                    this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+            String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
+            if (profileString != null) {
+                profile = (Profile) gson.fromJson(profileString, Profile.class);
+                return profile;
+            } else {
+                return new Profile();
+            }
+        } else {
+            return profile;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -196,5 +230,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
+
+
 
 }

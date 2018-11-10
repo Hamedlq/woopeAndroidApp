@@ -22,12 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.takusemba.spotlight.OnSpotlightStateChangedListener;
-import com.takusemba.spotlight.OnTargetStateChangedListener;
-import com.takusemba.spotlight.Spotlight;
-import com.takusemba.spotlight.shape.Circle;
-import com.takusemba.spotlight.target.SimpleTarget;
-
 import java.io.IOException;
 
 import ir.woope.woopeapp.R;
@@ -36,9 +30,7 @@ import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.AccessToken;
 import ir.woope.woopeapp.models.Profile;
-import me.toptas.fancyshowcase.AnimationListener;
-import me.toptas.fancyshowcase.FancyShowCaseView;
-import me.toptas.fancyshowcase.FocusShape;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,58 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         View usr= findViewById(R.id.txtbx_userphone_login);
         View pass = findViewById(R.id.txtbx_password_login);
 
-//        SimpleTarget usernameTarget = new SimpleTarget.Builder(this)
-//                .setPoint(usr)
-//                .setShape(new Circle(200f))
-//                .setTitle("نام کاربری")
-//                .setDescription("نام کاربری خود را وارد کنید")
-//                .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
-//                    @Override
-//                    public void onStarted(SimpleTarget target) {
-//                        // do something
-//                    }
-//                    @Override
-//                    public void onEnded(SimpleTarget target) {
-//                        // do something
-//                    }
-//                })
-//                .build();
-//
-//        SimpleTarget passwordTarget = new SimpleTarget.Builder(this)
-//                .setPoint(pass)
-//                .setShape(new Circle(200f))
-//                .setTitle("رمز عبور")
-//                .setDescription("رمز عبور خود را وارد کنید")
-//                .setOnSpotlightStartedListener(new OnTargetStateChangedListener<SimpleTarget>() {
-//                    @Override
-//                    public void onStarted(SimpleTarget target) {
-//                        // do something
-//                    }
-//                    @Override
-//                    public void onEnded(SimpleTarget target) {
-//                        // do something
-//                    }
-//                })
-//                .build();
 
-//        Spotlight.with(this)
-//                .setOverlayColor(R.color.colorPrimary)
-//                .setDuration(1000L)
-//                .setAnimation(new DecelerateInterpolator(2f))
-//                .setTargets(usernameTarget, passwordTarget)
-//                .setClosedOnTouchedOutside(false)
-//                .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
-//                    @Override
-//                    public void onStarted() {
-//                        Toast.makeText(LoginActivity.this, "spotlight is started", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    @Override
-//                    public void onEnded() {
-//                        Toast.makeText(LoginActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .start();
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
