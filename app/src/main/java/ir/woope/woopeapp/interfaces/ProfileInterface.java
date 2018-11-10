@@ -1,5 +1,7 @@
 package ir.woope.woopeapp.interfaces;
 
+import android.text.Editable;
+
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
@@ -40,4 +42,8 @@ public interface ProfileInterface {
     Call<ApiResponse> updateImage(@Part MultipartBody.Part file,
                                   @Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
+    @FormUrlEncoded
+    @POST("api/Gift/SubmitGiftCode")
+    Call<ApiResponse> sendGiftCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                 @Field("GiftCode") String giftCode);
 }

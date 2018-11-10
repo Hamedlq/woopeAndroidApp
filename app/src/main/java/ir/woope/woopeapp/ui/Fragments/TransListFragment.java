@@ -47,7 +47,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
  * Created by alireza on 3/26/18.
  */
 
-public class TransListFragment extends Fragment {
+public class  TransListFragment extends Fragment {
     private RecyclerView ordersList;
     private List<PayListModel> orderModelList;
     /*private List<ItemModel> userOrderModelList;*/

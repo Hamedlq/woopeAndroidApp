@@ -237,42 +237,5 @@ public class SmsVerificationActivity extends AppCompatActivity {
             }
         });
 
-
-//        save.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View arg0) {
-//
-//                Intent goto_mainpage_sms = new Intent(SmsVerificationActivity.this,
-//                        MainActivity.class);
-//                {
-//
-//                    startActivity(goto_mainpage_sms);
-//                    goto_mainpage_sms.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    finish();
-//
-//                }
-//            }});
-
-//                String user_code = user_verif_code.getText().toString();
-//
-//                if (user_verif_code.getText().toString().equals(recieved_code)) {
-//                    Toast.makeText(
-//                            sms_validation.this
-//                            , getText(R.string.code_accepted),
-//                            Toast.LENGTH_SHORT).show();
-//                    Intent goto_user_info = new Intent(sms_validation.this,
-//                            user_info.class);
-//                    startActivity(goto_user_info);
-//
-//                } else {
-//                    Toast.makeText(
-//                            sms_validation.this
-//                            , getText(R.string.wrong_code),
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//
-//
-//            }
-//        });
-
     }
 }
