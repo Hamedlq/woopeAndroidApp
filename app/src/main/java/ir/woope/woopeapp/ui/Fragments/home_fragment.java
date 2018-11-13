@@ -56,6 +56,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
@@ -220,7 +221,7 @@ public class home_fragment extends Fragment {
                 Profile userobj =((MainActivity)getActivity()).getUserProfile();
                 Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
                 giftIntent.putExtra(PREF_PROFILE, userobj);
-                getActivity().startActivity(giftIntent);
+                getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
                 getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
                 break;
             default:

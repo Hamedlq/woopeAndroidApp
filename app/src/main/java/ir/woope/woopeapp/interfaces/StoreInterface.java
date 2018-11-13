@@ -25,7 +25,7 @@ public interface StoreInterface {
     @POST(Constants.Actions.FOLLOW_STORE)
     @FormUrlEncoded
     Call<ApiResponse> followStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                            @Field("branchId") String s);
+                            @Field("branchId") long s);
 
     @GET(Constants.Actions.GET_FOLLOW_STORE)
     Call<List<Store>> getFollowStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
@@ -33,6 +33,6 @@ public interface StoreInterface {
     @POST(Constants.Actions.GET_STORE)
     @FormUrlEncoded
     Call<Store> getStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                  @Field("branchId") String s);
+                                  @Field("branchId") long s);
 
 }

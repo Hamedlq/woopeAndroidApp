@@ -29,6 +29,7 @@ import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.CashPayActivity;
 import ir.woope.woopeapp.ui.Activities.CreditPayActivity;
+import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -170,7 +171,7 @@ public class  TransListFragment extends Fragment {
 
     public void gotoCreditCash(PayListModel model){
         Profile profile=((TransactionActivity)getActivity()).getProfile();
-        Intent myIntent = new Intent(getActivity(), CreditPayActivity.class);
+        Intent myIntent = new Intent(getActivity(), PayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
         getActivity().startActivityForResult(myIntent,RELOAD_LIST);

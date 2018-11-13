@@ -18,6 +18,8 @@ public class PayListModel extends ApiResponse implements Serializable {
     public int payType;
     public String confirmationCode;
     public String logoSrc;
+    public boolean switchCredit;
+    public boolean switchWoope;
 
     public PayListModel() {
 

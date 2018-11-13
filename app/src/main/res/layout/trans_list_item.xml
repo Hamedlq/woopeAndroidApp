@@ -17,45 +17,19 @@
         android:orientation="vertical">
 
 
-        <!--      <TextView
-                  android:id="@+id/store_name"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="center"
-                  android:layout_margin="7dp"
-                  android:text="store_name"
-                  android:textSize="16sp"
-                  android:textStyle="bold" />-->
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
-                android:layout_height="wrap_content">
-
                 <TextView
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
                     android:id="@+id/store_name_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="18sp" />
-
-                <ImageView
-                    android:id="@+id/ic_item"
-                    android:background="@mipmap/ic_redbag"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp" />
-
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/return_woop"
@@ -81,30 +55,221 @@
                 android:layout_centerVertical="true" />
 
         </RelativeLayout>
-
-
-        <!--
         <View
             android:layout_width="match_parent"
-            android:background="@color/separator"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:background="@color/colorAccent"
             android:layout_height="1dp"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:orientation="horizontal">
+            android:id="@+id/tr1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="2dp">
 
-            <Button
-                android:id="@+id/cancel_btn"
+            <TextView
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:id="@+id/tr1_ct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel_order"/>
+                android:text=""
+                android:textSize="10sp" />
 
+            <TextView
+                android:id="@+id/tr1_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_centerHorizontal="true"
+                android:textSize="12sp" />
 
-        </LinearLayout>-->
+            <TextView
+                android:id="@+id/tr1_tt"
+                android:layout_width="80dp"
+                android:textSize="8sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/tr1_time"
+                android:textSize="8sp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tr1_tt" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tr2"
+            android:layout_margin="2dp">
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:id="@+id/tr2_ct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/tr2_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_centerHorizontal="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tr2_tt"
+                android:layout_width="80dp"
+                android:textSize="6sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/tr2_time"
+                android:textSize="8sp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tr2_tt"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tr3"
+            android:layout_margin="2dp">
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:id="@+id/tr3_ct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/tr3_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_centerHorizontal="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tr3_tt"
+                android:layout_width="80dp"
+                android:textSize="6sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/tr3_time"
+                android:textSize="8sp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tr3_tt"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tr4"
+            android:layout_margin="2dp">
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:id="@+id/tr4_ct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/tr4_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_centerHorizontal="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tr4_tt"
+                android:layout_width="80dp"
+                android:textSize="6sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/tr4_time"
+                android:textSize="8sp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tr4_tt"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tr5"
+            android:layout_margin="2dp">
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:id="@+id/tr5_ct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/tr5_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_centerHorizontal="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tr5_tt"
+                android:layout_width="80dp"
+                android:textSize="6sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/tr5_time"
+                android:textSize="8sp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tr5_tt"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

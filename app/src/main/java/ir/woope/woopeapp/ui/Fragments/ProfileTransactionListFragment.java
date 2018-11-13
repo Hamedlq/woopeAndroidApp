@@ -24,6 +24,7 @@ import ir.woope.woopeapp.adapters.ProfileTransactionListAdapter;
 import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
+import ir.woope.woopeapp.models.DocumentModel;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.TransactionModel;
 import ir.woope.woopeapp.ui.Activities.CashPayActivity;
@@ -45,7 +46,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 
 public class ProfileTransactionListFragment extends Fragment {
     private RecyclerView ordersList;
-    private List<TransactionModel> orderModelList;
+    private List<DocumentModel> orderModelList;
     /*private List<ItemModel> userOrderModelList;*/
     private ProfileTransactionListAdapter adapter;
     private String authToken;
@@ -71,7 +72,7 @@ public class ProfileTransactionListFragment extends Fragment {
         payTransactionTouchListener = new ProfileTransactionTouchListener() {
             @Override
             public void onBtnClick(View view, int position) {
-                TransactionModel model = (TransactionModel) orderModelList.get(position);
+                DocumentModel model = (DocumentModel) orderModelList.get(position);
 
                 /*Intent myIntent = new Intent(getActivity(), PayActivity.class);
                 myIntent.putExtra(STORE_NAME, model.storeName); //Optional parameters
@@ -97,13 +98,13 @@ public class ProfileTransactionListFragment extends Fragment {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        Call<List<TransactionModel>> call =
+        Call<List<DocumentModel>> call =
                 providerApiInterface.getUserTransactionsFromServer("bearer "+authToken);
 
 
-        call.enqueue(new Callback<List<TransactionModel>>() {
+        call.enqueue(new Callback<List<DocumentModel>>() {
             @Override
-            public void onResponse(Call<List<TransactionModel>> call, Response<List<TransactionModel>> response) {
+            public void onResponse(Call<List<DocumentModel>> call, Response<List<DocumentModel>> response) {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
@@ -118,7 +119,7 @@ public class ProfileTransactionListFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<TransactionModel>> call, Throwable t) {
+            public void onFailure(Call<List<DocumentModel>> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
             }

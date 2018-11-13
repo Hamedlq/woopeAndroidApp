@@ -71,11 +71,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 import co.ronash.pushe.Pushe;
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
     boolean getProfileFromServer = false;
     String authToken = null;
     Profile profile = null;
-    private int CROP = 2;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -294,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 onSelectFromGalleryResult(data);
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
-            else if (requestCode == CROP) {
+            else if (requestCode == CROP_IMAGE) {
                 File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
                 if (file.exists()) {
                     String filePath = file.getPath();
@@ -306,6 +307,8 @@ public class MainActivity extends AppCompatActivity {
                     }*/
 
                 }
+            }else if(requestCode == SHOULD_GET_PROFILE){
+                getProfileFromServer();
             }
         }
     }
@@ -375,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
             photoPickerIntent.putExtra("return-data", true);
             photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, picFileUri);
             photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-            startActivityForResult(photoPickerIntent, CROP);
+            startActivityForResult(photoPickerIntent, CROP_IMAGE);
 
         }
         // respond to users whose devices do not support the crop action

@@ -109,8 +109,9 @@ public class GiftActivity extends AppCompatActivity {
                                 GiftActivity.this
                                 , response.body().getMessage(),
                                 Toast.LENGTH_SHORT).show();
-                         finish();
-
+                        Intent i=getIntent();
+                        setResult(RESULT_OK, i);
+                        finish();
                     }
 
                 }

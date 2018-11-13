@@ -23,6 +23,7 @@ import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
@@ -63,7 +64,12 @@ public class PayCodeActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Intent goto_main = new Intent(PayCodeActivity.this,
+                            MainActivity.class);
+                    goto_main.putExtra(GET_PROFILE_FROM_SERVER, true);
+                    goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
+                    startActivity(goto_main);
                 }
                 return false;
             }
