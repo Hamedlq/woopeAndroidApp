@@ -161,9 +161,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
 
         cash_radio = findViewById(R.id.pay_cash_radio);
+        cash_radio.setOnTouchListener(this);
         credit_radio = findViewById(R.id.pay_credit_radio);
 
 
+//            cash_radio.setEnabled(false);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
         setSupportActionBar(toolbar);
@@ -307,6 +309,16 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         }
                         return true;
                     }
+                    break;
+
+                case R.id.pay_cash_radio:
+                        if (!cash_radio.isEnabled()) {
+
+                            Toast.makeText(
+                                    this
+                                    , getResources().getString(R.string.askStoreForCashPay),
+                                    Toast.LENGTH_LONG).show();
+                        }
                     break;
             }
         }

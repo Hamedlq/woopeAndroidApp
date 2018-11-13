@@ -53,5 +53,6 @@
     <string name="bio">درباره من</string>
     <string name="invalid_email">ایمیل نامعتبر</string>
     <string name="cashPayNotAllowed">امکان پرداخت نقدی برای این فروشگاه وجود ندارد</string>
+    <string name="askStoreForCashPay">از فروشگاه درخواست خرید نقدی کنید</string>
 
 </resources>

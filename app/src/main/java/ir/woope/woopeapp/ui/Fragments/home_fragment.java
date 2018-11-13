@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -23,10 +25,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.ViewTarget;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -46,11 +52,14 @@ import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
+import me.toptas.fancyshowcase.FancyShowCaseView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
@@ -77,16 +86,28 @@ public class home_fragment extends Fragment {
     FloatingActionButton fab;
     ProgressBar progressBar;
 
+    GuideView s;
+
+    Toolbar toolbar;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+
+//        new MaterialTapTargetPrompt.Builder(this)
+//                .setTarget(R.id.nav_store)
+//                .setPrimaryText("لیست پرداخت")
+//                .setSecondaryText("فاکتور اولیه ی خود را تکمیل کنید")
+//                .show();
+
+//        ((MainActivity)getActivity()).nav_store_showcase
+
+        getActivity().setTitle("");
         mRecycler = inflater.inflate(R.layout.fragment_home, null);
         setHasOptionsMenu(true);
         itemTouchListener = new ItemTouchListener() {
@@ -159,7 +180,11 @@ public class home_fragment extends Fragment {
         }
 
 
+
         return mRecycler;
+
+
+
     }
 
     private void followStore(Store s) {
@@ -286,6 +311,73 @@ public class home_fragment extends Fragment {
 
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+
+                SharedPreferences prefs =
+                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
+                if (isFirstRun)
+                {
+                    // Code to run once
+
+                    showhint();
+
+                }
+
+            }
+        });
+    }
+
+    public void showhint(){
+
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
+                        // All options below are optional
+                        .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(60),                  // Specify the target radius (in dp)
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+
+                        SharedPreferences prefs =
+                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("FIRSTRUN", false);
+                        editor.commit();
+
+                    }
+                });
+
     }
 
 

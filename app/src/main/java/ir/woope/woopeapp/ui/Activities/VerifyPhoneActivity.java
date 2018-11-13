@@ -43,7 +43,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms_validation_register);
 
         Intent intent = getIntent();
-        final String token = intent.getStringExtra("token");
+        final String token = intent.getStringExtra(TOKEN);
 
         final TextView countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final EditText code = (EditText) findViewById(R.id.txtbx_confirm_code_register);
