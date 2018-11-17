@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
+import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
@@ -98,7 +99,7 @@ public class StoreActivity extends AppCompatActivity {
 
     }
 
-    private void getStore(String storeId) {
+    private void getStore(long storeId) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -165,7 +166,15 @@ public class StoreActivity extends AppCompatActivity {
         Profile obj = gson.fromJson(json, Profile.class);*/
         Intent myIntent = new Intent(this, PayActivity.class);
         myIntent.putExtra(PREF_PROFILE, profile);
-        myIntent.putExtra(STORE, store); //Optional parameters
+        //myIntent.putExtra(STORE, store);
+        PayListModel model=new PayListModel();
+        model.storeName=store.storeName;
+        model.branchId=store.storeId;
+        model.totalPrice=0;
+        model.logoSrc=store.logoSrc;
+        model.switchWoope=false;
+        model.switchCredit=false;
+        myIntent.putExtra(PAY_LIST_ITEM, model);
         this.startActivity(myIntent);
         this.finish();
     }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.DocumentModel;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.PayResponseModel;
 import ir.woope.woopeapp.models.TransactionModel;
@@ -22,7 +23,8 @@ public interface TransactionInterface {
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
     Call<PayListModel> InsertTransaction(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                      @Field("BranchId") String StoreId,
+                                                      @Field("Id") long payListId,
+                                                      @Field("BranchId") long StoreId,
                                                       @Field("TotalPrice") String Amount,
                                                       @Field("PayType") int payType,
                                                       @Field("SwitchCredit") boolean switch_credit,
@@ -48,5 +50,5 @@ public interface TransactionInterface {
 
 
     @GET("api/Transaction/GetUserTransactions")
-    Call<List<TransactionModel>> getUserTransactionsFromServer(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
+    Call<List<DocumentModel>> getUserTransactionsFromServer(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 }

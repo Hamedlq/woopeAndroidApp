@@ -20,7 +20,7 @@ public class Store extends ApiResponse implements Serializable {
         isAdvertise=false;
     }
 
-    public String storeId;
+    public long storeId;
     public String storeName;
     public String storeDescription;
     public String basePrice;
@@ -36,4 +36,5 @@ public class Store extends ApiResponse implements Serializable {
     public boolean isCashPayAllowed;
     public boolean isAdvertise;
     public String website;
+    public String woopeThreshold;
 }

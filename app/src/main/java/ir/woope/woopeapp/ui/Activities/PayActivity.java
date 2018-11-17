@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -43,8 +44,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.interfaces.ProfileInterface;
+import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.PayResponseModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Store;
@@ -56,6 +60,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
@@ -70,23 +76,33 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected Switch switch_credit;
     @BindView(R.id.switch_woope)
     protected Switch switch_woope;
+    @BindView(R.id.amount)
+    protected EditText amount;
+    @BindView(R.id.StoreName)
+    protected TextView StoreName_tv;
+    @BindView(R.id.progressBar)
+    protected ProgressBar progressBar;
 
+    //amount = findViewById(R.id.amount);
     Store store;
-    long totalPrice;
+    //long totalPrice;
     //Spinner spinner;
-    EditText amount;
+    //EditText amount;
     TextView woope_credit;
     TextView toman_credit;
     String authToken;
     Profile profile;
     String profileJson;
     Button btn;
-    ProgressBar progressBar;
+    //ProgressBar progressBar;
     LinearLayout cash_layout;
     RadioButton cash_radio;
     LinearLayout credit_layout;
     RadioButton credit_radio;
     String profileString;
+    boolean flag;
+    //boolean saveTransactionFlag=true;
+    PayListModel savedPayListModel;
 
     RadioGroup payType;
 
@@ -103,20 +119,19 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
 
         ButterKnife.bind(this);
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
-            store = (Store) getIntent().getExtras().getSerializable(STORE);
-
-        }
-        TextView StoreName_tv = findViewById(R.id.StoreName);
-
-        amount = findViewById(R.id.amount);
         amount.addTextChangedListener(onTextChangedListener());
 
-        StoreName_tv.setText(store.storeName);
-        if (totalPrice != 0) {
-            amount.setText(String.valueOf(totalPrice));
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+            savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            getStore(savedPayListModel.branchId);
+            amount.setText(String.valueOf(savedPayListModel.totalPrice));
+            StoreName_tv.setText(savedPayListModel.storeName);
+            Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).into(backdrop);
+        }else {
+            savedPayListModel=new PayListModel();
         }
+
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
             woope_credit.setText(String.valueOf(profile.getWoopeCreditString()));
@@ -125,7 +140,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             toman_credit.setText(String.valueOf(profile.getCreditString()));
         }
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
 
         btn = (Button) findViewById(R.id.button);
@@ -143,25 +158,26 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         payType = findViewById(R.id.radioGroup_payType);
 
-        Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(backdrop);
 
 
         cash_radio = findViewById(R.id.pay_cash_radio);
         cash_radio.setOnTouchListener(this);
         credit_radio = findViewById(R.id.pay_credit_radio);
 
-        if (!store.isCashPayAllowed) {
 
 //            cash_radio.setEnabled(false);
 
-            Toast.makeText(
-                    this
-                    , getResources().getString(R.string.cashPayNotAllowed),
-                    Toast.LENGTH_LONG).show();
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
         setSupportActionBar(toolbar);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(flag){
+            getProfileFromServer();
+        }
 
     }
 
@@ -179,22 +195,19 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         Intent myIntent = new Intent(PayActivity.this, CashPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile); //Optional parameters
-        this.startActivity(myIntent);
+        this.startActivityForResult(myIntent,SHOULD_GET_PROFILE);
         this.finish();
     }
 
-    public void gotoCreditPay(PayListModel model) {
-        Gson gson = new Gson();
-        String transModel = gson.toJson(model);
-
-        //myIntent.putExtra(BUY_AMOUNT, String.valueOf(model.totalPrice)); //Optional parameters
-        Intent myIntent = new Intent(PayActivity.this, CreditPayActivity.class);
-        myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
-        myIntent.putExtra(PREF_PROFILE, profile); //Optional parameters
-        this.startActivity(myIntent);
-        this.finish();
+    public void setNext(PayListModel payListModel) {
+        flag=true;
+        float credit=profile.getTomanCredit()+(profile.getWoopeCredit()*1000);
+        if(credit>=payListModel.totalPrice){
+            ConfirmPayment(payListModel);
+        }else {
+            GetPayInfo(payListModel);
+        }
     }
-
 
     private void saveTransaction() {
 
@@ -226,7 +239,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.InsertTransaction("bearer "+authToken, store.storeId, amount.getText().toString(), pt,switch_credit.isChecked(),switch_woope.isChecked());
+                providerApiInterface.InsertTransaction("bearer "+authToken, savedPayListModel.id, savedPayListModel.branchId, amount.getText().toString(), pt,switch_credit.isChecked(),switch_woope.isChecked());
 
 
         call.enqueue(new Callback<PayListModel>() {
@@ -242,7 +255,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         gotoPayCash(model);
                     } else if (credit_radio.isChecked()) {
                         //go to credit pay
-                        gotoCreditPay(model);
+                        setNext(model);
                     }
                 }
             }
@@ -290,7 +303,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 case R.id.button:
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (!TextUtils.isEmpty(amount.getText())) {
-                            saveTransaction();
+                                saveTransaction();
                         } else {
                             showFillError();
                         }
@@ -384,5 +397,163 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 amount.addTextChangedListener(this);
             }
         };
+    }
+
+    private void getStore(long storeId) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs = getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+        Call<Store> call =
+                providerApiInterface.getStore("bearer " + authToken,storeId);
+
+
+        call.enqueue(new Callback<Store>() {
+            @Override
+            public void onResponse(Call<Store> call, Response<Store> response) {
+                hideProgreeBar();
+                int code = response.code();
+                if (code == 200) {
+                    store = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Store> call, Throwable t) {
+                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                hideProgreeBar();
+            }
+        });
+
+
+    }
+
+    public void ConfirmPayment(PayListModel payListModel){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        TransactionInterface providerApiInterface =
+                retrofit.create(TransactionInterface.class);
+
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+        Call<PayListModel> call =
+                providerApiInterface.GetConfirmCode("Bearer "+authToken, payListModel.id,payListModel.pointPayString());
+        call.enqueue(new Callback<PayListModel>() {
+            @Override
+            public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
+                hideProgreeBar();
+                int code = response.code();
+                if (code == 200) {
+                    PayListModel trans = response.body();
+                    gotoPayCodeActivity(trans);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PayListModel> call, Throwable t) {
+                hideProgreeBar();
+            }
+        });
+
+    }
+
+    public void getProfileFromServer() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        ProfileInterface providerApiInterface =
+                retrofit.create(ProfileInterface.class);
+        showProgreeBar();
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+        Call<Profile> call =
+                providerApiInterface.getProfileFromServer("bearer " + authToken);
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                hideProgreeBar();
+                int code = response.code();
+                if (code == 200) {
+                    profile = response.body();
+                    //profile=user.getMessage();
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(profile);
+                    prefsEditor.putString(PROFILE, json);
+                    prefsEditor.apply();
+                    //setNext();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                hideProgreeBar();
+            }
+        });
+
+    }
+
+    public void gotoPayCodeActivity(PayListModel trans){
+
+        Intent myIntent = new Intent(PayActivity.this, PayCodeActivity.class);
+        myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
+        myIntent.putExtra(PREF_PROFILE, profile);
+        //myIntent.putExtra(POINTS_PAYED, payedPoints);
+        startActivity(myIntent);
+        this.finish();
+    }
+    public void GetPayInfo(PayListModel model){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        TransactionInterface providerApiInterface =
+                retrofit.create(TransactionInterface.class);
+
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+        Call<PayResponseModel> call =
+                providerApiInterface.GetPayInfo("Bearer "+authToken, model.id);
+        call.enqueue(new Callback<PayResponseModel>() {
+            @Override
+            public void onResponse(Call<PayResponseModel> call, Response<PayResponseModel> response) {
+                hideProgreeBar();
+                int code = response.code();
+                if (code == 200) {
+                    PayResponseModel bankModel = response.body();
+                    gotoBankPage(bankModel);
+                    //gotoPayCodeActivity(trans);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PayResponseModel> call, Throwable t) {
+                hideProgreeBar();
+            }
+        });
+
+    }
+
+    private void gotoBankPage(PayResponseModel bankModel) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bankModel.bankUrl));
+        startActivity(browserIntent);
     }
 }

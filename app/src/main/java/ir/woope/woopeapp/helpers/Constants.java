@@ -41,6 +41,7 @@ public final class Constants {
         public static final String TOTAL_PRICE = "total_price";
         public static final String STORE_NAME = "StoreName";
         public static final String STORE = "StoreObj";
+        //public static final String DO_SAVE_TRANSACTION = "DoSaveTransaction";
         public static final String BUY_AMOUNT = "BuyAmount";
         public static final String PAY_LIST_ITEM = "PayListItem";
         public static final String PROFILE = "profile";
@@ -54,6 +55,8 @@ public final class Constants {
         public static final int RELOAD_LIST = 8735 ;
         public static final int REQUEST_CAMERA =2356;
         public static final int SELECT_FILE =8596;
+        public static final int CROP_IMAGE =22;
+        public static final int SHOULD_GET_PROFILE =2289;
     }
 
     public final class Actions {
