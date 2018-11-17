@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        nav_store = findViewById(R.id.nav_store);
 
-        Toolbar tb = (Toolbar) findViewById(R.id.home_fragment_toolbar);
+        //Toolbar tb = (Toolbar) findViewById(R.id.home_fragment_toolbar);
 
 
 //

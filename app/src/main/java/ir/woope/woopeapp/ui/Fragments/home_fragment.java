@@ -153,10 +153,11 @@ public class home_fragment extends Fragment {
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
 
 
-        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
+        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
