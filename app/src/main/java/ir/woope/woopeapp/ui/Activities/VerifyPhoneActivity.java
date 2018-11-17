@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.RegisterInterface;
@@ -214,7 +215,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                 progress.setVisibility(View.VISIBLE);
                 accept.setVisibility(View.GONE);
 
-                send.send_verif_code(phoneNumber, code.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                send.send_verif_code(phoneNumber, Utility.convertNumberToEnglish(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
