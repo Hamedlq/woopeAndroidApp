@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.interfaces.RegisterInterface;
 import ir.woope.woopeapp.models.AccessToken;
@@ -152,7 +153,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                 progress.setVisibility(View.VISIBLE);
 
-                send.send_verif_code(getIntent().getExtras().getString("phone_number"), code.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                send.send_verif_code(getIntent().getExtras().getString("phone_number"),Utility.convertNumberToEnglish(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
@@ -238,4 +239,6 @@ public class SmsVerificationActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

@@ -48,4 +48,21 @@ public class Utility {
             return true;
         }
     }
+
+    public static String convertNumberToEnglish(String num) {
+        String d = num;
+        d = d.replace("۰", "0");
+        d = d.replace("۱", "1");
+        d = d.replace("۲", "2");
+        d = d.replace("٣", "3");
+        d = d.replace("٤", "4");
+        d = d.replace("۵", "5");
+        d = d.replace("٦", "6");
+        d = d.replace("٧", "7");
+        d = d.replace("۸", "8");
+        d = d.replace("۹", "9");
+
+        return d;
+    }
+
 }
