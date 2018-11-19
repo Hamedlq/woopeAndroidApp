@@ -34,8 +34,7 @@ public interface TransactionInterface {
     @FormUrlEncoded
     @POST("api/Transaction/GetConfirmCode")
     Call<PayListModel> GetConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                   @Field("Id") long paylistId,
-                                                   @Field("Woope") String pointPay);
+                                                   @Field("Id") long paylistId);
 
     @FormUrlEncoded
     @POST("api/Pay/GetPayInfo")

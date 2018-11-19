@@ -155,9 +155,9 @@ public class home_fragment extends Fragment {
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(R.drawable.ic_card_giftcard);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
