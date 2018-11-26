@@ -325,24 +325,24 @@ public class home_fragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.post(new Runnable() {
-            @Override
-            public void run() {
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
-                SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
+        if (!isFirstRun) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
 
-                boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
-                if (isFirstRun)
-                {
+
                     // Code to run once
 
                     showhint();
 
-                }
 
-            }
-        });
+                }
+            });
+        }
     }
 
     public void showhint(){

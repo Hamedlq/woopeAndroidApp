@@ -58,7 +58,7 @@ import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.woope.woopeapp.Manifest;
+
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.Utils.RevealBackgroundView;
@@ -88,6 +88,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.FIRST_RUN_PROFILE_FRAGMENT;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
@@ -384,33 +385,28 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         GetProfilePicture();
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        boolean isFirstRun = prefs.getBoolean(FIRST_RUN_PROFILE_FRAGMENT, true);
+        if (isFirstRun)
+        {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 // Do something after 5s = 5000ms
-
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-
-                        SharedPreferences prefs =
-                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-
-                        boolean isFirstRun = prefs.getBoolean("FIRSTRUNProfileFragment", true);
-                        if (isFirstRun)
-                        {
                             // Code to run once
-
-                            showFavHint();
-
-                        }
-
+                           showFavHint();
                     }
                 });
-
             }
         }, 2000);
+        }
     }
 
     private void showFavHint (){
@@ -469,7 +465,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                                 getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
                         SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("FIRSTRUNProfileFragment", false);
+                        editor.putBoolean(FIRST_RUN_PROFILE_FRAGMENT, false);
                         editor.commit();
 
                     }

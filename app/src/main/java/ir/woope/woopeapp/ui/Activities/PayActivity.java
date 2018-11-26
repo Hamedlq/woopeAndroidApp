@@ -260,7 +260,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(String.valueOf(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText(0);
+                    tax.setText("0");
                 }else if(alpha>0){
                     pay_price.setText(String.valueOf(alpha));
                     payPriceValue=alpha;
