@@ -19,6 +19,8 @@ public class PayListModel extends ApiResponse implements Serializable {
     public String confirmationCode;
     public String logoSrc;
     public boolean switchCredit;
+    public long basePrice;
+    public long returnPoint;
     public boolean switchWoope;
 
     public PayListModel() {

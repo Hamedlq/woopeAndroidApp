@@ -140,7 +140,7 @@ public class StoreActivity extends AppCompatActivity {
                         store_discount.setVisibility(View.VISIBLE);
                         store_discount.setText(store.discountPercent + " درصد تخفیف ");
                     }
-                    if (!TextUtils.isEmpty(store.basePrice)){
+                    if (store.basePrice!=0){
                         store_point.setVisibility(View.VISIBLE);
                         store_point.setText("به ازای هر "+store.basePrice+" تومان خرید "+store.returnPoint+" ووپ دریافت می‌کنید" );
                     }
@@ -174,6 +174,8 @@ public class StoreActivity extends AppCompatActivity {
         model.logoSrc=store.logoSrc;
         model.switchWoope=false;
         model.switchCredit=false;
+        model.basePrice=store.basePrice;
+        model.returnPoint=store.returnPoint;
         myIntent.putExtra(PAY_LIST_ITEM, model);
         this.startActivity(myIntent);
         this.finish();

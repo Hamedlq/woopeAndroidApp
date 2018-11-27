@@ -150,6 +150,7 @@ public class home_fragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
@@ -317,25 +318,24 @@ public class home_fragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
-        view.post(new Runnable() {
-            @Override
-            public void run() {
+        boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
+        if (!isFirstRun) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
 
-                SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
-                boolean isFirstRun = prefs.getBoolean("HOMEFIRSTRUN", true);
-                if (isFirstRun)
-                {
                     // Code to run once
 
                     showhint();
 
-                }
 
-            }
-        });
+                }
+            });
+        }
     }
 
     private void showHint () {

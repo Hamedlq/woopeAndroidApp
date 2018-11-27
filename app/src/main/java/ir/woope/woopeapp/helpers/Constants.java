@@ -25,12 +25,12 @@ public final class Constants {
        //public static final String BASE_URL = "http://localhost:58795/";
 
 //        public static final String BASE_URL = "http://192.168.100.9:8090/";
-//         public static final String BASE_URL = "http://localhost:58795/";
+//        public static final String BASE_URL = "http://localhost:58795/";
 
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 
-//        public static final String BASE_URL = "http://mywoope.com/";
+        public static final String BASE_URL = "http://mywoope.com/";
     }
 
     public final class GlobalConstants{
@@ -57,6 +57,7 @@ public final class Constants {
         public static final int SELECT_FILE =8596;
         public static final int CROP_IMAGE =22;
         public static final int SHOULD_GET_PROFILE =2289;
+        public static final String FIRST_RUN_PROFILE_FRAGMENT ="firstRunProfileFragment";
     }
 
     public final class Actions {

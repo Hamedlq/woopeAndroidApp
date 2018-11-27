@@ -11,7 +11,7 @@ public class Store extends ApiResponse implements Serializable {
     public Store() {
     }
 
-    public Store(String name,String point, int numOfSongs, int thumbnail) {
+    public Store(String name,long point, int numOfSongs, int thumbnail) {
         this.storeName = name;
         this.returnPoint = point;
         this.thumbnail = thumbnail;
@@ -23,8 +23,8 @@ public class Store extends ApiResponse implements Serializable {
     public long storeId;
     public String storeName;
     public String storeDescription;
-    public String basePrice;
-    public String returnPoint;
+    public long basePrice;
+    public long returnPoint;
     public String discountPercent;
     public String imageUId;
     public String logoSrc;

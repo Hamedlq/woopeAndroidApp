@@ -18,7 +18,7 @@
     <string name="username">نام کاربری</string>
     <string name="password">رمز عبور</string>
     <string name="enter">ورود</string>
-    <string name="forgetـpassword">فراموشی رمز عبور</string>
+    <string name="forget_password"><u>رمز عبور خود را فراموش کرده‌اید؟</u></string>
     <string name="save">ثبت</string>
     <string name="email">ایمیل</string>
     <string name="new_password">رمز عبور جدید</string>
@@ -35,7 +35,7 @@
     <string name="wrong_username">نام کاربری اشتباه!</string>
     <string name="wrong_pass">رمز عبور اشتباه!</string>
     <string name="wrong_email">ایمیل اشتباه!</string>
-    <string name="login">ورود به حساب کاربری</string>
+    <string name="login">ورود</string>
     <string name="register">ثبت نام کنید</string>
     <string name="phonenumber">شماره موبایل</string>
     <string name="press_again_to_exit">برای خروج دوباره بازگشت را بزنید</string>
