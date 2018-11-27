@@ -32,16 +32,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.request.target.ViewTarget;
 import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
@@ -58,8 +61,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import smartdevelop.ir.eram.showcaseviewlib.GuideView;
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+
 
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
@@ -86,8 +88,6 @@ public class home_fragment extends Fragment {
     FloatingActionButton fab;
     ProgressBar progressBar;
 
-    GuideView s;
-
     Toolbar toolbar;
 
     @Override
@@ -99,13 +99,6 @@ public class home_fragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
 
-//        new MaterialTapTargetPrompt.Builder(this)
-//                .setTarget(R.id.nav_store)
-//                .setPrimaryText("لیست پرداخت")
-//                .setSecondaryText("فاکتور اولیه ی خود را تکمیل کنید")
-//                .show();
-
-//        ((MainActivity)getActivity()).nav_store_showcase
 
         getActivity().setTitle("");
         mRecycler = inflater.inflate(R.layout.fragment_home, null);
@@ -155,8 +148,7 @@ public class home_fragment extends Fragment {
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayOptions(R.drawable.ic_card_giftcard);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //toolbar.setTitle(R.string.app_name);
 
@@ -325,6 +317,7 @@ public class home_fragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -332,7 +325,7 @@ public class home_fragment extends Fragment {
                 SharedPreferences prefs =
                         getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
-                boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
+                boolean isFirstRun = prefs.getBoolean("HOMEFIRSTRUN", true);
                 if (isFirstRun)
                 {
                     // Code to run once
@@ -343,6 +336,87 @@ public class home_fragment extends Fragment {
 
             }
         });
+    }
+
+    private void showHint () {
+
+        final TapTargetSequence sequence = new TapTargetSequence(getActivity())
+                .targets(
+                        // Likewise, this tap target will target the search button
+                        TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
+                                // All options below are optional
+                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)                   // Whether to tint the target view's color
+                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60),
+                        TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
+                                // All options below are optional
+                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)                   // Whether to tint the target view's color
+                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60)
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+
+                        SharedPreferences prefs =
+                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("HOMEFIRSTRUN", false);
+                        editor.commit();
+
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+//                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
+//                                .setTitle("Uh oh")
+//                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
+//
+//                        TapTargetView.showFor(dialog,
+//                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
+//                                        .cancelable(false)
+//                                        .tintTarget(false), new TapTargetView.Listener() {
+//                                    @Override
+//                                    public void onTargetClick(TapTargetView view) {
+//                                        super.onTargetClick(view);
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+                    }
+                });
+
+        sequence.start();
+
     }
 
     public void showhint(){
@@ -369,12 +443,38 @@ public class home_fragment extends Fragment {
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);      // This call is optional
 
-                        SharedPreferences prefs =
-                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                        showGifthint();
 
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("FIRSTRUN", false);
-                        editor.commit();
+                    }
+                });
+
+    }
+
+    public void showGifthint(){
+
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
+                        // All options below are optional
+                        .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(60),                  // Specify the target radius (in dp)
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+
+
 
                     }
                 });

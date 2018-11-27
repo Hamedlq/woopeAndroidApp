@@ -155,17 +155,11 @@
                         android:text="تومان"
                         android:textSize="12sp" />
 
-
                     <RadioGroup
                         android:id="@+id/radioGroup_payType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp">
-
-                        <LinearLayout
-                            android:id="@+id/pay_credit_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
 
                         <RadioButton
                             android:id="@+id/pay_credit_radio"
@@ -177,13 +171,6 @@
                             android:padding="10dp"
                             android:text="پرداخت اعتباری" />
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/pay_cash_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
                         <RadioButton
                             android:id="@+id/pay_cash_radio"
                             android:layout_width="match_parent"
@@ -191,10 +178,6 @@
                             android:layoutDirection="rtl"
                             android:padding="10dp"
                             android:text="پرداخت نقدی" />
-
-                        </LinearLayout>
-
-
 
                     </RadioGroup>
 

@@ -153,7 +153,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                 progress.setVisibility(View.VISIBLE);
 
-                send.send_verif_code(getIntent().getExtras().getString("phone_number"),Utility.convertNumberToEnglish(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
+                send.send_verif_code(getIntent().getExtras().getString("phone_number"),Utility.arabicToDecimal(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 

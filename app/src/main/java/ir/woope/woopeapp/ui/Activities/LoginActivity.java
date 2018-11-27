@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +28,7 @@ import java.io.IOException;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.AccessToken;
@@ -159,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                 enter.setVisibility(View.GONE);
                 enterprogress.setVisibility(View.VISIBLE);
 
-                login.send_info(username.getText().toString(), password.getText().toString(), "password").enqueue(new Callback<AccessToken>() {
+                login.send_info(username.getText().toString(), Utility.arabicToDecimal(password.getText().toString()), "password").enqueue(new Callback<AccessToken>() {
                     @Override
                     public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
 
@@ -177,8 +180,6 @@ public class LoginActivity extends AppCompatActivity {
                                     if (response.code() == 200) {
 
                                         if (response.body().getConfirmed() == false) {
-
-
 
                                             Toast.makeText(
                                                     LoginActivity.this

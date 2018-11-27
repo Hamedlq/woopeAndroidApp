@@ -215,7 +215,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                 progress.setVisibility(View.VISIBLE);
                 accept.setVisibility(View.GONE);
 
-                send.send_verif_code(phoneNumber, Utility.convertNumberToEnglish(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
+                send.send_verif_code(phoneNumber, Utility.arabicToDecimal(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
