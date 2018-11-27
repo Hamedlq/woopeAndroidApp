@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="center"
-            android:src="@drawable/ic_woop" />
+            android:src="@drawable/logo_white" />
 
 
     </android.support.v7.widget.Toolbar>

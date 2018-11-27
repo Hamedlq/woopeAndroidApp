@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -46,11 +48,11 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class LoginActivity extends AppCompatActivity {
 
-    boolean doubleBackToExitPressedOnce = false;
+
 
     Animation rotateonceAnim;
     ImageView wplogologin;
-
+    Toolbar toolbar;
     private void rotationAnimation() {
 
         rotateonceAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_once);
@@ -74,43 +76,8 @@ public class LoginActivity extends AppCompatActivity {
         View pass = findViewById(R.id.txtbx_password_login);
 
 
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-//        }
-
-        //sets the statusbar and navbar colors
-
         wplogologin = findViewById(R.id.imgbx_logo_login);
-        /*final MediaPlayer mp = new MediaPlayer();
-        wplogologin.setSoundEffectsEnabled(false);
-        wplogologin.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View arg0) {
-                rotationAnimation();
-
-                if(mp.isPlaying())
-                {
-                    mp.stop();
-                }
-
-                try {
-                    mp.reset();
-                    AssetFileDescriptor afd;
-                    afd = getAssets().openFd("coins.wav");
-                    mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-                    mp.prepare();
-                    mp.start();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });*/
 
         TextView forgetpass = (TextView) findViewById(R.id.txt_forget_pass);
 
@@ -123,18 +90,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button register = (Button) findViewById(R.id.btn_register);
+        toolbar = (Toolbar) findViewById(R.id.login_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        register.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View arg0) {
-                Intent goto_userinfo = new Intent(LoginActivity.this,
-                        UserRegisterActivity.class);
-                {
-                    startActivity(goto_userinfo);
-                }
-            }
-        });
 
         final Button enter = (Button) findViewById(R.id.btn_enter_login);
 
@@ -197,10 +158,10 @@ public class LoginActivity extends AppCompatActivity {
                                             editor.putString(TOKEN, tk);
                                             editor.apply();
 
-                                            Toast.makeText(
-                                                    LoginActivity.this
-                                                    , "ورود موفق!",
-                                                    Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(
+//                                                    LoginActivity.this
+//                                                    , "ورود موفق!",
+//                                                    Toast.LENGTH_SHORT).show();
                                             Intent goto_mainpage = new Intent(LoginActivity.this,
                                                     MainActivity.class);
                                             goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
@@ -262,21 +223,26 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+        Intent goto_select = new Intent(LoginActivity.this,
+                SplashSelectActivity.class);
+        {
+            startActivity(goto_select);
+            finish();
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            Intent goto_select = new Intent(LoginActivity.this,
+                    SplashSelectActivity.class);
+            {
+                startActivity(goto_select);
+                finish();
+            }
         }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "برای خروج کلید بازگشت را فشار دهید", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
+        return super.onOptionsItemSelected(item);
     }
 
 }

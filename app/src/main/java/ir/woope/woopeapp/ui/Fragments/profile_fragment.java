@@ -477,9 +477,9 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         tlUserProfileTabs.setupWithViewPager(viewPager);
 
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_favorite));
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_dots));
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_dots));
 
     }
 
@@ -541,8 +541,8 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
             vUserProfileRoot.setVisibility(View.VISIBLE);
             ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
             viewPager.setAdapter(adapter);
-            tlUserProfileTabs.getTabAt(0).setIcon(R.drawable.ic_favorite);
-            tlUserProfileTabs.getTabAt(1).setIcon(R.drawable.ic_list_white);
+            tlUserProfileTabs.getTabAt(0).setIcon(R.drawable.ic_dots);
+            tlUserProfileTabs.getTabAt(1).setIcon(R.drawable.ic_dots);
             animateUserProfileOptions();
             animateUserProfileHeader();
         } else {
