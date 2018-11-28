@@ -1,26 +1,34 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -34,6 +42,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.ViewTarget;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -136,6 +149,19 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     long payPriceValue=0;
 
 
+    View helpButton;
+
+    Toolbar toolbar;
+
+//    @Override
+//    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+////        helpButton=findViewById(R.id.action_support);
+//
+//        showhint();
+//
+//        return super.onCreateView(parent, name, context, attrs);
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,8 +184,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             amount.setText(String.valueOf(savedPayListModel.totalPrice));
             StoreName_tv.setText(savedPayListModel.storeName);
             Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).into(backdrop);
-        }else {
-            savedPayListModel=new PayListModel();
+        } else {
+            savedPayListModel = new PayListModel();
         }
 
         if (profile != null) {
@@ -175,16 +201,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         btn = (Button) findViewById(R.id.button);
         btn.setOnTouchListener(this);
-//        cash_layout = (LinearLayout) findViewById(R.id.cash_layout);
-//        cash_radio = (RadioButton) findViewById(R.id.cash_radio);
-//        credit_layout = (LinearLayout) findViewById(R.id.credit_layout);
-//        credit_radio = (RadioButton) findViewById(R.id.credit_radio);
-//        cash_layout.setOnTouchListener(this);
-//        cash_radio.setOnTouchListener(this);
-//        credit_layout.setOnTouchListener(this);
-//        credit_radio.setOnTouchListener(this);
-//        cash_layout.setBackgroundColor(getResources().getColor(R.color.choice_selected));
-//        cash_radio.setChecked(true);
 
         //payType = findViewById(R.id.radioGroup_payType);
         payType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -210,11 +226,52 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         cash_radio.setOnTouchListener(this);
         credit_radio = findViewById(R.id.pay_credit_radio);
 
-
-//            cash_radio.setEnabled(false);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
+        toolbar.inflateMenu(R.menu.pay_toolbar_items);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    }
+
+    public void showhint() {
+
+        final TapTargetSequence sequence = new TapTargetSequence(this)
+                .targets(
+                        // Likewise, this tap target will target the search button
+                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "This is a search icon", "As you can see, it has gotten pretty dark around here...")
+                                .dimColor(android.R.color.black)
+                                .outerCircleColor(R.color.colorAccent)
+                                .targetCircleColor(android.R.color.black)
+                                .transparentTarget(true)
+                                .textColor(android.R.color.black)
+                                .id(2)
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        SharedPreferences prefs =
+                                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
+                        editor.commit();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                });
+
+        sequence.start();
 
     }
 
@@ -337,9 +394,19 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     @Override
     protected void onResume() {
         super.onResume();
-        if(flag){
+        if (flag) {
             getProfileFromServer();
         }
+
+//        SharedPreferences prefs =
+//                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//
+//        boolean isFirstRun = prefs.getBoolean("PAYFIRSTRUN", true);
+//        if (isFirstRun) {
+//
+//            showhint();
+//
+//        }
 
     }
 
@@ -348,16 +415,38 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         // Inflate the menu; this adds items to the action bar if it is present.
 
         getMenuInflater().inflate(R.menu.pay_toolbar_items, menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        return true;
+
+//        new Handler().post(new Runnable() {
+//            @Override
+//            public void run() {
+////                view = findViewById(R.id.menu_refresh_button);
+//                // view.startAnimation(animation);
+//
+//                showhint();
+//
+//            }
+//        });
+
+        SharedPreferences prefs =
+                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        boolean isFirstRun = prefs.getBoolean("PAYACTIVITYFIRSTRUN", true);
+        if (isFirstRun)
+        {
+            // Code to run once
+
+            showhint();
+
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void gotoPayCash(PayListModel model) {
         Intent myIntent = new Intent(PayActivity.this, CashPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile); //Optional parameters
-        this.startActivityForResult(myIntent,SHOULD_GET_PROFILE);
+        this.startActivityForResult(myIntent, SHOULD_GET_PROFILE);
         this.finish();
     }
 
@@ -367,7 +456,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         if(payPriceValue==0){
 
             ConfirmPayment(payListModel);
-        }else {
+        } else {
             GetPayInfo(payListModel);
         }
     }
@@ -381,7 +470,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         TransactionInterface providerApiInterface =
                 retrofit.create(TransactionInterface.class);
-
 
 
         int selectedId = payType.getCheckedRadioButtonId();
@@ -449,7 +537,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 case R.id.button:
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (!TextUtils.isEmpty(amount.getText())) {
-                                saveTransaction();
+                            saveTransaction();
                         } else {
                             showFillError();
                         }
@@ -458,13 +546,13 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     break;
 
                 case R.id.pay_cash_radio:
-                        if (!cash_radio.isEnabled()) {
+                    if (!cash_radio.isEnabled()) {
 
-                            Toast.makeText(
-                                    this
-                                    , getResources().getString(R.string.askStoreForCashPay),
-                                    Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(
+                                this
+                                , getResources().getString(R.string.askStoreForCashPay),
+                                Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
         }
@@ -559,7 +647,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<Store> call =
-                providerApiInterface.getStore("bearer " + authToken,storeId);
+                providerApiInterface.getStore("bearer " + authToken, storeId);
 
 
         call.enqueue(new Callback<Store>() {
@@ -582,7 +670,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     }
 
-    public void ConfirmPayment(PayListModel payListModel){
+    public void ConfirmPayment(PayListModel payListModel) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -656,7 +744,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     }
 
-    public void gotoPayCodeActivity(PayListModel trans){
+    public void gotoPayCodeActivity(PayListModel trans) {
 
         Intent myIntent = new Intent(PayActivity.this, PayCodeActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
@@ -665,7 +753,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         startActivity(myIntent);
         this.finish();
     }
-    public void GetPayInfo(PayListModel model){
+
+    public void GetPayInfo(PayListModel model) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -679,7 +768,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayResponseModel> call =
-                providerApiInterface.GetPayInfo("Bearer "+authToken, model.id);
+                providerApiInterface.GetPayInfo("Bearer " + authToken, model.id);
         call.enqueue(new Callback<PayResponseModel>() {
             @Override
             public void onResponse(Call<PayResponseModel> call, Response<PayResponseModel> response) {

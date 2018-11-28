@@ -122,7 +122,6 @@
                         android:text="تومان"
                         android:textSize="12sp" />
 
-
                     <RadioGroup
                         android:id="@+id/radioGroup_payType"
                         android:layout_width="match_parent"

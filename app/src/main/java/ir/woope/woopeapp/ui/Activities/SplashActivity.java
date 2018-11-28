@@ -4,6 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +19,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
@@ -41,8 +44,10 @@ public class SplashActivity extends AppCompatActivity {
     Retrofit retrofit_splash;
     Button retry;
     TextView err;
-    ProgressBar progress;
+    AVLoadingIndicatorView progress;
     ImageView wpelogo;
+
+
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -60,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
 
         retry = (Button) findViewById(R.id.btn_retry);
         err = (TextView) findViewById(R.id.txt_errorconnection);
-        progress = (ProgressBar) findViewById(R.id.progressBar_splash);
+        progress = (AVLoadingIndicatorView) findViewById(R.id.progressBar_splash);
         wpelogo = (ImageView) findViewById(R.id.img_wplogo);
 
         View splashLayout = findViewById(R.id.activity_splash);
@@ -73,7 +78,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 retry.setVisibility(View.GONE);
                 err.setVisibility(View.GONE);
-                progress.setVisibility(View.VISIBLE);
+                progress.smoothToShow();
                 //GetProfileFromServer();
                 checkVersion();
 
@@ -120,7 +125,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 retry.setVisibility(View.VISIBLE);
                 err.setVisibility(View.VISIBLE);
-                progress.setVisibility(View.GONE);
+                progress.smoothToHide();
 
                 Toast.makeText(
                         SplashActivity.this
@@ -134,7 +139,7 @@ public class SplashActivity extends AppCompatActivity {
     private void showUpdateDialog() {
         retry.setVisibility(View.VISIBLE);
         err.setVisibility(View.VISIBLE);
-        progress.setVisibility(View.GONE);
+        progress.smoothToHide();
         AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
         builder.setMessage("لطفا نسخه جدید را دانلود کنید").setPositiveButton("دانلود", dialogClickListener)
                 .setNegativeButton("بستن برنامه", dialogClickListener);
@@ -214,7 +219,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 retry.setVisibility(View.VISIBLE);
                 err.setVisibility(View.VISIBLE);
-                progress.setVisibility(View.GONE);
+                progress.smoothToHide();
                 Toast.makeText(
                         SplashActivity.this
                         , t.getMessage()+"getProfile",

@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -409,67 +410,83 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         }
     }
 
-    private void showFavHint (){
-        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
-                TapTarget.forView(((ViewGroup) tlUserProfileTabs.getChildAt(0)).getChildAt(0), "مورد علاقه ها", "در اینجا لیستی از مورد علاقه های خود را ببینید")
-                        // All options below are optional
-                        .outerCircleColor(R.color.colorAccent)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                        .titleTextColor(R.color.white)      // Specify the color of the title text
-                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(true)                   // Whether to tint the target view's color
-                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(60),                  // Specify the target radius (in dp)
-                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+    private void showHint () {
+
+        final TapTargetSequence sequence = new TapTargetSequence(getActivity())
+                .targets(
+                        // Likewise, this tap target will target the search button
+                        TapTarget.forView(((ViewGroup) tlUserProfileTabs.getChildAt(0)).getChildAt(0), "مورد علاقه ها", "در اینجا لیستی از مورد علاقه های خود را ببینید")
+                                // All options below are optional
+                                .outerCircleColor(R.color.colorAccent)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)                   // Whether to tint the target view's color
+                                .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60),
+                        TapTarget.forView(((ViewGroup) tlUserProfileTabs.getChildAt(0)).getChildAt(1), "تاریخچه پرداخت ها", "در اینجا لیستی از پرداخت های اخیر خود را ببینید")
+                                // All options below are optional
+                                .outerCircleColor(R.color.colorAccent)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)                   // Whether to tint the target view's color
+                                .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60)
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
                     @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-
-                        showThHint();
-
-                    }
-                });
-    }
-
-    private void showThHint (){
-        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
-                TapTarget.forView(((ViewGroup) tlUserProfileTabs.getChildAt(0)).getChildAt(1), "تاریخچه پرداخت ها", "در اینجا لیستی از پرداخت های اخیر خود را ببینید")
-                        // All options below are optional
-                        .outerCircleColor(R.color.colorAccent)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                        .titleTextColor(R.color.white)      // Specify the color of the title text
-                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(true)                   // Whether to tint the target view's color
-                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(60),                  // Specify the target radius (in dp)
-                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-
+                    public void onSequenceFinish() {
                         SharedPreferences prefs =
                                 getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean(FIRST_RUN_PROFILE_FRAGMENT, false);
                         editor.commit();
+                    }
 
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+//                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
+//                                .setTitle("Uh oh")
+//                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
+//
+//                        TapTargetView.showFor(dialog,
+//                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
+//                                        .cancelable(false)
+//                                        .tintTarget(false), new TapTargetView.Listener() {
+//                                    @Override
+//                                    public void onTargetClick(TapTargetView view) {
+//                                        super.onTargetClick(view);
+//                                        dialog.dismiss();
+//                                    }
+//                                });
                     }
                 });
+
+        sequence.start();
+
     }
 
     private void setupTabs() {

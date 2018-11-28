@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.RegisterInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import retrofit2.Call;
@@ -74,7 +75,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                 progress.setVisibility(View.VISIBLE);
                 register.setVisibility(View.GONE);
 
-                reg.send_info(username.getText().toString(), phonenumber.getText().toString(), password.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                reg.send_info(username.getText().toString(), phonenumber.getText().toString(), Utility.arabicToDecimal(password.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 

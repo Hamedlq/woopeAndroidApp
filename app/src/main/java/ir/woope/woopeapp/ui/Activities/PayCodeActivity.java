@@ -1,6 +1,8 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -41,6 +45,9 @@ public class PayCodeActivity extends AppCompatActivity {
     String authToken;
     PayListModel payListModel;
 
+    Toolbar toolbar;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +81,7 @@ public class PayCodeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        Toolbar toolbar = (Toolbar) findViewById(R.id.codepay_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.codepay_toolbar);
         setSupportActionBar(toolbar);
 
     }
@@ -104,6 +111,47 @@ public class PayCodeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+//    public void showhint() {
+//
+//        final TapTargetSequence sequence = new TapTargetSequence(this)
+//                .targets(
+//                        // Likewise, this tap target will target the search button
+//                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "This is a search icon", "As you can see, it has gotten pretty dark around here...")
+//                                .dimColor(android.R.color.black)
+//                                .outerCircleColor(R.color.colorAccent)
+//                                .targetCircleColor(android.R.color.black)
+//                                .transparentTarget(true)
+//                                .textColor(android.R.color.black)
+//                                .id(2)
+//                )
+//                .listener(new TapTargetSequence.Listener() {
+//                    // This listener will tell us when interesting(tm) events happen in regards
+//                    // to the sequence
+//                    @Override
+//                    public void onSequenceFinish() {
+//                        SharedPreferences prefs =
+//                                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//
+//                        SharedPreferences.Editor editor = prefs.edit();
+//                        editor.putBoolean("PAYCODEACTIVITYFIRSTRUN", false);
+//                        editor.commit();
+//                    }
+//
+//                    @Override
+//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceCanceled(TapTarget lastTarget) {
+//
+//                    }
+//                });
+//
+//        sequence.start();
+//
+//    }
 
 
 }

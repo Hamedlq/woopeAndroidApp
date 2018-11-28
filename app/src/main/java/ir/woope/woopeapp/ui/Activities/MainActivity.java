@@ -90,8 +90,6 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PRO
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 import co.ronash.pushe.Pushe;
-import smartdevelop.ir.eram.showcaseviewlib.GuideView;
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -107,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     String authToken = null;
     Profile profile = null;
 
-    public GuideView nav_store_showcase;
+
     View nav_store;
 
     private long mLastClickTime = 0;
