@@ -6,7 +6,7 @@
 
     <color name="textPrimary">#80ffffff</color>
 
-    <color name="viewBg">#f1f5f8</color>
+    <color name="viewBg">#f7f6fb</color>
     <color name="album_title">#4c4c4c</color>
     <color name="choice_selected">#eeeeee</color>
     <color name="choice_not_selected">#ffffff</color>
@@ -22,4 +22,7 @@
     <color name="btn_logout_normal">#c70209</color>
     <color name="btn_logout_pressed">#660002</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="fab_btn">#8100F9</color>
+
+
 </resources>

@@ -18,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import com.bumptech.glide.request.target.ViewTarget;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -44,7 +46,8 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
-import ir.woope.woopeapp.helpers.Utility;
+import ir.woope.woopeapp.helpers.ListPaddingDecoration;
+import ir.woope.woopeapp.helpers.SwipeController;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
@@ -148,8 +151,10 @@ public class home_fragment extends Fragment {
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+/*
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+*/
 
         //toolbar.setTitle(R.string.app_name);
 
@@ -157,6 +162,7 @@ public class home_fragment extends Fragment {
         adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new ListPaddingDecoration());
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         //recyclerView.setLayoutManager(mLayoutManager);
         //recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
@@ -172,6 +178,31 @@ public class home_fragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        SwipeController swipeController = new SwipeController();
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+        recyclerView.addOnItemTouchListener(new SwipeableRecyclerViewTouchListener(recyclerView,
+                new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                    @Override
+                    public boolean canSwipeLeft(int position) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canSwipeRight(int position) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                        //gotopay
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                    }
+                }));
 
 
 
@@ -236,13 +267,13 @@ public class home_fragment extends Fragment {
                 getActivity().startActivity(myIntent);
                 getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
                 break;
-            case android.R.id.home:
+            /*case android.R.id.home:
                 Profile userobj =((MainActivity)getActivity()).getUserProfile();
                 Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
                 giftIntent.putExtra(PREF_PROFILE, userobj);
                 getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
                 getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
-                break;
+                break;*/
             default:
                 break;
         }
