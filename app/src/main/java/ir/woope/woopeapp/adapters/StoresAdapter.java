@@ -4,10 +4,13 @@ package ir.woope.woopeapp.adapters;
  * Created by Hamed on 6/10/2018.
  */
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,10 +47,10 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count,points;
+        public TextView title, count,points,points_brief;
         public ImageView thumbnail;
         public ImageView followIcon;
-        public LinearLayout action_layout;
+        //public LinearLayout action_layout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -56,7 +59,8 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             points = (TextView) view.findViewById(R.id.points);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             followIcon = (ImageView) view.findViewById(R.id.follow);
-            action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
+            points_brief=(TextView) view.findViewById(R.id.points_brief);
+            //action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -100,12 +104,12 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     return true;
                 }
             });
-            action_layout.setOnTouchListener(new View.OnTouchListener() {
+            /*action_layout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return true;
                 }
-            });
+            });*/
             followIcon.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -177,6 +181,7 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 
+
     public StoresAdapter(Context mContext, List<Store> albumList, home_fragment.ItemTouchListener onItemTouchListener) {
         this.mContext = mContext;
         this.albumList = albumList;
@@ -220,6 +225,7 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 MyViewHolder holder = (MyViewHolder)vholder;
                 Store store = albumList.get(position);
                 holder.title.setText(store.storeName);
+                holder.points_brief.setText(store.returnPoint + " عدد ووپ");
                 holder.count.setText(store.discountPercent + "٪ تخفیف");
                 holder.points.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
 

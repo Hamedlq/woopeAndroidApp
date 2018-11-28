@@ -93,7 +93,6 @@
         <activity android:name=".ui.Activities.StoreActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.MobileFormActivity" />
         <activity android:name=".ui.Activities.SmsVerificationActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.UserRegisterActivity"
@@ -112,10 +111,10 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.SplashSelectActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ui.Activities.ChangePassActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
