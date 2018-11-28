@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.unstoppable.submitbuttonview.SubmitButton;
 
 import co.ceryle.radiorealbutton.RadioRealButton;
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;

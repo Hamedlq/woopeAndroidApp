@@ -18,7 +18,7 @@
     <string name="username">نام کاربری</string>
     <string name="password">رمز عبور</string>
     <string name="enter">ورود</string>
-    <string name="forget_password"><u>رمز عبور خود را فراموش کرده‌اید؟</u></string>
+    <string name="forget_password">رمز عبور خود را فراموش کرده‌اید؟</string>
     <string name="save">ثبت</string>
     <string name="email">ایمیل</string>
     <string name="new_password">رمز عبور جدید</string>

@@ -88,41 +88,53 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.TransactionActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.StoreActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.MobileFormActivity" />
         <activity android:name=".ui.Activities.SmsVerificationActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.UserRegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.BankActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.GiftActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.SplashActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity android:name=".ui.Activities.UserRegisterActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.BankActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""/>
+        <activity android:name=".ui.Activities.GiftActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.Activities.SplashActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.Activities.SendNumber_ChangePassActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.SplashSelectActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+
         </activity>
         <activity android:name=".ui.Activities.ChangePassActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.EditProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".ui.Activities.VerifyPhoneActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".ui.Activities.ContactUsActivity"

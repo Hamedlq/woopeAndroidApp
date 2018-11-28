@@ -402,7 +402,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                     @Override
                     public void run() {
                             // Code to run once
-                           showFavHint();
+                           showHint();
                     }
                 });
             }

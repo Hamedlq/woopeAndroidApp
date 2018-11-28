@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -16,6 +17,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.chaos.view.PinView;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
@@ -38,22 +43,36 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
     Retrofit retrofit_sms_verif, retrofit_login;
 
+    Toolbar toolbar;
+
+    ProgressBar progress_bar;
+
+    PinView code;
+
+    TextView countdown_timer;
+
+    MaterialRippleLayout accept;
+    TextView resend;
+
+    AVLoadingIndicatorView loading;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_register);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-//        }
+        toolbar = (Toolbar) findViewById(R.id.sms_validation_register_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final TextView countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
+        countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final String recieved_code = getIntent().getStringExtra("validation_code");
-        final EditText code = (EditText) findViewById(R.id.txtbx_confirm_code_register);
-        final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar_sms_verif_register);
+        code = findViewById(R.id.pinView_smsValidation_register);
+        progress_bar = (ProgressBar) findViewById(R.id.sms_validation_register_progressBar);
+
+        loading = findViewById(R.id.progressBar_sms_verification_register);
 
         retrofit_login = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -69,34 +88,59 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
         final RegisterInterface send = retrofit_sms_verif.create(RegisterInterface.class);
 
-        final Button accept = (Button) findViewById(R.id.btn_accept_code_register);
-        final Button resend = (Button) findViewById(R.id.btn_resendcode_register);
+        accept = findViewById(R.id.btn_accept_code_register);
+        resend = findViewById(R.id.btn_resendcode_register);
+
+//        new CountDownTimer(60000, 1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//
+//                countdown_timer.setText(getText(R.string.remaining_time) + " : " + millisUntilFinished / 1000);
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                countdown_timer.setText("");
+//                if (code.equals("")) {
+//
+//                    countdown_timer.setText("زمان شما به پایان رسید");
+//
+////                    Toast.makeText(
+////                            sms_validation.this
+////                            , "زمان شما به پایان رسید!",
+////                            Toast.LENGTH_SHORT).show();
+//
+//                    finish();
+//                }
+//                accept.setVisibility(View.GONE);
+//                resend.setVisibility(View.VISIBLE);
+//            }
+//        }.start();
 
         new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                //this will be done every 1000 milliseconds ( 1 seconds )
 
-                countdown_timer.setText(getText(R.string.remaining_time) + " : " + millisUntilFinished / 1000);
+                countdown_timer.setText("00:"+millisUntilFinished / 1000);
 
+                long progress = (60000 - millisUntilFinished) / 1000;
+                progress_bar.setProgress((int) progress);
             }
 
             @Override
             public void onFinish() {
-                countdown_timer.setText("");
-                if (code.equals("")) {
+                //the progressBar will be invisible after 60 000 miliseconds ( 1 minute)
 
-                    countdown_timer.setText("زمان شما به پایان رسید");
+                countdown_timer.setText("00:00");
 
-//                    Toast.makeText(
-//                            sms_validation.this
-//                            , "زمان شما به پایان رسید!",
-//                            Toast.LENGTH_SHORT).show();
+                progress_bar.setProgress(60);
 
-                    finish();
-                }
-                accept.setVisibility(View.GONE);
-                resend.setVisibility(View.VISIBLE);
+                resend.animate().alpha(1.0f);
+
             }
+
         }.start();
 
         resend.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +148,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 accept.setVisibility(View.VISIBLE);
-                resend.setVisibility(View.GONE);
+                resend.animate().alpha(0.0f);
 
                 send.send_code(getIntent().getExtras().getString("phone_number")).enqueue(new Callback<ApiResponse>() {
                     @Override
@@ -112,7 +156,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                         if (response.body().getStatus() == 101) {
 
-                            progress.setVisibility(View.GONE);
+//                            progress.setVisibility(View.GONE);
 
                             Toast.makeText(
                                     SmsVerificationActivity.this
@@ -121,7 +165,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                         } else {
 
-                            progress.setVisibility(View.GONE);
+//                            progress.setVisibility(View.GONE);
 
                             Toast.makeText(
                                     SmsVerificationActivity.this
@@ -135,7 +179,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
 
-                        progress.setVisibility(View.GONE);
+//                        progress.setVisibility(View.GONE);
 
                         Toast.makeText(
 
@@ -151,7 +195,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                progress.setVisibility(View.VISIBLE);
+                loading.smoothToShow();
 
                 send.send_verif_code(getIntent().getExtras().getString("phone_number"),Utility.arabicToDecimal(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
@@ -159,7 +203,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                         if (response.body().getStatus() == 101) {
 
-                            progress.setVisibility(View.GONE);
+                            loading.smoothToHide();
 
                             Toast.makeText(
                                     SmsVerificationActivity.this
@@ -210,7 +254,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                         } else {
 
-                            progress.setVisibility(View.GONE);
+                            loading.smoothToHide();
                             Toast.makeText(
                                     SmsVerificationActivity.this
                                     , response.body().getMessage(),
@@ -226,7 +270,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
 
-                        progress.setVisibility(View.GONE);
+                        loading.smoothToHide();
 
                         Toast.makeText(
                                 SmsVerificationActivity.this

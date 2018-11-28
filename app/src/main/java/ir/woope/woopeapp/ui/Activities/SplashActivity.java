@@ -207,7 +207,7 @@ public class SplashActivity extends AppCompatActivity {
                 } else if (response.code() == 401) {
 
                     Intent goto_login = new Intent(SplashActivity.this,
-                            LoginActivity.class);
+                            SplashSelectActivity.class);
                     goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(goto_login);
