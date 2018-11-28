@@ -118,30 +118,32 @@ public class SmsVerificationActivity extends AppCompatActivity {
 //            }
 //        }.start();
 
-        new CountDownTimer(60000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                //this will be done every 1000 milliseconds ( 1 seconds )
-
-                countdown_timer.setText("00:"+millisUntilFinished / 1000);
-
-                long progress = (60000 - millisUntilFinished) / 1000;
-                progress_bar.setProgress((int) progress);
-            }
-
-            @Override
-            public void onFinish() {
-                //the progressBar will be invisible after 60 000 miliseconds ( 1 minute)
-
-                countdown_timer.setText("00:00");
-
-                progress_bar.setProgress(60);
-
-                resend.animate().alpha(1.0f);
-
-            }
-
-        }.start();
+//        new CountDownTimer(60000, 1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                //this will be done every 1000 milliseconds ( 1 seconds )
+//
+//                countdown_timer.setText("00:"+millisUntilFinished / 1000);
+//
+//                long progress = (60000 - millisUntilFinished) / 1000;
+//                progress_bar.setProgress((int) progress);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                //the progressBar will be invisible after 60 000 miliseconds ( 1 minute)
+//
+//                countdown_timer.setText("00:00");
+//
+//                progress_bar.setProgress(60);
+//
+//                resend.animate().alpha(1.0f);
+//                resend.setVisibility(View.VISIBLE);
+//
+//            }
+//
+//        }.start();
+        timer();
 
         resend.setOnClickListener(new View.OnClickListener() {
 
@@ -149,6 +151,8 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                 accept.setVisibility(View.VISIBLE);
                 resend.animate().alpha(0.0f);
+                resend.setVisibility(View.GONE);
+                timer();
 
                 send.send_code(getIntent().getExtras().getString("phone_number")).enqueue(new Callback<ApiResponse>() {
                     @Override
@@ -281,6 +285,36 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    public void timer(){
+
+        new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //this will be done every 1000 milliseconds ( 1 seconds )
+
+                countdown_timer.setText("00:"+millisUntilFinished / 1000);
+
+                long progress = (60000 - millisUntilFinished) / 1000;
+                progress_bar.setProgress((int) progress);
+            }
+
+            @Override
+            public void onFinish() {
+                //the progressBar will be invisible after 60 000 miliseconds ( 1 minute)
+
+                countdown_timer.setText("00:00");
+
+                progress_bar.setProgress(60);
+
+                resend.animate().alpha(1.0f);
+                resend.setVisibility(View.VISIBLE);
+
+            }
+
+        }.start();
 
     }
 
