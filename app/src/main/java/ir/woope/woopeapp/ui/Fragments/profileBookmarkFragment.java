@@ -33,6 +33,7 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.ProfileBookmarkAdapter;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.ListPaddingDecoration;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
@@ -122,6 +123,7 @@ public class profileBookmarkFragment extends Fragment {
         adapter = new ProfileBookmarkAdapter(getActivity(), albumList,itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new ListPaddingDecoration());
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         //recyclerView.setLayoutManager(mLayoutManager);
         //recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));

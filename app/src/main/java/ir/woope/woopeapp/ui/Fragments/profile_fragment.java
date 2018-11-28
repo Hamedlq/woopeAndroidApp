@@ -102,7 +102,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
  * Created by Hamed on 6/11/2018.
  */
 
-public class profile_fragment extends Fragment implements TabLayout.OnTabSelectedListener, RevealBackgroundView.OnStateChangeListener {
+public class profile_fragment extends Fragment implements RevealBackgroundView.OnStateChangeListener {
 
     private View mRecycler;
     public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
@@ -120,9 +120,9 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     //RecyclerView rvUserProfile;
 
     //@BindView(R.id.tlUserProfileTabs)
-    TabLayout tlUserProfileTabs;
+    //TabLayout tlUserProfileTabs;
     //This is our viewPager
-    private ViewPager viewPager;
+    //private ViewPager viewPager;
 
     //@BindView(R.id.ivUserProfilePhoto)
     ImageView ivUserProfilePhoto;
@@ -210,14 +210,14 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto = mRecycler.findViewById(R.id.ivUserProfilePhoto);
-        tlUserProfileTabs = mRecycler.findViewById(R.id.tlUserProfileTabs);
+        //tlUserProfileTabs = mRecycler.findViewById(R.id.tlUserProfileTabs);
         vUserDetails = mRecycler.findViewById(R.id.vUserDetails);
-        btnEdit = mRecycler.findViewById(R.id.btnEditProfile);
+        //btnEdit = mRecycler.findViewById(R.id.btnEditProfile);
         //btnlogout = mRecycler.findViewById(R.id.btn_logout_editprofile);
         vUserStats = mRecycler.findViewById(R.id.vUserStats);
         vUserProfileRoot = mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager
-        viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
+        //viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
         return mRecycler;
     }
 
@@ -226,7 +226,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        /*btnEdit.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
@@ -235,7 +235,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                 startActivityForResult(goto_edit, 110);
 
             }
-        });
+        });*/
 
         /*btnlogout.setOnClickListener(new View.OnClickListener() {
 
@@ -378,9 +378,9 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         //this.profilePhoto = getString(R.string.user_profile_photo);
 
-        setupUserProfileGrid();
+        //setupUserProfileGrid();
 
-        setupTabs();
+       //setupTabs();
 
         setupRevealBackground(savedInstanceState);
 
@@ -402,7 +402,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
                     @Override
                     public void run() {
                             // Code to run once
-                           showFavHint();
+                           //showHint();
                     }
                 });
             }
@@ -410,7 +410,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         }
     }
 
-    private void showHint () {
+    /*private void showHint () {
 
         final TapTargetSequence sequence = new TapTargetSequence(getActivity())
                 .targets(
@@ -487,9 +487,9 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         sequence.start();
 
-    }
+    }*/
 
-    private void setupTabs() {
+    /*private void setupTabs() {
 
         tlUserProfileTabs.setupWithViewPager(viewPager);
 
@@ -498,9 +498,9 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         //tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
         tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_dots));
 
-    }
+    }*/
 
-    private void setupUserProfileGrid() {
+   /* private void setupUserProfileGrid() {
 
         //Creating our pager adapter
         ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
@@ -513,24 +513,24 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
         tlUserProfileTabs.setOnTabSelectedListener(this);
 
-        /*final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        rvUserProfile.setLayoutManager(layoutManager);*/
+        *//*final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        rvUserProfile.setLayoutManager(layoutManager);*//*
 
         //rvUserProfile.setAdapter(profileTabAdapter);
-        /*rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        *//*rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 profileTabAdapter.setLockedAnimations(true);
             }
-        });*/
+        });*//*
 
-        /*rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        *//*rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 userPhotosAdapter.setLockedAnimations(true);
             }
-        });*/
-    }
+        });*//*
+    }*/
 
     private void setupRevealBackground(Bundle savedInstanceState) {
         vRevealBackground.setOnStateChangeListener(this);
@@ -553,26 +553,26 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public void onStateChange(int state) {
         if (RevealBackgroundView.STATE_FINISHED == state) {
-            viewPager.setVisibility(View.VISIBLE);
-            tlUserProfileTabs.setVisibility(View.VISIBLE);
+            //viewPager.setVisibility(View.VISIBLE);
+            //tlUserProfileTabs.setVisibility(View.VISIBLE);
             vUserProfileRoot.setVisibility(View.VISIBLE);
-            ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
-            viewPager.setAdapter(adapter);
-            tlUserProfileTabs.getTabAt(0).setIcon(R.drawable.ic_dots);
-            tlUserProfileTabs.getTabAt(1).setIcon(R.drawable.ic_dots);
-            animateUserProfileOptions();
+            //ProfilePageAdapter adapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), tlUserProfileTabs.getTabCount());
+            //viewPager.setAdapter(adapter);
+            //tlUserProfileTabs.getTabAt(0).setIcon(R.drawable.ic_dots);
+            //tlUserProfileTabs.getTabAt(1).setIcon(R.drawable.ic_dots);
+            //animateUserProfileOptions();
             animateUserProfileHeader();
         } else {
-            tlUserProfileTabs.setVisibility(View.INVISIBLE);
-            viewPager.setVisibility(View.INVISIBLE);
+            //tlUserProfileTabs.setVisibility(View.INVISIBLE);
+            //viewPager.setVisibility(View.INVISIBLE);
             vUserProfileRoot.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void animateUserProfileOptions() {
+   /* private void animateUserProfileOptions() {
         tlUserProfileTabs.setTranslationY(-tlUserProfileTabs.getHeight());
         tlUserProfileTabs.animate().translationY(0).setDuration(300).setStartDelay(USER_OPTIONS_ANIMATION_DELAY).setInterpolator(INTERPOLATOR);
-    }
+    }*/
 
     private void animateUserProfileHeader() {
         vUserProfileRoot.setTranslationY(-vUserProfileRoot.getHeight());
@@ -610,7 +610,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
         isImageUploaded = true;
     }
 
-    @Override
+/*    @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
     }
@@ -623,7 +623,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
-    }
+    }*/
 
     private void uploadFile(Uri fileUri) {
         // create upload service client
@@ -702,7 +702,7 @@ public class profile_fragment extends Fragment implements TabLayout.OnTabSelecte
 
                     } else
                         Picasso.with(getActivity())
-                                .load(R.drawable.user)
+                                .load(R.drawable.group34)
                                 .placeholder(R.drawable.img_circle_placeholder)
                                 .resize(avatarSize, avatarSize)
                                 .centerCrop()

@@ -139,9 +139,9 @@ public class search_fragment extends Fragment {
         albumList = new ArrayList<>();
         adapter = new StoreSearchAdapter(getActivity(), albumList,itemTouchListener);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(2), false));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(2), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
