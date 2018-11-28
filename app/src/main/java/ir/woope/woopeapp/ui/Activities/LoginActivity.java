@@ -24,6 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.wang.avi.AVLoadingIndicatorView;
+
 import java.io.IOException;
 
 import ir.woope.woopeapp.R;
@@ -49,19 +52,12 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class LoginActivity extends AppCompatActivity {
 
-
-
-    Animation rotateonceAnim;
     ImageView wplogologin;
     Toolbar toolbar;
-    private void rotationAnimation() {
-
-        rotateonceAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_once);
-        wplogologin.startAnimation(rotateonceAnim);
-
-    }
 
     Retrofit retrofit_login;
+
+    MaterialRippleLayout enter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,16 +65,13 @@ public class LoginActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_login);
 
-
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
 
         View usr= findViewById(R.id.txtbx_userphone_login);
         View pass = findViewById(R.id.txtbx_password_login);
 
-
         wplogologin = findViewById(R.id.imgbx_logo_login);
-
 
         TextView forgetpass = (TextView) findViewById(R.id.txt_forget_pass);
 
@@ -96,9 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-        final Button enter = (Button) findViewById(R.id.btn_enter_login);
+        enter = findViewById(R.id.btn_enter_login);
 
         retrofit_login = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -112,14 +103,14 @@ public class LoginActivity extends AppCompatActivity {
 
         final LoginInterface login = retrofit_login.create(LoginInterface.class);
         final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
-        final ProgressBar enterprogress = (ProgressBar) findViewById(R.id.enter_progressbar_login);
+        final AVLoadingIndicatorView enterprogress = findViewById(R.id.progressBar_login);
 
         enter.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
                 enter.setVisibility(View.GONE);
-                enterprogress.setVisibility(View.VISIBLE);
+                enterprogress.smoothToShow();
 
                 login.send_info(username.getText().toString(), Utility.arabicToDecimal(password.getText().toString()), "password").enqueue(new Callback<AccessToken>() {
                     @Override
@@ -127,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (response.code() == 200) {
 
-                            enterprogress.setVisibility(View.GONE);
+                            enterprogress.smoothToHide();
                             enter.setVisibility(View.VISIBLE);
 
                             final String tk = response.body().getAccessToken();
@@ -182,14 +173,14 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
 
                                     enter.setVisibility(View.VISIBLE);
-                                    enterprogress.setVisibility(View.GONE);
+                                    enterprogress.smoothToHide();
                                 }
                             });
 
 
                         } else {
 
-                            enterprogress.setVisibility(View.GONE);
+                            enterprogress.smoothToHide();
                             enter.setVisibility(View.VISIBLE);
 
                             Toast.makeText(
@@ -209,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
 
                         enter.setVisibility(View.VISIBLE);
-                        enterprogress.setVisibility(View.GONE);
+                        enterprogress.smoothToHide();
                     }
                 });
 

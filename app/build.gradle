@@ -85,9 +85,8 @@ dependencies {
 
     implementation 'com.github.ceryle:RadioRealButton:v2.1.1'
 
-    implementation 'com.unstoppable:submitbutton:1.1.3'
 
-    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.1'
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.1.0'
 
     implementation  'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 
@@ -103,5 +102,9 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
 
     implementation 'com.wang.avi:library:2.1.3'
+
+    implementation 'com.balysv:material-ripple:1.0.2'
+
+    implementation 'com.chaos.view:pinview:1.4.2'
 
 }

@@ -13,50 +13,55 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:focusableInTouchMode="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/login_toolbar"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/login_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center_vertical"
+            android:layoutDirection="rtl"
+            android:background="@color/transparent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:text="ورود" />
+
+        </android.support.v7.widget.Toolbar>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="center_vertical"
-                android:layoutDirection="rtl"
-                android:background="@color/transparent">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:paddingLeft="50dp"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:layout_height="match_parent"
-                    android:text="ورود" />
-
-            </android.support.v7.widget.Toolbar>
-
-            <ImageView
-                android:id="@+id/imgbx_logo_login"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="30dp"
-                android:soundEffectsEnabled="true"
-                app:srcCompat="@drawable/logo_white" />
+                <ImageView
+                    android:id="@+id/imgbx_logo_login"
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="30dp"
+                    android:soundEffectsEnabled="true"
+                    app:srcCompat="@drawable/logo_white" />
 
 
                 <EditText
                     android:id="@+id/txtbx_userphone_login"
-                    android:background="@drawable/group1776"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
+                    android:background="@drawable/group1776"
                     android:gravity="center"
                     android:hint="نام کاربری/شماره موبایل"
                     android:inputType="textPersonName"
@@ -67,49 +72,83 @@
 
                 <EditText
                     android:id="@+id/txtbx_password_login"
-                    android:background="@drawable/group1777"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/group1777"
                     android:gravity="center"
                     android:hint="رمز عبور"
                     android:inputType="textPassword"
                     android:textColor="@color/white"
                     android:textColorHint="@color/textPrimary"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
-            <TextView
-                android:id="@+id/txt_forget_pass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/forget_password"
-                android:textStyle=""
-                android:textSize="12sp"
-                android:textColor="@color/textPrimary" />
-
-
-            <ProgressBar
-                android:id="@+id/enter_progressbar_login"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:indeterminateDrawable="@drawable/progress_white"
-                android:visibility="gone"
-                tools:visibility="gone" />
-            <Button
-                android:id="@+id/btn_enter_login"
-                android:layout_marginTop="30dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/group1785"
-                android:text="@string/login"
-                android:textSize="14sp"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/txt_forget_pass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/underline"
+                    android:includeFontPadding="true"
+                    android:paddingBottom="20dp"
+                    android:text="@string/forget_password"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="" />
 
 
+                <ProgressBar
+                    android:id="@+id/enter_progressbar_login"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:indeterminateDrawable="@drawable/progress_white"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/progressBar_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:visibility="gone"
+                    app:indicatorColor="#59CC89"
+                    app:indicatorName="BallPulseIndicator" />
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/btn_enter_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="40dp"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/group1785"
+                    app:mrl_rippleRoundedCorners="50dp"
+                    app:mrl_rippleHover="true"
+                    app:mrl_rippleDelayClick="true"
+                    app:mrl_rippleOverlay="true"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <!--<Button-->
+                    <!--android:id="@+id/btn_enter_login"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="30dp"-->
+                    <!--android:background="@drawable/group1785"-->
+                    <!--android:text="@string/login"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="14sp" />-->
+
+
+            </LinearLayout>
 
         </LinearLayout>
 

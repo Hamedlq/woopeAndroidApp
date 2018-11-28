@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.balysv.materialripple.MaterialRippleLayout;
 
 import com.google.gson.Gson;
 
@@ -38,9 +42,9 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 public class SplashSelectActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_enter_login)
-    protected Button btn_enter_login;
+    protected MaterialRippleLayout btn_enter_login;
     @BindView(R.id.btn_register)
-    protected Button btn_register;
+    protected MaterialRippleLayout btn_register;
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -72,6 +76,34 @@ public class SplashSelectActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        btn_register.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+//
+//            @Override
+//            public void onComplete(RippleView rippleView) {
+//                Intent goto_register = new Intent(SplashSelectActivity.this,
+//                        UserRegisterActivity.class);
+//                {
+//                    startActivity(goto_register);
+//                    finish();
+//                }
+//            }
+//
+//        });
+//
+//        btn_enter_login.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+//
+//            @Override
+//            public void onComplete(RippleView rippleView) {
+//                Intent goto_login = new Intent(SplashSelectActivity.this,
+//                        LoginActivity.class);
+//                {
+//                    startActivity(goto_login);
+//                    finish();
+//                }
+//            }
+//
+//        });
 
     }
 }

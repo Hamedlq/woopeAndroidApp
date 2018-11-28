@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
@@ -25,21 +30,26 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
     Retrofit retrofit_changepass;
 
+    Toolbar toolbar;
+
+    MaterialRippleLayout send;
+
+    AVLoadingIndicatorView progress;
+
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sendnumber_changepass);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-//        }
+        toolbar = (Toolbar) findViewById(R.id.sendnumber_changepass_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final EditText number = (EditText) findViewById(R.id.txtbx_sendnumber_changepass);
-        final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar_sendnumber_changepass);
-        final Button send = (Button) findViewById(R.id.btn_sendnumber_changepass);
+        progress = findViewById(R.id.progressBar_sendnumber_changepass);
+        send = findViewById(R.id.btn_sendnumber_changepass);
 
         retrofit_changepass = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -52,7 +62,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                progress.setVisibility(View.VISIBLE);
+                progress.smoothToShow();
                 send.setVisibility(View.GONE);
 
                 changepass.send_mobile(number.getText().toString()).enqueue(new Callback<ApiResponse>() {
@@ -61,7 +71,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
                         if (response.body().getStatus() == 101) {
 
-                            progress.setVisibility(View.GONE);
+                            progress.smoothToHide();
 
                             Toast.makeText(
                                     SendNumber_ChangePassActivity.this
@@ -75,7 +85,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
                         } else {
 
-                            progress.setVisibility(View.GONE);
+                            progress.smoothToHide();
                             send.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(
@@ -94,7 +104,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
 
-                        progress.setVisibility(View.GONE);
+                        progress.smoothToHide();
                         send.setVisibility(View.VISIBLE);
 
                         Toast.makeText(
@@ -105,5 +115,28 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent goto_select = new Intent(SendNumber_ChangePassActivity.this,
+                LoginActivity.class);
+        {
+            startActivity(goto_select);
+            finish();
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            Intent goto_select = new Intent(SendNumber_ChangePassActivity.this,
+                    LoginActivity.class);
+            {
+                startActivity(goto_select);
+                finish();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

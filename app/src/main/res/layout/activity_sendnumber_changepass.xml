@@ -4,12 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/login">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/sendnumber_changepass_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center_vertical"
+            android:background="@color/transparent"
+            android:layoutDirection="rtl">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="رمز خود را فراموش کرده اید؟"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+        </android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +52,7 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
                 android:soundEffectsEnabled="true"
-                app:srcCompat="@drawable/woope_blue" />
+                app:srcCompat="@drawable/logo_white" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -34,61 +60,82 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="شماره موبایل خود را وارد کنید"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/sendnumber_changepass_layout"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:textColor="@color/textPrimary"
-            android:textColorHint="@color/textPrimary"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
             <EditText
                 android:id="@+id/txtbx_sendnumber_changepass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/white"
-                android:ellipsize="start"
-                android:ems="10"
-                android:gravity="center_horizontal"
-                android:hint="09xxxxxxxxx"
+                android:background="@drawable/phonenumber_background"
+                android:gravity="center"
+                android:hint="شماره موبایل"
                 android:inputType="phone"
                 android:maxLength="11"
+                android:layout_marginTop="30dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/textPrimary"
                 android:textDirection="rtl"
                 android:textSize="18sp" />
 
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/btn_sendnumber_changepass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="40dp"
+                android:paddingBottom="10dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/accept_button"
+                app:mrl_rippleRoundedCorners="50dp"
+                app:mrl_rippleHover="true"
+                app:mrl_rippleDelayClick="true"
+                app:mrl_rippleOverlay="true"
+                >
 
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/btn_sendnumber_changepass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/button_border"
-            android:text="@string/accept"
-            android:textColor="@color/white" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_sendnumber_changepass"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@drawable/accept_button"-->
+            <!---->
+            <!--android:textColor="@color/white" />-->
 
 
-    <ProgressBar
-        android:id="@+id/progressBar_sendnumber_changepass"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="42dp"
-        android:indeterminateDrawable="@drawable/progress_white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/llLinearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone" />
+    <!--<ProgressBar-->
+        <!--android:id="@+id/progressBar_sendnumber_changepass"-->
+        <!--style="?android:attr/progressBarStyle"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="42dp"-->
+        <!--android:indeterminateDrawable="@drawable/progress_white"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/llLinearLayout"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.498"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+         <!--/>-->
 
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/progressBar_sendnumber_changepass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:visibility="gone"
+                app:indicatorColor="#59CC89"
+                app:indicatorName="BallPulseIndicator" />
+
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

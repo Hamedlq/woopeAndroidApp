@@ -15,7 +15,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-
+import android.view.animation.TranslateAnimation;
 
 
 import java.lang.reflect.Field;
@@ -106,6 +106,23 @@ public class Utility {
         if(hadContentDescription)
             toolbar.setNavigationContentDescription(null);
         return navIcon;
+    }
+
+    // To animate view slide out from left to right
+    public void slideToRight(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
+    }
+    // To animate view slide out from right to left
+    public void slideToLeft(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,-view.getWidth(),0,0);
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.GONE);
     }
 
 }
