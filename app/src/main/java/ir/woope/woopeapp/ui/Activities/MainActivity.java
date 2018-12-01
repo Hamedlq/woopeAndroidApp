@@ -24,6 +24,7 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +38,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -67,6 +69,7 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
 import me.toptas.fancyshowcase.FancyShowCaseView;
@@ -82,6 +85,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     boolean getProfileFromServer = false;
     String authToken = null;
     Profile profile = null;
-
+    FloatingActionButton fab;
 
     View nav_store;
 
@@ -143,6 +147,21 @@ public class MainActivity extends AppCompatActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
                         fragmentManager.beginTransaction()
                                 .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
+                                .commit();
+                        IsOnSearch = true;
+                        IsOnHome = false;
+                        IsOnProfile = false;
+                        return true;
+                    }
+                    else break;
+                case R.id.navigation_favorite:
+                    if (!IsOnSearch) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new profileBookmarkFragment(), SEARCH_FRAGMENT)
                                 .commit();
                         IsOnSearch = true;
                         IsOnHome = false;
@@ -234,7 +253,18 @@ public class MainActivity extends AppCompatActivity {
 //                .showOnce("id0")
 //                .build();
 
-
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Profile obj =getUserProfile();
+                Intent myIntent = new Intent(MainActivity.this, TransactionActivity.class);
+                myIntent.putExtra(PREF_PROFILE, obj);
+                startActivity(myIntent);
+                overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                return false;
+            }
+        });
     }
 
 

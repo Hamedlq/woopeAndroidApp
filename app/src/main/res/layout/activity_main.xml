@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:backgroundTint="@color/fab_btn"
+        app:backgroundTint="@color/fab_btn"
         android:src="@drawable/woope_icon"
         app:fabSize="normal"
         android:layout_centerInParent="true"

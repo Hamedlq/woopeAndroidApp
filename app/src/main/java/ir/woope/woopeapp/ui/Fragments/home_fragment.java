@@ -262,11 +262,16 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
-                Profile obj =((MainActivity)getActivity()).getUserProfile();
+                Profile userobj =((MainActivity)getActivity()).getUserProfile();
+                Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
+                giftIntent.putExtra(PREF_PROFILE, userobj);
+                getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                /*Profile obj =((MainActivity)getActivity()).getUserProfile();
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 getActivity().startActivity(myIntent);
-                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);*/
                 break;
             /*case android.R.id.home:
                 Profile userobj =((MainActivity)getActivity()).getUserProfile();
