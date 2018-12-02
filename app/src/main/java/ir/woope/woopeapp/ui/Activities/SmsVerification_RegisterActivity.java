@@ -2,18 +2,11 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +57,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.sms_validation_register_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
@@ -151,7 +144,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                 accept.setVisibility(View.VISIBLE);
                 resend.animate().alpha(0.0f);
-                resend.setVisibility(View.GONE);
+                resend.setVisibility(View.INVISIBLE);
                 timer();
 
                 send.send_code(getIntent().getExtras().getString("phone_number")).enqueue(new Callback<ApiResponse>() {

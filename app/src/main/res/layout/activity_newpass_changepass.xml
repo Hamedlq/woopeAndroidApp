@@ -30,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="ثبت نام"
+                    android:text="تغییر رمز عبور"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -49,8 +49,8 @@
 
                 <ImageView
                     android:id="@+id/imgbx_logo_login"
-                    android:layout_width="150dp"
-                    android:layout_height="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:soundEffectsEnabled="true"
                     app:srcCompat="@drawable/logo_white" />
@@ -63,23 +63,22 @@
                     android:layout_marginTop="30dp"
                     android:background="@drawable/password_background"
                     android:gravity="center"
-                    android:hint="@string/password"
+                    android:hint="@string/new_password"
                     android:inputType="textPassword"
                     android:textColor="@color/white"
                     android:textColorHint="@color/textPrimary"
-                    android:textDirection="ltr"
-                    android:textSize="11sp"/>
+                    android:textSize="12sp"/>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    android:id="@+id/btn_accept_register"
+                    android:id="@+id/btn_accept_changepass"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="40dp"
                     android:paddingTop="10dp"
                     android:paddingEnd="40dp"
                     android:paddingBottom="10dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/register_button"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/changepass_button"
                     app:mrl_rippleRoundedCorners="50dp"
                     app:mrl_rippleHover="true"
                     app:mrl_rippleDelayClick="true"
@@ -92,28 +91,6 @@
 
                 </com.balysv.materialripple.MaterialRippleLayout>
 
-                <!--<Button-->
-                <!--android:id="@+id/btn_accept_registerr"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:background="@drawable/register_button"-->
-                <!--android:paddingStart="40dp"-->
-                <!--android:paddingTop="10dp"-->
-                <!--android:paddingEnd="40dp"-->
-                <!--android:paddingBottom="10dp"-->
-                <!--android:textColor="@color/white" />-->
-
-
-                <ProgressBar
-                    android:id="@+id/progressBar_userinfo"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="44dp"
-                    android:indeterminateDrawable="@drawable/progress_white"
-                    android:visibility="gone"
-                    tools:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
