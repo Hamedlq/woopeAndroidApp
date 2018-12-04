@@ -1,13 +1,18 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.smarteist.autoimageslider.SliderLayout;
-import com.smarteist.autoimageslider.SliderView;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+
 
 import java.util.HashMap;
 
@@ -17,52 +22,46 @@ public class SliderActivity extends AppCompatActivity {
 
     SliderLayout slider;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slider);
-        //slider = findViewById(R.id.imageSlider);
 
-        //slider.setIndicatorAnimation(SliderLayout.Animations.SWAP);
 
-        //setSliderViews();
+        slider = (SliderLayout)findViewById(R.id.slider);
 
-    }
+        HashMap<String,String> url_maps = new HashMap<String, String>();
+        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
 
-    private void setSliderViews(){
+        HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
+        file_maps.put("1",R.drawable.slider1);
+        file_maps.put("2",R.drawable.slider2);
+        file_maps.put("3",R.drawable.slider3);
+        file_maps.put("4", R.drawable.slider4);
 
-        for (int i = 0; i <= 3; i++) {
+        for(String name : file_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(this);
+            // initialize a SliderLayout
+            textSliderView
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
 
-            SliderView sliderView = new SliderView(this);
-
-            switch (i) {
-                case 0:
-                    sliderView.setImageDrawable(R.drawable.slider1);
-                    break;
-                case 1:
-                    sliderView.setImageDrawable(R.drawable.slider2);
-                    break;
-                case 2:
-                    sliderView.setImageDrawable(R.drawable.slider3);
-                    break;
-                case 3:
-                    sliderView.setImageDrawable(R.drawable.slider4);
-                    break;
-            }
-
-            sliderView.setImageScaleType(ImageView.ScaleType.FIT_CENTER);
-            final int finalI = i;
-            sliderView.setOnSliderClickListener(new SliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(SliderView sliderView) {
-                    Toast.makeText(SliderActivity.this, "This is slider " + (finalI + 1), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            //at last add this view in your layout :
-            slider.addSliderView(sliderView);
+            slider.addSlider(textSliderView);
         }
 
+        slider.setPresetTransformer(SliderLayout.Transformer.ZoomOut);
+
+
+
     }
+
+
+
+
 
 }

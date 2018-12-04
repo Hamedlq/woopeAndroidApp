@@ -108,21 +108,6 @@ public class Utility {
         return navIcon;
     }
 
-    // To animate view slide out from left to right
-    public void slideToRight(View view){
-        TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-        view.setVisibility(View.GONE);
-    }
-    // To animate view slide out from right to left
-    public void slideToLeft(View view){
-        TranslateAnimation animate = new TranslateAnimation(0,-view.getWidth(),0,0);
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-        view.setVisibility(View.GONE);
-    }
+
 
 }

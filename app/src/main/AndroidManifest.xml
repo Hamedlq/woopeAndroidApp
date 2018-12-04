@@ -112,10 +112,7 @@
         <activity android:name=".ui.Activities.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".ui.Activities.SendNumber_ChangePassActivity"
             android:label=""
@@ -148,7 +145,10 @@
         <activity android:name=".ui.Activities.SliderActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
     </application>
