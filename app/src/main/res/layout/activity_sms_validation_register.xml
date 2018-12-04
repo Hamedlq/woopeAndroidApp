@@ -132,18 +132,24 @@
                     app:lineColor="@color/white"
                     app:viewType="line" />
 
-                <TextView
-                    android:id="@+id/btn_resendcode_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:alpha="0.0"
-                    android:animateLayoutChanges="true"
-                    android:background="@drawable/underline"
-                    android:paddingBottom="20dp"
-                    android:text="ارسال مجدد کد تایید"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+            <com.chaos.view.PinView
+                android:id="@+id/pinView_smsValidation_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:padding="5dp"
+                app:itemCount="6"
+                app:lineColor="@color/white"
+                app:itemWidth="44dp"
+                app:viewType="line"
+                android:layout_marginTop="10dp"
+                app:cursorColor="@color/gray"
+                android:focusable="true"
+                android:cursorVisible="true"
+                style="@style/PinWidget.PinView" />
 
 
                 <!--<Button-->

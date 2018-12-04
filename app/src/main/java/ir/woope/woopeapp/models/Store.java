@@ -36,5 +36,6 @@ public class Store extends ApiResponse implements Serializable {
     public boolean isCashPayAllowed;
     public boolean isAdvertise;
     public String website;
+    public String address;
     public String woopeThreshold;
 }

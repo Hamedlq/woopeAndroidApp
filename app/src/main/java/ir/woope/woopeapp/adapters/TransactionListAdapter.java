@@ -16,8 +16,7 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.PayListModel;
-import ir.woope.woopeapp.ui.Activities.PayActivity;
-import ir.woope.woopeapp.ui.Fragments.TransListFragment;
+import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 
 /**
  * Created by alireza on 3/30/18.
@@ -25,15 +24,15 @@ import ir.woope.woopeapp.ui.Fragments.TransListFragment;
 
 public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.MyViewHolder> {
 
-    private TextView name_tv;
+    private TextView title;
     private TextView total_price;
     private TextView paytype;
-    private ImageView ic_item;
+    private ImageView thumbnail;
     private Context context;
 
     private List<PayListModel> orderModels;
 
-    private TransListFragment.PayTransactionTouchListener payTransactionTouchListener;
+    private TransactionActivity.PayTransactionTouchListener payTransactionTouchListener;
 
     private long startClickTime;
     private static final int MAX_CLICK_DURATION = 200;
@@ -44,7 +43,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     }
 
 
-    public TransactionListAdapter(Context context,List<PayListModel> list, TransListFragment.PayTransactionTouchListener payTransactionTouchListener) {
+    public TransactionListAdapter(Context context,List<PayListModel> list, TransactionActivity.PayTransactionTouchListener payTransactionTouchListener) {
         this.orderModels = list;
         this.payTransactionTouchListener=payTransactionTouchListener;
         this.context=context;
@@ -67,9 +66,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         public MyViewHolder(View view) {
             super(view);
             total_price = view.findViewById(R.id.total_price);
-            name_tv= view.findViewById(R.id.store_name_textview);
+            title= view.findViewById(R.id.title);
             paytype= view.findViewById(R.id.paytype);
-            ic_item=view.findViewById(R.id.ic_item);
+            thumbnail=view.findViewById(R.id.thumbnail);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -82,8 +81,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     @Override
     public void onBindViewHolder(TransactionListAdapter.MyViewHolder holder, int position) {
         total_price.setText(String.valueOf(orderModels.get(position).totalPrice)+" تومان ");
-        name_tv.setText(orderModels.get(position).storeName);
-        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + orderModels.get(position).logoSrc).into(ic_item);
+        title.setText(orderModels.get(position).storeName);
+        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + orderModels.get(position).logoSrc).into(thumbnail);
         if(orderModels.get(position).payType==1){
             paytype.setText("نقدی");
         }else{

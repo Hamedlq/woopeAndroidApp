@@ -295,28 +295,43 @@
                     </android.support.v7.widget.CardView>
                 </LinearLayout>
 
-            </LinearLayout>
-
-
-
-            <!--<FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tlUserProfileTabs"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="?attr/colorAccent"
-                    app:tabGravity="fill"
-                    app:tabIndicatorColor="#5be5ad"
-                    app:tabIndicatorHeight="4dp"
-                    app:tabMode="fixed" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    card_view:cardBackgroundColor="@color/white"
+                    android:elevation="13dp"
+                    android:layout_margin="15dp"
+                    card_view:cardCornerRadius="5dp">
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:id="@+id/history_layout"
+                        android:layout_margin="8dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/left_arrow"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="تاریخچه پرداخت ها"
+                            android:textStyle="bold"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp" />
 
-                &lt;!&ndash; View pager to swipe views &ndash;&gt;
-
-
-            </FrameLayout>-->
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
 
         </android.support.design.widget.AppBarLayout>
 

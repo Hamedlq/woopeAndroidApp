@@ -38,6 +38,8 @@ public class PayCodeActivity extends AppCompatActivity {
     protected ImageView backdrop;
     @BindView(R.id.button)
     protected Button btn;
+    @BindView(R.id.store_name)
+    protected TextView StoreName_tv;
     String profileString;
     String transactionString;
     String payedPoints;
@@ -61,7 +63,7 @@ public class PayCodeActivity extends AppCompatActivity {
 
         TextView ConfirmCode = findViewById(R.id.ConfirmCode);
 
-        TextView StoreName_tv=findViewById(R.id.StoreName);
+        //TextView StoreName_tv=findViewById(R.id.StoreName);
         StoreName_tv.setText(payListModel.storeName);
 
         ConfirmCode.setText(payListModel.confirmationCode);
@@ -81,7 +83,7 @@ public class PayCodeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        toolbar = (Toolbar) findViewById(R.id.codepay_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
     }

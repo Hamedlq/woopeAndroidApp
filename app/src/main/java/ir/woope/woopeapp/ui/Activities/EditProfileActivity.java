@@ -1,8 +1,10 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -76,8 +78,8 @@ public class EditProfileActivity extends AppCompatActivity {
         age = findViewById(R.id.txtbx_age_editprofile);
         email = findViewById(R.id.txtbx_email_editprofile);
         bio = findViewById(R.id.txtbx_userbio_editprofile);
-        editprogress = findViewById(R.id.progressBar_editprofile);
-        sendedit = findViewById(R.id.btn_send_editprofile);
+        editprogress = findViewById(R.id.progressBar);
+        sendedit = findViewById(R.id.button);
 
         final RadioRealButtonGroup group = findViewById(R.id.realradiogroup_gender_editprofile);
 
@@ -101,12 +103,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 .build();
 
         final EditProfileInterface edit = retrofit_editprofile.create(EditProfileInterface.class);
-
+        showProgreeBar();
         edit.getProfileFromServer("bearer " + token).enqueue(new Callback<Profile>() {
 
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {
-
+                hideProgreeBar();
                 if (response.code() == 200) {
                     name.setText(response.body().getName());
                     family.setText(response.body().getFamily());
@@ -123,8 +125,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
-
-
+                hideProgreeBar();
             }
         });
 
@@ -231,5 +232,36 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
+    public void showProgreeBar() {
+        editprogress.setVisibility(View.VISIBLE);
+        sendedit.setEnabled(false);
+    }
 
+
+    public void hideProgreeBar() {
+        editprogress.setVisibility(View.GONE);
+        sendedit.setEnabled(true);
+    }
+
+    private void showFillError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("آیا می‌خواهید از حساب کاربری خود خارج شوید؟").setPositiveButton("بله", ConfirmDialogClickListener).setNegativeButton("نه فعلا",ConfirmDialogClickListener).show();
+    }
+
+
+    DialogInterface.OnClickListener ConfirmDialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+
+                    dialog.dismiss();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+
+                    dialog.dismiss();
+                    break;
+            }
+        }
+    };
 }

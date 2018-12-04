@@ -1,12 +1,10 @@
 package ir.woope.woopeapp.ui.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -23,10 +24,8 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
-import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
-import ir.woope.woopeapp.ui.Fragments.TransListFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,16 +33,28 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 
 public class GiftActivity extends AppCompatActivity {
     Profile profile;
     @BindView(R.id.txtbx_gift_code)
     protected EditText txtbx_gift_code;
+    @BindView(R.id.gift_result)
+    protected TextView gift_result;
     @BindView(R.id.button)
     protected Button button;
+    @BindView(R.id.gift_response)
+    protected LinearLayout gift_response;
     @BindView(R.id.progressBar)
     protected ProgressBar progressBar;
+    @BindView(R.id.ok_result)
+    protected ImageView ok_result;
+    @BindView(R.id.nok_result)
+    protected ImageView nok_result ;
+    @BindView(R.id.ok_res)
+    protected ImageView ok_res;
+    @BindView(R.id.nok_res)
+    protected ImageView nok_res ;
+
     String authToken;
 
     //Store store;
@@ -99,27 +110,40 @@ public class GiftActivity extends AppCompatActivity {
                 int code = response.code();
                 if (code == 200) {
                     if(response.body().getStatus()==202){
+                        gift_response.setVisibility(View.VISIBLE);
+                        nok_res.setVisibility(View.VISIBLE);
+                        nok_result.setVisibility(View.VISIBLE);
+                        gift_result.setText("کد هدیه اشتباه است");
+/*
                         Toast.makeText(
                                 GiftActivity.this
                                 , response.body().getMessage(),
                                 Toast.LENGTH_SHORT).show();
+*/
                     }
                     if(response.body().getStatus()==101){
-                        Toast.makeText(
+                        gift_response.setVisibility(View.VISIBLE);
+                        ok_res.setVisibility(View.VISIBLE);
+                        ok_result.setVisibility(View.VISIBLE);
+                        gift_result.setText("کد هدیه اعمال شد");
+                        /*Toast.makeText(
                                 GiftActivity.this
                                 , response.body().getMessage(),
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();*/
                         Intent i=getIntent();
                         setResult(RESULT_OK, i);
                         finish();
                     }
-
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 hideProgreeBar();
+                gift_response.setVisibility(View.VISIBLE);
+                nok_res.setVisibility(View.VISIBLE);
+                nok_result.setVisibility(View.VISIBLE);
+                gift_result.setText("خطا در ارتباط");
             }
         });
     }
@@ -148,11 +172,13 @@ public class GiftActivity extends AppCompatActivity {
 
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
+        button.setEnabled(false);
     }
 
 
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
+        button.setEnabled(true);
     }
 
 }

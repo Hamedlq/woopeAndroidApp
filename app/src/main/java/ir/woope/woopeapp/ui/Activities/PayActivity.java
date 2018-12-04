@@ -10,9 +10,11 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -28,6 +30,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -90,9 +93,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected Switch switch_credit;
     @BindView(R.id.switch_woope)
     protected Switch switch_woope;
-    @BindView(R.id.amount)
-    protected EditText amount;
-    @BindView(R.id.StoreName)
+   /* @BindView(R.id.amount)
+    protected EditText amount;*/
+    @BindView(R.id.store_name)
     protected TextView StoreName_tv;
     @BindView(R.id.progressBar)
     protected ProgressBar progressBar;
@@ -122,9 +125,30 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected RelativeLayout tr5;
     @BindView(R.id.tax)
     protected TextView tax;
-    @BindView(R.id.radioGroup_payType)
-    protected RadioGroup payType;
+    @BindView(R.id.cash_card)
+    protected CardView cash_card;
+    @BindView(R.id.online_card)
+    protected CardView online_card;
+    @BindView(R.id.woope_layout)
+    protected CardView woope_layout;
+    @BindView(R.id.credit_layout)
+    protected CardView credit_layout;
+    @BindView(R.id.pay_radio_cash)
+    protected ImageView pay_radio_cash;
+    @BindView(R.id.pay_radio_credit)
+    protected ImageView pay_radio_credit;
+    @BindView(R.id.drawer_icon)
+    protected ImageView drawer_icon;
+    @BindView(R.id.drawer_pull)
+    protected RelativeLayout drawer_pull;
 
+    @BindView(R.id.detail_layout)
+    protected LinearLayout detail_layout;
+
+
+
+    @BindView(R.id.payBtn)
+    protected Button btn;
     //amount = findViewById(R.id.amount);
     Store store;
     //long totalPrice;
@@ -135,14 +159,13 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     String authToken;
     Profile profile;
     String profileJson;
-    Button btn;
     //ProgressBar progressBar;
-    LinearLayout cash_layout;
-    RadioButton cash_radio;
-    LinearLayout credit_layout;
-    RadioButton credit_radio;
+
+
     String profileString;
     boolean flag;
+    boolean isOnline=true;
+    boolean isDetailShow=false;
     //boolean saveTransactionFlag=true;
     PayListModel savedPayListModel;
     long totalPrice=0;
@@ -175,41 +198,73 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
 
         ButterKnife.bind(this);
-        amount.addTextChangedListener(onTextChangedListener());
+        //amount.addTextChangedListener(onTextChangedListener());
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            totalPrice=savedPayListModel.totalPrice;
             getStore(savedPayListModel.branchId);
-            amount.setText(String.valueOf(savedPayListModel.totalPrice));
+            //amount.setText(String.valueOf(savedPayListModel.totalPrice));
             StoreName_tv.setText(savedPayListModel.storeName);
             Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).into(backdrop);
+            calculateValues();
         } else {
             savedPayListModel = new PayListModel();
         }
 
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
-            woope_credit.setText(String.valueOf(profile.getWoopeCreditString()));
+            woope_credit.setText(" استفاده از ووپ ("+String.valueOf(profile.getWoopeCreditString())+")");
 
             toman_credit = (TextView) findViewById(R.id.toman_credit);
-            toman_credit.setText(String.valueOf(profile.getCreditString()));
+            toman_credit.setText("استفاده از موجودی تومانی(" + String.valueOf(profile.getCreditString())+")");
         }
 
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
 
-        btn = (Button) findViewById(R.id.button);
+;
         btn.setOnTouchListener(this);
+        online_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isOnline=true;
+                pay_radio_cash.setVisibility(View.GONE);
+                pay_radio_credit.setVisibility(View.VISIBLE);
+                credit_layout.setVisibility(View.VISIBLE);
+                woope_layout.setVisibility(View.VISIBLE);
 
-        //payType = findViewById(R.id.radioGroup_payType);
-        payType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                calculateValues();
             }
         });
+        cash_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isOnline=false;
+                pay_radio_cash.setVisibility(View.VISIBLE);
+                pay_radio_credit.setVisibility(View.GONE);
+                credit_layout.setVisibility(View.GONE);
+                woope_layout.setVisibility(View.GONE);
+                switch_credit.setChecked(false);
+                switch_woope.setChecked(false);
+            }
+        });
+        drawer_pull.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isDetailShow){
+                    isDetailShow=false;
+                    drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.up_arrow));
+                    detail_layout.setVisibility(View.GONE);
+                }else{
+                    isDetailShow=true;
+                    drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.down_arrow));
+                    detail_layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
         switch_woope.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -222,9 +277,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 calculateValues();
             }
         });
-        cash_radio = findViewById(R.id.pay_cash_radio);
-        cash_radio.setOnTouchListener(this);
-        credit_radio = findViewById(R.id.pay_credit_radio);
+
 
         toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
         toolbar.inflateMenu(R.menu.pay_toolbar_items);
@@ -234,12 +287,14 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     }
 
+
+
     public void showhint() {
 
         final TapTargetSequence sequence = new TapTargetSequence(this)
                 .targets(
                         // Likewise, this tap target will target the search button
-                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "This is a search icon", "As you can see, it has gotten pretty dark around here...")
+                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "تماس با پشتیبانی", "در صورت وجود هرگونه مشکل یا ابهام در پرداخت با پشتیبانی تماس بگیرید")
                                 .dimColor(android.R.color.black)
                                 .outerCircleColor(R.color.colorAccent)
                                 .targetCircleColor(android.R.color.black)
@@ -276,19 +331,20 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     private void calculateValues() {
-        int selectedId = payType.getCheckedRadioButtonId();
+        //int selectedId = payType.getCheckedRadioButtonId();
 
         total_price.setText(String.valueOf(totalPrice));
         long rw=((totalPrice)/savedPayListModel.basePrice)*savedPayListModel.returnPoint;
         return_woope.setText(String.valueOf(rw));
-        if (selectedId == R.id.pay_cash_radio) {
-            pay_price.setText(String.valueOf(totalPrice));
+        if (!isOnline) {
+            pay_price.setText(commaSeprate(totalPrice));
+            btn.setText("پرداخت ("+commaSeprate(totalPrice)+" تومان)");
             payPriceValue=totalPrice;
             toman_use.setText("0");
             woope_use.setText("0");
             remain_toman.setText("0");
             tax.setText("0");
-        } else if (selectedId == R.id.pay_credit_radio) {
+        } else {
             long alpha=totalPrice-profile.getTomanCredit();
             long beta=totalPrice-(profile.getWoopeCredit()*1000);
             long gama=totalPrice-profile.getTomanCredit()-(profile.getWoopeCredit()*1000);
@@ -296,7 +352,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             //    long  remainToman=profile.getTomanCredit()-totalprice;
             toman_use.setText("0");
             if(!switch_credit.isChecked()&&!switch_woope.isChecked()){
-                pay_price.setText(String.valueOf(totalPrice));
+                pay_price.setText(commaSeprate(totalPrice));
+                btn.setText("پرداخت ("+commaSeprate(totalPrice)+" تومان)");
                 payPriceValue=totalPrice;
                 toman_use.setText("0");
                 woope_use.setText("0");
@@ -306,22 +363,25 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             if(switch_credit.isChecked()&&!switch_woope.isChecked()){
                 if(alpha==0){
                     pay_price.setText("0");
+                    btn.setText("پرداخت ("+"0"+" تومان)");
                     payPriceValue=0;
-                    toman_use.setText(String.valueOf(totalPrice));
+                    toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
                 }else if(alpha<0){
                     pay_price.setText("0");
+                    btn.setText("پرداخت ("+"0"+" تومان)");
                     payPriceValue=0;
-                    toman_use.setText(String.valueOf(totalPrice));
+                    toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
                 }else if(alpha>0){
-                    pay_price.setText(String.valueOf(alpha));
+                    pay_price.setText(commaSeprate(alpha));
+                    btn.setText("پرداخت ("+commaSeprate(alpha)+" تومان)");
                     payPriceValue=alpha;
-                    toman_use.setText(String.valueOf(profile.getTomanCredit()));
+                    toman_use.setText(commaSeprate(profile.getTomanCredit()));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
@@ -330,8 +390,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             if(!switch_credit.isChecked()&&switch_woope.isChecked()){
                 if(beta==0){
                     pay_price.setText("0");
+                    btn.setText("پرداخت ("+"0"+" تومان)");
                     payPriceValue=0;
-                    woope_use.setText(String.valueOf(profile.getWoopeCredit()));
+                    woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
@@ -339,15 +400,17 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     double integerPart = Math.ceil((double) totalPrice/1000);
                     int remainder=(int)Math.abs(beta%1000);
                     pay_price.setText("0");
+                    btn.setText("پرداخت ("+"0"+" تومان)");
                     payPriceValue=0;
                     toman_use.setText("0");
                     woope_use.setText(String.valueOf(Math.abs(integerPart)));
-                    remain_toman.setText(String.valueOf(remainder));
+                    remain_toman.setText(commaSeprate(remainder));
                     tax.setText("0");
                 }else if(beta>0){
-                    pay_price.setText(String.valueOf(beta));
+                    pay_price.setText(commaSeprate(beta));
+                    btn.setText("پرداخت ("+commaSeprate(beta)+" تومان)");
                     payPriceValue=beta;
-                    woope_use.setText(String.valueOf(profile.getWoopeCredit()));
+                    woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
@@ -356,32 +419,36 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             if(switch_credit.isChecked()&&switch_woope.isChecked()){
                 if(alpha<=0){
                     pay_price.setText("0");
+                    btn.setText("پرداخت ("+"0"+" تومان)");
                     payPriceValue=0;
-                    toman_use.setText(String.valueOf(totalPrice));
+                    toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
                 }else {
                     if(gama==0){
                         pay_price.setText("0");
+                        btn.setText("پرداخت ("+"0"+" تومان)");
                         payPriceValue=0;
-                        toman_use.setText(String.valueOf(profile.getTomanCredit()));
-                        woope_use.setText(String.valueOf(profile.getWoopeCredit()));
+                        toman_use.setText(commaSeprate(profile.getTomanCredit()));
+                        woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
                         tax.setText("0");
                     }else if(gama>0){
-                        pay_price.setText(String.valueOf(gama));
+                        pay_price.setText(commaSeprate(gama));
+                        btn.setText("پرداخت ("+commaSeprate(gama)+" تومان)");
                         payPriceValue=gama;
-                        toman_use.setText(String.valueOf(profile.getTomanCredit()));
-                        woope_use.setText(String.valueOf(profile.getWoopeCredit()));
+                        toman_use.setText(commaSeprate(profile.getTomanCredit()));
+                        woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
                         tax.setText("0");
                     }else if(gama<0){
                         double integerPart = Math.ceil((double) alpha/1000);
                         int remainder=(int)Math.abs(gama%1000);
                         pay_price.setText("0");
+                        btn.setText("پرداخت ("+"0"+" تومان)");
                         payPriceValue=0;
-                        toman_use.setText(String.valueOf(profile.getTomanCredit()));
+                        toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(String.valueOf(Math.abs(integerPart)));
                         remain_toman.setText(String.valueOf(remainder));
                         tax.setText("0");
@@ -472,14 +539,14 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 retrofit.create(TransactionInterface.class);
 
 
-        int selectedId = payType.getCheckedRadioButtonId();
+        //int selectedId = payType.getCheckedRadioButtonId();
         int pt = 0;
         //String payType = sp.getMode();
-        if (selectedId == R.id.pay_cash_radio) {
+        if (!isOnline) {
             //go to cash pay
             //gotoPayCash();
             pt = 1;
-        } else if (selectedId == R.id.pay_credit_radio) {
+        } else {
             //go to credit pay
             pt = 2;
         }
@@ -501,10 +568,10 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 if (code == 200) {
                     PayListModel model = response.body();
                     //PayState sp = (PayState) spinner.getSelectedItem();
-                    if (cash_radio.isChecked()) {
+                    if (!isOnline) {
                         //go to cash pay
                         gotoPayCash(model);
-                    } else if (credit_radio.isChecked()) {
+                    } else {
                         //go to credit pay
                         setNext(model);
                     }
@@ -523,10 +590,12 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
+        btn.setEnabled(false);
     }
 
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
+        btn.setEnabled(true);
     }
 
 
@@ -534,18 +603,18 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == KeyEvent.ACTION_UP) {
             switch (v.getId()) {
-                case R.id.button:
+                case R.id.payBtn:
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        if (!TextUtils.isEmpty(amount.getText())) {
+                        //if (!TextUtils.isEmpty(amount.getText())) {
                             saveTransaction();
-                        } else {
+                        /*} else {
                             showFillError();
-                        }
+                        }*/
                         return true;
                     }
                     break;
 
-                case R.id.pay_cash_radio:
+                /*case R.id.pay_cash_radio:
                     if (!cash_radio.isEnabled()) {
 
                         Toast.makeText(
@@ -553,27 +622,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                                 , getResources().getString(R.string.askStoreForCashPay),
                                 Toast.LENGTH_LONG).show();
                     }
-                    break;
+                    break;*/
             }
         }
         return false;
     }
-
-    private void showFillError() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("لطفا مبلغ خرید را وارد کنید").setPositiveButton("باشه", ConfirmDialogClickListener).show();
-    }
-
-    DialogInterface.OnClickListener ConfirmDialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    dialog.dismiss();
-                    break;
-            }
-        }
-    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -592,7 +645,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         return super.onOptionsItemSelected(item);
     }
 
-    private TextWatcher onTextChangedListener() {
+    /*private TextWatcher onTextChangedListener() {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -632,6 +685,14 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 amount.addTextChangedListener(this);
             }
         };
+    }*/
+
+    private String commaSeprate(long longval){
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        formatter.applyPattern("#,###,###,###");
+        String formattedString = formatter.format(longval);
+        return formattedString;
     }
 
     private void getStore(long storeId) {
@@ -657,6 +718,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 int code = response.code();
                 if (code == 200) {
                     store = response.body();
+                    calculateValues();
                 }
             }
 

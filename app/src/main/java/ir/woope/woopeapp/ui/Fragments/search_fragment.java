@@ -147,13 +147,7 @@ public class search_fragment extends Fragment {
 
         //prepareAlbums();
         findStores("");
-        //getOrderListFromServer();
 
-        try {
-            Picasso.with(getActivity()).load(R.drawable.woope_blue).into((ImageView) mRecycler.findViewById(R.id.backdrop));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return mRecycler;
     }
 

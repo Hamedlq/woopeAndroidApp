@@ -42,7 +42,7 @@ public interface TransactionInterface {
                                       @Field("paylistId") long paylistId);
 
     @FormUrlEncoded
-    @POST("api/Transaction/SubmitUserBillTransaction")
+    @POST("api/Transaction/CheckConfirmationCode")
     Call<ApiResponse> SendConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Field("paylistId") long payListId,
                                       @Field("code") String confirmationCode);
