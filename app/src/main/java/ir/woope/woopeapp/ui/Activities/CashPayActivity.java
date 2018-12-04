@@ -52,6 +52,8 @@ public class CashPayActivity extends AppCompatActivity {
 
     @BindView(R.id.backdrop)
     protected ImageView backdrop;
+    @BindView(R.id.store_name)
+    protected TextView StoreName_tv;
     String authToken;
     String profileString;
     String transactionString;
@@ -72,8 +74,8 @@ public class CashPayActivity extends AppCompatActivity {
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
             payedPoints = getIntent().getStringExtra(POINTS_PAYED);
         }
-        TextView StoreName=(TextView) findViewById(R.id.StoreName);
-        StoreName.setText(payListModel.storeName);
+        //TextView StoreName=(TextView) findViewById(R.id.StoreName);
+        StoreName_tv.setText(payListModel.storeName);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
@@ -93,7 +95,7 @@ public class CashPayActivity extends AppCompatActivity {
         });
         Picasso.with(CashPayActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).into(backdrop);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.cashpay_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
     }

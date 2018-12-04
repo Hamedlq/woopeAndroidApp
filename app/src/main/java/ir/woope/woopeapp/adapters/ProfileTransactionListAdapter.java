@@ -9,17 +9,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.DocumentModel;
-import ir.woope.woopeapp.models.PayListModel;
-import ir.woope.woopeapp.models.TransactionModel;
-import ir.woope.woopeapp.ui.Fragments.ProfileTransactionListFragment;
-import ir.woope.woopeapp.ui.Fragments.TransListFragment;
+import ir.woope.woopeapp.ui.Activities.TransHistoryActivity;
 
 /**
  * Created by alireza on 3/30/18.
@@ -29,7 +23,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
 
     private TextView name_tv;
     private TextView total_price;
-    private TextView paytype;
+    private ImageView paytype;
     //private ImageView ic_item;
     private TextView return_woop;
     private RelativeLayout tr1;
@@ -61,7 +55,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
 private Context context;
     private List<DocumentModel> orderModels;
 
-    private ProfileTransactionListFragment.ProfileTransactionTouchListener payTransactionTouchListener;
+    private TransHistoryActivity.ProfileTransactionTouchListener payTransactionTouchListener;
 
     private long startClicktime;
     private static final int MAX_CLICK_DURATION = 200;
@@ -72,7 +66,7 @@ private Context context;
     }
 
 
-    public ProfileTransactionListAdapter(Context context,List<DocumentModel> list, ProfileTransactionListFragment.ProfileTransactionTouchListener payTransactionTouchListener) {
+    public ProfileTransactionListAdapter(Context context,List<DocumentModel> list, TransHistoryActivity.ProfileTransactionTouchListener payTransactionTouchListener) {
         context=context;
         this.orderModels = list;
         this.payTransactionTouchListener=payTransactionTouchListener;
@@ -138,7 +132,12 @@ private Context context;
         DocumentModel model=orderModels.get(position);
         total_price.setText(String.valueOf(orderModels.get(position).totalPrice)+" تومان ");
         name_tv.setText(orderModels.get(position).storeName);
-        return_woop.setText(orderModels.get(position).returnWoop);
+        return_woop.setText(orderModels.get(position).returnWoop +" عدد ووپ ");
+        if(model.payType==1){
+            paytype.setImageResource(R.drawable.wallet_mini);
+        }else {
+            paytype.setImageResource(R.drawable.mini_woope);
+        }
         //if(model.payType==10)
         if(model.transactionList.size()>0){
             tr1_ct.setText(model.transactionList.get(0).currencyType);

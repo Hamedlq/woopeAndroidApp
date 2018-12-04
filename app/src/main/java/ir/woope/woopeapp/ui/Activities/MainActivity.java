@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        nav_store = findViewById(R.id.nav_store);
 
-        //Toolbar tb = (Toolbar) findViewById(R.id.home_fragment_toolbar);
+        //Toolbar tb = (Toolbar) findViewById(R.id.home_frag    `ment_toolbar);
 
 
 //
@@ -254,15 +254,14 @@ public class MainActivity extends AppCompatActivity {
 //                .build();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnTouchListener(new View.OnTouchListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 Profile obj =getUserProfile();
                 Intent myIntent = new Intent(MainActivity.this, TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 startActivity(myIntent);
                 overridePendingTransition(R.anim.slide_up,R.anim.no_change);
-                return false;
             }
         });
     }

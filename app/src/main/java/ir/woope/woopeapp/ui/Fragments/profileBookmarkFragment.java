@@ -134,13 +134,6 @@ public class profileBookmarkFragment extends Fragment {
 
         getOrderListFromServer();
 
-        try {
-            Picasso.with(getActivity()).load(R.drawable.woope_blue).into((ImageView) mRecycler.findViewById(R.id.backdrop));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         return mRecycler;
     }
 

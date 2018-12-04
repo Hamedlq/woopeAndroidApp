@@ -52,6 +52,7 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.GiftActivity;
@@ -120,7 +121,7 @@ public class home_fragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra(STORE, s); //Optional parameters
-                getActivity().startActivityForResult(myIntent,RELOAD_LIST);
+                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
                 //open activity
                 //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
@@ -130,7 +131,7 @@ public class home_fragment extends Fragment {
             @Override
             public void onAdvTap(View view, int position) {
                 Store s = albumList.get(position);
-                if(s.isAdvertise){
+                if (s.isAdvertise) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s.website));
                     startActivity(browserIntent);
                 }
@@ -145,13 +146,13 @@ public class home_fragment extends Fragment {
 
         };
 
-        progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
 
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 /*
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -160,25 +161,15 @@ public class home_fragment extends Fragment {
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
+        adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new ListPaddingDecoration());
-        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        //recyclerView.setLayoutManager(mLayoutManager);
-        //recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        //prepareAlbums();
-
         getOrderListFromServer();
 
-        try {
-            Picasso.with(getActivity()).load(R.drawable.woope_blue).into((ImageView) mRecycler.findViewById(R.id.backdrop));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         SwipeController swipeController = new SwipeController();
 
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
@@ -187,7 +178,7 @@ public class home_fragment extends Fragment {
                 new SwipeableRecyclerViewTouchListener.SwipeListener() {
                     @Override
                     public boolean canSwipeLeft(int position) {
-                        return true;
+                        return false;
                     }
 
                     @Override
@@ -197,7 +188,11 @@ public class home_fragment extends Fragment {
 
                     @Override
                     public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                        //gotopay
+                    /*    Store s = new Store();
+                        for (int position : reverseSortedPositions) {
+                            s = albumList.get(position);
+                        }
+                        goToPaying(s);*/
                     }
 
                     @Override
@@ -206,12 +201,28 @@ public class home_fragment extends Fragment {
                 }));
 
 
-
         return mRecycler;
-
-
-
     }
+
+    /*public void goToPaying(Store theStore) {
+
+        Intent myIntent = new Intent(getActivity(), PayActivity.class);
+        Profile profile=((MainActivity)getActivity()).getUserProfile();
+        myIntent.putExtra(PREF_PROFILE, profile);
+        //myIntent.putExtra(STORE, store);
+        PayListModel model=new PayListModel();
+        model.storeName=theStore.storeName;
+        model.branchId=theStore.storeId;
+        model.totalPrice=totalPrice;
+        model.logoSrc=store.logoSrc;
+        model.switchWoope=false;
+        model.switchCredit=false;
+        model.basePrice=store.basePrice;
+        model.returnPoint=store.returnPoint;
+        myIntent.putExtra(PAY_LIST_ITEM, model);
+        this.startActivity(myIntent);
+        this.finish();
+    }*/
 
     private void followStore(Store s) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -225,7 +236,7 @@ public class home_fragment extends Fragment {
         authToken = settings.getString(TOKEN, null);
 
         Call<ApiResponse> call =
-                providerApiInterface.followStore("bearer "+authToken,s.storeId);
+                providerApiInterface.followStore("bearer " + authToken, s.storeId);
 
 
         call.enqueue(new Callback<ApiResponse>() {
@@ -262,11 +273,11 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
-                Profile userobj =((MainActivity)getActivity()).getUserProfile();
+                Profile userobj = ((MainActivity) getActivity()).getUserProfile();
                 Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
                 giftIntent.putExtra(PREF_PROFILE, userobj);
                 getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
-                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
                 /*Profile obj =((MainActivity)getActivity()).getUserProfile();
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
@@ -300,7 +311,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer("bearer "+authToken);
+                providerApiInterface.getStoreFromServer("bearer " + authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {
@@ -312,7 +323,7 @@ public class home_fragment extends Fragment {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoresAdapter(getActivity(),albumList, itemTouchListener);
+                    adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
@@ -331,7 +342,9 @@ public class home_fragment extends Fragment {
 
     public interface ItemTouchListener {
         public void onCardViewTap(View view, int position);
+
         public void onAdvTap(View view, int position);
+
         public void onFollowTap(View view, int position);
     }
 
@@ -375,7 +388,7 @@ public class home_fragment extends Fragment {
         }
     }
 
-    private void showHint () {
+    private void showHint() {
 
         final TapTargetSequence sequence = new TapTargetSequence(getActivity())
                 .targets(
@@ -456,7 +469,7 @@ public class home_fragment extends Fragment {
 
     }
 
-    public void showhint(){
+    public void showhint() {
 
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
                 TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
@@ -487,7 +500,7 @@ public class home_fragment extends Fragment {
 
     }
 
-    public void showGifthint(){
+    public void showGifthint() {
 
         TapTargetView.showFor(getActivity(),                 // `this` is an Activity
                 TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
@@ -510,7 +523,6 @@ public class home_fragment extends Fragment {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);      // This call is optional
-
 
 
                     }

@@ -123,7 +123,7 @@
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:padding="5dp"
-                app:itemCount="5"
+                app:itemCount="6"
                 app:lineColor="@color/white"
                 app:itemWidth="44dp"
                 app:viewType="line"

@@ -31,7 +31,12 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +46,7 @@ import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +80,7 @@ import ir.woope.woopeapp.ui.Activities.EditProfileActivity;
 import ir.woope.woopeapp.ui.Activities.LoginActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.SplashActivity;
+import ir.woope.woopeapp.ui.Activities.TransHistoryActivity;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -109,7 +116,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     private String userChoosenTask;
     boolean isImageUploaded = false;
-
+    Toolbar toolbar;
     private static final int USER_OPTIONS_ANIMATION_DELAY = 300;
     private static final Interpolator INTERPOLATOR = new DecelerateInterpolator();
     //private Unbinder mUnbinder;
@@ -142,6 +149,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public TextView cashCredit;
     public TextView woopeCredit;
     public TextView useNumber;
+    public RelativeLayout history_layout;
 
 
     private int avatarSize;
@@ -197,7 +205,10 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+        getActivity().setTitle("");
+
         mRecycler = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        setHasOptionsMenu(true);
         //mUnbinder=ButterKnife.bind(this,mRecycler);
         vRevealBackground = mRecycler.findViewById(R.id.vRevealBackground);
         userNameFamily = mRecycler.findViewById(R.id.userNameFamily);
@@ -207,7 +218,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         woopeCredit = mRecycler.findViewById(R.id.woope_credit);
         useNumber = mRecycler.findViewById(R.id.transactionCount);
 
-
+        history_layout= mRecycler.findViewById(R.id.history_layout);
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto = mRecycler.findViewById(R.id.ivUserProfilePhoto);
         //tlUserProfileTabs = mRecycler.findViewById(R.id.tlUserProfileTabs);
@@ -218,6 +229,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         vUserProfileRoot = mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager
         //viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
+        toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         return mRecycler;
     }
 
@@ -226,34 +239,16 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*btnEdit.setOnClickListener(new View.OnClickListener() {
+        history_layout.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
-                Intent goto_edit = new Intent(getActivity(),
-                        EditProfileActivity.class);
-                startActivityForResult(goto_edit, 110);
+                Intent goto_history = new Intent(getActivity(),
+                        TransHistoryActivity.class);
+                getActivity().startActivityForResult(goto_history, 110);
 
             }
-        });*/
-
-        /*btnlogout.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-
-                SharedPreferences settings = getContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString(TOKEN, null);
-                editor.apply();
-
-                Intent goto_splash = new Intent(getActivity(),
-                        SplashActivity.class);
-                getActivity().finish();
-                startActivity(goto_splash);
-
-            }
-        });*/
-
+        });
         Profile pp = ((MainActivity) getActivity()).getUserProfile();
         if (pp == null) {
             userNameFamily.setText("");
@@ -769,5 +764,26 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_edit_profile:
+                Intent giftIntent = new Intent(getActivity(), EditProfileActivity.class);
+                getActivity().startActivity(giftIntent);
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 
 }
