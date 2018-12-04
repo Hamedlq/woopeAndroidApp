@@ -48,9 +48,9 @@
 
             <ImageView
                 android:id="@+id/imgbx_logo_login"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:soundEffectsEnabled="true"
                 app:srcCompat="@drawable/logo_white" />
 
@@ -74,14 +74,14 @@
                 android:hint="شماره موبایل"
                 android:inputType="phone"
                 android:maxLength="11"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/textPrimary"
-                android:textDirection="rtl"
-                android:textSize="18sp" />
+                android:textSize="12sp"
+                />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/btn_sendnumber_changepass"
+                android:id="@+id/btn_accept_sendnumber_changepass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="40dp"
@@ -98,7 +98,8 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
             </com.balysv.materialripple.MaterialRippleLayout>
 

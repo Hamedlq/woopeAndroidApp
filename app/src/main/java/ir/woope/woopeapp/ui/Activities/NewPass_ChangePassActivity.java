@@ -2,12 +2,15 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -23,30 +26,34 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SendNumber_ChangePassActivity extends AppCompatActivity {
+public class NewPass_ChangePassActivity extends AppCompatActivity {
+
+    MaterialRippleLayout accept;
+    AVLoadingIndicatorView progress;
+    EditText newpass;
+    String code,phonenumber;
 
     Retrofit retrofit_changepass;
 
     Toolbar toolbar;
 
-    MaterialRippleLayout send;
-
-    AVLoadingIndicatorView progress;
-
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
-        setContentView(R.layout.activity_sendnumber_changepass);
+        setContentView(R.layout.activity_newpass_changepass);
 
-        toolbar = (Toolbar) findViewById(R.id.sendnumber_changepass_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.newpass_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final EditText number = (EditText) findViewById(R.id.txtbx_sendnumber_changepass);
-        progress = findViewById(R.id.progressBar_sendnumber_changepass);
-        send = findViewById(R.id.btn_accept_sendnumber_changepass);
+
+        newpass = findViewById(R.id.txtbx_newpass_changepass);
+        code = getIntent().getExtras().getString("confirmcode");
+        phonenumber = getIntent().getExtras().getString("phonenumber");
+        progress = findViewById(R.id.progressBar_newpass_changepass);
+        accept = findViewById(R.id.btn_accept_newpass_changepass);
 
         retrofit_changepass = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -55,23 +62,18 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
         final ChangePassInterface changepass = retrofit_changepass.create(ChangePassInterface.class);
 
-        send.setOnClickListener(new View.OnClickListener() {
+        accept.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
-                if (TextUtils.isEmpty(number.getText()))
+                if(newpass.getText().length()>=4)
 
                 {
-                    Toast.makeText(
-                            SendNumber_ChangePassActivity.this
-                            , "شماره موبایل خود را وارد کنید",
-                            Toast.LENGTH_SHORT).show();
-                } else if (!TextUtils.isEmpty(number.getText()))  {
 
                     progress.smoothToShow();
-                    send.setVisibility(View.GONE);
+                    accept.setVisibility(View.GONE);
 
-                    changepass.send_mobile(number.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                    changepass.change_pass(phonenumber, newpass.getText().toString(), code).enqueue(new Callback<ApiResponse>() {
                         @Override
                         public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
@@ -80,24 +82,27 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                                 progress.smoothToHide();
 
                                 Toast.makeText(
-                                        SendNumber_ChangePassActivity.this
+                                        NewPass_ChangePassActivity.this
                                         , response.body().getMessage(),
                                         Toast.LENGTH_SHORT).show();
 
-                                Intent goto_changepass = new Intent(SendNumber_ChangePassActivity.this,
-                                        SmsVerification_ChangePassActivity.class);
-                                goto_changepass.putExtra("phonenumber", number.getText().toString());
-                                startActivity(goto_changepass);
+                                Intent goto_login = new Intent(NewPass_ChangePassActivity.this,
+                                        MainActivity.class);
+                                goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finishAffinity();
+                                startActivity(goto_login);
 
                             } else {
 
                                 progress.smoothToHide();
-                                send.setVisibility(View.VISIBLE);
+                                accept.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(
-                                        SendNumber_ChangePassActivity.this
+                                        NewPass_ChangePassActivity.this
                                         , response.body().getMessage(),
                                         Toast.LENGTH_SHORT).show();
+
+                                finish();
 
                             }
 
@@ -107,39 +112,47 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                         public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                             progress.smoothToHide();
-                            send.setVisibility(View.VISIBLE);
+                            accept.setVisibility(View.VISIBLE);
 
                             Toast.makeText(
-                                    SendNumber_ChangePassActivity.this
+                                    NewPass_ChangePassActivity.this
                                     , "خطای اتصال",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
+
+                else if(newpass.getText().length()<4)
+                    Toast.makeText(
+                            NewPass_ChangePassActivity.this
+                            , "رمز عبور باید 4 رقم یا بیشتر باشد",
+                            Toast.LENGTH_SHORT).show();
             }
         });
+
     }
+
     @Override
     public void onBackPressed() {
-        Intent goto_select = new Intent(SendNumber_ChangePassActivity.this,
-                LoginActivity.class);
-        {
-            startActivity(goto_select);
-            finish();
-        }
+        finish();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            Intent goto_select = new Intent(SendNumber_ChangePassActivity.this,
-                    LoginActivity.class);
+
+            Intent goto_select = new Intent(NewPass_ChangePassActivity.this,
+                    SmsVerification_ChangePassActivity.class);
             {
                 startActivity(goto_select);
                 finish();
             }
+
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
