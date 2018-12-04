@@ -56,5 +56,6 @@
     <string name="askStoreForCashPay">از فروشگاه درخواست خرید نقدی کنید</string>
     <string name="receive_gift">دریافت هدیه</string>
     <string name="edit_profile">ویرایش پروفایل</string>
+    <string name="logout_profile">خروج</string>
 
 </resources>

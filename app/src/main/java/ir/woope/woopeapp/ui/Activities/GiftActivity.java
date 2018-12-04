@@ -73,6 +73,7 @@ public class GiftActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -113,7 +114,7 @@ public class GiftActivity extends AppCompatActivity {
                         gift_response.setVisibility(View.VISIBLE);
                         nok_res.setVisibility(View.VISIBLE);
                         nok_result.setVisibility(View.VISIBLE);
-                        gift_result.setText("کد هدیه اشتباه است");
+                        gift_result.setText(response.body().getMessage());
 /*
                         Toast.makeText(
                                 GiftActivity.this

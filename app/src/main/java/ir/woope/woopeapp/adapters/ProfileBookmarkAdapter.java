@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 
 /**
@@ -130,7 +128,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
                                 }else {
                                     store.isFollowed=false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
@@ -177,7 +175,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
         }else {
             store.isFollowed=false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));

@@ -27,7 +27,6 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
 
 /**
@@ -128,7 +127,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
                                 }else {
                                     store.isFollowed=false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
@@ -172,7 +171,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
         }else {
             store.isFollowed=false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));

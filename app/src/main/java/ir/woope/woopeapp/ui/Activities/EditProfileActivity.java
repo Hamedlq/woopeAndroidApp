@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
@@ -69,6 +72,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editprofile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         toolbar.setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -94,7 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        final SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        final SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
         final String token = settings.getString(TOKEN, null);
 
         retrofit_editprofile = new Retrofit.Builder()
@@ -201,7 +205,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (profile == null) {
             Gson gson = new Gson();
             final SharedPreferences prefs =
-                    this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                    this.getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
             String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
             if (profileString != null) {
                 profile = (Profile) gson.fromJson(profileString, Profile.class);
@@ -215,14 +219,44 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_user_profile, menu);
+        return true;
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             finish(); // close this activity and return to preview activity (if there is any)
+        }else if (item.getItemId() == R.id.nav_logout) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+            String msg = "آیا می‌خواهید از حساب کاربری خود خارج شوید؟";
+            builder.setMessage(msg).setPositiveButton("بله", dialogClickListener).setNegativeButton("نه", dialogClickListener).show();
         }
+
 
         return super.onOptionsItemSelected(item);
     }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    SharedPreferences settings = getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(TOKEN, null);
+                    editor.apply();
+
+                    Intent goto_splash = new Intent(EditProfileActivity.this,
+                            SplashActivity.class);
+                    finish();
+                    startActivity(goto_splash);
+                    break;
+            }
+        }
+    };
 
     public final static boolean isValidEmail(CharSequence target) {
         if (target == null)

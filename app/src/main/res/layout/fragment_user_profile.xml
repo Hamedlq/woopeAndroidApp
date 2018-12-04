@@ -317,7 +317,7 @@
                             android:layout_marginTop="5dp"
                             android:layout_alignParentLeft="true"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/left_arrow"
+                            android:src="@drawable/right_arrow"
                             />
                         <TextView
                             android:layout_width="wrap_content"

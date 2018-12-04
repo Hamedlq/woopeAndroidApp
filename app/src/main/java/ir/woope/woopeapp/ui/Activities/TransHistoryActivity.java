@@ -61,7 +61,7 @@ public class TransHistoryActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
