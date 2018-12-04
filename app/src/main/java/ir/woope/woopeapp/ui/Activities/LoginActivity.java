@@ -2,32 +2,18 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.io.IOException;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
@@ -42,12 +28,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class LoginActivity extends AppCompatActivity {
@@ -86,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         enter = findViewById(R.id.btn_enter_login);

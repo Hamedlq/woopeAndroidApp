@@ -32,7 +32,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FR
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
-public class SmsVerificationActivity extends AppCompatActivity {
+public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
     Retrofit retrofit_sms_verif, retrofit_login;
 
@@ -60,7 +60,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
+        countdown_timer = (TextView) findViewById(R.id.txt_countdown_register);
         final String recieved_code = getIntent().getStringExtra("validation_code");
         code = findViewById(R.id.pinView_smsValidation_register);
         progress_bar = (ProgressBar) findViewById(R.id.sms_validation_register_progressBar);
@@ -84,58 +84,6 @@ public class SmsVerificationActivity extends AppCompatActivity {
         accept = findViewById(R.id.btn_accept_code_register);
         resend = findViewById(R.id.btn_resendcode_register);
 
-//        new CountDownTimer(60000, 1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//
-//                countdown_timer.setText(getText(R.string.remaining_time) + " : " + millisUntilFinished / 1000);
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                countdown_timer.setText("");
-//                if (code.equals("")) {
-//
-//                    countdown_timer.setText("زمان شما به پایان رسید");
-//
-////                    Toast.makeText(
-////                            sms_validation.this
-////                            , "زمان شما به پایان رسید!",
-////                            Toast.LENGTH_SHORT).show();
-//
-//                    finish();
-//                }
-//                accept.setVisibility(View.GONE);
-//                resend.setVisibility(View.VISIBLE);
-//            }
-//        }.start();
-
-//        new CountDownTimer(60000, 1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                //this will be done every 1000 milliseconds ( 1 seconds )
-//
-//                countdown_timer.setText("00:"+millisUntilFinished / 1000);
-//
-//                long progress = (60000 - millisUntilFinished) / 1000;
-//                progress_bar.setProgress((int) progress);
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                //the progressBar will be invisible after 60 000 miliseconds ( 1 minute)
-//
-//                countdown_timer.setText("00:00");
-//
-//                progress_bar.setProgress(60);
-//
-//                resend.animate().alpha(1.0f);
-//                resend.setVisibility(View.VISIBLE);
-//
-//            }
-//
-//        }.start();
         timer();
 
         resend.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +104,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 //                            progress.setVisibility(View.GONE);
 
                             Toast.makeText(
-                                    SmsVerificationActivity.this
+                                    SmsVerification_RegisterActivity.this
                                     , response.body().getMessage(),
                                     Toast.LENGTH_SHORT).show();
 
@@ -165,7 +113,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 //                            progress.setVisibility(View.GONE);
 
                             Toast.makeText(
-                                    SmsVerificationActivity.this
+                                    SmsVerification_RegisterActivity.this
                                     , response.body().getMessage(),
                                     Toast.LENGTH_SHORT).show();
 
@@ -180,7 +128,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                         Toast.makeText(
 
-                                SmsVerificationActivity.this
+                                SmsVerification_RegisterActivity.this
                                 , "خطای اتصال",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -203,7 +151,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
                             loading.smoothToHide();
 
                             Toast.makeText(
-                                    SmsVerificationActivity.this
+                                    SmsVerification_RegisterActivity.this
                                     , response.body().getMessage(),
                                     Toast.LENGTH_SHORT).show();
 
@@ -218,10 +166,10 @@ public class SmsVerificationActivity extends AppCompatActivity {
                                         editor.putString(TOKEN, response.body().getAccessToken()).apply();
 
                                         Toast.makeText(
-                                                SmsVerificationActivity.this
+                                                SmsVerification_RegisterActivity.this
                                                 , "ورود موفق!",
                                                 Toast.LENGTH_SHORT).show();
-                                        Intent goto_mainpage = new Intent(SmsVerificationActivity.this,
+                                        Intent goto_mainpage = new Intent(SmsVerification_RegisterActivity.this,
                                                 MainActivity.class);
                                         goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
                                         goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -229,7 +177,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
                                         startActivity(goto_mainpage);
                                     } else {
                                         Toast.makeText(
-                                                SmsVerificationActivity.this
+                                                SmsVerification_RegisterActivity.this
                                                 , "نام کاربری یا رمز عبور نامعتبر!",
                                                 Toast.LENGTH_SHORT).show();
                                     }
@@ -241,7 +189,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
                                 public void onFailure(Call<AccessToken> call, Throwable t) {
                                     // این متود هم فقط زمانی فرخوانی می‌شه که به هر دلیلی کانکشن ما با مشکل روبرو بشه
                                     Toast.makeText(
-                                            SmsVerificationActivity.this
+                                            SmsVerification_RegisterActivity.this
                                             , "خطا!",
                                             Toast.LENGTH_SHORT).show();
 
@@ -253,7 +201,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
 
                             loading.smoothToHide();
                             Toast.makeText(
-                                    SmsVerificationActivity.this
+                                    SmsVerification_RegisterActivity.this
                                     , response.body().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -270,7 +218,7 @@ public class SmsVerificationActivity extends AppCompatActivity {
                         loading.smoothToHide();
 
                         Toast.makeText(
-                                SmsVerificationActivity.this
+                                SmsVerification_RegisterActivity.this
                                 , "خطای اتصال",
                                 Toast.LENGTH_SHORT).show();
                     }

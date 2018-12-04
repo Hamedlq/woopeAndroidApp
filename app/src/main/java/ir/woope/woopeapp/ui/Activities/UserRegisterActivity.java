@@ -1,24 +1,17 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.w3c.dom.Text;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
@@ -50,7 +43,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.register_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.left_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         username = (EditText) findViewById(R.id.txtbx_username_register);
@@ -89,7 +82,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                             final Intent goto_sms_validation = new Intent(UserRegisterActivity.this,
-                                    SmsVerificationActivity.class);
+                                    SmsVerification_RegisterActivity.class);
 
                             goto_sms_validation.putExtra("phone_number", phonenumber.getText().toString());
                             goto_sms_validation.putExtra("username", username.getText().toString());

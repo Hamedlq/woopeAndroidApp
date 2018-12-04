@@ -93,10 +93,9 @@
         <activity android:name=".ui.Activities.StoreActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.Activities.SmsVerificationActivity"
+        <activity android:name=".ui.Activities.SmsVerification_RegisterActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
         <activity android:name=".ui.Activities.UserRegisterActivity"
             android:label=""
@@ -126,9 +125,6 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".ui.Activities.ChangePassActivity"
-            android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.Activities.EditProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
@@ -140,6 +136,20 @@
         <activity android:name=".ui.Activities.ContactUsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label=""/>
+
+        <activity android:name=".ui.Activities.NewPass_ChangePassActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""/>
+
+        <activity android:name=".ui.Activities.SmsVerification_ChangePassActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""/>
+
+        <activity android:name=".ui.Activities.SliderActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="">
+
+        </activity>
 
     </application>
 
