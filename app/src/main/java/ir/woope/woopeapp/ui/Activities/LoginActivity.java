@@ -2,64 +2,44 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.AccessToken;
 import ir.woope.woopeapp.models.Profile;
-import me.toptas.fancyshowcase.AnimationListener;
-import me.toptas.fancyshowcase.FancyShowCaseView;
-import me.toptas.fancyshowcase.FocusShape;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class LoginActivity extends AppCompatActivity {
 
-    boolean doubleBackToExitPressedOnce = false;
-
-    Animation rotateonceAnim;
     ImageView wplogologin;
-
-    private void rotationAnimation() {
-
-        rotateonceAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_once);
-        wplogologin.startAnimation(rotateonceAnim);
-
-    }
+    Toolbar toolbar;
 
     Retrofit retrofit_login;
+
+    MaterialRippleLayout enter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,120 +47,13 @@ public class LoginActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_login);
 
-
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
 
-        final FancyShowCaseView passwordcase = new FancyShowCaseView.Builder(this)
-                .focusOn(password)
-                .title("گذرواژه خود را وارد کنید")
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(10)
-                .focusBorderColor(Color.WHITE)
-                .focusBorderSize(10)
-                .backgroundColor(getResources().getColor(R.color.fancyshowcase))
-                .titleStyle(R.style.MyTitleStyle, Gravity.BOTTOM | Gravity.CENTER)
-                .animationListener(new AnimationListener() {
-                    @Override
-                    public void onEnterAnimationEnd() {
-
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//                            getWindow().setStatusBarColor(getResources().getColor(R.color.fancyshowcase));
-//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.fancyshowcase));
-//                        }
-
-                    }
-
-                    @Override
-                    public void onExitAnimationEnd() {
-
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//                            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
-//                        }
-
-
-                    }
-                })
-                .build();
-
-
-        new FancyShowCaseView.Builder(this)
-                .focusOn(username)
-                .title("نام کاربری خود را وارد کنید")
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(40)
-                .focusBorderColor(Color.WHITE)
-                .focusBorderSize(10)
-                .backgroundColor(getResources().getColor(R.color.fancyshowcase))
-                .titleStyle(R.style.MyTitleStyle, Gravity.BOTTOM | Gravity.CENTER)
-                .animationListener(new AnimationListener() {
-                    @Override
-                    public void onEnterAnimationEnd() {
-
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//                            getWindow().setStatusBarColor(getResources().getColor(R.color.fancyshowcase));
-//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.fancyshowcase));
-//                        }
-
-                    }
-
-                    @Override
-                    public void onExitAnimationEnd() {
-
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//                            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-//                            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
-//                        }
-
-                        passwordcase.show();
-
-                    }
-                })
-                .build()
-                .show();
-
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-//        }
-
-        //sets the statusbar and navbar colors
+        View usr= findViewById(R.id.txtbx_userphone_login);
+        View pass = findViewById(R.id.txtbx_password_login);
 
         wplogologin = findViewById(R.id.imgbx_logo_login);
-        /*final MediaPlayer mp = new MediaPlayer();
-        wplogologin.setSoundEffectsEnabled(false);
-        wplogologin.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                rotationAnimation();
-
-                if(mp.isPlaying())
-                {
-                    mp.stop();
-                }
-
-                try {
-                    mp.reset();
-                    AssetFileDescriptor afd;
-                    afd = getAssets().openFd("coins.wav");
-                    mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-                    mp.prepare();
-                    mp.start();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });*/
 
         TextView forgetpass = (TextView) findViewById(R.id.txt_forget_pass);
 
@@ -193,20 +66,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button register = (Button) findViewById(R.id.btn_register);
+        toolbar = (Toolbar) findViewById(R.id.login_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        register.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                Intent goto_userinfo = new Intent(LoginActivity.this,
-                        UserRegisterActivity.class);
-                {
-                    startActivity(goto_userinfo);
-                }
-            }
-        });
-
-        final Button enter = (Button) findViewById(R.id.btn_enter_login);
+        enter = findViewById(R.id.btn_enter_login);
 
         retrofit_login = new Retrofit.Builder()
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -220,23 +85,23 @@ public class LoginActivity extends AppCompatActivity {
 
         final LoginInterface login = retrofit_login.create(LoginInterface.class);
         final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
-        final ProgressBar enterprogress = (ProgressBar) findViewById(R.id.enter_progressbar_login);
+        final AVLoadingIndicatorView enterprogress = findViewById(R.id.progressBar_login);
 
         enter.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
                 enter.setVisibility(View.GONE);
-                enterprogress.setVisibility(View.VISIBLE);
+                enterprogress.smoothToShow();
 
-                login.send_info(username.getText().toString(), password.getText().toString(), "password").enqueue(new Callback<AccessToken>() {
+                login.send_info(username.getText().toString(), Utility.arabicToDecimal(password.getText().toString()), "password").enqueue(new Callback<AccessToken>() {
                     @Override
                     public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
 
                         if (response.code() == 200) {
 
-//                            enterprogress.setVisibility(View.GONE);
-//                            enter.setVisibility(View.VISIBLE);
+                            enterprogress.smoothToHide();
+                            enter.setVisibility(View.VISIBLE);
 
                             final String tk = response.body().getAccessToken();
 
@@ -248,8 +113,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                         if (response.body().getConfirmed() == false) {
 
-                                            enterprogress.setVisibility(View.VISIBLE);
-
                                             Toast.makeText(
                                                     LoginActivity.this
                                                     , "شماره موبایل خود را تایید کنید",
@@ -257,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             Intent goto_verifphone = new Intent(LoginActivity.this,
                                                     VerifyPhoneActivity.class);
-                                            goto_verifphone.putExtra("token",tk);
+                                            goto_verifphone.putExtra(TOKEN,tk);
                                             startActivity(goto_verifphone);
 
                                         } else {
@@ -267,10 +130,10 @@ public class LoginActivity extends AppCompatActivity {
                                             editor.putString(TOKEN, tk);
                                             editor.apply();
 
-                                            Toast.makeText(
-                                                    LoginActivity.this
-                                                    , "ورود موفق!",
-                                                    Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(
+//                                                    LoginActivity.this
+//                                                    , "ورود موفق!",
+//                                                    Toast.LENGTH_SHORT).show();
                                             Intent goto_mainpage = new Intent(LoginActivity.this,
                                                     MainActivity.class);
                                             goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
@@ -292,14 +155,14 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
 
                                     enter.setVisibility(View.VISIBLE);
-                                    enterprogress.setVisibility(View.GONE);
+                                    enterprogress.smoothToHide();
                                 }
                             });
 
 
                         } else {
 
-                            enterprogress.setVisibility(View.GONE);
+                            enterprogress.smoothToHide();
                             enter.setVisibility(View.VISIBLE);
 
                             Toast.makeText(
@@ -319,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
 
                         enter.setVisibility(View.VISIBLE);
-                        enterprogress.setVisibility(View.GONE);
+                        enterprogress.smoothToHide();
                     }
                 });
 
@@ -332,21 +195,26 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+        Intent goto_select = new Intent(LoginActivity.this,
+                SplashSelectActivity.class);
+        {
+            startActivity(goto_select);
+            finish();
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            Intent goto_select = new Intent(LoginActivity.this,
+                    SplashSelectActivity.class);
+            {
+                startActivity(goto_select);
+                finish();
+            }
         }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "برای خروج کلید بازگشت را فشار دهید", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -8,11 +8,11 @@ import retrofit2.http.POST;
 
 public interface ChangePassInterface {
 
-    @POST("/Account/SendForgetPassCode")
+    @POST("api/Account/SendForgetPassCode")
     @FormUrlEncoded
     Call<ApiResponse> send_mobile(@Field("Mobile") String mobile);
 
-    @POST("/Account/ConfirmCodeAndUpdate")
+    @POST("api/Account/ConfirmCodeAndUpdate")
     @FormUrlEncoded
     Call<ApiResponse> change_pass(@Field("Mobile") String mobile, @Field("Password") String password, @Field("VerifyCode") String verifycode);
 

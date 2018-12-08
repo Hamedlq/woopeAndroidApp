@@ -1,146 +1,220 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#303F9F">
+    android:background="@drawable/login">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/llLinearLayout"
-        android:layout_width="300dp"
-        android:layout_height="258dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/button_border"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="12dp">
 
-        <!--<TextView-->
-        <!--android:id="@+id/txt_verification_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginEnd="130dp"-->
-        <!--android:layout_marginLeft="131dp"-->
-        <!--android:layout_marginRight="130dp"-->
-        <!--android:layout_marginStart="131dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:text="@string/verification_code"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--<Button-->
-        <!--android:id="@+id/btn_save_verif_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginTop="32dp"-->
-        <!--android:background="@drawable/button_border"-->
-        <!--android:text="@string/save"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/verification_code" />-->
-
-        <TextView
-            android:id="@+id/txt_countdown_changepass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="34dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sms_valid_register_layout" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/sms_valid_register_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:layout_marginTop="40dp"
-            android:gravity="center_horizontal"
-            android:textColor="@color/darkwhite"
-            android:textColorHint="@color/darkwhite"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/txtbx_confirm_code_register"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/sms_validation_register_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:layoutDirection="rtl">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="ثبت نام"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </android.support.v7.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center">
+
+                    <ProgressBar
+                        android:id="@+id/sms_validation_register_progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/circle_shape"
+                        android:indeterminate="false"
+                        android:max="60"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/circular_progress_bar" />
+
+                    <!--<ImageView-->
+                    <!--android:id="@+id/imgbx_logo_login"-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="100dp"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--android:soundEffectsEnabled="true"-->
+                    <!--app:srcCompat="@drawable/logo_white" />-->
+
+                    <TextView
+                        android:id="@+id/txt_countdown_register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/sms_validation_register_progressBar"
+                        app:layout_constraintEnd_toEndOf="@+id/sms_validation_register_progressBar"
+                        app:layout_constraintStart_toStartOf="@+id/sms_validation_register_progressBar"
+                        app:layout_constraintTop_toTopOf="@+id/sms_validation_register_progressBar" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <!--<EditText-->
+                <!--android:id="@+id/txtbx_confirm_code_register"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:backgroundTint="@android:color/white"-->
+                <!--android:ellipsize="start"-->
+                <!--android:ems="10"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:hint="کد تایید"-->
+                <!--android:inputType="number"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textColorHint="@color/textPrimary"-->
+                <!--android:textDirection="rtl"-->
+                <!--android:textSize="18sp" />-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="لطفا کد تایید ارسالی را وارد کنید"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+
+            <com.chaos.view.PinView
+                android:id="@+id/pinView_smsValidation_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/white"
-                android:ellipsize="start"
-                android:ems="10"
-                android:gravity="center_horizontal"
-                android:hint="کد تایید"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:textColor="@color/white"
-                android:textColorHint="@color/darkwhite"
-                android:textDirection="rtl"
-                android:textSize="18sp" />
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:padding="5dp"
+                app:itemCount="6"
+                app:lineColor="@color/white"
+                app:itemWidth="44dp"
+                app:viewType="line"
+                android:layout_marginTop="10dp"
+                app:cursorColor="@color/gray"
+                android:focusable="true"
+                android:cursorVisible="true"
+                style="@style/PinWidget.PinView" />
 
-            <!--<android.support.v7.widget.AppCompatEditText-->
-            <!--android:id="@+id/txtbx_confirm_code"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:backgroundTint="@color/wgreen"-->
-            <!--android:ems="6"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:inputType="number"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/txt_verification_code"-->
-            <!--tools:text=" " />-->
 
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:id="@+id/btn_resendcode_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:alpha="0.0"
+                    android:animateLayoutChanges="true"
+                    android:background="@drawable/underline"
+                    android:paddingBottom="20dp"
+                    android:text="ارسال مجدد کد تایید"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btn_accept_code_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/button_border"
-            android:text="@string/accept"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_resendcode_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/button_border"
-            android:text="ارسال دوباره"
-            android:textColor="@color/white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                <!--<Button-->
+                <!--android:id="@+id/btn_accept_code_register"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="40dp"-->
+                <!--android:background="@drawable/button_border"-->
+                <!--android:text="@string/accept"-->
+                <!--android:textColor="@color/white"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                <!--app:layout_constraintRight_toRightOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent" />-->
 
-    </android.support.constraint.ConstraintLayout>
+                <!--<Button-->
+                <!--android:id="@+id/btn_resendcode_register"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="40dp"-->
+                <!--android:background="@drawable/button_border"-->
+                <!--android:text="ارسال دوباره"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:visibility="gone"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintLeft_toLeftOf="parent"-->
+                <!--app:layout_constraintRight_toRightOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent" />-->
 
-    <ProgressBar
-        android:id="@+id/progressBar_sms_verif_register"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:indeterminateDrawable="@drawable/progress"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/llLinearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone" />
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/btn_accept_code_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/accept_button"
+                    android:paddingStart="40dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="10dp"
+                    app:mrl_rippleDelayClick="true"
+                    app:mrl_rippleHover="true"
+                    app:mrl_rippleOverlay="true"
+                    app:mrl_rippleRoundedCorners="50dp">
 
-</android.support.constraint.ConstraintLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/progressBar_sms_verification_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="84dp"
+                    android:visibility="gone"
+                    app:indicatorColor="#59CC89"
+                    app:indicatorName="BallPulseIndicator"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

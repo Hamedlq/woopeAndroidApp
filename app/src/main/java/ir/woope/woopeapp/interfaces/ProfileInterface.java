@@ -1,5 +1,7 @@
 package ir.woope.woopeapp.interfaces;
 
+import android.text.Editable;
+
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
@@ -19,6 +21,10 @@ public interface ProfileInterface {
     @POST("api/Profile/GetProfile")
     Call<Profile> getProfileFromServer(@Header("Authorization")String auth);
 
+    @POST("api/Profile/AndroidVersion")
+    @FormUrlEncoded
+    Call<ApiResponse> GetVersion(@Field("UserId") String Id);
+
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
     Call<ApiResponse> InsertTransaction(@Field("token") String authtoken,
@@ -28,11 +34,16 @@ public interface ProfileInterface {
 
     @FormUrlEncoded
     @POST("api/Profile/sendOneSignalToken")
-    Call<ApiResponse> sendOneSignalToken(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                        @Field("OneSignalToken") String oneSignalToken);
+    Call<ApiResponse> sendPushNotificationTokens(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                        @Field("OneSignalToken") String oneSignalToken,@Field("PusheToken") String pusheToken);
 
     @Multipart
     @POST("api/Profile/SetProfileImage")
-    Call<ApiResponse> updateImage(@Part MultipartBody.Part image,
+    Call<ApiResponse> updateImage(@Part MultipartBody.Part file,
                                   @Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
+
+    @FormUrlEncoded
+    @POST("api/Gift/SubmitGiftCode")
+    Call<ApiResponse> sendGiftCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                 @Field("GiftCode") String giftCode);
 }

@@ -11,19 +11,20 @@ public class Store extends ApiResponse implements Serializable {
     public Store() {
     }
 
-    public Store(String name,String point, int numOfSongs, int thumbnail) {
+    public Store(String name,long point, int numOfSongs, int thumbnail) {
         this.storeName = name;
         this.returnPoint = point;
         this.thumbnail = thumbnail;
         isFollowed=false;
         isCashPayAllowed=true;
+        isAdvertise=false;
     }
 
-    public String storeId;
+    public long storeId;
     public String storeName;
     public String storeDescription;
-    public String basePrice;
-    public String returnPoint;
+    public long basePrice;
+    public long returnPoint;
     public String discountPercent;
     public String imageUId;
     public String logoSrc;
@@ -33,4 +34,8 @@ public class Store extends ApiResponse implements Serializable {
     public String firstPhone;
     public String secondPhone;
     public boolean isCashPayAllowed;
+    public boolean isAdvertise;
+    public String website;
+    public String address;
+    public String woopeThreshold;
 }

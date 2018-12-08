@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <size android:height="@dimen/album_cover_height"
+        android:width="@dimen/album_cover_width"/>
+    <solid android:color="@color/white"/>
+    <corners android:topRightRadius="@dimen/album_cover_half_height"
+        android:bottomRightRadius="@dimen/album_cover_half_width"/>
+</shape>

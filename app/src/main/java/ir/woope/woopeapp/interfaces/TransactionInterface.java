@@ -4,7 +4,9 @@ import java.util.List;
 
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.DocumentModel;
 import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.PayResponseModel;
 import ir.woope.woopeapp.models.TransactionModel;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -21,23 +23,31 @@ public interface TransactionInterface {
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
     Call<PayListModel> InsertTransaction(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                      @Field("StoreId") String StoreId,
+                                                      @Field("Id") long payListId,
+                                                      @Field("BranchId") long StoreId,
                                                       @Field("TotalPrice") String Amount,
-                                                      @Field("PayType") int payType);
+                                                      @Field("PayType") int payType,
+                                                      @Field("SwitchCredit") boolean switch_credit,
+                                                      @Field("SwitchWoope") boolean switch_woope
+                                         );
 
     @FormUrlEncoded
     @POST("api/Transaction/GetConfirmCode")
     Call<PayListModel> GetConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                   @Field("Id") long paylistId,
-                                                   @Field("Woope") String pointPay);
+                                                   @Field("Id") long paylistId);
 
     @FormUrlEncoded
-    @POST("api/Transaction/SubmitUserBillTransaction")
+    @POST("api/Pay/GetPayInfo")
+    Call<PayResponseModel> GetPayInfo(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Field("paylistId") long paylistId);
+
+    @FormUrlEncoded
+    @POST("api/Transaction/CheckConfirmationCode")
     Call<ApiResponse> SendConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Field("paylistId") long payListId,
                                       @Field("code") String confirmationCode);
 
 
     @GET("api/Transaction/GetUserTransactions")
-    Call<List<TransactionModel>> getUserTransactionsFromServer(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
+    Call<List<DocumentModel>> getUserTransactionsFromServer(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 }

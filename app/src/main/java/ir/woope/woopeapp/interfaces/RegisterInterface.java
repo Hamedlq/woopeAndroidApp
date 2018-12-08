@@ -8,15 +8,15 @@ import retrofit2.http.POST;
 
 public interface RegisterInterface {
 
-        @POST("/Account/RegisterApp")
+        @POST("api/Account/RegisterApp")
         @FormUrlEncoded
         Call<ApiResponse> send_info(@Field("username") String username, @Field("mobile") String mobile, @Field("password") String password);
 
-        @POST("/Account/ConfirmCode")
+        @POST("api/Account/ConfirmCode")
         @FormUrlEncoded
         Call<ApiResponse> send_verif_code(@Field("Mobile") String mobile, @Field("VerifyCode") String code);
 
-        @POST("/Account/SendForgetPassCode")
+        @POST("api/Account/SendForgetPassCode")
         @FormUrlEncoded
         Call<ApiResponse> send_code(@Field("Mobile") String mobile);
 

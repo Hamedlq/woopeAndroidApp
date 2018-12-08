@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WoopeApp</string>
+    <string name="app_name">Woope</string>
     <string name="title_home">فروشگاه‌ها</string>
     <string name="title_search">جستجو</string>
     <string name="title_profile">پروفایل</string>
@@ -18,7 +18,7 @@
     <string name="username">نام کاربری</string>
     <string name="password">رمز عبور</string>
     <string name="enter">ورود</string>
-    <string name="forgetـpassword">فراموشی رمز عبور</string>
+    <string name="forget_password">رمز عبور خود را فراموش کرده‌اید؟</string>
     <string name="save">ثبت</string>
     <string name="email">ایمیل</string>
     <string name="new_password">رمز عبور جدید</string>
@@ -35,9 +35,26 @@
     <string name="wrong_username">نام کاربری اشتباه!</string>
     <string name="wrong_pass">رمز عبور اشتباه!</string>
     <string name="wrong_email">ایمیل اشتباه!</string>
-    <string name="login">ورود به حساب کاربری</string>
+    <string name="login">ورود</string>
     <string name="register">ثبت نام کنید</string>
     <string name="phonenumber">شماره موبایل</string>
     <string name="press_again_to_exit">برای خروج دوباره بازگشت را بزنید</string>
     <string name="upload_error">خطا در آپلود عکس</string>
+    <string name="support">پشتیبانی</string>
+    <string name="support_phoneNumber">021-40445047</string>
+    <string name="support_telegram_id">-</string>
+    <string name="contact_woope_support">تماس با پشتیبانی ووپ</string>
+    <string name="name">نام</string>
+    <string name="familyName">نام خانوادگی</string>
+    <string name="gender">جنسیت</string>
+    <string name="male">آقا</string>
+    <string name="female">خانم</string>
+    <string name="age">سن</string>
+    <string name="bio">درباره من</string>
+    <string name="invalid_email">ایمیل نامعتبر</string>
+    <string name="cashPayNotAllowed">امکان پرداخت نقدی برای این فروشگاه وجود ندارد</string>
+    <string name="askStoreForCashPay">از فروشگاه درخواست خرید نقدی کنید</string>
+    <string name="receive_gift">دریافت هدیه</string>
+    <string name="edit_profile">ویرایش پروفایل</string>
+
 </resources>

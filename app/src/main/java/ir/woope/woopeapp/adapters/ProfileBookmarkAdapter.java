@@ -45,10 +45,10 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
+        public TextView title, count,points,points_brief;
         public ImageView thumbnail;
         public ImageView followIcon;
-        public LinearLayout action_layout;
+        //public LinearLayout action_layout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -56,7 +56,9 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             followIcon = (ImageView) view.findViewById(R.id.follow);
-            action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
+            points = (TextView) view.findViewById(R.id.points);
+            points_brief = (TextView) view.findViewById(R.id.points_brief);
+            //action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -101,12 +103,12 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
                 }
             });
 
-            action_layout.setOnTouchListener(new View.OnTouchListener() {
+           /* action_layout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return true;
                 }
-            });
+            });*/
             followIcon.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -128,10 +130,10 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
                                 }else {
                                     store.isFollowed=false;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                                 }
                             }
                             break;
@@ -166,15 +168,19 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
         holder.title.setText(store.storeName);
         holder.count.setText(store.discountPercent + "٪ تخفیف");
 
+        holder.points_brief.setText(store.returnPoint + " عدد ووپ");
+        holder.points.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
+
+
 // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
         }else {
             store.isFollowed=false;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
        /* holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override

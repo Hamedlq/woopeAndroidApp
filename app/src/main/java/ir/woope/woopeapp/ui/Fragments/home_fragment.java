@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,38 +26,53 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.ViewTarget;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.ListPaddingDecoration;
+import ir.woope.woopeapp.helpers.SwipeController;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.GiftActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
+import me.toptas.fancyshowcase.FancyShowCaseView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
@@ -74,16 +93,19 @@ public class home_fragment extends Fragment {
     FloatingActionButton fab;
     ProgressBar progressBar;
 
+    Toolbar toolbar;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+
+
+        getActivity().setTitle("");
         mRecycler = inflater.inflate(R.layout.fragment_home, null);
         setHasOptionsMenu(true);
         itemTouchListener = new ItemTouchListener() {
@@ -99,10 +121,20 @@ public class home_fragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra(STORE, s); //Optional parameters
-                getActivity().startActivityForResult(myIntent,RELOAD_LIST);
+                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
                 //open activity
                 //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onAdvTap(View view, int position) {
+                Store s = albumList.get(position);
+                if (s.isAdvertise) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(s.website));
+                    startActivity(browserIntent);
+                }
 
             }
 
@@ -114,46 +146,83 @@ public class home_fragment extends Fragment {
 
         };
 
-        progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-        /*fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
-                getActivity().startActivity(myIntent);
-            }
-        });*/
-        //initCollapsingToolbar();
 
-        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.app_name);
+
+        toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+/*
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+*/
+
+        //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList,itemTouchListener);
+        adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
-        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        //recyclerView.setLayoutManager(mLayoutManager);
-        //recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.addItemDecoration(new ListPaddingDecoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        //prepareAlbums();
-
         getOrderListFromServer();
 
-        try {
-            Picasso.with(getActivity()).load(R.drawable.cover).into((ImageView) mRecycler.findViewById(R.id.backdrop));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SwipeController swipeController = new SwipeController();
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+        recyclerView.addOnItemTouchListener(new SwipeableRecyclerViewTouchListener(recyclerView,
+                new SwipeableRecyclerViewTouchListener.SwipeListener() {
+                    @Override
+                    public boolean canSwipeLeft(int position) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean canSwipeRight(int position) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                    /*    Store s = new Store();
+                        for (int position : reverseSortedPositions) {
+                            s = albumList.get(position);
+                        }
+                        goToPaying(s);*/
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                    }
+                }));
 
 
         return mRecycler;
     }
+
+    /*public void goToPaying(Store theStore) {
+
+        Intent myIntent = new Intent(getActivity(), PayActivity.class);
+        Profile profile=((MainActivity)getActivity()).getUserProfile();
+        myIntent.putExtra(PREF_PROFILE, profile);
+        //myIntent.putExtra(STORE, store);
+        PayListModel model=new PayListModel();
+        model.storeName=theStore.storeName;
+        model.branchId=theStore.storeId;
+        model.totalPrice=totalPrice;
+        model.logoSrc=store.logoSrc;
+        model.switchWoope=false;
+        model.switchCredit=false;
+        model.basePrice=store.basePrice;
+        model.returnPoint=store.returnPoint;
+        myIntent.putExtra(PAY_LIST_ITEM, model);
+        this.startActivity(myIntent);
+        this.finish();
+    }*/
 
     private void followStore(Store s) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -167,7 +236,7 @@ public class home_fragment extends Fragment {
         authToken = settings.getString(TOKEN, null);
 
         Call<ApiResponse> call =
-                providerApiInterface.followStore("bearer "+authToken,s.storeId);
+                providerApiInterface.followStore("bearer " + authToken, s.storeId);
 
 
         call.enqueue(new Callback<ApiResponse>() {
@@ -204,18 +273,24 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
-                /*final SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = prefs.getString(PROFILE, "");
-                Profile obj = gson.fromJson(json, Profile.class);*/
-                Profile obj =((MainActivity)getActivity()).getUserProfile();
-
+                Profile userobj = ((MainActivity) getActivity()).getUserProfile();
+                Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
+                giftIntent.putExtra(PREF_PROFILE, userobj);
+                getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
+                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+                /*Profile obj =((MainActivity)getActivity()).getUserProfile();
                 Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 getActivity().startActivity(myIntent);
-
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);*/
                 break;
+            /*case android.R.id.home:
+                Profile userobj =((MainActivity)getActivity()).getUserProfile();
+                Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
+                giftIntent.putExtra(PREF_PROFILE, userobj);
+                getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
+                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                break;*/
             default:
                 break;
         }
@@ -236,7 +311,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer("bearer "+authToken);
+                providerApiInterface.getStoreFromServer("bearer " + authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {
@@ -248,7 +323,7 @@ public class home_fragment extends Fragment {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoresAdapter(getActivity(),albumList, itemTouchListener);
+                    adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
@@ -265,54 +340,11 @@ public class home_fragment extends Fragment {
 
     }
 
-    /**
-     * RecyclerView item decoration - give equal margin around grid item
-     */
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
-            }
-        }
-    }
-
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
     public interface ItemTouchListener {
         public void onCardViewTap(View view, int position);
+
+        public void onAdvTap(View view, int position);
+
         public void onFollowTap(View view, int position);
     }
 
@@ -323,6 +355,179 @@ public class home_fragment extends Fragment {
 
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
+        if (!isFirstRun) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    // Code to run once
+
+                    showhint();
+
+
+                }
+            });
+        }
+    }
+
+    private void showHint() {
+
+        final TapTargetSequence sequence = new TapTargetSequence(getActivity())
+                .targets(
+                        // Likewise, this tap target will target the search button
+                        TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
+                                // All options below are optional
+                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)                   // Whether to tint the target view's color
+                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60),
+                        TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
+                                // All options below are optional
+                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(true)                   // Whether to tint the target view's color
+                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60)
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+
+                        SharedPreferences prefs =
+                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("HOMEFIRSTRUN", false);
+                        editor.commit();
+
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+//                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
+//                                .setTitle("Uh oh")
+//                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
+//
+//                        TapTargetView.showFor(dialog,
+//                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
+//                                        .cancelable(false)
+//                                        .tintTarget(false), new TapTargetView.Listener() {
+//                                    @Override
+//                                    public void onTargetClick(TapTargetView view) {
+//                                        super.onTargetClick(view);
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+                    }
+                });
+
+        sequence.start();
+
+    }
+
+    public void showhint() {
+
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
+                        // All options below are optional
+                        .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(60),                  // Specify the target radius (in dp)
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+
+                        showGifthint();
+
+                    }
+                });
+
+    }
+
+    public void showGifthint() {
+
+        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
+                TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
+                        // All options below are optional
+                        .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(60),                  // Specify the target radius (in dp)
+                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);      // This call is optional
+
+
+                    }
+                });
+
     }
 
 

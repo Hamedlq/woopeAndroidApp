@@ -44,7 +44,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
+        public TextView title, count,point;
         public ImageView followIcon;
         public ImageView thumbnail;
         public LinearLayout action_layout;
@@ -53,6 +53,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
+            point = (TextView) view.findViewById(R.id.point);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             followIcon = (ImageView) view.findViewById(R.id.follow);
             action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
@@ -127,10 +128,10 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
                                 }else {
                                     store.isFollowed=false;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                                 }
                             }
                             break;
@@ -164,16 +165,17 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         Store store = albumList.get(position);
         holder.title.setText(store.storeName);
         holder.count.setText(store.discountPercent + "٪ تخفیف");
+        holder.point.setText(store.returnPoint + " عدد پوینت");
 
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
         }else {
             store.isFollowed=false;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_bookmark_border_black));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
 
 

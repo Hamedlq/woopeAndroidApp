@@ -11,13 +11,17 @@ public class PayListModel extends ApiResponse implements Serializable {
 
     public long id;
     public String storeName;
-    public long storeId;
+    public long branchId;
     public long pointPay;
     public long totalPrice;
     public long returnWoope;
     public int payType;
     public String confirmationCode;
     public String logoSrc;
+    public boolean switchCredit;
+    public long basePrice;
+    public long returnPoint;
+    public boolean switchWoope;
 
     public PayListModel() {
 

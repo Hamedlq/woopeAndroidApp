@@ -82,7 +82,7 @@ public class BankActivity extends AppCompatActivity {
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.GetConfirmCode("Bearer "+authToken, payListModel.id,payListModel.pointPayString());
+                providerApiInterface.GetConfirmCode("Bearer "+authToken, payListModel.id);
         call.enqueue(new Callback<PayListModel>() {
             @Override
             public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {

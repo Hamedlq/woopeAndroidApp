@@ -10,6 +10,6 @@ public interface LoginInterface {
 
     @POST("/connect/token")
     @FormUrlEncoded
-    Call<AccessToken> send_info(@Field("username") String userphone, @Field("password") String password, @Field("grant_type") String grant_type);
+    Call<AccessToken> send_info(@Field("username") String username, @Field("password") String password, @Field("grant_type") String grant_type);
 
 }

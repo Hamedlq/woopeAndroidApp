@@ -16,11 +16,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,12 +35,17 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.ViewTarget;
 import com.google.gson.Gson;
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
@@ -46,6 +55,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +69,10 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
+import me.toptas.fancyshowcase.FancyShowCaseView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -70,13 +82,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static ir.aronapp.supplierapp.Helpers.Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
+
+import co.ronash.pushe.Pushe;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,7 +108,13 @@ public class MainActivity extends AppCompatActivity {
     boolean getProfileFromServer = false;
     String authToken = null;
     Profile profile = null;
-    private int CROP = 2;
+    FloatingActionButton fab;
+
+    View nav_store;
+
+    private long mLastClickTime = 0;
+
+    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -101,22 +124,67 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
-                            .commit();
-                    return true;
+                    if (!IsOnHome) {
+                        //mTextMessage.setText(R.string.title_home);
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
+                                .commit();
+                        IsOnHome = true;
+                        IsOnSearch = false;
+                        IsOnProfile=false;
+                        return true;
+                    }
+                    else break;
                 case R.id.navigation_‌search:
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
-                            .commit();
-                    return true;
+                    if (!IsOnSearch) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
+                                .commit();
+                        IsOnSearch = true;
+                        IsOnHome = false;
+                        IsOnProfile = false;
+                        return true;
+                    }
+                    else break;
+                case R.id.navigation_favorite:
+                    if (!IsOnSearch) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new profileBookmarkFragment(), SEARCH_FRAGMENT)
+                                .commit();
+                        IsOnSearch = true;
+                        IsOnHome = false;
+                        IsOnProfile = false;
+                        return true;
+                    }
+                    else break;
                 case R.id.navigation_profile:
-                    //mTextMessage.setText(R.string.title_notifications);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
-                            .commit();
-                    return true;
+                    if (!IsOnProfile) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        //mTextMessage.setText(R.string.title_notifications);
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
+                                .commit();
+                        IsOnProfile = true;
+                        IsOnHome= false;
+                        IsOnSearch=false;
+                        return true;
+                    }
+                    else break;
             }
             return false;
         }
@@ -138,17 +206,64 @@ public class MainActivity extends AppCompatActivity {
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+        for (int i = 0; i < menuView.getChildCount(); i++) {
+            BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+            final View iconView = item.findViewById(android.support.design.R.id.icon);
+            item.setShiftingMode(false);
+            item.setChecked(item.getItemData().isChecked());
+            final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+            final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+            layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+            iconView.setLayoutParams(layoutParams);
+        }
+        } catch (NoSuchFieldException e) {
+            //Log.e("BNVHelper", "Unable to get shift mode field", e);
+        } catch (IllegalAccessException e) {
+            //Log.e("BNVHelper", "Unable to change value of shift mode", e);
+        }
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-        sendRegistrationToServer();
+        //sendRegistrationToServer();
         //getProfileFromServer();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                 .commit();
 
+        Pushe.initialize(this, true);
+
+//        nav_store = findViewById(R.id.nav_store);
+
+        //Toolbar tb = (Toolbar) findViewById(R.id.home_frag    `ment_toolbar);
+
+
+//
+
+
+//        nav_store_showcase = new FancyShowCaseView.Builder(this)
+//                .focusOn(findViewById(R.id.nav_store))
+//                .title("لیست پرداخت ها")
+//                .showOnce("id0")
+//                .build();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Profile obj =getUserProfile();
+                Intent myIntent = new Intent(MainActivity.this, TransactionActivity.class);
+                myIntent.putExtra(PREF_PROFILE, obj);
+                startActivity(myIntent);
+                overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+            }
+        });
     }
 
 
@@ -214,10 +329,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendRegistrationToServer() {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         ProfileInterface profileInterface =
                 retrofit.create(ProfileInterface.class);
 
@@ -227,9 +344,10 @@ public class MainActivity extends AppCompatActivity {
 
         OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
         String oneSignalToken = status.getSubscriptionStatus().getUserId();
+        String pusheToken = Pushe.getPusheId(this);
 
         Call<ApiResponse> call =
-                profileInterface.sendOneSignalToken("bearer " + authToken, oneSignalToken);
+                profileInterface.sendPushNotificationTokens("bearer " + authToken, oneSignalToken, pusheToken);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -287,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                 onSelectFromGalleryResult(data);
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
-            else if (requestCode == CROP) {
+            else if (requestCode == CROP_IMAGE) {
                 File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
                 if (file.exists()) {
                     String filePath = file.getPath();
@@ -299,10 +417,11 @@ public class MainActivity extends AppCompatActivity {
                     }*/
 
                 }
+            }else if(requestCode == SHOULD_GET_PROFILE){
+                getProfileFromServer();
             }
         }
     }
-
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;
@@ -369,7 +488,7 @@ public class MainActivity extends AppCompatActivity {
             photoPickerIntent.putExtra("return-data", true);
             photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, picFileUri);
             photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-            startActivityForResult(photoPickerIntent, CROP);
+            startActivityForResult(photoPickerIntent, CROP_IMAGE);
 
         }
         // respond to users whose devices do not support the crop action
@@ -496,4 +615,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

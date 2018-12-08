@@ -1,7 +1,6 @@
 package ir.woope.woopeapp.models;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * Created by Hamed on 6/10/2018.
@@ -14,11 +13,12 @@ public class Profile extends ApiResponse implements Serializable{
     private String userBio;
     private String age;
     private String email;
+    private int gender;
     private String imageSrc;
     private String mobile;
     private boolean phoneNumberConfirmed;
     private int woopeCredit =0;
-    private Float moneyCredit;
+    private long moneyCredit;
     private int transactionCount =0;
 
     public Profile() {
@@ -27,7 +27,7 @@ public class Profile extends ApiResponse implements Serializable{
         username="";
         userBio="";
         imageSrc="";
-        moneyCredit=0f;
+        moneyCredit=0;
     }
 
     public String getName() {
@@ -60,7 +60,7 @@ public class Profile extends ApiResponse implements Serializable{
         this.woopeCredit = woopeCredit;
     }
 
-    public Float getTomanCredit() {
+    public long getTomanCredit() {
         return moneyCredit;
     }
 
@@ -82,7 +82,7 @@ public class Profile extends ApiResponse implements Serializable{
         }
         return "0";
     }
-    public void setTomanCredit(Float moneyCredit) {
+    public void setTomanCredit(long moneyCredit) {
         this.moneyCredit = moneyCredit;
     }
 
@@ -118,9 +118,17 @@ public class Profile extends ApiResponse implements Serializable{
         return email;
     }
 
+    public int getGender() {
+        return gender;
+    }
+
     public boolean getConfirmed() { return phoneNumberConfirmed; }
 
     public String getMobile() {
         return mobile;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
     }
 }
