@@ -781,10 +781,10 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         gotoPayCodeActivity(payListModel);
                     } else {
 
-                        Toast.makeText(
+                        /*Toast.makeText(
                                 PayActivity.this
                                 , response.body().getMessage(),
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();*/
 
                     }
                 }

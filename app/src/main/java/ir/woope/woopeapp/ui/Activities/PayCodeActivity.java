@@ -82,7 +82,7 @@ public class PayCodeActivity extends AppCompatActivity {
         });
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
 
         hideProgreeBar();
     }
@@ -91,8 +91,8 @@ public class PayCodeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.pay_toolbar_items, menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        /*getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
         return true;
     }
 
