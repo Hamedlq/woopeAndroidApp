@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -48,20 +49,11 @@ public class SplashActivity extends AppCompatActivity {
     ImageView wpelogo;
 
 
-
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_splash);
-
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wpp));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.wpp));
-        }
-        */
 
         retry = (Button) findViewById(R.id.btn_retry);
         err = (TextView) findViewById(R.id.txt_errorconnection);
@@ -111,11 +103,11 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 int code = response.code();
                 if (code == 200) {
-                    ApiResponse res= response.body();
+                    ApiResponse res = response.body();
                     int appVersion = Integer.valueOf(res.getMessage());
                     if (appVersion > getVersion()) {
                         showUpdateDialog();
-                    }else {
+                    } else {
                         GetProfileFromServer();
                     }
                 }
@@ -129,7 +121,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 Toast.makeText(
                         SplashActivity.this
-                        , t.getMessage()+"checkVersion",
+                        , t.getMessage() + "checkVersion",
                         Toast.LENGTH_LONG).show();
 
             }
@@ -206,11 +198,27 @@ public class SplashActivity extends AppCompatActivity {
 
                 } else if (response.code() == 401) {
 
-                    Intent goto_login = new Intent(SplashActivity.this,
-                            SplashSelectActivity.class);
-                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(goto_login);
+                    final boolean tutorialIsShown = settings.getBoolean("tutorialIsShown", false);
+
+                    if (tutorialIsShown == false) {
+
+                        Intent goto_login = new Intent(SplashActivity.this,
+                                SliderActivity.class);
+                        goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(goto_login);
+
+                    } else if (tutorialIsShown == true) {
+
+                        Intent goto_login = new Intent(SplashActivity.this,
+                                SplashSelectActivity.class);
+                        goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(goto_login);
+
+                    }
+
+
                 }
             }
 
@@ -222,7 +230,7 @@ public class SplashActivity extends AppCompatActivity {
                 progress.smoothToHide();
                 Toast.makeText(
                         SplashActivity.this
-                        , t.getMessage()+"getProfile",
+                        , t.getMessage() + "getProfile",
                         Toast.LENGTH_LONG).show();
 
             }

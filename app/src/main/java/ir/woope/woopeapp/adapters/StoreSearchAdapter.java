@@ -128,7 +128,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
                                 }else {
                                     store.isFollowed=false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
@@ -172,7 +172,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 
         if(store.isFollowed){
             store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
         }else {
             store.isFollowed=false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));

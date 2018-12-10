@@ -113,24 +113,25 @@
                     android:textStyle="bold" />
 
 
-                <com.chaos.view.PinView
-                    android:id="@+id/pinView_smsValidation_register"
-                    style="@style/PinWidget.PinView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:cursorVisible="true"
-                    android:focusable="true"
-                    android:inputType="number"
-                    android:padding="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="32sp"
-                    android:textStyle="bold"
-                    app:cursorColor="@color/gray"
-                    app:itemCount="6"
-                    app:itemWidth="44dp"
-                    app:lineColor="@color/white"
-                    app:viewType="line" />
+            <com.chaos.view.PinView
+                android:id="@+id/pinView_smsValidation_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:padding="5dp"
+                app:itemCount="6"
+                app:lineColor="@color/white"
+                app:itemWidth="44dp"
+                app:viewType="line"
+                android:layout_marginTop="10dp"
+                app:cursorColor="@color/gray"
+                android:focusable="true"
+                android:cursorVisible="true"
+                style="@style/PinWidget.PinView" />
+
 
                 <TextView
                     android:id="@+id/btn_resendcode_register"

@@ -129,7 +129,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
                                 }else {
                                     store.isFollowed=false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
