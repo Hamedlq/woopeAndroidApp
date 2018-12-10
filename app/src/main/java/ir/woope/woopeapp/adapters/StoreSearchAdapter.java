@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
@@ -167,7 +168,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         holder.point.setText(store.returnPoint + " عدد پوینت");
 
         // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
         if(store.isFollowed){
             store.isFollowed=true;

@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
@@ -221,13 +222,13 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.points.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
 
                 // loading album cover using Glide library
-                Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
+                Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
                 if (store.isFollowed) {
-                    store.isFollowed = true;
+                    //store.isFollowed = true;
                     holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
                 } else {
-                    store.isFollowed = false;
+                    //store.isFollowed = false;
                     holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                 }
                 break;

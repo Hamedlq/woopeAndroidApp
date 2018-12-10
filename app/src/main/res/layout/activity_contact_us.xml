@@ -1,109 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main_content"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/viewBg"
+android:fitsSystemWindows="true">
+
+<RelativeLayout
+    android:id="@+id/relative_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="83dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/contactUs_toolbar"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="center"
-            android:src="@drawable/logo_white" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:layoutDirection="rtl"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contactUs_toolbar">
+        android:layout_alignParentTop="true"
+        android:background="@drawable/home_shadow" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/contact_woope_support"
-            android:textSize="18sp"
-            android:padding="5dp"
-            android:layout_margin="5dp"/>
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
-            android:id="@+id/call_woope_support"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_margin="5dp"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+            android:id="@+id/gift_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/round_call_24" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/call_woope_support"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:fontFamily="@font/iransans_light"
-                android:text="@string/support_phoneNumber"
-                android:textSize="22sp" />
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/round_call_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:fontFamily="@font/iransans_light"
+                    android:text="@string/support_phoneNumber"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/telegram_woope_support"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:layout_margin="5dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/telegram_icon" />
-
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/telegram_woope_support"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:fontFamily="@font/iransans_light"
-                android:text="@string/support_telegram_id"
-                android:textSize="22sp" />
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/telegram_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:fontFamily="@font/iransans_light"
+                    android:text="@string/support_telegram_id"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
+
+<android.support.v7.widget.Toolbar
+    android:id="@+id/contactUs_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/home2"
+    android:gravity="center"
+    android:layoutDirection="rtl">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/contact_woope_support"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+
+</android.support.v7.widget.Toolbar>
+
+</RelativeLayout>
+
+

@@ -690,7 +690,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
                 if (response.code() == 200) {
 
-                    if (!response.body().getImageSrc().equals("") && response.body().getImageSrc().equals(null)) {
+                    if (!response.body().getImageSrc().equals("") && !response.body().getImageSrc().equals(null)) {
 
                         String imagesrc = response.body().getImageSrc();
                         setPhoto(imagesrc);

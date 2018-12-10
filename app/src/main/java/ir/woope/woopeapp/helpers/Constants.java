@@ -20,8 +20,8 @@ public final class Constants {
 
 //        public static final String BASE_URL = "http://localhost/";
 //
-        public static final String BASE_URL = "http://localhost:58795/";
-
+//        public static final String BASE_URL = "http://localhost:58795/";
+//
        //public static final String BASE_URL = "http://localhost:58795/";
 
 //        public static final String BASE_URL = "http://192.168.100.9:8090/";
@@ -30,10 +30,10 @@ public final class Constants {
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 
-//        public static final String BASE_URL = "http://mywoope.com/";
+        public static final String BASE_URL = "http://mywoope.com/";
     }
 
-    public final class GlobalConstants{
+    public final class GlobalConstants {
 
         public static final String MOBILE_NUMBER_TAG = "MOBILENUMBERTTAG";
         public static final String MY_SHARED_PREFERENCES = "ir.woope.woopeapp";

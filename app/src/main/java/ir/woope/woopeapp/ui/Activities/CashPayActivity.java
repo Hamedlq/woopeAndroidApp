@@ -11,32 +11,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.adapters.PayArrayAdapter;
+import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayListModel;
-import ir.woope.woopeapp.models.PayState;
 import ir.woope.woopeapp.models.Profile;
-import ir.woope.woopeapp.models.Store;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +38,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class CashPayActivity extends AppCompatActivity {
 
@@ -93,7 +84,7 @@ public class CashPayActivity extends AppCompatActivity {
                 return false;
             }
         });
-        Picasso.with(CashPayActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).into(backdrop);
+        Picasso.with(CashPayActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).transform(new CircleTransformation()).into(backdrop);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
