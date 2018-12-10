@@ -27,7 +27,6 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
 
 /**

@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -79,6 +80,8 @@ public class StoreActivity extends AppCompatActivity {
     protected CardView store_phones_layout;
     @BindView(R.id.store_address_layout)
     protected CardView store_address_layout;
+    @BindView(R.id.payBtn)
+    protected Button payBtn;
     ImageView close_btn;
     TextView confirm_pay;
     String STORE_FRAGMENT = "StoreFragment";
@@ -103,7 +106,7 @@ public class StoreActivity extends AppCompatActivity {
 
         getStore(store.storeId);
 
-        Button payBtn = (Button) findViewById(R.id.payBtn);
+        //Button payBtn = (Button) findViewById(R.id.payBtn);
         payBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -120,6 +123,7 @@ public class StoreActivity extends AppCompatActivity {
         hideProgreeBar();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         toolbar.setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -136,6 +140,7 @@ public class StoreActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         close_btn=(ImageView)dialog.findViewById(R.id.close_btn);
         confirm_pay=(TextView)dialog.findViewById(R.id.confirm_pay);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,10 +299,12 @@ public class StoreActivity extends AppCompatActivity {
 
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
+        payBtn.setEnabled(false);
     }
 
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
+        payBtn.setEnabled(true);
     }
 
 

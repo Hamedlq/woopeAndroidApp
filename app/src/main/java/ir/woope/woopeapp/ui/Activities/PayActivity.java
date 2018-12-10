@@ -282,6 +282,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
         toolbar.inflateMenu(R.menu.pay_toolbar_items);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
