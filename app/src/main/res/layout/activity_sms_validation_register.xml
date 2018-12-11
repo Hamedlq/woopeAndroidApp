@@ -147,35 +147,6 @@
                     android:textStyle="bold" />
 
 
-                <!--<Button-->
-                <!--android:id="@+id/btn_accept_code_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="40dp"-->
-                <!--android:background="@drawable/button_border"-->
-                <!--android:text="@string/accept"-->
-                <!--android:textColor="@color/white"-->
-                <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintLeft_toLeftOf="parent"-->
-                <!--app:layout_constraintRight_toRightOf="parent"-->
-                <!--app:layout_constraintStart_toStartOf="parent" />-->
-
-                <!--<Button-->
-                <!--android:id="@+id/btn_resendcode_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="40dp"-->
-                <!--android:background="@drawable/button_border"-->
-                <!--android:text="ارسال دوباره"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:visibility="gone"-->
-                <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintLeft_toLeftOf="parent"-->
-                <!--app:layout_constraintRight_toRightOf="parent"-->
-                <!--app:layout_constraintStart_toStartOf="parent" />-->
-
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/btn_accept_code_register"
                     android:layout_width="wrap_content"
