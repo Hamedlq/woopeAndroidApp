@@ -58,21 +58,4 @@
     <string name="edit_profile">ویرایش پروفایل</string>
     <string name="logout_profile">خروج</string>
 
-    <string name="support">پشتیبانی</string>
-    <string name="support_phoneNumber">021-40445047</string>
-    <string name="support_telegram_id">-</string>
-    <string name="contact_woope_support">تماس با پشتیبانی ووپ</string>
-    <string name="name">نام</string>
-    <string name="familyName">نام خانوادگی</string>
-    <string name="gender">جنسیت</string>
-    <string name="male">آقا</string>
-    <string name="female">خانم</string>
-    <string name="age">سن</string>
-    <string name="bio">درباره من</string>
-    <string name="invalid_email">ایمیل نامعتبر</string>
-    <string name="cashPayNotAllowed">امکان پرداخت نقدی برای این فروشگاه وجود ندارد</string>
-    <string name="askStoreForCashPay">از فروشگاه درخواست خرید نقدی کنید</string>
-    <string name="receive_gift">دریافت هدیه</string>
-    <string name="edit_profile">ویرایش پروفایل</string>
-
 </resources>
