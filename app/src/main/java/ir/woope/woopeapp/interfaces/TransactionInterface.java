@@ -42,10 +42,10 @@ public interface TransactionInterface {
                                       @Field("paylistId") long paylistId);
 
     @FormUrlEncoded
-    @POST("api/Transaction/CheckConfirmationCode")
+    @POST("api/Transaction/SubmitCashConfirmationCode")
     Call<ApiResponse> SendConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Field("paylistId") long payListId,
-                                      @Field("code") String confirmationCode);
+                                      @Field("confirmationCode") String confirmationCode);
 
 
     @GET("api/Transaction/GetUserTransactions")

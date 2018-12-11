@@ -65,109 +65,116 @@ public class UserRegisterActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                progress.smoothToShow();
-                register.setVisibility(View.GONE);
+                if (!isUserNameValid(username.getText().toString())) {
+                    Toast.makeText(
+                            UserRegisterActivity.this
+                            , "نام کاربری معتبر نیست",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    progress.smoothToShow();
+                    register.setVisibility(View.GONE);
 
-                reg.send_info(username.getText().toString(), phonenumber.getText().toString(), Utility.arabicToDecimal(password.getText().toString())).enqueue(new Callback<ApiResponse>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    reg.send_info(username.getText().toString(), phonenumber.getText().toString(), Utility.arabicToDecimal(password.getText().toString())).enqueue(new Callback<ApiResponse>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                        if (response.body().getStatus() == 101) {
+                            if (response.body().getStatus() == 101) {
 
-                            progress.smoothToHide();
+                                progress.smoothToHide();
 
-                            Toast.makeText(
-                                    UserRegisterActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                                Toast.makeText(
+                                        UserRegisterActivity.this
+                                        , response.body().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
 
-                            final Intent goto_sms_validation = new Intent(UserRegisterActivity.this,
-                                    SmsVerification_RegisterActivity.class);
+                                final Intent goto_sms_validation = new Intent(UserRegisterActivity.this,
+                                        SmsVerification_RegisterActivity.class);
 
-                            goto_sms_validation.putExtra("phone_number", phonenumber.getText().toString());
-                            goto_sms_validation.putExtra("username", username.getText().toString());
-                            goto_sms_validation.putExtra("password", password.getText().toString());
+                                goto_sms_validation.putExtra("phone_number", phonenumber.getText().toString());
+                                goto_sms_validation.putExtra("username", username.getText().toString());
+                                goto_sms_validation.putExtra("password", password.getText().toString());
 
-                            reg.send_code(phonenumber.getText().toString()).enqueue(new Callback<ApiResponse>() {
-                                @Override
-                                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                reg.send_code(phonenumber.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                                    @Override
+                                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                                    if (response.message().toString().equals("OK")) {
+                                        if (response.message().toString().equals("OK")) {
 
-                                        progress.smoothToHide();
+                                            progress.smoothToHide();
 
-                                        Toast.makeText(
-                                                UserRegisterActivity.this
-                                                , response.body().getMessage(),
-                                                Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(
+                                                    UserRegisterActivity.this
+                                                    , response.body().getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
 
-                                        startActivity(goto_sms_validation);
+                                            startActivity(goto_sms_validation);
 
-                                    } else {
+                                        } else {
 
-                                        progress.smoothToHide();
-                                        register.setVisibility(View.VISIBLE);
+                                            progress.smoothToHide();
+                                            register.setVisibility(View.VISIBLE);
 
-                                        Toast.makeText(
-                                                UserRegisterActivity.this
-                                                , response.body().getMessage(),
-                                                Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(
+                                                    UserRegisterActivity.this
+                                                    , response.body().getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
+
+                                        }
 
                                     }
 
+                                    @Override
+                                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                        progress.smoothToHide();
+                                        register.setVisibility(View.VISIBLE);
+                                        Toast.makeText(
+                                                UserRegisterActivity.this
+                                                , "خطای اتصال",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
+                            } else {
+
+                                progress.smoothToHide();
+                                register.setVisibility(View.VISIBLE);
+
+                                if (username.getText().toString() == "") {
+                                    usernamelayout.setError("نام کاربری را وارد کنید");
+                                }
+                                if (phonenumber.getText().toString() == "") {
+                                    phonenumberlayout.setError("شماره موبایل را وارد کنید");
+                                }
+                                if (password.getText().toString() == "") {
+                                    passwordlayout.setError("رمز عبور را وارد کنید");
                                 }
 
-                                @Override
-                                public void onFailure(Call<ApiResponse> call, Throwable t) {
-                                    progress.smoothToHide();
-                                    register.setVisibility(View.VISIBLE);
-                                    Toast.makeText(
-                                            UserRegisterActivity.this
-                                            , "خطای اتصال",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
 
+                                Toast.makeText(
+                                        UserRegisterActivity.this
+                                        , response.body().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
 
-                        } else {
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                             progress.smoothToHide();
                             register.setVisibility(View.VISIBLE);
 
-                            if (username.getText().toString() == "") {
-                                usernamelayout.setError("نام کاربری را وارد کنید");
-                            }
-                            if (phonenumber.getText().toString() == "") {
-                                phonenumberlayout.setError("شماره موبایل را وارد کنید");
-                            }
-                            if (password.getText().toString() == "") {
-                                passwordlayout.setError("رمز عبور را وارد کنید");
-                            }
-
-
                             Toast.makeText(
                                     UserRegisterActivity.this
-                                    , response.body().getMessage(),
+                                    , "خطای اتصال",
                                     Toast.LENGTH_SHORT).show();
-
                         }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse> call, Throwable t) {
-
-                        progress.smoothToHide();
-                        register.setVisibility(View.VISIBLE);
-
-                        Toast.makeText(
-                                UserRegisterActivity.this
-                                , "خطای اتصال",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    });
 
 
+                }
             }
 
         });
@@ -184,6 +191,7 @@ public class UserRegisterActivity extends AppCompatActivity {
             finish();
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -199,5 +207,9 @@ public class UserRegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean isUserNameValid(String text) {
+
+        return text.matches("^([A-Za-z]+)(\\s[A-Za-z]+)*\\s?$");
+    }
 
 }

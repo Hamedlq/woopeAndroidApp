@@ -52,7 +52,7 @@ public class TransHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transaction);
+        setContentView(R.layout.activity_trans_history);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             //store = (Store) getIntent().getExtras().getSerializable(STORE);

@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         IsOnFavorite = true;
                         IsOnSearch = false;
                         IsOnHome = false;
+                        IsOnHome = false;
                         IsOnProfile = false;
                         return true;
                     }

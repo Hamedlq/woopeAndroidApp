@@ -102,6 +102,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREF
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 
@@ -777,7 +778,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         switch (item.getItemId()) {
             case R.id.nav_edit_profile:
                 Intent giftIntent = new Intent(getActivity(), EditProfileActivity.class);
-                getActivity().startActivity(giftIntent);
+                getActivity().startActivityForResult(giftIntent,SHOULD_GET_PROFILE);
                 getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
                 break;
             default:

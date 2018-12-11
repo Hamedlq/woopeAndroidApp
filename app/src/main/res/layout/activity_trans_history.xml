@@ -60,7 +60,7 @@ android:fitsSystemWindows="true">
         android:textSize="12sp"
         android:textStyle="bold"
         android:layout_height="match_parent"
-        android:text="لیست پرداخت ها" />
+        android:text="تاریخچه پرداختها" />
 
 
 </android.support.v7.widget.Toolbar>

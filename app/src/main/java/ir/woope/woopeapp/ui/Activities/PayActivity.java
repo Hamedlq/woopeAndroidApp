@@ -192,7 +192,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         } else {
             savedPayListModel = new PayListModel();
         }
-
+        ConfirmPayment(savedPayListModel);
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
             woope_credit.setText(" استفاده از ووپ ("+String.valueOf(profile.getWoopeCreditString())+")");
@@ -287,12 +287,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     // to the sequence
                     @Override
                     public void onSequenceFinish() {
-                        SharedPreferences prefs =
-                                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
-                        editor.commit();
                     }
 
                     @Override
@@ -485,10 +480,10 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         boolean isFirstRun = prefs.getBoolean("PAYACTIVITYFIRSTRUN", true);
         if (isFirstRun)
         {
-            // Code to run once
-
             showhint();
-
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
+            editor.commit();
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -649,9 +644,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     public void showDialog() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(PayActivity.this);
         alertBuilder.setCancelable(true);
-        alertBuilder.setTitle("خروج از پرداخت؟");
-        alertBuilder.setMessage("شما در هر زمان می‌توانید پرداخت خود را از لیست پرداخت‌ها کامل کنید");
-        alertBuilder.setPositiveButton("باشه",
+        alertBuilder.setTitle(" ");
+        alertBuilder.setMessage("می‌خواهید از صفحه پرداخت خارج شوید؟");
+        alertBuilder.setPositiveButton("بله",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
