@@ -4,12 +4,8 @@ package ir.woope.woopeapp.adapters;
  * Created by Hamed on 6/10/2018.
  */
 import android.content.Context;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -127,7 +123,7 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
                                 }else {
                                     store.isFollowed=false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));

@@ -175,7 +175,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
 
                 }
-            }
+             }
 
         });
 
@@ -209,7 +209,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
     public boolean isUserNameValid(String text) {
 
-        return text.matches("^([A-Za-z]+)(\\s[A-Za-z]+)*\\s?$");
+        return text.matches("^([A-Za-z0-9]+)(\\s[A-Za-z]+)*\\s?$");
     }
 
 }
