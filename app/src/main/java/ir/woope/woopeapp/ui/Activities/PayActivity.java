@@ -1,55 +1,34 @@
 package ir.woope.woopeapp.ui.Activities;
 
-import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.view.Gravity;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.widget.ActionMenuView;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.target.ViewTarget;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -60,11 +39,11 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
-import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayResponseModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
@@ -79,11 +58,6 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_NAME;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
-
-import android.widget.RelativeLayout.LayoutParams;
 
 public class PayActivity extends AppCompatActivity implements View.OnTouchListener {
     //@BindView(R.id.StoreName) TextView StoreName_tv;
@@ -163,7 +137,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
 
     String profileString;
-    boolean flag;
+    boolean automaticPayFlag=false;
     boolean isOnline=true;
     boolean isDetailShow=false;
     //boolean saveTransactionFlag=true;
@@ -203,16 +177,22 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            if(savedPayListModel==null){
+                //fetch from shared preferences because of going to bank page and return
+                profile=getUserProfile();
+                savedPayListModel=getSavedPayList();
+                ConfirmPayment(savedPayListModel);
+            }
             totalPrice=savedPayListModel.totalPrice;
             getStore(savedPayListModel.branchId);
             //amount.setText(String.valueOf(savedPayListModel.totalPrice));
             StoreName_tv.setText(savedPayListModel.storeName);
-            Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).into(backdrop);
+            Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).transform(new CircleTransformation()).into(backdrop);
             calculateValues();
         } else {
             savedPayListModel = new PayListModel();
         }
-
+        ConfirmPayment(savedPayListModel);
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
             woope_credit.setText(" استفاده از ووپ ("+String.valueOf(profile.getWoopeCreditString())+")");
@@ -224,7 +204,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
 
-;
         btn.setOnTouchListener(this);
         online_card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,12 +287,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     // to the sequence
                     @Override
                     public void onSequenceFinish() {
-                        SharedPreferences prefs =
-                                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
-                        editor.commit();
                     }
 
                     @Override
@@ -335,7 +309,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         //int selectedId = payType.getCheckedRadioButtonId();
 
         total_price.setText(String.valueOf(totalPrice));
-        long rw=((totalPrice)/savedPayListModel.basePrice)*savedPayListModel.returnPoint;
+        long rw=0;
+        if(savedPayListModel.returnPoint!=0){
+            rw=((totalPrice)/savedPayListModel.basePrice)*savedPayListModel.returnPoint;
+        }
+
         return_woope.setText(String.valueOf(rw));
         if (!isOnline) {
             pay_price.setText(commaSeprate(totalPrice));
@@ -462,8 +440,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     @Override
     protected void onResume() {
         super.onResume();
-        if (flag) {
-            getProfileFromServer();
+        if (automaticPayFlag) {
+            ConfirmPayment(savedPayListModel);
+            //getProfileFromServer();
         }
 
 //        SharedPreferences prefs =
@@ -501,10 +480,10 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         boolean isFirstRun = prefs.getBoolean("PAYACTIVITYFIRSTRUN", true);
         if (isFirstRun)
         {
-            // Code to run once
-
             showhint();
-
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
+            editor.commit();
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -568,6 +547,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 int code = response.code();
                 if (code == 200) {
                     PayListModel model = response.body();
+                    savedPayListModel = model;
                     //PayState sp = (PayState) spinner.getSelectedItem();
                     if (!isOnline) {
                         //go to cash pay
@@ -633,17 +613,53 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+            if(isDetailShow){
+                isDetailShow=false;
+                drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.up_arrow));
+                detail_layout.setVisibility(View.GONE);
+            }else{
+                showDialog(); // close this activity and return to preview activity (if there is any)
+            }
         }
         if (item.getItemId() == R.id.action_support) {
 
             Intent goto_verifphone = new Intent(this,
                     ContactUsActivity.class);
             startActivity(goto_verifphone);
-
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isDetailShow){
+            isDetailShow=false;
+            drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.up_arrow));
+            detail_layout.setVisibility(View.GONE);
+        }else{
+            showDialog(); // close this activity and return to preview activity (if there is any)
+        }
+    }
+
+    public void showDialog() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(PayActivity.this);
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle(" ");
+        alertBuilder.setMessage("می‌خواهید از صفحه پرداخت خارج شوید؟");
+        alertBuilder.setPositiveButton("بله",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        alertBuilder.setNegativeButton("نه، ادامه میدم",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 
     /*private TextWatcher onTextChangedListener() {
@@ -733,7 +749,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     }
 
-    public void ConfirmPayment(PayListModel payListModel) {
+    public void ConfirmPayment(final PayListModel payListModel) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -754,8 +770,18 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
-                    PayListModel trans = response.body();
-                    gotoPayCodeActivity(trans);
+                    if (response.body().getStatus() == 101) {
+                        //PayListModel trans = response.body();
+                        payListModel.confirmationCode=response.body().getMessage();
+                        gotoPayCodeActivity(payListModel);
+                    } else {
+
+                        /*Toast.makeText(
+                                PayActivity.this
+                                , response.body().getMessage(),
+                                Toast.LENGTH_SHORT).show();*/
+
+                    }
                 }
             }
 
@@ -853,7 +879,40 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     private void gotoBankPage(PayResponseModel bankModel) {
+        automaticPayFlag=true;
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(savedPayListModel);
+        prefsEditor.putString(PAY_LIST_ITEM, json);
+        prefsEditor.apply();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bankModel.bankUrl));
         startActivity(browserIntent);
+    }
+
+    public Profile getUserProfile() {
+            Gson gson = new Gson();
+            final SharedPreferences prefs =
+                    this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+            String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
+            if (profileString != null) {
+                profile = (Profile) gson.fromJson(profileString, Profile.class);
+                return profile;
+            } else {
+                return new Profile();
+            }
+    }
+    public PayListModel getSavedPayList() {
+        Gson gson = new Gson();
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String payListString = prefs.getString(PAY_LIST_ITEM, null);
+        if (payListString != null) {
+            savedPayListModel = (PayListModel) gson.fromJson(payListString, PayListModel.class);
+            return savedPayListModel;
+        } else {
+            return new PayListModel();
+        }
     }
 }

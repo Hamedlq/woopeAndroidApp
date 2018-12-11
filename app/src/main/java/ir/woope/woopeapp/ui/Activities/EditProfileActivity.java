@@ -156,7 +156,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                         EditProfileActivity.this
                                         , response.body().getMessage(),
                                         Toast.LENGTH_SHORT).show();
-
+                                Intent i=getIntent();
+                                setResult(RESULT_OK, i);
                                 finish();
 
                             } else {

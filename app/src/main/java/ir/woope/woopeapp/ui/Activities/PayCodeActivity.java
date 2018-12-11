@@ -2,7 +2,6 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,24 +14,19 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
-import ir.woope.woopeapp.models.Store;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.POINTS_PAYED;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
 
 public class PayCodeActivity extends AppCompatActivity {
     @BindView(R.id.backdrop)
@@ -71,7 +65,7 @@ public class PayCodeActivity extends AppCompatActivity {
 
         ConfirmCode.setText(payListModel.confirmationCode);
 
-        Picasso.with(PayCodeActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).into(backdrop);
+        Picasso.with(PayCodeActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).transform(new CircleTransformation()).into(backdrop);
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -88,7 +82,7 @@ public class PayCodeActivity extends AppCompatActivity {
         });
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
 
         hideProgreeBar();
     }
@@ -97,8 +91,8 @@ public class PayCodeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.pay_toolbar_items, menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        /*getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
         return true;
     }
 

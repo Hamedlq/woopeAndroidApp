@@ -109,7 +109,10 @@ dependencies {
 
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
     implementation 'com.yuyakaido.android:card-stack-view:2.1.0'
 
@@ -118,6 +121,9 @@ dependencies {
     implementation 'com.android.support:support-core-ui:27.1.1'
 
     implementation 'com.romandanylyk:pageindicatorview:1.0.2'
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 
 }

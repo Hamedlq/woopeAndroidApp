@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
@@ -128,7 +129,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 */
                                 if(!store.isFollowed){
                                     store.isFollowed=true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
                                 }else {
                                     store.isFollowed=false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
@@ -171,13 +172,13 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
 
 // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
         if(store.isFollowed){
-            store.isFollowed=true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite));
+            //store.isFollowed=true;
+            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
         }else {
-            store.isFollowed=false;
+            //store.isFollowed=false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
        /* holder.overflow.setOnClickListener(new View.OnClickListener() {

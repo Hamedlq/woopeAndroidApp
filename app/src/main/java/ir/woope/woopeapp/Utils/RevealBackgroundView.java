@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import ir.woope.woopeapp.R;
+
 /**
  * Created by Miroslaw Stanek on 18.01.15.
  */
@@ -61,7 +63,7 @@ public class RevealBackgroundView extends View {
     private void init() {
         fillPaint = new Paint();
         fillPaint.setStyle(Paint.Style.FILL);
-        fillPaint.setColor(Color.WHITE);
+        fillPaint.setColor(getResources().getColor(R.color.viewBg));
     }
 
     public void setFillPaintColor(int color) {

@@ -41,7 +41,7 @@ public class TransHistoryActivity extends AppCompatActivity {
     Profile profile;
     private RecyclerView recyclerView;
     private List<DocumentModel> orderModelList;
-    private ProfileTransactionTouchListener payTransactionTouchListener;
+    //private ProfileTransactionTouchListener payTransactionTouchListener;
     private ProgressBar progressBar;
     /*private List<ItemModel> userOrderModelList;*/
     private ProfileTransactionListAdapter adapter;
@@ -52,7 +52,7 @@ public class TransHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transaction);
+        setContentView(R.layout.activity_trans_history);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             //store = (Store) getIntent().getExtras().getSerializable(STORE);
@@ -72,7 +72,7 @@ public class TransHistoryActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recycler_view);
         orderModelList = new ArrayList<>();
-        adapter = new ProfileTransactionListAdapter(this,orderModelList, payTransactionTouchListener);
+        adapter = new ProfileTransactionListAdapter(this,orderModelList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.addItemDecoration(new ListPaddingDecoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -134,7 +134,7 @@ public class TransHistoryActivity extends AppCompatActivity {
                     orderModelList = response.body();
                     adapter.notifyDataSetChanged();
 
-                    adapter = new ProfileTransactionListAdapter(TransHistoryActivity.this,orderModelList, payTransactionTouchListener);
+                    adapter = new ProfileTransactionListAdapter(TransHistoryActivity.this,orderModelList);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);

@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long mLastClickTime = 0;
 
-    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false;
+    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite=false;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         IsOnHome = true;
                         IsOnSearch = false;
                         IsOnProfile=false;
+                        IsOnFavorite=false;
                         return true;
                     }
                     else break;
@@ -151,11 +152,12 @@ public class MainActivity extends AppCompatActivity {
                         IsOnSearch = true;
                         IsOnHome = false;
                         IsOnProfile = false;
+                        IsOnFavorite=false;
                         return true;
                     }
                     else break;
                 case R.id.navigation_favorite:
-                    if (!IsOnSearch) {
+                    if (!IsOnFavorite) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                             break;
                         }
@@ -163,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction()
                                 .replace(R.id.frame_layout, new profileBookmarkFragment(), SEARCH_FRAGMENT)
                                 .commit();
-                        IsOnSearch = true;
+                        IsOnFavorite = true;
+                        IsOnSearch = false;
+                        IsOnHome = false;
                         IsOnHome = false;
                         IsOnProfile = false;
                         return true;
@@ -182,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         IsOnProfile = true;
                         IsOnHome= false;
                         IsOnSearch=false;
+                        IsOnFavorite=false;
                         return true;
                     }
                     else break;

@@ -55,7 +55,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
 private Context context;
     private List<DocumentModel> orderModels;
 
-    private TransHistoryActivity.ProfileTransactionTouchListener payTransactionTouchListener;
+    //private TransHistoryActivity.ProfileTransactionTouchListener payTransactionTouchListener;
 
     private long startClicktime;
     private static final int MAX_CLICK_DURATION = 200;
@@ -66,10 +66,10 @@ private Context context;
     }
 
 
-    public ProfileTransactionListAdapter(Context context,List<DocumentModel> list, TransHistoryActivity.ProfileTransactionTouchListener payTransactionTouchListener) {
+    public ProfileTransactionListAdapter(Context context,List<DocumentModel> list) {
         context=context;
         this.orderModels = list;
-        this.payTransactionTouchListener=payTransactionTouchListener;
+        //this.payTransactionTouchListener=payTransactionTouchListener;
     }
 
 
@@ -118,12 +118,12 @@ private Context context;
             tr5_am = view.findViewById(R.id.tr5_am);
             tr5_tt = view.findViewById(R.id.tr5_tt);
             tr5_time = view.findViewById(R.id.tr5_time);
-            view.setOnClickListener(new View.OnClickListener() {
+            /*view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     payTransactionTouchListener.onBtnClick(v, getPosition());
                 }
-            });
+            });*/
         }
     }
 
