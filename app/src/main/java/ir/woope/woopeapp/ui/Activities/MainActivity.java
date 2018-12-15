@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -49,6 +51,7 @@ import com.bumptech.glide.request.target.ViewTarget;
 import com.google.gson.Gson;
 import com.onesignal.OSPermissionSubscriptionState;
 import com.onesignal.OneSignal;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -56,7 +59,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -115,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
     private long mLastClickTime = 0;
 
     boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite=false;
+
+    UCrop.Options options;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -269,6 +276,12 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_up,R.anim.no_change);
             }
         });
+
+        options = new UCrop.Options();
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        options.setToolbarTitle("ویرایش عکس");
+
     }
 
 
@@ -410,20 +423,57 @@ public class MainActivity extends AppCompatActivity {
                 onSelectFromGalleryResult(data);
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
-            else if (requestCode == CROP_IMAGE) {
-                File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
-                if (file.exists()) {
-                    String filePath = file.getPath();
-                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                    //Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
-                    sendPicToServer(bitmap, filePath);
-                    /*if(fragment !=null){
-                        ((profile_fragment) fragment).setPhoto(bitmap);
-                    }*/
+//            else if (requestCode == CROP_IMAGE) {
+//                File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
+//
+//                //////////
+//
+////                File file = new File(Environment.getExternalStorageDirectory()+"/woopeCache/");
+//                if (file.exists()) {
+//                    String filePath = file.getPath();
+//                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+//                    //Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+//                    sendPicToServer(bitmap, filePath);
+//
+//                    /*if(fragment !=null){
+//                        ((profile_fragment) fragment).setPhoto(bitmap);
+//                    }*/
+//
+//                }
+//
+//                ///////////
+//
+////                String path = data.getStringExtra(CropImage.IMAGE_PATH);
+////
+////                // if nothing received
+////                if (path == null) {
+////
+////                    return;
+////                }
+////
+////                // cropped bitmap
+////                Bitmap bitmap = BitmapFactory.decodeFile(mFileTemp.getPath());
+//
+//
+//
+//            }
 
-                }
-            }else if(requestCode == SHOULD_GET_PROFILE){
+            else if(requestCode == SHOULD_GET_PROFILE){
                 getProfileFromServer();
+            }
+            else if (requestCode == UCrop.REQUEST_CROP) {
+                final Uri resultUri = UCrop.getOutput(data);
+
+                try {
+                    sendPicToServer(MediaStore.Images.Media.getBitmap(this.getContentResolver(),resultUri), resultUri.getPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                final Throwable cropError = UCrop.getError(data);
             }
         }
     }
@@ -436,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bm.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 File destination = new File(getExternalCacheDir(), "tempItemFile.jpg");
+//                File destination = new File(Environment.getExternalStorageDirectory()+"/woopeCache/");
                 FileOutputStream fo;
 
                 destination.createNewFile();
@@ -443,8 +494,15 @@ public class MainActivity extends AppCompatActivity {
                 fo.write(bytes.toByteArray());
                 fo.close();
                 Uri uri = Uri.fromFile(destination);
-                doCrop(uri);
+//                doCrop(uri);
+                ////
 
+                UCrop.of(uri, uri)
+                        .withAspectRatio(1, 1)
+                        .withMaxResultSize(1024,1024)
+                        .withOptions(options)
+                        .start(this);
+                ////
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -469,7 +527,15 @@ public class MainActivity extends AppCompatActivity {
             fo.write(bytes.toByteArray());
             fo.close();
             Uri uri = Uri.fromFile(destination);
-            doCrop(uri);
+//            doCrop(uri);
+            ///
+
+            UCrop.of(uri, uri)
+                    .withAspectRatio(1, 1)
+                    .withMaxResultSize(1024,1024)
+                    .withOptions(options)
+                    .start(this);
+            ///
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -488,8 +554,8 @@ public class MainActivity extends AppCompatActivity {
             photoPickerIntent.putExtra("crop", "true");
             photoPickerIntent.putExtra("aspectX", 1);
             photoPickerIntent.putExtra("aspectY", 1);
-            photoPickerIntent.putExtra("outputX", 512);
-            photoPickerIntent.putExtra("outputY", 512);
+//            photoPickerIntent.putExtra("outputX", 512);
+//            photoPickerIntent.putExtra("outputY", 512);
             photoPickerIntent.putExtra("return-data", true);
             photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, picFileUri);
             photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());

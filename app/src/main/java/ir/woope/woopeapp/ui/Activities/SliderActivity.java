@@ -1,48 +1,29 @@
 package ir.woope.woopeapp.ui.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.daimajia.slider.library.Indicators.PagerIndicator;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
+
 import com.rd.PageIndicatorView;
 import com.rd.animation.type.AnimationType;
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
+
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
 import com.yuyakaido.android.cardstackview.StackFrom;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.Utils.ChildAnimationExample;
 import ir.woope.woopeapp.adapters.CardStackAdapter;
 import ir.woope.woopeapp.helpers.Constants;
-
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class SliderActivity extends AppCompatActivity implements CardStackListener {
 

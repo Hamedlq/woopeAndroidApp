@@ -108,6 +108,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                                     Toast.LENGTH_SHORT).show();
 
                                             startActivity(goto_sms_validation);
+                                            finish();
 
                                         } else {
 
