@@ -105,12 +105,21 @@ dependencies {
 
     implementation 'com.chaos.view:pinview:1.4.2'
 
+<<<<<<< HEAD
+=======
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.daimajia.slider:library:1.1.5@aar'
+
+>>>>>>> master
     implementation 'com.yuyakaido.android:card-stack-view:2.1.0'
 
     implementation 'com.android.support:support-core-ui:27.1.1'
 
     implementation 'com.romandanylyk:pageindicatorview:1.0.2'
+<<<<<<< HEAD
 
     implementation 'com.github.yalantis:ucrop:2.2.2'
+=======
+>>>>>>> master
 
 }
