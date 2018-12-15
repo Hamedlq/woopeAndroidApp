@@ -591,7 +591,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     }
 
     public void setPhoto(String filePath) {
-        //ivUserProfilePhoto.setImageBitmap(bitmap);
+        //        //ivUserProfilePhoto.setImageBitmap(bitmap);
 
         Picasso.with(getActivity())
                 .load(Constants.GlobalConstants.LOGO_URL + filePath)

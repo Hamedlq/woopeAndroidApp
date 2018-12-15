@@ -424,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
+            else if (requestCode == REQUEST_CAMERA) {
                 onCaptureImageResult(data);
 //            else if (requestCode == CROP_IMAGE) {
 //                File file = new File(getExternalCacheDir(), "tempItemFile.jpg");
@@ -461,26 +461,24 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 
-                }
-            } else if (requestCode == SHOULD_GET_PROFILE) {
-                getProfileFromServer();
             }
-            else if (requestCode == UCrop.REQUEST_CROP) {
-                final Uri resultUri = UCrop.getOutput(data);
+        } else if (requestCode == SHOULD_GET_PROFILE) {
+            getProfileFromServer();
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
 
-                try {
-                    sendPicToServer(MediaStore.Images.Media.getBitmap(this.getContentResolver(),resultUri), resultUri.getPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-
-            } else if (resultCode == UCrop.RESULT_ERROR) {
-                final Throwable cropError = UCrop.getError(data);
+            try {
+                sendPicToServer(MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri), resultUri.getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
         }
     }
+
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;
@@ -503,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
 
                 UCrop.of(uri, uri)
                         .withAspectRatio(1, 1)
-                        .withMaxResultSize(1024,1024)
+                        .withMaxResultSize(1024, 1024)
                         .withOptions(options)
                         .start(this);
                 ////
@@ -536,7 +534,7 @@ public class MainActivity extends AppCompatActivity {
 
             UCrop.of(uri, uri)
                     .withAspectRatio(1, 1)
-                    .withMaxResultSize(1024,1024)
+                    .withMaxResultSize(1024, 1024)
                     .withOptions(options)
                     .start(this);
             ///
