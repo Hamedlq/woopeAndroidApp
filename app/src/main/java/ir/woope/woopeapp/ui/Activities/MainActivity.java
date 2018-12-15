@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
         options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         options.setToolbarTitle("ویرایش عکس");
 
+
     }
 
 
@@ -461,21 +462,21 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 
+            } else if (requestCode == SHOULD_GET_PROFILE) {
+                getProfileFromServer();
+            } else if (requestCode == UCrop.REQUEST_CROP) {
+                final Uri resultUri = UCrop.getOutput(data);
+
+                try {
+                    sendPicToServer(MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri), resultUri.getPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                final Throwable cropError = UCrop.getError(data);
             }
-        } else if (requestCode == SHOULD_GET_PROFILE) {
-            getProfileFromServer();
-        } else if (requestCode == UCrop.REQUEST_CROP) {
-            final Uri resultUri = UCrop.getOutput(data);
-
-            try {
-                sendPicToServer(MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri), resultUri.getPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            final Throwable cropError = UCrop.getError(data);
         }
     }
 
@@ -534,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
 
             UCrop.of(uri, uri)
                     .withAspectRatio(1, 1)
-                    .withMaxResultSize(1024, 1024)
+                    .withMaxResultSize(1024,1024)
                     .withOptions(options)
                     .start(this);
             ///
