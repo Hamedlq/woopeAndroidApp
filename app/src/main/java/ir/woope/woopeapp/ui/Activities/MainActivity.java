@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
 
     //private TextView mTextMessage;
     String HOME_FRAGMENT = "HomeFragment";
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long mLastClickTime = 0;
 
-    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite=false;
+    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite = false;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -135,11 +136,10 @@ public class MainActivity extends AppCompatActivity {
                                 .commit();
                         IsOnHome = true;
                         IsOnSearch = false;
-                        IsOnProfile=false;
-                        IsOnFavorite=false;
+                        IsOnProfile = false;
+                        IsOnFavorite = false;
                         return true;
-                    }
-                    else break;
+                    } else break;
                 case R.id.navigation_‌search:
                     if (!IsOnSearch) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -152,10 +152,9 @@ public class MainActivity extends AppCompatActivity {
                         IsOnSearch = true;
                         IsOnHome = false;
                         IsOnProfile = false;
-                        IsOnFavorite=false;
+                        IsOnFavorite = false;
                         return true;
-                    }
-                    else break;
+                    } else break;
                 case R.id.navigation_favorite:
                     if (!IsOnFavorite) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -171,8 +170,7 @@ public class MainActivity extends AppCompatActivity {
                         IsOnHome = false;
                         IsOnProfile = false;
                         return true;
-                    }
-                    else break;
+                    } else break;
                 case R.id.navigation_profile:
                     if (!IsOnProfile) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
@@ -184,12 +182,11 @@ public class MainActivity extends AppCompatActivity {
                                 .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
                                 .commit();
                         IsOnProfile = true;
-                        IsOnHome= false;
-                        IsOnSearch=false;
-                        IsOnFavorite=false;
+                        IsOnHome = false;
+                        IsOnSearch = false;
+                        IsOnFavorite = false;
                         return true;
-                    }
-                    else break;
+                    } else break;
             }
             return false;
         }
@@ -217,17 +214,17 @@ public class MainActivity extends AppCompatActivity {
             shiftingMode.setAccessible(true);
             shiftingMode.setBoolean(menuView, false);
             shiftingMode.setAccessible(false);
-        for (int i = 0; i < menuView.getChildCount(); i++) {
-            BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-            final View iconView = item.findViewById(android.support.design.R.id.icon);
-            item.setShiftingMode(false);
-            item.setChecked(item.getItemData().isChecked());
-            final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-            final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
-            layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
-            iconView.setLayoutParams(layoutParams);
-        }
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                final View iconView = item.findViewById(android.support.design.R.id.icon);
+                item.setShiftingMode(false);
+                item.setChecked(item.getItemData().isChecked());
+                final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+                final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+                layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, displayMetrics);
+                iconView.setLayoutParams(layoutParams);
+            }
         } catch (NoSuchFieldException e) {
             //Log.e("BNVHelper", "Unable to get shift mode field", e);
         } catch (IllegalAccessException e) {
@@ -235,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         }
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-        //sendRegistrationToServer();
+        sendRegistrationToServer();
         //getProfileFromServer();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -262,11 +259,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Profile obj =getUserProfile();
+                Profile obj = getUserProfile();
                 Intent myIntent = new Intent(MainActivity.this, TransactionActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 startActivity(myIntent);
-                overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                overridePendingTransition(R.anim.slide_up, R.anim.no_change);
             }
         });
     }
@@ -346,25 +343,28 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(
                 Constants.GlobalConstants.MY_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "");
+        try {
+            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+            String oneSignalToken = status.getSubscriptionStatus().getUserId();
+            String pusheToken = Pushe.getPusheId(this);
 
-        OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-        String oneSignalToken = status.getSubscriptionStatus().getUserId();
-        String pusheToken = Pushe.getPusheId(this);
+            Call<ApiResponse> call =
+                    profileInterface.sendPushNotificationTokens("bearer " + authToken, oneSignalToken, pusheToken);
 
-        Call<ApiResponse> call =
-                profileInterface.sendPushNotificationTokens("bearer " + authToken, oneSignalToken, pusheToken);
+            call.enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    //Toast.makeText(MainActivity.this, "do", Toast.LENGTH_LONG).show();
+                }
 
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                //Toast.makeText(MainActivity.this, "do", Toast.LENGTH_LONG).show();
-            }
+                @Override
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    //Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                //Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_LONG).show();
-            }
-        });
+        }
     }
 
 
@@ -389,6 +389,7 @@ public class MainActivity extends AppCompatActivity {
     public void galleryIntent() {
 
         if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);//
@@ -397,8 +398,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+        if (checkPermission_image_capture(this)) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_CAMERA);
+        }
     }
 
 
@@ -422,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
                     }*/
 
                 }
-            }else if(requestCode == SHOULD_GET_PROFILE){
+            } else if (requestCode == SHOULD_GET_PROFILE) {
                 getProfileFromServer();
             }
         }
@@ -540,6 +543,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    public boolean checkPermission_image_capture(final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (Activity) context,
+                        Manifest.permission.CAMERA)) {
+                    showCameraDialog("دوربین", context,
+                            Manifest.permission.CAMERA);
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[]{Manifest.permission.CAMERA},
+                                    MY_PERMISSIONS_REQUEST_CAMERA);
+                }
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
+    }
+
+
     public void showDialog(final String msg, final Context context,
                            final String permission) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
@@ -558,11 +591,37 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    public void showCameraDialog(final String msg, final Context context,
+                                 final String permission) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle("دسترسی مورد نیاز است");
+        alertBuilder.setMessage(msg + " لطفا برای ذخیره عکس دسترسی بدهید");
+        alertBuilder.setPositiveButton(android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[]{permission},
+                                MY_PERMISSIONS_REQUEST_CAMERA);
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //nothing happen
+                } else {
+                    Toast.makeText(MainActivity.this, "عدم دسترسی",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MY_PERMISSIONS_REQUEST_CAMERA:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //nothing happen
                 } else {
