@@ -57,5 +57,7 @@
     <string name="askStoreForCashPay">از فروشگاه درخواست خرید نقدی کنید</string>
     <string name="receive_gift">دریافت هدیه</string>
     <string name="edit_profile">ویرایش پروفایل</string>
+    <string name="network_error">خطا در ارتباط با شبکه. لطفا ارتباط اینترنت را بررسی کنید</string>
+    <string name="error">خطا در ارتباط. لطفا مجدد تلاش کنید</string>
 
 </resources>

@@ -143,13 +143,17 @@ public class CashPayActivity extends AppCompatActivity {
                 if (code == 200) {
                     ApiResponse res = response.body();
                     String x=res.getMessage();
-                    Toast.makeText(CashPayActivity.this,x,Toast.LENGTH_LONG).show();
-                    Intent goto_main = new Intent(CashPayActivity.this,
-                            MainActivity.class);
-                    goto_main.putExtra(GET_PROFILE_FROM_SERVER, true);
-                    goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(goto_main);
+                    if (response.body().getStatus() == 101) {
+                        Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
+                        Intent goto_main = new Intent(CashPayActivity.this,
+                                MainActivity.class);
+                        goto_main.putExtra(GET_PROFILE_FROM_SERVER, true);
+                        goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(goto_main);
+                    }else {
+                        Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 

@@ -561,7 +561,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
             @Override
             public void onFailure(Call<PayListModel> call, Throwable t) {
-                Toast.makeText(PayActivity.this, "failure", Toast.LENGTH_LONG).show();
+                Toast.makeText(PayActivity.this, R.string.error, Toast.LENGTH_LONG).show();
                 hideProgreeBar();
             }
         });

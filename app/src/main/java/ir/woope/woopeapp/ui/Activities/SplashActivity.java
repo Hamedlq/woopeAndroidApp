@@ -121,7 +121,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 Toast.makeText(
                         SplashActivity.this
-                        , t.getMessage() + "checkVersion",
+                        , R.string.network_error,
                         Toast.LENGTH_LONG).show();
 
             }
@@ -230,7 +230,7 @@ public class SplashActivity extends AppCompatActivity {
                 progress.smoothToHide();
                 Toast.makeText(
                         SplashActivity.this
-                        , t.getMessage() + "getProfile",
+                        , R.string.network_error,
                         Toast.LENGTH_LONG).show();
 
             }

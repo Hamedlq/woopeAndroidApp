@@ -67,7 +67,6 @@ public class TransactionActivity extends AppCompatActivity {
         /*fragmentManager.beginTransaction()
                 .add(R.id.frame_layout, new TransListFragment(), LIST_FRAGMENT)
                 .commit();*/
-        progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recycler_view);
         orderModelList = new ArrayList<>();
         adapter = new TransactionListAdapter(this,orderModelList, payTransactionTouchListener);
@@ -157,7 +156,7 @@ public class TransactionActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<PayListModel>> call, Throwable t) {
-                Toast.makeText(TransactionActivity.this, "failure", Toast.LENGTH_LONG).show();
+                Toast.makeText(TransactionActivity.this, R.string.error, Toast.LENGTH_LONG).show();
                 hideProgreeBar();
             }
         });
