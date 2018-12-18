@@ -12,26 +12,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:background="@drawable/group1787"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.814"
-        android:background="@drawable/group1787"
-        app:mrl_rippleRoundedCorners="50dp"
-        app:mrl_rippleHover="true"
+        app:layout_constraintVertical_bias="0.935"
         app:mrl_rippleDelayClick="true"
+        app:mrl_rippleHover="true"
         app:mrl_rippleOverlay="true"
-        >
+        app:mrl_rippleRoundedCorners="50dp">
 
-    <TextView
-        android:id="@+id/btn_enter_loginn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ورود"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        />
+        <TextView
+            android:id="@+id/btn_enter_loginn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="ورود اعضا"
+            android:textColor="@color/white" />
 
     </com.balysv.materialripple.MaterialRippleLayout>
 
@@ -40,26 +38,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:background="@drawable/group1786"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937"
-        android:background="@drawable/group1786"
-        app:mrl_rippleRoundedCorners="50dp"
-        app:mrl_rippleHover="true"
+        app:layout_constraintVertical_bias="0.793"
         app:mrl_rippleDelayClick="true"
+        app:mrl_rippleHover="true"
         app:mrl_rippleOverlay="true"
-        >
+        app:mrl_rippleRoundedCorners="50dp">
 
-    <TextView
-        android:id="@+id/btn_registerr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ثبت نام"
-        android:layout_gravity="center"
-        android:textColor="@color/colorPrimary"
-         />
+        <TextView
+            android:id="@+id/btn_registerr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="ثبت نام جدید"
+            android:textColor="@color/colorPrimary" />
 
     </com.balysv.materialripple.MaterialRippleLayout>
 
