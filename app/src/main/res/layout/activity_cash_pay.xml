@@ -74,8 +74,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_marginTop="40dp"
-                    android:text="با دریافت کد از فروشگاه ووپ خود را دریافت کنید"
-                    android:textSize="12sp" />
+                    android:text="با دریافت کد از فروشگاه، ووپ خود را دریافت کنید"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/ConfirmCode"
@@ -85,6 +85,7 @@
                     android:layout_marginTop="30dp"
                     android:background="@drawable/code_input"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:inputType="number"
                     android:hint="کد تایید پرداخت"
                     android:textSize="12sp" />

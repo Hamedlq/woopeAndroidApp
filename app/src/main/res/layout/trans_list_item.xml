@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
@@ -9,6 +7,8 @@
     android:layout_margin="10dp"
     android:elevation="5dp"
     card_view:cardCornerRadius="10dp"
+    android:layoutDirection="ltr"
+    android:textDirection="rtl"
     card_view:cardPreventCornerOverlap="false">
 
     <LinearLayout
@@ -24,8 +24,8 @@
             android:layout_gravity="center"
             android:background="@color/white"
             card_view:cardBackgroundColor="@color/white"
-            card_view:cardElevation="10dp"
-            card_view:cardCornerRadius="5dp">
+            card_view:cardCornerRadius="5dp"
+            card_view:cardElevation="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -36,6 +36,7 @@
                     android:id="@+id/store_name_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
                     android:text=""
@@ -53,19 +54,20 @@
                     android:id="@+id/total_price"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/return_woop"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/total_price"
-                    android:background="@drawable/woope_bg"
+                    android:layout_marginEnd="7dp"
                     android:layout_marginRight="7dp"
-                    android:textColor="@color/white"
+                    android:background="@drawable/woope_bg"
                     android:gravity="center"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
 
 
@@ -98,8 +100,8 @@
                 android:id="@+id/tr1_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/tr1_ct"
                 android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/tr1_ct"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
 
@@ -118,8 +120,8 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:gravity="center"
                 android:layout_toRightOf="@+id/tr1_tt"
+                android:gravity="center"
                 android:textSize="8sp" />
 
         </RelativeLayout>
@@ -129,8 +131,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/tr2_ct"
@@ -145,8 +147,8 @@
                 android:id="@+id/tr2_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/tr2_ct"
                 android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/tr2_ct"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
 
@@ -164,8 +166,8 @@
                 android:id="@+id/tr2_time"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tr2_tt"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tr2_tt"
                 android:gravity="center"
                 android:textSize="8sp" />
 
@@ -192,8 +194,8 @@
                 android:id="@+id/tr3_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/tr3_ct"
                 android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/tr3_ct"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
 
@@ -211,8 +213,8 @@
                 android:id="@+id/tr3_time"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tr3_tt"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tr3_tt"
                 android:gravity="center"
                 android:textSize="8sp" />
 
@@ -239,8 +241,8 @@
                 android:id="@+id/tr4_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/tr4_ct"
                 android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/tr4_ct"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
 
@@ -250,16 +252,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:gravity="center"
                 android:layout_centerVertical="true"
+                android:gravity="center"
                 android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/tr4_time"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tr4_tt"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tr4_tt"
                 android:gravity="center"
                 android:textSize="8sp" />
 
@@ -286,8 +288,8 @@
                 android:id="@+id/tr5_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/tr5_ct"
                 android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/tr5_ct"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
 
@@ -305,8 +307,8 @@
                 android:id="@+id/tr5_time"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tr5_tt"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tr5_tt"
                 android:gravity="center"
                 android:textSize="8sp" />
 

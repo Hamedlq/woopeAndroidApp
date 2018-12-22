@@ -75,8 +75,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:textSize="12sp"
-                    android:text="با ارایه این کد به فروشگاه مبلغ انتقال می‌یابد" />
+                    android:textSize="18sp"
+                    android:text="با ارایه این کد به فروشگاه خرید کامل خواهد شد" />
 
                 <TextView
                     android:id="@+id/ConfirmCode"

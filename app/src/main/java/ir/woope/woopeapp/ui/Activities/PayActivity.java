@@ -772,7 +772,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         payListModel.confirmationCode = response.body().getMessage();
                         gotoPayCodeActivity(payListModel);
                     } else {
-
+                        calculateValues();
                         /*Toast.makeText(
                                 PayActivity.this
                                 , response.body().getMessage(),

@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
-                    android:text="لطفا کد تایید ارسالی را وارد کنید"
+                    android:text= "@string/sms_msg"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
