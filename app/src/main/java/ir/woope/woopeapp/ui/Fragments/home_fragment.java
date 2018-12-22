@@ -1,5 +1,6 @@
 package ir.woope.woopeapp.ui.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -7,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -29,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.request.target.ViewTarget;
@@ -88,6 +91,7 @@ public class home_fragment extends Fragment {
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
     private RecyclerView recyclerView;
+    RecyclerView.LayoutManager mLayoutManager;
     private StoresAdapter adapter;
     ItemTouchListener itemTouchListener;
     FloatingActionButton fab;
@@ -161,8 +165,8 @@ public class home_fragment extends Fragment {
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener, this);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new ListPaddingDecoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -323,7 +327,7 @@ public class home_fragment extends Fragment {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener);
+                    adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener, home_fragment.this);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
@@ -368,48 +372,38 @@ public class home_fragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-
-        boolean isFirstRun = prefs.getBoolean("FIRSTRUN", true);
-        if (!isFirstRun) {
-            view.post(new Runnable() {
-                @Override
-                public void run() {
 
 
-                    // Code to run once
-
-                    showhint();
-
-
-                }
-            });
-        }
     }
 
-    private void showHint() {
+    View v;
+
+    public void showHint() {
+
+
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                v = mLayoutManager.getChildAt(0);
+//
+//            }
+//        },50);
+//
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(0);
+//
+//
+//        }
+//        },100);
 
         final TapTargetSequence sequence = new TapTargetSequence(getActivity())
                 .targets(
                         // Likewise, this tap target will target the search button
-                        TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
-                                // All options below are optional
-                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(true)                   // Whether to tint the target view's color
-                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(60),
-                        TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
+                        TapTarget.forToolbarMenuItem(toolbar, R.id.nav_store, "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
                                 // All options below are optional
                                 .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
                                 .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
@@ -425,6 +419,7 @@ public class home_fragment extends Fragment {
                                 .tintTarget(true)                   // Whether to tint the target view's color
                                 .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
                                 .targetRadius(60)
+
                 )
                 .listener(new TapTargetSequence.Listener() {
                     // This listener will tell us when interesting(tm) events happen in regards
@@ -466,67 +461,6 @@ public class home_fragment extends Fragment {
                 });
 
         sequence.start();
-
-    }
-
-    public void showhint() {
-
-        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
-                TapTarget.forView(toolbar.findViewById(R.id.nav_store), "لیست پرداخت ها", "پیش فاکتور خود را تکمیل کنید")
-                        // All options below are optional
-                        .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                        .titleTextColor(R.color.white)      // Specify the color of the title text
-                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(true)                   // Whether to tint the target view's color
-                        .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(60),                  // Specify the target radius (in dp)
-                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-
-                        showGifthint();
-
-                    }
-                });
-
-    }
-
-    public void showGifthint() {
-
-        TapTargetView.showFor(getActivity(),                 // `this` is an Activity
-                TapTarget.forView(Utility.getToolbarNavigationIcon(toolbar), "کد هدیه", "اینجا میتونید کد هدیه تون رو به ووپ تبدیل کنید")
-                        // All options below are optional
-                        .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                        .titleTextColor(R.color.white)      // Specify the color of the title text
-                        .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                        .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                        .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(true)                   // Whether to tint the target view's color
-                        .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(60),                  // Specify the target radius (in dp)
-                new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);      // This call is optional
-
-
-                    }
-                });
 
     }
 

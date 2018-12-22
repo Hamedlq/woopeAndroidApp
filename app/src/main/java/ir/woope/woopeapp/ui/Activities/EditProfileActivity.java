@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,9 @@ public class EditProfileActivity extends AppCompatActivity {
     public TextView woopeCredit;
     public TextView useNumber;
 
+    RadioGroup genderGroup;
+    RadioButton male, female;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,16 +90,38 @@ public class EditProfileActivity extends AppCompatActivity {
         editprogress = findViewById(R.id.progressBar);
         sendedit = findViewById(R.id.button);
 
-        final RadioRealButtonGroup group = findViewById(R.id.realradiogroup_gender_editprofile);
+//        final RadioRealButtonGroup group = findViewById(R.id.realradiogroup_gender_editprofile);
+        genderGroup = findViewById(R.id.radiogroup_gender_editprofile);
+        male = findViewById(R.id.radiobutton_male_editprofile);
+        female = findViewById(R.id.radiobutton_female_editprofile);
 
         // onClickButton listener detects any click performed on buttons by touch
-        group.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
+//        genderGroup.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
+//            @Override
+//            public void onClickedButton(RadioRealButton button, int position) {
+//                if (position == 0)
+//                    gender = "1";
+//                else if (position == 1)
+//                    gender = "2";
+//            }
+//        });
+
+        genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClickedButton(RadioRealButton button, int position) {
-                if (position == 0)
-                    gender = "1";
-                else if (position == 1)
-                    gender = "2";
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // checkedId is the RadioButton selected
+
+                View radioButton = genderGroup.findViewById(checkedId);
+
+                switch (radioButton.getId()) {
+                    case R.id.radiobutton_male_editprofile: // first button
+                        gender = "1";
+                        break;
+                    case R.id.radiobutton_female_editprofile: // secondbutton
+                        gender = "2";
+                        break;
+                }
+
             }
         });
 
@@ -116,14 +143,21 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     name.setText(response.body().getName());
                     family.setText(response.body().getFamily());
-                    age.setText(response.body().getAge());
+
+                    if (response.body().getAge().equals("0")) {
+                        age.setText("");
+                    } else
+                        age.setText(response.body().getAge());
+
                     email.setText(response.body().getEmail());
                     bio.setText(response.body().getUserBio());
-                    group.setPosition(response.body().getGender());
+//                    genderGroup.setPosition(response.body().getGender());
                     if (response.body().getGender() == 1)
-                        group.setPosition(0);
+                        male.setChecked(true);
+//                        genderGroup.setPosition(0);
                     else if (response.body().getGender() == 2)
-                        group.setPosition(1);
+                        female.setChecked(true);
+//                        genderGroup.setPosition(1);
                 }
             }
 
@@ -139,7 +173,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                if (isValidEmail(email.getText())||TextUtils.isEmpty(email.getText())) {
+                if (isValidEmail(email.getText()) || TextUtils.isEmpty(email.getText())) {
 
                     editprogress.setVisibility(View.VISIBLE);
                     sendedit.setVisibility(View.GONE);
@@ -156,7 +190,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                         EditProfileActivity.this
                                         , response.body().getMessage(),
                                         Toast.LENGTH_SHORT).show();
-                                Intent i=getIntent();
+                                Intent i = getIntent();
                                 setResult(RESULT_OK, i);
                                 finish();
 
@@ -200,8 +234,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-
-
     public Profile getUserProfile() {
         if (profile == null) {
             Gson gson = new Gson();
@@ -225,12 +257,13 @@ public class EditProfileActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_user_profile, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             finish(); // close this activity and return to preview activity (if there is any)
-        }else if (item.getItemId() == R.id.nav_logout) {
+        } else if (item.getItemId() == R.id.nav_logout) {
             AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
             String msg = "آیا می‌خواهید از حساب کاربری خود خارج شوید؟";
             builder.setMessage(msg).setPositiveButton("بله", dialogClickListener).setNegativeButton("نه", dialogClickListener).show();
@@ -280,7 +313,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void showFillError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("آیا می‌خواهید از حساب کاربری خود خارج شوید؟").setPositiveButton("بله", ConfirmDialogClickListener).setNegativeButton("نه فعلا",ConfirmDialogClickListener).show();
+        builder.setMessage("آیا می‌خواهید از حساب کاربری خود خارج شوید؟").setPositiveButton("بله", ConfirmDialogClickListener).setNegativeButton("نه فعلا", ConfirmDialogClickListener).show();
     }
 
 

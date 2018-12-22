@@ -59,7 +59,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:textSize="12sp"
-                        android:gravity="center"/>
+                        android:gravity="center" />
 
                     <ImageView
                         android:id="@+id/ok_result"
@@ -67,6 +67,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         android:background="@drawable/ic_tick" />
+
                     <ImageView
                         android:id="@+id/nok_result"
                         android:layout_width="wrap_content"
@@ -89,6 +90,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         android:background="@drawable/ic_ok" />
+
                     <ImageView
                         android:id="@+id/nok_res"
                         android:layout_width="wrap_content"
@@ -96,6 +98,7 @@
                         android:visibility="gone"
 
                         android:background="@drawable/ic_nok" />
+
                     <EditText
                         android:id="@+id/txtbx_gift_code"
                         android:layout_width="wrap_content"
@@ -113,9 +116,8 @@
                 </LinearLayout>
 
 
-           </LinearLayout>
+            </LinearLayout>
         </ScrollView>
-
 
 
         <Button

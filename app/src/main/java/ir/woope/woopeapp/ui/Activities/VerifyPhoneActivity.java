@@ -146,8 +146,6 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         });
 
 
-
-
         resend.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -270,14 +268,14 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
     }
 
-    public void timer(){
+    public void timer() {
 
         new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //this will be done every 1000 milliseconds ( 1 seconds )
 
-                countdown_timer.setText("00:"+millisUntilFinished / 1000);
+                countdown_timer.setText("00:" + millisUntilFinished / 1000);
 
                 long progress = (60000 - millisUntilFinished) / 1000;
                 progress_bar.setProgress((int) progress);

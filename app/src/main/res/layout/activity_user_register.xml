@@ -67,7 +67,7 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/textPrimary"
                     android:textDirection="rtl"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
 
                 <EditText
@@ -82,7 +82,7 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/textPrimary"
                     android:textDirection="ltr"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <EditText
                     android:id="@+id/txtbx_phonenumber_register"
@@ -96,7 +96,7 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/textPrimary"
                     android:textDirection="ltr"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp" />
 
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/btn_accept_register"
@@ -112,8 +112,7 @@
                     app:mrl_rippleHover="true"
                     app:mrl_rippleDelayClick="true"
                     app:mrl_rippleOverlay="true"
-                    android:visibility="visible"
-                    >
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"

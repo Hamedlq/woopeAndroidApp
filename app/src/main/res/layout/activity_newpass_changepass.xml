@@ -67,7 +67,7 @@
                     android:inputType="textPassword"
                     android:textColor="@color/white"
                     android:textColorHint="@color/textPrimary"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
 
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/btn_accept_newpass_changepass"
@@ -82,8 +82,7 @@
                     app:mrl_rippleRoundedCorners="50dp"
                     app:mrl_rippleHover="true"
                     app:mrl_rippleDelayClick="true"
-                    app:mrl_rippleOverlay="true"
-                    >
+                    app:mrl_rippleOverlay="true">
 
                     <TextView
                         android:layout_width="wrap_content"

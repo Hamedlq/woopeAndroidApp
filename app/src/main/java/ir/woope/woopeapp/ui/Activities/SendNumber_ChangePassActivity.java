@@ -66,7 +66,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                             SendNumber_ChangePassActivity.this
                             , "شماره موبایل خود را وارد کنید",
                             Toast.LENGTH_SHORT).show();
-                } else if (!TextUtils.isEmpty(number.getText()))  {
+                } else if (!TextUtils.isEmpty(number.getText())) {
 
                     progress.smoothToShow();
                     send.setVisibility(View.GONE);
@@ -119,6 +119,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         Intent goto_select = new Intent(SendNumber_ChangePassActivity.this,
@@ -128,6 +129,7 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
             finish();
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here

@@ -73,8 +73,8 @@ public class CashPayActivity extends AppCompatActivity {
         hideProgreeBar();
 
 
-        final EditText ConfirmCode=findViewById(R.id.ConfirmCode);
-        Button btn=findViewById(R.id.button);
+        final EditText ConfirmCode = findViewById(R.id.ConfirmCode);
+        Button btn = findViewById(R.id.button);
 
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -120,7 +120,7 @@ public class CashPayActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void ConfirmPayment(String confirmCode){
+    public void ConfirmPayment(String confirmCode) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -134,7 +134,7 @@ public class CashPayActivity extends AppCompatActivity {
 
         showProgreeBar();
         Call<ApiResponse> call =
-                providerApiInterface.SendConfirmCode("bearer "+authToken, payListModel.id,confirmCode);
+                providerApiInterface.SendConfirmCode("bearer " + authToken, payListModel.id, confirmCode);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -142,7 +142,7 @@ public class CashPayActivity extends AppCompatActivity {
                 int code = response.code();
                 if (code == 200) {
                     ApiResponse res = response.body();
-                    String x=res.getMessage();
+                    String x = res.getMessage();
                     if (response.body().getStatus() == 101) {
                         Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
                         Intent goto_main = new Intent(CashPayActivity.this,
@@ -151,7 +151,7 @@ public class CashPayActivity extends AppCompatActivity {
                         goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(goto_main);
-                    }else {
+                    } else {
                         Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
                     }
                 }

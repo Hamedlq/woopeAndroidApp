@@ -66,9 +66,7 @@ public class BankActivity extends AppCompatActivity {
     }
 
 
-
-
-    public void ConfirmPayment(){
+    public void ConfirmPayment() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -82,7 +80,7 @@ public class BankActivity extends AppCompatActivity {
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.GetConfirmCode("Bearer "+authToken, payListModel.id);
+                providerApiInterface.GetConfirmCode("Bearer " + authToken, payListModel.id);
         call.enqueue(new Callback<PayListModel>() {
             @Override
             public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
@@ -103,7 +101,6 @@ public class BankActivity extends AppCompatActivity {
     }
 
 
-
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -112,10 +109,10 @@ public class BankActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    public void gotoPayCodeActivity(PayListModel trans){
+    public void gotoPayCodeActivity(PayListModel trans) {
 
         Intent myIntent = new Intent(BankActivity.this, PayCodeActivity.class);
-        payListModel.confirmationCode=trans.confirmationCode;
+        payListModel.confirmationCode = trans.confirmationCode;
         myIntent.putExtra(PAY_LIST_ITEM, payListModel); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
         //myIntent.putExtra(POINTS_PAYED, payedPoints);

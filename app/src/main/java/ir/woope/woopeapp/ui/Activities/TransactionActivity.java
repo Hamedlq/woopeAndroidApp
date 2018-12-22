@@ -44,6 +44,7 @@ public class TransactionActivity extends AppCompatActivity {
     /*private List<ItemModel> userOrderModelList;*/
     private TransactionListAdapter adapter;
     private String authToken;
+
     //Store store;
     //String LIST_FRAGMENT = "ListFragment";
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -55,6 +56,9 @@ public class TransactionActivity extends AppCompatActivity {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             //store = (Store) getIntent().getExtras().getSerializable(STORE);
         }
+
+        progressBar = findViewById(R.id.transaction_progressBar);
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,7 +73,7 @@ public class TransactionActivity extends AppCompatActivity {
                 .commit();*/
         recyclerView = findViewById(R.id.recycler_view);
         orderModelList = new ArrayList<>();
-        adapter = new TransactionListAdapter(this,orderModelList, payTransactionTouchListener);
+        adapter = new TransactionListAdapter(this, orderModelList, payTransactionTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.addItemDecoration(new ListPaddingDecoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -82,15 +86,16 @@ public class TransactionActivity extends AppCompatActivity {
             @Override
             public void onBtnClick(View view, int position) {
                 PayListModel model = (PayListModel) orderModelList.get(position);
-                if(model.payType==1){
+                if (model.payType == 1) {
                     //go to cash pay
                     gotoPayCash(model);
-                }else {
+                } else {
                     //go to credit pay
                     gotoCreditCash(model);
                 }
             }
         };
+
 
     }
 
@@ -109,7 +114,7 @@ public class TransactionActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == RELOAD_LIST){
+            if (requestCode == RELOAD_LIST) {
                 getPayListFromServer();
             }
         }
@@ -118,7 +123,6 @@ public class TransactionActivity extends AppCompatActivity {
     public Profile getProfile() {
         return profile;
     }
-
 
 
     public void getPayListFromServer() {
@@ -147,7 +151,7 @@ public class TransactionActivity extends AppCompatActivity {
                     orderModelList = response.body();
                     adapter.notifyDataSetChanged();
 
-                    adapter = new TransactionListAdapter(TransactionActivity.this,orderModelList, payTransactionTouchListener);
+                    adapter = new TransactionListAdapter(TransactionActivity.this, orderModelList, payTransactionTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
@@ -184,21 +188,21 @@ public class TransactionActivity extends AppCompatActivity {
         public void onBtnClick(View view, int position);
     }
 
-    public void gotoPayCash(PayListModel model){
+    public void gotoPayCash(PayListModel model) {
 
-        Profile profile=getProfile();
+        Profile profile = getProfile();
         Intent myIntent = new Intent(this, CashPayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
-        startActivityForResult(myIntent,RELOAD_LIST);
+        startActivityForResult(myIntent, RELOAD_LIST);
     }
 
-    public void gotoCreditCash(PayListModel model){
-        Profile profile=getProfile();
+    public void gotoCreditCash(PayListModel model) {
+        Profile profile = getProfile();
         Intent myIntent = new Intent(this, PayActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
-        startActivityForResult(myIntent,RELOAD_LIST);
+        startActivityForResult(myIntent, RELOAD_LIST);
     }
 
 }

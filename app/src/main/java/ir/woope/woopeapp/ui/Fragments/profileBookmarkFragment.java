@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -68,6 +71,7 @@ public class profileBookmarkFragment extends Fragment {
     BookmarkTouchListener itemTouchListener;
     FloatingActionButton fab;
     ProgressBar progressBar;
+    TextView noBookmark;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -77,6 +81,12 @@ public class profileBookmarkFragment extends Fragment {
 
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        noBookmark = getView().findViewById(R.id.txtNoBookmarkAvailable);
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         mRecycler = inflater.inflate(R.layout.fragment_bookmark, null);
@@ -84,7 +94,7 @@ public class profileBookmarkFragment extends Fragment {
         itemTouchListener = new BookmarkTouchListener() {
 
             @Override
-            public void onCardViewTap( int position) {
+            public void onCardViewTap(int position) {
                 Store s = albumList.get(position);
                 final SharedPreferences prefs =
                         getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
@@ -106,7 +116,7 @@ public class profileBookmarkFragment extends Fragment {
             }
         };
 
-        progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
         /*fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
@@ -120,7 +130,7 @@ public class profileBookmarkFragment extends Fragment {
         //initCollapsingToolbar();
 
         albumList = new ArrayList<>();
-        adapter = new ProfileBookmarkAdapter(getActivity(), albumList,itemTouchListener);
+        adapter = new ProfileBookmarkAdapter(getActivity(), albumList, itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new ListPaddingDecoration());
@@ -133,6 +143,7 @@ public class profileBookmarkFragment extends Fragment {
         //prepareAlbums();
 
         getOrderListFromServer();
+
 
         return mRecycler;
     }
@@ -162,7 +173,7 @@ public class profileBookmarkFragment extends Fragment {
         authToken = settings.getString(TOKEN, null);
 
         Call<ApiResponse> call =
-                providerApiInterface.followStore("bearer "+authToken,s.storeId);
+                providerApiInterface.followStore("bearer " + authToken, s.storeId);
 
 
         call.enqueue(new Callback<ApiResponse>() {
@@ -172,6 +183,10 @@ public class profileBookmarkFragment extends Fragment {
                 if (code == 200) {
                     ApiResponse ar = response.body();
                     Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
+                    if (albumList.size() == 0)
+                        noBookmark.setVisibility(View.VISIBLE);
+                    else if (albumList.size() >= 0)
+                        noBookmark.setVisibility(View.GONE);
                     getOrderListFromServer();
                 }
             }
@@ -212,7 +227,7 @@ public class profileBookmarkFragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getFollowStore("bearer "+authToken);
+                providerApiInterface.getFollowStore("bearer " + authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {
@@ -221,13 +236,21 @@ public class profileBookmarkFragment extends Fragment {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
+
                     albumList = response.body();
+
+
                     //adapter.notifyDataSetChanged();
-                    adapter = new ProfileBookmarkAdapter(getActivity(),albumList, itemTouchListener);
+                    adapter = new ProfileBookmarkAdapter(getActivity(), albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
                     //prepareAlbums();
+
+                    if (albumList.size() == 0)
+                        noBookmark.setVisibility(View.VISIBLE);
+                    else if (albumList.size() >= 0)
+                        noBookmark.setVisibility(View.GONE);
                 }
             }
 
@@ -243,6 +266,7 @@ public class profileBookmarkFragment extends Fragment {
 
     public interface BookmarkTouchListener {
         public void onCardViewTap(int position);
+
         public void onFollowTap(int position);
     }
 

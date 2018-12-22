@@ -23,18 +23,18 @@ public interface TransactionInterface {
     @FormUrlEncoded
     @POST("api/Transaction/InsertUserPayList")
     Call<PayListModel> InsertTransaction(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                      @Field("Id") long payListId,
-                                                      @Field("BranchId") long StoreId,
-                                                      @Field("TotalPrice") String Amount,
-                                                      @Field("PayType") int payType,
-                                                      @Field("SwitchCredit") boolean switch_credit,
-                                                      @Field("SwitchWoope") boolean switch_woope
-                                         );
+                                         @Field("Id") long payListId,
+                                         @Field("BranchId") long StoreId,
+                                         @Field("TotalPrice") String Amount,
+                                         @Field("PayType") int payType,
+                                         @Field("SwitchCredit") boolean switch_credit,
+                                         @Field("SwitchWoope") boolean switch_woope
+    );
 
     @FormUrlEncoded
     @POST("api/Transaction/GetConfirmCode")
     Call<PayListModel> GetConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                   @Field("Id") long paylistId);
+                                      @Field("Id") long paylistId);
 
     @FormUrlEncoded
     @POST("api/Pay/GetPayInfo")

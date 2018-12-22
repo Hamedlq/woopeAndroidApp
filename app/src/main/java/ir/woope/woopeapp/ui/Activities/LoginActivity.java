@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
 
-        View usr= findViewById(R.id.txtbx_userphone_login);
+        View usr = findViewById(R.id.txtbx_userphone_login);
         View pass = findViewById(R.id.txtbx_password_login);
 
         wplogologin = findViewById(R.id.imgbx_logo_login);
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             Intent goto_verifphone = new Intent(LoginActivity.this,
                                                     VerifyPhoneActivity.class);
-                                            goto_verifphone.putExtra(TOKEN,tk);
+                                            goto_verifphone.putExtra(TOKEN, tk);
                                             startActivity(goto_verifphone);
 
                                         } else {
@@ -202,6 +202,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here

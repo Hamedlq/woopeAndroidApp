@@ -67,8 +67,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected Switch switch_credit;
     @BindView(R.id.switch_woope)
     protected Switch switch_woope;
-   /* @BindView(R.id.amount)
-    protected EditText amount;*/
+    /* @BindView(R.id.amount)
+     protected EditText amount;*/
     @BindView(R.id.store_name)
     protected TextView StoreName_tv;
     @BindView(R.id.progressBar)
@@ -120,7 +120,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected LinearLayout detail_layout;
 
 
-
     @BindView(R.id.payBtn)
     protected Button btn;
     //amount = findViewById(R.id.amount);
@@ -137,13 +136,13 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
 
     String profileString;
-    boolean automaticPayFlag=false;
-    boolean isOnline=true;
-    boolean isDetailShow=false;
+    boolean automaticPayFlag = false;
+    boolean isOnline = true;
+    boolean isDetailShow = false;
     //boolean saveTransactionFlag=true;
     PayListModel savedPayListModel;
-    long totalPrice=0;
-    long payPriceValue=0;
+    long totalPrice = 0;
+    long payPriceValue = 0;
 
 
     View helpButton;
@@ -177,13 +176,13 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
-            if(savedPayListModel==null){
+            if (savedPayListModel == null) {
                 //fetch from shared preferences because of going to bank page and return
-                profile=getUserProfile();
-                savedPayListModel=getSavedPayList();
+                profile = getUserProfile();
+                savedPayListModel = getSavedPayList();
                 ConfirmPayment(savedPayListModel);
             }
-            totalPrice=savedPayListModel.totalPrice;
+            totalPrice = savedPayListModel.totalPrice;
             getStore(savedPayListModel.branchId);
             //amount.setText(String.valueOf(savedPayListModel.totalPrice));
             StoreName_tv.setText(savedPayListModel.storeName);
@@ -195,10 +194,10 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         ConfirmPayment(savedPayListModel);
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
-            woope_credit.setText(" استفاده از ووپ ("+String.valueOf(profile.getWoopeCreditString())+")");
+            woope_credit.setText(" استفاده از ووپ (" + String.valueOf(profile.getWoopeCreditString()) + ")");
 
             toman_credit = (TextView) findViewById(R.id.toman_credit);
-            toman_credit.setText("استفاده از موجودی تومانی(" + String.valueOf(profile.getCreditString())+")");
+            toman_credit.setText("استفاده از موجودی تومانی(" + String.valueOf(profile.getCreditString()) + ")");
         }
 
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -208,7 +207,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         online_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isOnline=true;
+                isOnline = true;
                 pay_radio_cash.setVisibility(View.GONE);
                 pay_radio_credit.setVisibility(View.VISIBLE);
                 credit_layout.setVisibility(View.VISIBLE);
@@ -219,7 +218,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         cash_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isOnline=false;
+                isOnline = false;
                 pay_radio_cash.setVisibility(View.VISIBLE);
                 pay_radio_credit.setVisibility(View.GONE);
                 credit_layout.setVisibility(View.GONE);
@@ -231,12 +230,12 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         drawer_pull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isDetailShow){
-                    isDetailShow=false;
+                if (isDetailShow) {
+                    isDetailShow = false;
                     drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.up_arrow));
                     detail_layout.setVisibility(View.GONE);
-                }else{
-                    isDetailShow=true;
+                } else {
+                    isDetailShow = true;
                     drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.down_arrow));
                     detail_layout.setVisibility(View.VISIBLE);
                 }
@@ -266,7 +265,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
-
 
 
     public void showhint() {
@@ -309,124 +307,124 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         //int selectedId = payType.getCheckedRadioButtonId();
 
         total_price.setText(String.valueOf(totalPrice));
-        long rw=0;
-        if(savedPayListModel.returnPoint!=0){
-            rw=((totalPrice)/savedPayListModel.basePrice)*savedPayListModel.returnPoint;
+        long rw = 0;
+        if (savedPayListModel.returnPoint != 0) {
+            rw = ((totalPrice) / savedPayListModel.basePrice) * savedPayListModel.returnPoint;
         }
 
         return_woope.setText(String.valueOf(rw));
         if (!isOnline) {
             pay_price.setText(commaSeprate(totalPrice));
-            btn.setText("پرداخت ("+commaSeprate(totalPrice)+" تومان)");
-            payPriceValue=totalPrice;
+            btn.setText("پرداخت (" + commaSeprate(totalPrice) + " تومان)");
+            payPriceValue = totalPrice;
             toman_use.setText("0");
             woope_use.setText("0");
             remain_toman.setText("0");
             tax.setText("0");
         } else {
-            long alpha=totalPrice-profile.getTomanCredit();
-            long beta=totalPrice-(profile.getWoopeCredit()*1000);
-            long gama=totalPrice-profile.getTomanCredit()-(profile.getWoopeCredit()*1000);
+            long alpha = totalPrice - profile.getTomanCredit();
+            long beta = totalPrice - (profile.getWoopeCredit() * 1000);
+            long gama = totalPrice - profile.getTomanCredit() - (profile.getWoopeCredit() * 1000);
 
             //    long  remainToman=profile.getTomanCredit()-totalprice;
             toman_use.setText("0");
-            if(!switch_credit.isChecked()&&!switch_woope.isChecked()){
+            if (!switch_credit.isChecked() && !switch_woope.isChecked()) {
                 pay_price.setText(commaSeprate(totalPrice));
-                btn.setText("پرداخت ("+commaSeprate(totalPrice)+" تومان)");
-                payPriceValue=totalPrice;
+                btn.setText("پرداخت (" + commaSeprate(totalPrice) + " تومان)");
+                payPriceValue = totalPrice;
                 toman_use.setText("0");
                 woope_use.setText("0");
                 remain_toman.setText("0");
                 tax.setText("0");
             }
-            if(switch_credit.isChecked()&&!switch_woope.isChecked()){
-                if(alpha==0){
+            if (switch_credit.isChecked() && !switch_woope.isChecked()) {
+                if (alpha == 0) {
                     pay_price.setText("0");
-                    btn.setText("پرداخت ("+"0"+" تومان)");
-                    payPriceValue=0;
+                    btn.setText("پرداخت (" + "0" + " تومان)");
+                    payPriceValue = 0;
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
-                }else if(alpha<0){
+                } else if (alpha < 0) {
                     pay_price.setText("0");
-                    btn.setText("پرداخت ("+"0"+" تومان)");
-                    payPriceValue=0;
+                    btn.setText("پرداخت (" + "0" + " تومان)");
+                    payPriceValue = 0;
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
-                }else if(alpha>0){
+                } else if (alpha > 0) {
                     pay_price.setText(commaSeprate(alpha));
-                    btn.setText("پرداخت ("+commaSeprate(alpha)+" تومان)");
-                    payPriceValue=alpha;
+                    btn.setText("پرداخت (" + commaSeprate(alpha) + " تومان)");
+                    payPriceValue = alpha;
                     toman_use.setText(commaSeprate(profile.getTomanCredit()));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
                 }
             }
-            if(!switch_credit.isChecked()&&switch_woope.isChecked()){
-                if(beta==0){
+            if (!switch_credit.isChecked() && switch_woope.isChecked()) {
+                if (beta == 0) {
                     pay_price.setText("0");
-                    btn.setText("پرداخت ("+"0"+" تومان)");
-                    payPriceValue=0;
+                    btn.setText("پرداخت (" + "0" + " تومان)");
+                    payPriceValue = 0;
                     woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
-                }else if(beta<0){
-                    double integerPart = Math.ceil((double) totalPrice/1000);
-                    int remainder=(int)Math.abs(beta%1000);
+                } else if (beta < 0) {
+                    double integerPart = Math.ceil((double) totalPrice / 1000);
+                    int remainder = (int) Math.abs(beta % 1000);
                     pay_price.setText("0");
-                    btn.setText("پرداخت ("+"0"+" تومان)");
-                    payPriceValue=0;
+                    btn.setText("پرداخت (" + "0" + " تومان)");
+                    payPriceValue = 0;
                     toman_use.setText("0");
                     woope_use.setText(String.valueOf(Math.abs(integerPart)));
                     remain_toman.setText(commaSeprate(remainder));
                     tax.setText("0");
-                }else if(beta>0){
+                } else if (beta > 0) {
                     pay_price.setText(commaSeprate(beta));
-                    btn.setText("پرداخت ("+commaSeprate(beta)+" تومان)");
-                    payPriceValue=beta;
+                    btn.setText("پرداخت (" + commaSeprate(beta) + " تومان)");
+                    payPriceValue = beta;
                     woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
                 }
             }
-            if(switch_credit.isChecked()&&switch_woope.isChecked()){
-                if(alpha<=0){
+            if (switch_credit.isChecked() && switch_woope.isChecked()) {
+                if (alpha <= 0) {
                     pay_price.setText("0");
-                    btn.setText("پرداخت ("+"0"+" تومان)");
-                    payPriceValue=0;
+                    btn.setText("پرداخت (" + "0" + " تومان)");
+                    payPriceValue = 0;
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     tax.setText("0");
-                }else {
-                    if(gama==0){
+                } else {
+                    if (gama == 0) {
                         pay_price.setText("0");
-                        btn.setText("پرداخت ("+"0"+" تومان)");
-                        payPriceValue=0;
+                        btn.setText("پرداخت (" + "0" + " تومان)");
+                        payPriceValue = 0;
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
                         tax.setText("0");
-                    }else if(gama>0){
+                    } else if (gama > 0) {
                         pay_price.setText(commaSeprate(gama));
-                        btn.setText("پرداخت ("+commaSeprate(gama)+" تومان)");
-                        payPriceValue=gama;
+                        btn.setText("پرداخت (" + commaSeprate(gama) + " تومان)");
+                        payPriceValue = gama;
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
                         tax.setText("0");
-                    }else if(gama<0){
-                        double integerPart = Math.ceil((double) alpha/1000);
-                        int remainder=(int)Math.abs(gama%1000);
+                    } else if (gama < 0) {
+                        double integerPart = Math.ceil((double) alpha / 1000);
+                        int remainder = (int) Math.abs(gama % 1000);
                         pay_price.setText("0");
-                        btn.setText("پرداخت ("+"0"+" تومان)");
-                        payPriceValue=0;
+                        btn.setText("پرداخت (" + "0" + " تومان)");
+                        payPriceValue = 0;
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(String.valueOf(Math.abs(integerPart)));
                         remain_toman.setText(String.valueOf(remainder));
@@ -478,8 +476,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
         boolean isFirstRun = prefs.getBoolean("PAYACTIVITYFIRSTRUN", true);
-        if (isFirstRun)
-        {
+        if (isFirstRun) {
             showhint();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
@@ -500,7 +497,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     public void setNext(PayListModel payListModel) {
         calculateValues();
 
-        if(payPriceValue==0){
+        if (payPriceValue == 0) {
 
             ConfirmPayment(payListModel);
         } else {
@@ -537,7 +534,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.InsertTransaction("bearer "+authToken, savedPayListModel.id, savedPayListModel.branchId, String.valueOf(totalPrice), pt,switch_credit.isChecked(),switch_woope.isChecked());
+                providerApiInterface.InsertTransaction("bearer " + authToken, savedPayListModel.id, savedPayListModel.branchId, String.valueOf(totalPrice), pt, switch_credit.isChecked(), switch_woope.isChecked());
 
 
         call.enqueue(new Callback<PayListModel>() {
@@ -587,7 +584,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 case R.id.payBtn:
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         //if (!TextUtils.isEmpty(amount.getText())) {
-                            saveTransaction();
+                        saveTransaction();
                         /*} else {
                             showFillError();
                         }*/
@@ -613,11 +610,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            if(isDetailShow){
-                isDetailShow=false;
+            if (isDetailShow) {
+                isDetailShow = false;
                 drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.up_arrow));
                 detail_layout.setVisibility(View.GONE);
-            }else{
+            } else {
                 showDialog(); // close this activity and return to preview activity (if there is any)
             }
         }
@@ -632,11 +629,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     @Override
     public void onBackPressed() {
-        if(isDetailShow){
-            isDetailShow=false;
+        if (isDetailShow) {
+            isDetailShow = false;
             drawer_icon.setBackgroundDrawable(ContextCompat.getDrawable(PayActivity.this, R.drawable.up_arrow));
             detail_layout.setVisibility(View.GONE);
-        }else{
+        } else {
             showDialog(); // close this activity and return to preview activity (if there is any)
         }
     }
@@ -704,7 +701,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         };
     }*/
 
-    private String commaSeprate(long longval){
+    private String commaSeprate(long longval) {
 
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         formatter.applyPattern("#,###,###,###");
@@ -763,7 +760,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.GetConfirmCode("Bearer "+authToken, payListModel.id);
+                providerApiInterface.GetConfirmCode("Bearer " + authToken, payListModel.id);
         call.enqueue(new Callback<PayListModel>() {
             @Override
             public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
@@ -772,7 +769,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 if (code == 200) {
                     if (response.body().getStatus() == 101) {
                         //PayListModel trans = response.body();
-                        payListModel.confirmationCode=response.body().getMessage();
+                        payListModel.confirmationCode = response.body().getMessage();
                         gotoPayCodeActivity(payListModel);
                     } else {
 
@@ -879,7 +876,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     private void gotoBankPage(PayResponseModel bankModel) {
-        automaticPayFlag=true;
+        automaticPayFlag = true;
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = prefs.edit();
@@ -892,17 +889,18 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     public Profile getUserProfile() {
-            Gson gson = new Gson();
-            final SharedPreferences prefs =
-                    this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-            String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
-            if (profileString != null) {
-                profile = (Profile) gson.fromJson(profileString, Profile.class);
-                return profile;
-            } else {
-                return new Profile();
-            }
+        Gson gson = new Gson();
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String profileString = prefs.getString(Constants.GlobalConstants.PROFILE, null);
+        if (profileString != null) {
+            profile = (Profile) gson.fromJson(profileString, Profile.class);
+            return profile;
+        } else {
+            return new Profile();
+        }
     }
+
     public PayListModel getSavedPayList() {
         Gson gson = new Gson();
         final SharedPreferences prefs =

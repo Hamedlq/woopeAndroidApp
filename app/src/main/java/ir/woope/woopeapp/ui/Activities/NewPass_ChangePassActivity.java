@@ -40,7 +40,7 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
     MaterialRippleLayout accept;
     AVLoadingIndicatorView progress;
     EditText newpass;
-    String code,phonenumber;
+    String code, phonenumber;
 
     Retrofit retrofit_changepass;
 
@@ -75,7 +75,7 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                if(newpass.getText().length()>=4)
+                if (newpass.getText().length() >= 4)
 
                 {
 
@@ -95,7 +95,7 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
                                         , response.body().getMessage(),
                                         Toast.LENGTH_SHORT).show();
 
-                                login(phonenumber,newpass.getText().toString());
+                                login(phonenumber, newpass.getText().toString());
 
                             } else {
 
@@ -125,9 +125,7 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-
-                else if(newpass.getText().length()<4)
+                } else if (newpass.getText().length() < 4)
                     Toast.makeText(
                             NewPass_ChangePassActivity.this
                             , "رمز عبور باید 4 رقم یا بیشتر باشد",
@@ -159,7 +157,7 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void login(String username,String password)
+    private void login(String username, String password)
 
     {
 
@@ -242,7 +240,6 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
 
 
                 } else {
-
 
 
                     Toast.makeText(
