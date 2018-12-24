@@ -19,7 +19,7 @@ import retrofit2.http.Query;
 public interface ProfileInterface {
 
     @POST("api/Profile/GetProfile")
-    Call<Profile> getProfileFromServer(@Header("Authorization")String auth);
+    Call<Profile> getProfileFromServer(@Header("Authorization") String auth);
 
     @POST("api/Profile/AndroidVersion")
     @FormUrlEncoded
@@ -35,7 +35,7 @@ public interface ProfileInterface {
     @FormUrlEncoded
     @POST("api/Profile/sendOneSignalToken")
     Call<ApiResponse> sendPushNotificationTokens(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                        @Field("OneSignalToken") String oneSignalToken,@Field("PusheToken") String pusheToken);
+                                                 @Field("OneSignalToken") String oneSignalToken, @Field("PusheToken") String pusheToken);
 
     @Multipart
     @POST("api/Profile/SetProfileImage")
@@ -45,5 +45,5 @@ public interface ProfileInterface {
     @FormUrlEncoded
     @POST("api/Gift/SubmitGiftCode")
     Call<ApiResponse> sendGiftCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                 @Field("GiftCode") String giftCode);
+                                   @Field("GiftCode") String giftCode);
 }

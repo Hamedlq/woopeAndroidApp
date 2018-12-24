@@ -70,7 +70,7 @@ public class search_fragment extends Fragment {
     ItemTouchListener itemTouchListener;
     FloatingActionButton fab;
     ProgressBar progressBar;
-    boolean searchInProgress=false;
+    boolean searchInProgress = false;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class search_fragment extends Fragment {
                 Intent myIntent = new Intent(getActivity(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra(STORE, s); //Optional parameters
-                getActivity().startActivityForResult(myIntent,RELOAD_LIST);
+                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
             }
 
@@ -108,12 +108,12 @@ public class search_fragment extends Fragment {
             }
         };
 
-        progressBar=(ProgressBar)mRecycler.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
 
         Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         //fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
         /*fab.setOnClickListener(new View.OnClickListener() {
@@ -125,19 +125,19 @@ public class search_fragment extends Fragment {
         });*/
         //initCollapsingToolbar();
 
-        floatingSearchView=(FloatingSearchView)mRecycler.findViewById(R.id.floating_search_view);
+        floatingSearchView = (FloatingSearchView) mRecycler.findViewById(R.id.floating_search_view);
         floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
                 //if(newQuery.length()>0){
-                    //Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
-                    findStores(newQuery);
+                //Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
+                findStores(newQuery);
                 //}
             }
         });
 
         albumList = new ArrayList<>();
-        adapter = new StoreSearchAdapter(getActivity(), albumList,itemTouchListener);
+        adapter = new StoreSearchAdapter(getActivity(), albumList, itemTouchListener);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -168,7 +168,7 @@ public class search_fragment extends Fragment {
         authToken = settings.getString(TOKEN, null);
 
         Call<ApiResponse> call =
-                providerApiInterface.followStore("bearer "+authToken,s.storeId);
+                providerApiInterface.followStore("bearer " + authToken, s.storeId);
 
 
         call.enqueue(new Callback<ApiResponse>() {
@@ -202,7 +202,7 @@ public class search_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer("bearer "+authToken);
+                providerApiInterface.getStoreFromServer("bearer " + authToken);
 
 
         call.enqueue(new Callback<List<Store>>() {
@@ -214,11 +214,10 @@ public class search_fragment extends Fragment {
                     albumList = response.body();
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoreSearchAdapter(getActivity(),albumList, itemTouchListener);
+                    adapter = new StoreSearchAdapter(getActivity(), albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
-
 
 
                     //prepareAlbums();
@@ -235,7 +234,7 @@ public class search_fragment extends Fragment {
 
     }
 
-    private void findStores(String storeQuery ) {
+    private void findStores(String storeQuery) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -248,10 +247,10 @@ public class search_fragment extends Fragment {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        if(!searchInProgress) {
+        if (!searchInProgress) {
             searchInProgress = true;
             Call<List<Store>> call =
-                    providerApiInterface.FindStore("bearer "+authToken, storeQuery);
+                    providerApiInterface.FindStore("bearer " + authToken, storeQuery);
 
 
             call.enqueue(new Callback<List<Store>>() {
@@ -284,7 +283,6 @@ public class search_fragment extends Fragment {
             });
         }
     }
-
 
 
     /**
@@ -335,7 +333,8 @@ public class search_fragment extends Fragment {
 
     public interface ItemTouchListener {
         public void onCardViewTap(View view, int position);
-        public void onFollowTap( int position);
+
+        public void onFollowTap(int position);
     }
 
 

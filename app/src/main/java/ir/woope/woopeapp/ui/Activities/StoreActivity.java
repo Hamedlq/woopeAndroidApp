@@ -84,7 +84,7 @@ public class StoreActivity extends AppCompatActivity {
     String authToken = null;
     Profile profile = null;
     Store store;
-    long totalPrice=0;
+    long totalPrice = 0;
     //ProgressBar progressBar;
 
 
@@ -134,8 +134,8 @@ public class StoreActivity extends AppCompatActivity {
         dialog.setTitle("");
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        close_btn=(ImageView)dialog.findViewById(R.id.close_btn);
-        confirm_pay=(TextView)dialog.findViewById(R.id.confirm_pay);
+        close_btn = (ImageView) dialog.findViewById(R.id.close_btn);
+        confirm_pay = (TextView) dialog.findViewById(R.id.confirm_pay);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,7 +152,7 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
-        final EditText amount=(EditText)dialog.findViewById(R.id.amount);
+        final EditText amount = (EditText) dialog.findViewById(R.id.amount);
         amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -177,7 +177,7 @@ public class StoreActivity extends AppCompatActivity {
                         originalString = originalString.replaceAll(",", "");
                     }
                     longval = Long.parseLong(originalString);
-                    totalPrice=longval;
+                    totalPrice = longval;
                     DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
                     formatter.applyPattern("#,###,###,###");
                     String formattedString = formatter.format(longval);
@@ -197,17 +197,17 @@ public class StoreActivity extends AppCompatActivity {
     }
 
 
-   /* DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    break;
-            }
-        }
-    };*/
+    /* DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+         @Override
+         public void onClick(DialogInterface dialog, int which) {
+             switch (which) {
+                 case DialogInterface.BUTTON_POSITIVE:
+                     break;
+                 case DialogInterface.BUTTON_NEGATIVE:
+                     break;
+             }
+         }
+     };*/
     private void getStore(long storeId) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -234,33 +234,33 @@ public class StoreActivity extends AppCompatActivity {
                     Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(logo);
                     Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.coverSrc).into(backdrop);
                     store_name.setText(store.storeName);
-                    if (!TextUtils.isEmpty(store.storeDescription)){
+                    if (!TextUtils.isEmpty(store.storeDescription)) {
                         desc_layout.setVisibility(View.VISIBLE);
                         store_desc.setText(store.storeDescription);
                     }
-                    String phones="";
-                    if (!TextUtils.isEmpty(store.firstPhone)){
+                    String phones = "";
+                    if (!TextUtils.isEmpty(store.firstPhone)) {
                         store_phones_layout.setVisibility(View.VISIBLE);
                         phones = store.firstPhone;
                     }
-                    if (!TextUtils.isEmpty(store.secondPhone)){
+                    if (!TextUtils.isEmpty(store.secondPhone)) {
                         store_phones_layout.setVisibility(View.VISIBLE);
-                        phones += " - "+store.secondPhone;
+                        phones += " - " + store.secondPhone;
                     }
                     store_phones.setText(phones);
-                    if (!TextUtils.isEmpty(store.discountPercent)){
+                    if (!TextUtils.isEmpty(store.discountPercent)) {
                         store_discount.setVisibility(View.VISIBLE);
                         store_discount.setText(store.discountPercent + " درصد تخفیف ");
                     }
-                    if (!TextUtils.isEmpty(store.address)){
+                    if (!TextUtils.isEmpty(store.address)) {
                         store_address_layout.setVisibility(View.VISIBLE);
                         store_address.setText(store.address);
                     }
 
-                    if (store.basePrice!=0){
+                    if (store.basePrice != 0) {
                         point_layout.setVisibility(View.VISIBLE);
-                        store_point.setText(store.returnPoint+" عدد ووپ ");
-                        point_desc.setText("به ازای هر "+store.basePrice+" تومان خرید "+store.returnPoint+" ووپ دریافت می‌کنید" );
+                        store_point.setText(store.returnPoint + " عدد ووپ ");
+                        point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
                     }
                 }
             }
@@ -278,15 +278,15 @@ public class StoreActivity extends AppCompatActivity {
         Intent myIntent = new Intent(this, PayActivity.class);
         myIntent.putExtra(PREF_PROFILE, profile);
         //myIntent.putExtra(STORE, store);
-        PayListModel model=new PayListModel();
-        model.storeName=store.storeName;
-        model.branchId=store.storeId;
-        model.totalPrice=totalPrice;
-        model.logoSrc=store.logoSrc;
-        model.switchWoope=false;
-        model.switchCredit=false;
-        model.basePrice=store.basePrice;
-        model.returnPoint=store.returnPoint;
+        PayListModel model = new PayListModel();
+        model.storeName = store.storeName;
+        model.branchId = store.storeId;
+        model.totalPrice = totalPrice;
+        model.logoSrc = store.logoSrc;
+        model.switchWoope = false;
+        model.switchCredit = false;
+        model.basePrice = store.basePrice;
+        model.returnPoint = store.returnPoint;
         myIntent.putExtra(PAY_LIST_ITEM, model);
         this.startActivity(myIntent);
         this.finish();
@@ -313,7 +313,6 @@ public class StoreActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }

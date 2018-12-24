@@ -48,7 +48,7 @@
                         android:id="@+id/txtbx_family_editprofile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
+                        android:backgroundTint="@color/grayy"
                         android:gravity="center"
                         android:hint="@string/familyName"
                         android:padding="8dp"
@@ -72,7 +72,7 @@
                         android:id="@+id/txtbx_name_editprofile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
+                        android:backgroundTint="@color/grayy"
                         android:gravity="center"
                         android:hint="@string/name"
                         android:drawableRight="@drawable/user"
@@ -96,7 +96,7 @@
                         android:id="@+id/txtbx_email_editprofile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
+                        android:backgroundTint="@color/grayy"
                         android:gravity="center"
                         android:hint="@string/email"
                         android:drawableRight="@drawable/envelope"
@@ -107,80 +107,104 @@
 
                 </android.support.v7.widget.CardView>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_marginTop="15dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:orientation="horizontal">
 
-                    <android.support.v7.widget.CardView
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="15dp"
-                        app:cardCornerRadius="5dp"
-                        app:cardElevation="5dp">
 
-                        <EditText
-                            android:id="@+id/txtbx_age_editprofile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/white"
-                            android:ellipsize="start"
-                            android:ems="10"
-                            android:gravity="center_horizontal"
-                            android:hint="@string/age"
-                            android:inputType="number"
-                            android:maxLength="2"
-                            android:textColor="@color/colorPrimary"
-                            android:textColorHint="@color/edittext_hint"
-                            android:textDirection="ltr"
-                            android:textSize="14sp" />
+                    <!--<co.ceryle.radiorealbutton.RadioRealButtonGroup-->
+                    <!--android:id="@+id/realradiogroup_gender_editprofile"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_marginEnd="15dp"-->
+                    <!--android:layout_marginStart="15dp"-->
+                    <!--app:rrbg_animateDrawables_enter="bounce"-->
+                    <!--app:rrbg_animateDrawables_scale="1.1"-->
+                    <!--app:rrbg_animateTexts_enter="bounce"-->
+                    <!--app:rrbg_backgroundColor="#00000000"-->
+                    <!--app:rrbg_borderColor="@color/white"-->
+                    <!--app:rrbg_dividerColor="@color/white"-->
+                    <!--app:rrbg_dividerSize="80dp"-->
+                    <!--app:rrbg_radius="2dp"-->
+                    <!--app:rrbg_selectorColor="@color/black"-->
+                    <!--app:rrbg_selectorSize="4dp">-->
 
-                    </android.support.v7.widget.CardView>
+                    <!--<co.ceryle.radiorealbutton.RadioRealButton-->
+                    <!--android:id="@+id/realradiobutton_male_editprofile"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:rrb_drawable="@drawable/male_radiobutton"-->
+                    <!--app:rrb_drawablePadding="8dp"-->
+                    <!--app:rrb_ripple="true"-->
+                    <!--app:rrb_rippleColor="@color/black" />-->
 
-                    <co.ceryle.radiorealbutton.RadioRealButtonGroup
-                        android:id="@+id/realradiogroup_gender_editprofile"
+                    <!--<co.ceryle.radiorealbutton.RadioRealButton-->
+                    <!--android:id="@+id/realradiobutton_female_editprofile"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:rrb_drawable="@drawable/female_radiobutton"-->
+                    <!--app:rrb_drawableGravity="right"-->
+                    <!--app:rrb_ripple="true"-->
+                    <!--app:rrb_rippleColor="@color/black" />-->
+
+                    <!--</co.ceryle.radiorealbutton.RadioRealButtonGroup>-->
+
+                    <RadioGroup
+                        android:id="@+id/radiogroup_gender_editprofile"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginStart="15dp"
-                        app:rrbg_animateDrawables_enter="bounce"
-                        app:rrbg_animateDrawables_scale="1.1"
-                        app:rrbg_animateTexts_enter="bounce"
-                        app:rrbg_backgroundColor="#00000000"
-                        app:rrbg_borderColor="@color/white"
-                        app:rrbg_dividerColor="@color/white"
-                        app:rrbg_dividerSize="80dp"
-                        app:rrbg_radius="2dp"
-                        app:rrbg_selectorColor="@color/black"
-                        app:rrbg_selectorSize="4dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal|center_vertical">
 
-                        <co.ceryle.radiorealbutton.RadioRealButton
-                            android:id="@+id/realradiobutton_male_editprofile"
+                        <RadioButton
+                            android:id="@+id/radiobutton_male_editprofile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:rrb_drawable="@drawable/male"
-                            app:rrb_drawableHeight="50dp"
-                            app:rrb_drawablePadding="8dp"
-                            app:rrb_drawableWidth="28dp"
-                            app:rrb_ripple="true"
-                            app:rrb_rippleColor="@color/black" />
+                            android:background="@drawable/male_radiobutton"
+                            android:button="@android:color/transparent" />
 
-                        <co.ceryle.radiorealbutton.RadioRealButton
-                            android:id="@+id/realradiobutton_female_editprofile"
+                        <android.support.v7.widget.CardView
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            app:cardCornerRadius="15dp"
+                            app:cardElevation="5dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginLeft="15dp">
+
+                            <EditText
+                                android:id="@+id/txtbx_age_editprofile"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@color/grayy"
+                                android:ellipsize="start"
+                                android:ems="10"
+                                android:gravity="center_horizontal"
+                                android:hint="@string/age"
+                                android:inputType="number"
+                                android:maxLength="2"
+                                android:textColor="@color/colorPrimary"
+                                android:textColorHint="@color/edittext_hint"
+                                android:textDirection="ltr"
+                                android:textSize="14sp" />
+
+                        </android.support.v7.widget.CardView>
+
+
+                        <RadioButton
+                            android:id="@+id/radiobutton_female_editprofile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:rrb_drawable="@drawable/female"
-                            app:rrb_drawableGravity="right"
-                            app:rrb_drawableHeight="50dp"
-                            app:rrb_drawablePadding="8dp"
-                            app:rrb_drawableWidth="28dp"
-                            app:rrb_ripple="true"
-                            app:rrb_rippleColor="@color/black" />
-                    </co.ceryle.radiorealbutton.RadioRealButtonGroup>
+                            android:background="@drawable/female_radiobutton"
+                            android:button="@android:color/transparent" />
 
-                </RelativeLayout>
+                    </RadioGroup>
+
+                </LinearLayout>
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -196,13 +220,14 @@
                         android:id="@+id/txtbx_userbio_editprofile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
+
                         android:ems="10"
                         android:drawableRight="@drawable/info"
                         android:gravity="center_horizontal"
                         android:hint="@string/bio"
                         android:inputType="textMultiLine"
                         android:maxLines="2"
+                        android:backgroundTint="@color/grayy"
                         android:textColor="@color/colorPrimary"
                         android:textColorHint="@color/edittext_hint"
                         android:textDirection="ltr"

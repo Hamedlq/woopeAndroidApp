@@ -1,6 +1,7 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite = false;
 
     UCrop.Options options;
+    private String pictureImagePath = "";
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -199,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -278,7 +281,8 @@ public class MainActivity extends AppCompatActivity {
         options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         options.setToolbarTitle("ویرایش عکس");
-
+        options.setCompressionQuality(100);
+        options.setMaxBitmapSize(10000);
 
     }
 
@@ -413,8 +417,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void cameraIntent() {
         if (checkPermission_image_capture(this)) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, REQUEST_CAMERA);
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(intent, REQUEST_CAMERA);
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = timeStamp + ".jpg";
+            File storageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+            File file = new File(pictureImagePath);
+            Uri outputFileUri = Uri.fromFile(file);
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            startActivityForResult(cameraIntent, REQUEST_CAMERA);
+
         }
     }
 
@@ -519,9 +535,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
+        File imgFile = new File(pictureImagePath);
+        Bitmap thumbnail = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
         File destination = new File(getExternalCacheDir(), "tempItemFile.jpg");
         FileOutputStream fo;
         try {
@@ -535,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
 
             UCrop.of(uri, uri)
                     .withAspectRatio(1, 1)
-                    .withMaxResultSize(1024,1024)
+                    .withMaxResultSize(1024, 1024)
                     .withOptions(options)
                     .start(this);
             ///

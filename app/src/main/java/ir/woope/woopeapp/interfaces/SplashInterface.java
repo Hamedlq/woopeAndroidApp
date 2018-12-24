@@ -8,5 +8,5 @@ import retrofit2.http.POST;
 
 public interface SplashInterface {
     @POST("api/Profile/GetProfile")
-    Call<Profile> check_connection(@Header("Authorization")String auth);
+    Call<Profile> check_connection(@Header("Authorization") String auth);
 }

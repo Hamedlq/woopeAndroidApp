@@ -11,8 +11,8 @@
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@color/transparent"
         card_view:cardBackgroundColor="@color/transparent"
         card_view:cardElevation="0dp"
@@ -33,6 +33,7 @@
                 android:orientation="vertical"
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical">
+
                 <ImageView
                     android:id="@+id/thumbnail"
                     android:layout_width="@dimen/album_cover_width"
@@ -86,6 +87,7 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/woope_bg"
                     android:textSize="@dimen/point_size" />
+
                 <TextView
                     android:id="@+id/count"
                     android:layout_width="wrap_content"
@@ -98,7 +100,6 @@
                     android:layout_marginTop="3dp"
                     android:textColor="@color/red"
                     android:textSize="@dimen/discount_size" />
-
 
 
                 <ImageView

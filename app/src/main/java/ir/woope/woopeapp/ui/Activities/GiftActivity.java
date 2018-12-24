@@ -49,11 +49,11 @@ public class GiftActivity extends AppCompatActivity {
     @BindView(R.id.ok_result)
     protected ImageView ok_result;
     @BindView(R.id.nok_result)
-    protected ImageView nok_result ;
+    protected ImageView nok_result;
     @BindView(R.id.ok_res)
     protected ImageView ok_res;
     @BindView(R.id.nok_res)
-    protected ImageView nok_res ;
+    protected ImageView nok_res;
 
     String authToken;
 
@@ -103,14 +103,14 @@ public class GiftActivity extends AppCompatActivity {
 
         showProgreeBar();
         Call<ApiResponse> call =
-                providerApiInterface.sendGiftCode("Bearer "+authToken, txtbx_gift_code.getText().toString());
+                providerApiInterface.sendGiftCode("Bearer " + authToken, txtbx_gift_code.getText().toString());
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
-                    if(response.body().getStatus()==202){
+                    if (response.body().getStatus() == 202) {
                         gift_response.setVisibility(View.VISIBLE);
                         nok_res.setVisibility(View.VISIBLE);
                         nok_result.setVisibility(View.VISIBLE);
@@ -122,7 +122,7 @@ public class GiftActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
 */
                     }
-                    if(response.body().getStatus()==101){
+                    if (response.body().getStatus() == 101) {
                         gift_response.setVisibility(View.VISIBLE);
                         ok_res.setVisibility(View.VISIBLE);
                         ok_result.setVisibility(View.VISIBLE);

@@ -8,16 +8,16 @@ import retrofit2.http.POST;
 
 public interface RegisterInterface {
 
-        @POST("api/Account/RegisterApp")
-        @FormUrlEncoded
-        Call<ApiResponse> send_info(@Field("username") String username, @Field("mobile") String mobile, @Field("password") String password);
+    @POST("api/Account/RegisterApp")
+    @FormUrlEncoded
+    Call<ApiResponse> send_info(@Field("username") String username, @Field("mobile") String mobile, @Field("password") String password);
 
-        @POST("api/Account/ConfirmCode")
-        @FormUrlEncoded
-        Call<ApiResponse> send_verif_code(@Field("Mobile") String mobile, @Field("VerifyCode") String code);
+    @POST("api/Account/ConfirmCode")
+    @FormUrlEncoded
+    Call<ApiResponse> send_verif_code(@Field("Mobile") String mobile, @Field("VerifyCode") String code);
 
-        @POST("api/Account/SendForgetPassCode")
-        @FormUrlEncoded
-        Call<ApiResponse> send_code(@Field("Mobile") String mobile);
+    @POST("api/Account/SendForgetPassCode")
+    @FormUrlEncoded
+    Call<ApiResponse> send_code(@Field("Mobile") String mobile);
 
 }

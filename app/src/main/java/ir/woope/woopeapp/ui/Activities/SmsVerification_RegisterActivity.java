@@ -142,7 +142,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
                 loading.smoothToShow();
 
-                send.send_verif_code(getIntent().getExtras().getString("phone_number"),Utility.arabicToDecimal(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
+                send.send_verif_code(getIntent().getExtras().getString("phone_number"), Utility.arabicToDecimal(code.getText().toString())).enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
@@ -229,14 +229,14 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void timer(){
+    public void timer() {
 
         new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //this will be done every 1000 milliseconds ( 1 seconds )
 
-                countdown_timer.setText("00:"+millisUntilFinished / 1000);
+                countdown_timer.setText("00:" + millisUntilFinished / 1000);
 
                 long progress = (60000 - millisUntilFinished) / 1000;
                 progress_bar.setProgress((int) progress);

@@ -37,7 +37,6 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
 
-
     Retrofit retrofit_sms_verif, retrofit_login;
 
     Toolbar toolbar;
@@ -68,7 +67,7 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
         countdown_timer = (TextView) findViewById(R.id.txt_countdown_changepass);
         final String recieved_code = getIntent().getStringExtra("validation_code");
-        phoneNumber=getIntent().getExtras().getString("phonenumber");
+        phoneNumber = getIntent().getExtras().getString("phonenumber");
         code = findViewById(R.id.pinView_smsValidation_changepass);
         progress_bar = (ProgressBar) findViewById(R.id.sms_validation_changepass_progressBar);
 
@@ -96,7 +95,6 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
         resend.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-
 
 
                 send.send_code(phoneNumber).enqueue(new Callback<ApiResponse>() {
@@ -146,16 +144,15 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
         });
 
 
-
         accept.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
                 Intent goto_newpass = new Intent(SmsVerification_ChangePassActivity.this,
-                                               NewPass_ChangePassActivity.class);
+                        NewPass_ChangePassActivity.class);
 
                 goto_newpass.putExtra("confirmcode", code.getText().toString());
-                goto_newpass.putExtra("phonenumber",phoneNumber );
+                goto_newpass.putExtra("phonenumber", phoneNumber);
 
                 startActivity(goto_newpass);
 
@@ -247,14 +244,14 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
     }
 
-    public void timer(){
+    public void timer() {
 
         new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //this will be done every 1000 milliseconds ( 1 seconds )
 
-                countdown_timer.setText("00:"+millisUntilFinished / 1000);
+                countdown_timer.setText("00:" + millisUntilFinished / 1000);
 
                 long progress = (60000 - millisUntilFinished) / 1000;
                 progress_bar.setProgress((int) progress);
