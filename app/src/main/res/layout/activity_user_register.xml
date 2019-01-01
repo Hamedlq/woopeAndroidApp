@@ -98,6 +98,17 @@
                     android:textDirection="ltr"
                     android:textSize="11sp" />
 
+                <TextView
+                    android:id="@+id/txt_rules"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:includeFontPadding="true"
+                    android:text="@string/rules"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="" />
+
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/btn_accept_register"
                     android:layout_width="wrap_content"

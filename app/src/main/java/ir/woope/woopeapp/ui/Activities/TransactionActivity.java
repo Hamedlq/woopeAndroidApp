@@ -18,6 +18,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
@@ -36,11 +38,14 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 
 public class TransactionActivity extends AppCompatActivity {
+
+    @BindView(R.id.transaction_progressBar)
+    protected ProgressBar progressBar;
     Profile profile;
     private RecyclerView recyclerView;
     private List<PayListModel> orderModelList;
     private PayTransactionTouchListener payTransactionTouchListener;
-    private ProgressBar progressBar;
+
     /*private List<ItemModel> userOrderModelList;*/
     private TransactionListAdapter adapter;
     private String authToken;
@@ -52,6 +57,8 @@ public class TransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
+        ButterKnife.bind(this);
+
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             //store = (Store) getIntent().getExtras().getSerializable(STORE);

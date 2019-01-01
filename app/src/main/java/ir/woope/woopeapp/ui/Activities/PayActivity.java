@@ -438,6 +438,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     @Override
     protected void onResume() {
         super.onResume();
+        calculateValues();
         if (automaticPayFlag) {
             ConfirmPayment(savedPayListModel);
             //getProfileFromServer();
