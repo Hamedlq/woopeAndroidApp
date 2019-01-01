@@ -19,6 +19,7 @@
     <string name="password">رمز عبور</string>
     <string name="enter">ورود</string>
     <string name="forget_password">رمز عبور خود را فراموش کرده‌اید؟</string>
+
     <string name="save">ثبت</string>
     <string name="email">ایمیل</string>
     <string name="new_password">رمز عبور جدید</string>
@@ -60,5 +61,5 @@
     <string name="network_error">خطا در ارتباط با شبکه. لطفا ارتباط اینترنت را بررسی کنید</string>
     <string name="error">خطا در ارتباط. لطفا مجدد تلاش کنید</string>
     <string name="sms_msg">لطفا کد تایید پیامک شده را وارد کنید</string>
-
+    <string name="rules">با ثبت نام در این برنامه تمام قوانین و مقررات را می‌پذیرم</string>
 </resources>

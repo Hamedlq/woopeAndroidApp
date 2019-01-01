@@ -39,7 +39,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 
 public class TransactionActivity extends AppCompatActivity {
 
-    @BindView(R.id.progressBar)
+    @BindView(R.id.transaction_progressBar)
     protected ProgressBar progressBar;
     Profile profile;
     private RecyclerView recyclerView;

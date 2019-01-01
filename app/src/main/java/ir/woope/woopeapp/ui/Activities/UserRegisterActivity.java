@@ -1,6 +1,7 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -32,7 +34,7 @@ public class UserRegisterActivity extends AppCompatActivity {
     MaterialRippleLayout register;
     Retrofit retrofit_userregister;
     RegisterInterface reg;
-
+    TextView txt_rules;
     Toolbar toolbar;
 
     @Override
@@ -49,6 +51,7 @@ public class UserRegisterActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.txtbx_username_register);
         password = (EditText) findViewById(R.id.txtbx_password_register);
         phonenumber = (EditText) findViewById(R.id.txtbx_phonenumber_register);
+        txt_rules = (TextView) findViewById(R.id.txt_rules);
 
         progress = findViewById(R.id.progressBar_user_register);
 
@@ -60,6 +63,14 @@ public class UserRegisterActivity extends AppCompatActivity {
                 .build();
 
         reg = retrofit_userregister.create(RegisterInterface.class);
+
+        txt_rules.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://woope.ir/rules.html"));
+                startActivity(browserIntent);
+            }
+        });
 
         register.setOnClickListener(new View.OnClickListener() {
 
