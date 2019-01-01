@@ -112,8 +112,11 @@ dependencies {
 
     implementation 'com.android.support:support-core-ui:27.1.1'
 
+    //noinspection GradleDependency
     implementation 'com.romandanylyk:pageindicatorview:1.0.2'
 
     implementation 'com.github.yalantis:ucrop:2.2.2'
+
+
 
 }

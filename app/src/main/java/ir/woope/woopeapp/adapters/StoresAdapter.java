@@ -3,6 +3,7 @@ package ir.woope.woopeapp.adapters;
 /**
  * Created by Hamed on 6/10/2018.
  */
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -23,6 +24,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,10 +47,14 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private float mDownX;
     private float mDownY;
     private home_fragment.ItemTouchListener onItemTouchListener;
-home_fragment f;
+    home_fragment f;
+
+    int lastItemPosition = -1;
+
+    String scrollDirection;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count,points,points_brief;
+        public TextView title, count, points, points_brief;
         public ImageView thumbnail;
         public ImageView followIcon;
         //public LinearLayout action_layout;
@@ -60,7 +66,7 @@ home_fragment f;
             points = (TextView) view.findViewById(R.id.points);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             followIcon = (ImageView) view.findViewById(R.id.follow);
-            points_brief=(TextView) view.findViewById(R.id.points_brief);
+            points_brief = (TextView) view.findViewById(R.id.points_brief);
             //action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
@@ -130,11 +136,11 @@ home_fragment f;
                                 Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
                                 Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
 */
-                                if(!store.isFollowed){
-                                    store.isFollowed=true;
+                                if (!store.isFollowed) {
+                                    store.isFollowed = true;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-                                }else {
-                                    store.isFollowed=false;
+                                } else {
+                                    store.isFollowed = false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                                 }
                             }
@@ -152,6 +158,7 @@ home_fragment f;
 
     public class AdvViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
+
         public AdvViewHolder(View view) {
             super(view);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
@@ -182,26 +189,25 @@ home_fragment f;
     }
 
 
-
     public StoresAdapter(Context mContext, List<Store> albumList, home_fragment.ItemTouchListener onItemTouchListener, home_fragment f) {
         this.mContext = mContext;
         this.albumList = albumList;
-        this.f=f;
+        this.f = f;
         this.onItemTouchListener = onItemTouchListener;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(albumList.get(position).isAdvertise){
+        if (albumList.get(position).isAdvertise) {
             return 0;
-        }else {
+        } else {
             return 1;
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType==0){
+        if (viewType == 0) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.adv_card, parent, false);
 
@@ -215,16 +221,17 @@ home_fragment f;
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder vholder, int position) {
+
         switch (vholder.getItemViewType()) {
             case 0:
-                AdvViewHolder advHolder = (AdvViewHolder)vholder;
+                AdvViewHolder advHolder = (AdvViewHolder) vholder;
                 Store advStore = albumList.get(position);
                 // loading album cover using Glide library
                 Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + advStore.logoSrc).into(advHolder.thumbnail);
                 break;
 
             case 1:
-                MyViewHolder holder = (MyViewHolder)vholder;
+                MyViewHolder holder = (MyViewHolder) vholder;
                 Store store = albumList.get(position);
                 holder.title.setText(store.storeName);
                 holder.points_brief.setText(store.returnPoint + " عدد ووپ");
@@ -319,11 +326,42 @@ home_fragment f;
 
                 break;
         }
+
+        if (position > lastItemPosition) {
+            // Scrolled Down
+            scrollDirection = "DOWN";
+        }
+        else {
+            // Scrolled Up
+            scrollDirection = "UP";
+        }
+        lastItemPosition = position;
     }
 
     @Override
     public int getItemCount() {
         return albumList.size();
+    }
+
+    public String getScrollDirection() { return scrollDirection;}
+
+    public void addItem(final List<Store> list) {
+
+//        final int oldsize = albumList.size();
+//        for (int i = list.size() - 1; i >= 0; i--) {
+//            albumList.add(0, list.get(i));
+//        }
+
+        if (list.size() > 1) {
+            for (Store s : list) {
+                albumList.add(s);
+            }
+        }
+        notifyDataSetChanged();
+
+//        notifyItemRangeInserted(0, albumList.size() - oldsize);
+
+
     }
 
 }

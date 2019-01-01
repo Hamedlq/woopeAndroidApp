@@ -22,6 +22,12 @@ public interface StoreInterface {
     Call<List<Store>> FindStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                 @Query("query") String query);
 
+    @POST("api/Store/FindStorebyPage")
+    @FormUrlEncoded
+    Call<List<Store>> FindStoreByPage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Query("query") String query,
+                                      @Field("pageNumber") int pageNumber);
+
     @POST(Constants.Actions.FOLLOW_STORE)
     @FormUrlEncoded
     Call<ApiResponse> followStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
@@ -34,5 +40,10 @@ public interface StoreInterface {
     @FormUrlEncoded
     Call<Store> getStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                          @Field("branchId") long s);
+
+    @POST("api/Store/GetStoresbyPage")
+    @FormUrlEncoded
+    Call<List<Store>> getStoresbyPage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Field("pageNumber") int pageNumber);
 
 }

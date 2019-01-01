@@ -28,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -41,12 +42,14 @@ import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.ListPaddingDecoration;
@@ -99,6 +102,13 @@ public class home_fragment extends Fragment {
 
     Toolbar toolbar;
 
+    int PageNumber = 0, cPage = 0;
+    List<Store> stores;
+
+    boolean scrollDirection = false; //up=false,down=true
+
+    private boolean itShouldLoadMore = true;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +118,7 @@ public class home_fragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
 
+        stores = new ArrayList<>();
 
         getActivity().setTitle("");
         mRecycler = inflater.inflate(R.layout.fragment_home, null);
@@ -166,13 +177,38 @@ public class home_fragment extends Fragment {
 
         albumList = new ArrayList<>();
         adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener, this);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity());
+        mLayoutManager = linearlayoutmanager;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new ListPaddingDecoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        getOrderListFromServer();
+        getStoresByPage(PageNumber);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            // for this tutorial, this is the ONLY method that we need, ignore the rest
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Recycle view scrolling downwards...
+                    // this if statement detects when user reaches the end of recyclerView, this is only time we should load more
+                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                        // remember "!" is the same as "== false"
+                        // here we are now allowed to load more, but we need to be careful
+                        // we must check if itShouldLoadMore variable is true [unlocked]
+                        if (itShouldLoadMore) {
+                            getStoresByPage(PageNumber);
+                        }
+                    }
+
+                }
+            }
+        });
+
+//        getOrderListFromServer();
 
         SwipeController swipeController = new SwipeController();
 
@@ -208,6 +244,15 @@ public class home_fragment extends Fragment {
         return mRecycler;
     }
 
+    private boolean isLastItemDisplaying(RecyclerView recyclerView) {
+        if (recyclerView.getAdapter().getItemCount() != 0) {
+            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
+                return true;
+        }
+        return false;
+    }
+
     /*public void goToPaying(Store theStore) {
 
         Intent myIntent = new Intent(getActivity(), PayActivity.class);
@@ -233,6 +278,7 @@ public class home_fragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         StoreInterface providerApiInterface =
                 retrofit.create(StoreInterface.class);
 
@@ -301,11 +347,64 @@ public class home_fragment extends Fragment {
         return true;
     }
 
-    private void getOrderListFromServer() {
+//    private void getOrderListFromServer() {
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .baseUrl(Constants.HTTP.BASE_URL)
+//                .build();
+//        StoreInterface providerApiInterface =
+//                retrofit.create(StoreInterface.class);
+//
+//        SharedPreferences prefs =
+//                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+//
+//        showProgreeBar();
+//        Call<List<Store>> call =
+//                providerApiInterface.getStoreFromServer("bearer " + authToken);
+//
+//
+//        call.enqueue(new Callback<List<Store>>() {
+//            @Override
+//            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+//                hideProgreeBar();
+//                int code = response.code();
+//                if (code == 200) {
+//
+//                    stores.addAll(response.body());
+//                    //adapter.notifyDataSetChanged();
+//
+//                    adapter = new StoresAdapter(getActivity(), stores, itemTouchListener, home_fragment.this);
+//                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+//                    ordersList.setLayoutManager(mLayoutManager);*/
+//                    recyclerView.setAdapter(adapter);
+//                    //prepareAlbums();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Store>> call, Throwable t) {
+//                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+//                hideProgreeBar();
+//            }
+//        });
+//
+//    }
+
+    int size;
+
+    private int getStoresByPage(final int pageNumber) {
+
+        showProgreeBar();
+
+        itShouldLoadMore = false;
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         StoreInterface providerApiInterface =
                 retrofit.create(StoreInterface.class);
 
@@ -315,8 +414,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoreFromServer("bearer " + authToken);
-
+                providerApiInterface.getStoresbyPage("bearer " + authToken, pageNumber);
 
         call.enqueue(new Callback<List<Store>>() {
             @Override
@@ -324,14 +422,42 @@ public class home_fragment extends Fragment {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
-                    albumList = response.body();
+
+                    hideProgreeBar();
+
+                    itShouldLoadMore = true;
+
+                    if(response.body().size()>1) {
+
+                        adapter.addItem(response.body());
+
+                        PageNumber++;
+
+                    }
+                   // interfaceInfinite.onSuccess(response);
+
+//                    adapter.addItem(response.body());
+//
+//                    size = response.body().size();
+
+//                    for(Store s: response.body()) {
+//                        stores.add(s);
+//                    }
+
+//                    for(int i=0;i<=11;i++)
+//                    {
+//                        stores.add(response.body().get(i));
+//                    }
+
+//                    stores.addAll(response.body());
                     //adapter.notifyDataSetChanged();
 
-                    adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener, home_fragment.this);
+//                    adapter = new StoresAdapter(getActivity(), stores, itemTouchListener, home_fragment.this);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
-                    recyclerView.setAdapter(adapter);
+//                    recyclerView.setAdapter(adapter);
                     //prepareAlbums();
+
                 }
             }
 
@@ -339,8 +465,12 @@ public class home_fragment extends Fragment {
             public void onFailure(Call<List<Store>> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
+                itShouldLoadMore = true;
+                size = 0;
             }
         });
+
+        return size;
 
     }
 

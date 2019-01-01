@@ -165,7 +165,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         Store store = albumList.get(position);
         holder.title.setText(store.storeName);
         holder.count.setText(store.discountPercent + "٪ تخفیف");
-        holder.point.setText(store.returnPoint + " عدد پوینت");
+        holder.point.setText(store.returnPoint + " عدد ووپ");
 
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
@@ -219,6 +219,31 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     @Override
     public int getItemCount() {
         return albumList.size();
+    }
+
+    public void addItem(final List<Store> list) {
+
+//        final int oldsize = albumList.size();
+//        for (int i = list.size() - 1; i >= 0; i--) {
+//            albumList.add(0, list.get(i));
+//        }
+
+        if (list.size() > 1) {
+            for (Store s : list) {
+                albumList.add(s);
+            }
+        }
+        notifyDataSetChanged();
+
+//        notifyItemRangeInserted(0, albumList.size() - oldsize);
+
+
+    }
+
+    public void emptyList() {
+
+        albumList.clear();
+
     }
 
 }

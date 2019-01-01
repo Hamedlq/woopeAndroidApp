@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -72,6 +73,12 @@ public class search_fragment extends Fragment {
     ProgressBar progressBar;
     boolean searchInProgress = false;
 
+    private boolean itShouldLoadMore = true;
+
+    int PageNumber = 0, cPage = 0;
+
+    String newquery;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +122,8 @@ public class search_fragment extends Fragment {
         Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
+        findStoresByPage("",0);
+
         //fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
         /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,8 +140,13 @@ public class search_fragment extends Fragment {
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
                 //if(newQuery.length()>0){
                 //Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
-                findStores(newQuery);
-                //}
+
+                    newquery = newQuery;
+                    PageNumber = 0;
+                    adapter.emptyList();
+                if(newQuery.length()>=2) {
+                    findStoresByPage(newQuery, PageNumber);
+                }
             }
         });
 
@@ -145,8 +159,30 @@ public class search_fragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            // for this tutorial, this is the ONLY method that we need, ignore the rest
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    // Recycle view scrolling downwards...
+                    // this if statement detects when user reaches the end of recyclerView, this is only time we should load more
+                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                        // remember "!" is the same as "== false"
+                        // here we are now allowed to load more, but we need to be careful
+                        // we must check if itShouldLoadMore variable is true [unlocked]
+                        if (itShouldLoadMore) {
+                            findStoresByPage(newquery,PageNumber);
+                        }
+                    }
+
+                }
+            }
+        });
+
         //prepareAlbums();
-        findStores("");
+        findStoresByPage("",0);
 
         return mRecycler;
     }
@@ -252,7 +288,6 @@ public class search_fragment extends Fragment {
             Call<List<Store>> call =
                     providerApiInterface.FindStore("bearer " + authToken, storeQuery);
 
-
             call.enqueue(new Callback<List<Store>>() {
                 @Override
                 public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
@@ -279,6 +314,72 @@ public class search_fragment extends Fragment {
                     searchInProgress = false;
                     //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                     hideProgreeBar();
+                }
+            });
+        }
+    }
+
+    private void findStoresByPage(String storeQuery,int pageNumber) {
+
+        showProgreeBar();
+
+        itShouldLoadMore = false;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+        if (!searchInProgress) {
+            searchInProgress = true;
+            Call<List<Store>> call =
+                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery,pageNumber);
+
+            call.enqueue(new Callback<List<Store>>() {
+                @Override
+                public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                    hideProgreeBar();
+                    searchInProgress = false;
+                    int code = response.code();
+                    if (code == 200) {
+
+                        hideProgreeBar();
+
+                        itShouldLoadMore = true;
+
+                        adapter.addItem(response.body());
+
+                        PageNumber++;
+
+//                        albumList = response.body();
+//                        //adapter.notifyDataSetChanged();
+//
+//                        adapter = new StoreSearchAdapter(getActivity(), albumList, itemTouchListener);
+//                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+//                    ordersList.setLayoutManager(mLayoutManager);*/
+//                        recyclerView.setAdapter(adapter);
+
+
+                        //prepareAlbums();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Store>> call, Throwable t) {
+                    searchInProgress = false;
+                    //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                    hideProgreeBar();
+                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    itShouldLoadMore = true;
+
                 }
             });
         }

@@ -739,7 +739,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                                 .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
                                 .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
                                 .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(true)                   // Whether to tint the target view's color
                                 .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
                                 .targetRadius(60),
@@ -755,7 +755,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                                 .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
                                 .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
                                 .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(false)                   // Whether to tint the target view's color
                                 .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
                                 .targetRadius(60),
@@ -771,7 +771,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                                 .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
                                 .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
                                 .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(false)                   // Whether to tint the target view's color
                                 .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
                                 .targetRadius(70),
@@ -787,7 +787,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                                 .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
                                 .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
                                 .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(false)                   // Whether to tint the target view's color
                                 .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
                                 .targetRadius(70),
@@ -803,7 +803,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                                 .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
                                 .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
                                 .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                 .tintTarget(false)                   // Whether to tint the target view's color
                                 .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
                                 .targetRadius(70),
