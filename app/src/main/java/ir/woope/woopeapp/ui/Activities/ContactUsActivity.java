@@ -46,7 +46,7 @@ public class ContactUsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent telegram = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/Hamedlq"));
+                Intent telegram = new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.me/woope"));
                 startActivity(telegram);
 
             }

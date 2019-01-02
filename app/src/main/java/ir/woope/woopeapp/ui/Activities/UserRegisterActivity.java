@@ -67,8 +67,11 @@ public class UserRegisterActivity extends AppCompatActivity {
         txt_rules.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://woope.ir/rules.html"));
-                startActivity(browserIntent);
+
+                Intent goto_sms_validation = new Intent(UserRegisterActivity.this,
+                        RulesActivity.class);
+                startActivity(goto_sms_validation);
+
             }
         });
 

@@ -228,7 +228,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 //            albumList.add(0, list.get(i));
 //        }
 
-        if (list.size() > 1) {
+        if (list.size() >= 1) {
             for (Store s : list) {
                 albumList.add(s);
             }

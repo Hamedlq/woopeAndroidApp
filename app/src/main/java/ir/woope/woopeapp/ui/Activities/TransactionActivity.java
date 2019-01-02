@@ -1,6 +1,7 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,10 +11,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +56,8 @@ public class TransactionActivity extends AppCompatActivity {
     private TransactionListAdapter adapter;
     private String authToken;
 
+    Toolbar toolbar;
+
     //Store store;
     //String LIST_FRAGMENT = "ListFragment";
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -68,7 +76,8 @@ public class TransactionActivity extends AppCompatActivity {
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.transaction_toolbar);
+        toolbar.inflateMenu(R.menu.pay_toolbar_items);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -103,7 +112,7 @@ public class TransactionActivity extends AppCompatActivity {
             }
         };
 
-
+//        showhint();
     }
 
 
@@ -113,8 +122,27 @@ public class TransactionActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish(); // close this activity and return to preview activity (if there is any)
         }
+        if (item.getItemId() == R.id.action_support) {
+
+            Intent goto_verifphone = new Intent(this,
+                    ContactUsActivity.class);
+            startActivity(goto_verifphone);
+
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+        getMenuInflater().inflate(R.menu.pay_toolbar_items, menu);
+       /* getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
+
+        showhint();
+        return true;
     }
 
     @Override
@@ -210,6 +238,42 @@ public class TransactionActivity extends AppCompatActivity {
         myIntent.putExtra(PAY_LIST_ITEM, model); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
         startActivityForResult(myIntent, RELOAD_LIST);
+    }
+
+    public void showhint() {
+
+        final TapTargetSequence sequence = new TapTargetSequence(this)
+                .targets(
+                        // Likewise, this tap target will target the search button
+                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "تماس با پشتیبانی", "در صورت وجود هرگونه مشکل یا ابهام در پرداخت با پشتیبانی تماس بگیرید")
+                                .dimColor(android.R.color.black)
+                                .outerCircleColor(R.color.colorAccent)
+                                .targetCircleColor(android.R.color.black)
+                                .transparentTarget(true)
+                                .textColor(android.R.color.black)
+                                .id(2)
+                )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                });
+
+        sequence.start();
+
     }
 
 }

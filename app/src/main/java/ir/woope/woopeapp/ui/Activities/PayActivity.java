@@ -256,7 +256,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             }
         });
 
-
         toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
         toolbar.inflateMenu(R.menu.pay_toolbar_items);
         setSupportActionBar(toolbar);
