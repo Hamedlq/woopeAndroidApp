@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
@@ -26,6 +29,7 @@ import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +37,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 
 public class GiftActivity extends AppCompatActivity {
     Profile profile;
@@ -56,6 +62,9 @@ public class GiftActivity extends AppCompatActivity {
     protected ImageView nok_res;
 
     String authToken;
+
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    String PROFILE_FRAGMENT = "ProfileFragment";
 
     //Store store;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -90,6 +99,13 @@ public class GiftActivity extends AppCompatActivity {
     }
 
     private void SendGiftCode() {
+
+        gift_response.setVisibility(View.INVISIBLE);
+        ok_res.setVisibility(View.INVISIBLE);
+        ok_result.setVisibility(View.INVISIBLE);
+        nok_res.setVisibility(View.INVISIBLE);
+        nok_result.setVisibility(View.INVISIBLE);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -112,9 +128,13 @@ public class GiftActivity extends AppCompatActivity {
                 if (code == 200) {
                     if (response.body().getStatus() == 202) {
                         gift_response.setVisibility(View.VISIBLE);
+                        ok_res.setVisibility(View.GONE);
+                        ok_result.setVisibility(View.GONE);
                         nok_res.setVisibility(View.VISIBLE);
                         nok_result.setVisibility(View.VISIBLE);
+
                         gift_result.setText(response.body().getMessage());
+
 /*
                         Toast.makeText(
                                 GiftActivity.this
@@ -124,9 +144,13 @@ public class GiftActivity extends AppCompatActivity {
                     }
                     if (response.body().getStatus() == 101) {
                         gift_response.setVisibility(View.VISIBLE);
+                        nok_res.setVisibility(View.GONE);
+                        nok_result.setVisibility(View.GONE);
                         ok_res.setVisibility(View.VISIBLE);
                         ok_result.setVisibility(View.VISIBLE);
+
                         gift_result.setText("کد هدیه اعمال شد");
+
                         /*Toast.makeText(
                                 GiftActivity.this
                                 , response.body().getMessage(),
@@ -144,6 +168,8 @@ public class GiftActivity extends AppCompatActivity {
                 gift_response.setVisibility(View.VISIBLE);
                 nok_res.setVisibility(View.VISIBLE);
                 nok_result.setVisibility(View.VISIBLE);
+                ok_res.setVisibility(View.GONE);
+                ok_result.setVisibility(View.GONE);
                 gift_result.setText("خطا در ارتباط");
             }
         });
@@ -154,7 +180,11 @@ public class GiftActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+
+            Intent returnIntent = new Intent();
+            setResult(RESULT_OK, returnIntent);
+            finish();
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -170,16 +200,23 @@ public class GiftActivity extends AppCompatActivity {
         return profile;
     }
 
-
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
         button.setEnabled(false);
     }
 
-
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
         button.setEnabled(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
+
     }
 
 }

@@ -248,6 +248,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+
         history_layout.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
