@@ -60,6 +60,9 @@
             </intent-filter>
         </receiver>
 
+        <!--<meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_442079978483"/>-->
+        <!--<meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>-->
+
         <meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_442079978483"/>
         <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
 

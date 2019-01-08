@@ -147,6 +147,9 @@ public class search_fragment extends Fragment {
                 if(newQuery.length()>=2) {
                     findStoresByPage(newQuery, PageNumber);
                 }
+                else if (newQuery.length()==0){
+                    findStoresByPage(newQuery, PageNumber);
+                }
             }
         });
 

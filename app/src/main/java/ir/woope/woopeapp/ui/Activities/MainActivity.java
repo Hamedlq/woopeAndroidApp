@@ -50,8 +50,7 @@ import android.widget.Toast;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.google.gson.Gson;
-import com.onesignal.OSPermissionSubscriptionState;
-import com.onesignal.OneSignal;
+
 import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
@@ -362,8 +361,8 @@ public class MainActivity extends AppCompatActivity {
                 Constants.GlobalConstants.MY_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "");
         try {
-            OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-            String oneSignalToken = status.getSubscriptionStatus().getUserId();
+
+            String oneSignalToken = "1";
             String pusheToken = Pushe.getPusheId(this);
 
             Call<ApiResponse> call =

@@ -18,6 +18,10 @@ import android.view.View;
 import android.view.animation.TranslateAnimation;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -59,22 +63,6 @@ public class Utility {
         }
     }
 
-    public static String convertNumberToEnglish(String num) {
-        String d = num;
-        d = d.replace("۰", "0");
-        d = d.replace("۱", "1");
-        d = d.replace("۲", "2");
-        d = d.replace("٣", "3");
-        d = d.replace("٤", "4");
-        d = d.replace("۵", "5");
-        d = d.replace("٦", "6");
-        d = d.replace("٧", "7");
-        d = d.replace("۸", "8");
-        d = d.replace("۹", "9");
-
-        return d;
-    }
-
     private static final String arabic = "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9";
     public static String arabicToDecimal(String number) {
         char[] chars = new char[number.length()];
@@ -108,6 +96,19 @@ public class Utility {
         return navIcon;
     }
 
-
+    public static boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            // edited, to include @Arthur's comment
+            // e.g. in case JSONArray is valid as well...
+            try {
+                new JSONArray(test);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

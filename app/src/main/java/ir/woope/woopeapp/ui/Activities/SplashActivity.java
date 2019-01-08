@@ -26,6 +26,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
@@ -104,13 +105,17 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 int code = response.code();
                 if (code == 200) {
-                    ApiResponse res = response.body();
-                    int appVersion = Integer.valueOf(res.getMessage());
-                    if (appVersion > getVersion()) {
-                        showUpdateDialog();
-                    } else {
-                        GetProfileFromServer();
-                    }
+
+
+
+                        ApiResponse res = response.body();
+                        int appVersion = Integer.valueOf(res.getMessage());
+                        if (appVersion > getVersion()) {
+                            showUpdateDialog();
+                        } else {
+                            GetProfileFromServer();
+                        }
+
                 }
             }
 
@@ -180,44 +185,46 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<Profile> call, Response<Profile> response) {
 
                 if (response.code() == 200) {
-                    Profile user = response.body();
-                    //profile=user.getMessage();
-                    final SharedPreferences.Editor prefsEditor = settings.edit();
-                    Gson gson = new Gson();
 
-                    String json = gson.toJson(user);
-                    prefsEditor.putString(PROFILE, json);
-                    prefsEditor.apply();
+                        Profile user = response.body();
+                        //profile=user.getMessage();
+                        final SharedPreferences.Editor prefsEditor = settings.edit();
+                        Gson gson = new Gson();
 
-                    Intent goto_main = new Intent(SplashActivity.this,
-                            MainActivity.class);
-                    goto_main.putExtra(GET_PROFILE_FROM_SERVER, false);
-                    goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(goto_main);
+                        String json = gson.toJson(user);
+                        prefsEditor.putString(PROFILE, json);
+                        prefsEditor.apply();
 
-
-                } else if (response.code() == 401) {
-
-                    final boolean tutorialIsShown = settings.getBoolean("tutorialIsShown", false);
-
-                    if (tutorialIsShown == false) {
-
-                        Intent goto_login = new Intent(SplashActivity.this,
-                                SliderActivity.class);
-                        goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        Intent goto_main = new Intent(SplashActivity.this,
+                                MainActivity.class);
+                        goto_main.putExtra(GET_PROFILE_FROM_SERVER, false);
+                        goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
-                        startActivity(goto_login);
+                        startActivity(goto_main);
 
-                    } else if (tutorialIsShown == true) {
 
-                        Intent goto_login = new Intent(SplashActivity.this,
-                                SplashSelectActivity.class);
-                        goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(goto_login);
+                    } else if (response.code() == 401) {
 
-                    }
+                        final boolean tutorialIsShown = settings.getBoolean("tutorialIsShown", false);
+
+                        if (tutorialIsShown == false) {
+
+                            Intent goto_login = new Intent(SplashActivity.this,
+                                    SliderActivity.class);
+                            goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            finish();
+                            startActivity(goto_login);
+
+                        } else if (tutorialIsShown == true) {
+
+                            Intent goto_login = new Intent(SplashActivity.this,
+                                    SplashSelectActivity.class);
+                            goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            finish();
+                            startActivity(goto_login);
+
+                        }
+
 
 
                 }

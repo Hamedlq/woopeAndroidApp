@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.net.HttpURLConnection;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
@@ -17,6 +19,7 @@ import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.helpers.Utility;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,14 +90,22 @@ public class BankActivity extends AppCompatActivity {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
-                    PayListModel trans = response.body();
-                    gotoPayCodeActivity(trans);
+
+//                    if(Utility.isJSONValid(response.body().toString())) {
+
+                        PayListModel trans = response.body();
+
+                        gotoPayCodeActivity(trans);
+
+//                    }
                 }
             }
 
             @Override
             public void onFailure(Call<PayListModel> call, Throwable t) {
+
                 hideProgreeBar();
+
             }
         });
 

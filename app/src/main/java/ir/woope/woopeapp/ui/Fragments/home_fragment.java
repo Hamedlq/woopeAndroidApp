@@ -53,7 +53,7 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.ListPaddingDecoration;
-import ir.woope.woopeapp.helpers.SwipeController;
+
 import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
@@ -209,36 +209,6 @@ public class home_fragment extends Fragment {
         });
 
 //        getOrderListFromServer();
-
-        SwipeController swipeController = new SwipeController();
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
-        recyclerView.addOnItemTouchListener(new SwipeableRecyclerViewTouchListener(recyclerView,
-                new SwipeableRecyclerViewTouchListener.SwipeListener() {
-                    @Override
-                    public boolean canSwipeLeft(int position) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean canSwipeRight(int position) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                    /*    Store s = new Store();
-                        for (int position : reverseSortedPositions) {
-                            s = albumList.get(position);
-                        }
-                        goToPaying(s);*/
-                    }
-
-                    @Override
-                    public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                    }
-                }));
 
 
         return mRecycler;
@@ -427,14 +397,14 @@ public class home_fragment extends Fragment {
 
                     itShouldLoadMore = true;
 
-                    if(response.body().size()>1) {
+                    if (response.body().size() > 1) {
 
                         adapter.addItem(response.body());
 
                         PageNumber++;
 
                     }
-                   // interfaceInfinite.onSuccess(response);
+                    // interfaceInfinite.onSuccess(response);
 
 //                    adapter.addItem(response.body());
 //
