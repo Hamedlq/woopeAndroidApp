@@ -43,10 +43,10 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     }
 
 
-    public TransactionListAdapter(Context context,List<PayListModel> list, TransactionActivity.PayTransactionTouchListener payTransactionTouchListener) {
+    public TransactionListAdapter(Context context, List<PayListModel> list, TransactionActivity.PayTransactionTouchListener payTransactionTouchListener) {
         this.orderModels = list;
-        this.payTransactionTouchListener=payTransactionTouchListener;
-        this.context=context;
+        this.payTransactionTouchListener = payTransactionTouchListener;
+        this.context = context;
     }
 
 
@@ -66,9 +66,9 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         public MyViewHolder(View view) {
             super(view);
             total_price = view.findViewById(R.id.total_price);
-            title= view.findViewById(R.id.title);
-            paytype= view.findViewById(R.id.paytype);
-            thumbnail=view.findViewById(R.id.thumbnail);
+            title = view.findViewById(R.id.title);
+            paytype = view.findViewById(R.id.paytype);
+            thumbnail = view.findViewById(R.id.thumbnail);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -80,12 +80,12 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
 
     @Override
     public void onBindViewHolder(TransactionListAdapter.MyViewHolder holder, int position) {
-        total_price.setText(String.valueOf(orderModels.get(position).totalPrice)+" تومان ");
+        total_price.setText(String.valueOf(orderModels.get(position).totalPrice) + " تومان ");
         title.setText(orderModels.get(position).storeName);
         Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + orderModels.get(position).logoSrc).into(thumbnail);
-        if(orderModels.get(position).payType==1){
+        if (orderModels.get(position).payType == 1) {
             paytype.setText("نقدی");
-        }else{
+        } else {
             paytype.setText("اعتباری");
         }
 

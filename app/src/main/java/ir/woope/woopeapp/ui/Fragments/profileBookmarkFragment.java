@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ import ir.woope.woopeapp.adapters.ProfileBookmarkAdapter;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.ListPaddingDecoration;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
@@ -73,6 +75,8 @@ public class profileBookmarkFragment extends Fragment {
     ProgressBar progressBar;
     TextView noBookmark;
 
+    View layout;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +88,15 @@ public class profileBookmarkFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         noBookmark = getView().findViewById(R.id.txtNoBookmarkAvailable);
+
+        layout = getView().findViewById(R.id.activity_profileBookmarkFragment);
+
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+
         mRecycler = inflater.inflate(R.layout.fragment_bookmark, null);
         setHasOptionsMenu(true);
         itemTouchListener = new BookmarkTouchListener() {
@@ -182,7 +190,7 @@ public class profileBookmarkFragment extends Fragment {
                 int code = response.code();
                 if (code == 200) {
                     ApiResponse ar = response.body();
-                    Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
+                    Utility.showSnackbar(layout, ar.getMessage(), Snackbar.LENGTH_LONG);
                     if (albumList.size() == 0)
                         noBookmark.setVisibility(View.VISIBLE);
                     else if (albumList.size() >= 0)
@@ -193,7 +201,8 @@ public class profileBookmarkFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), "خطا در تغییر علاقمندی‌ها", Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
     }
@@ -258,6 +267,8 @@ public class profileBookmarkFragment extends Fragment {
             public void onFailure(Call<List<Store>> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 

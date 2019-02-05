@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,6 +31,7 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.ListPaddingDecoration;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
@@ -58,6 +60,8 @@ public class TransactionActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
+    View layout;
+
     //Store store;
     //String LIST_FRAGMENT = "ListFragment";
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -65,6 +69,7 @@ public class TransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
+        layout = findViewById(R.id.activity_transaction);
         ButterKnife.bind(this);
 
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -183,6 +188,7 @@ public class TransactionActivity extends AppCompatActivity {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
+
                     orderModelList = response.body();
                     adapter.notifyDataSetChanged();
 
@@ -190,12 +196,14 @@ public class TransactionActivity extends AppCompatActivity {
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);
+
                 }
             }
 
             @Override
             public void onFailure(Call<List<PayListModel>> call, Throwable t) {
-                Toast.makeText(TransactionActivity.this, R.string.error, Toast.LENGTH_LONG).show();
+//                Toast.makeText(TransactionActivity.this, R.string.error, Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.error, Snackbar.LENGTH_SHORT);
                 hideProgreeBar();
             }
         });

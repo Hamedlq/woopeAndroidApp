@@ -114,8 +114,7 @@
                         android:hint="کد هدیه"
                         android:inputType="text"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="14sp" />
 
 
                 </LinearLayout>

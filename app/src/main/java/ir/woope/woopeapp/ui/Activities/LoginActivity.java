@@ -3,6 +3,7 @@ package ir.woope.woopeapp.ui.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -41,11 +42,15 @@ public class LoginActivity extends AppCompatActivity {
 
     MaterialRippleLayout enter;
 
+    View layout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_login);
+
+        layout = findViewById(R.id.activity_login);
 
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
         final EditText password = (EditText) findViewById(R.id.txtbx_password_login);
@@ -113,10 +118,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                         if (response.body().getConfirmed() == false) {
 
-                                            Toast.makeText(
-                                                    LoginActivity.this
-                                                    , "شماره موبایل خود را تایید کنید",
-                                                    Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(
+//                                                    LoginActivity.this
+//                                                    , getResources().getString(R.string.confirmPhoneNumber),
+//                                                    Toast.LENGTH_SHORT).show();
+
+                                            Utility.showSnackbar(layout, R.string.confirmPhoneNumber, Snackbar.LENGTH_LONG);
 
                                             Intent goto_verifphone = new Intent(LoginActivity.this,
                                                     VerifyPhoneActivity.class);
@@ -149,10 +156,12 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<Profile> call, Throwable t) {
 
-                                    Toast.makeText(
-                                            LoginActivity.this
-                                            , "خطای اتصال!",
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(
+//                                            LoginActivity.this
+//                                            , "خطای اتصال!",
+//                                            Toast.LENGTH_SHORT).show();
+
+                                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
 
                                     enter.setVisibility(View.VISIBLE);
                                     enterprogress.smoothToHide();
@@ -165,10 +174,12 @@ public class LoginActivity extends AppCompatActivity {
                             enterprogress.smoothToHide();
                             enter.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(
-                                    LoginActivity.this
-                                    , "نام کاربری یا رمز عبور نامعتبر!",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    LoginActivity.this
+//                                    , "نام کاربری یا رمز عبور نامعتبر!",
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, R.string.invalidUsernameOrPassword, Snackbar.LENGTH_LONG);
                         }
 
                     }
@@ -176,10 +187,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<AccessToken> call, Throwable t) {
                         // این متود هم فقط زمانی فرخوانی می‌شه که به هر دلیلی کانکشن ما با مشکل روبرو بشه
-                        Toast.makeText(
-                                LoginActivity.this
-                                , "خطا!",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(
+//                                LoginActivity.this
+//                                , "خطا!",
+//                                Toast.LENGTH_SHORT).show();
+                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
 
                         enter.setVisibility(View.VISIBLE);
                         enterprogress.smoothToHide();

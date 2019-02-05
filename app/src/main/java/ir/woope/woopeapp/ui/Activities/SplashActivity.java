@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
@@ -106,15 +107,13 @@ public class SplashActivity extends AppCompatActivity {
                 int code = response.code();
                 if (code == 200) {
 
-
-
-                        ApiResponse res = response.body();
-                        int appVersion = Integer.valueOf(res.getMessage());
-                        if (appVersion > getVersion()) {
-                            showUpdateDialog();
-                        } else {
-                            GetProfileFromServer();
-                        }
+                    ApiResponse res = response.body();
+                    int appVersion = Integer.valueOf(res.getMessage());
+                    if (appVersion > getVersion()) {
+                        showUpdateDialog();
+                    } else {
+                        GetProfileFromServer();
+                    }
 
                 }
             }
@@ -125,10 +124,12 @@ public class SplashActivity extends AppCompatActivity {
                 err.setVisibility(View.VISIBLE);
                 progress.smoothToHide();
 
-                Toast.makeText(
-                        SplashActivity.this
-                        , R.string.network_error,
-                        Toast.LENGTH_LONG).show();
+//                Toast.makeText(
+//                        SplashActivity.this
+//                        , R.string.network_error,
+//                        Toast.LENGTH_LONG).show();
+
+                Utility.showSnackbar(findViewById(R.id.activity_splash), R.string.network_error, Snackbar.LENGTH_LONG);
 
             }
         });
@@ -186,45 +187,44 @@ public class SplashActivity extends AppCompatActivity {
 
                 if (response.code() == 200) {
 
-                        Profile user = response.body();
-                        //profile=user.getMessage();
-                        final SharedPreferences.Editor prefsEditor = settings.edit();
-                        Gson gson = new Gson();
+                    Profile user = response.body();
+                    //profile=user.getMessage();
+                    final SharedPreferences.Editor prefsEditor = settings.edit();
+                    Gson gson = new Gson();
 
-                        String json = gson.toJson(user);
-                        prefsEditor.putString(PROFILE, json);
-                        prefsEditor.apply();
+                    String json = gson.toJson(user);
+                    prefsEditor.putString(PROFILE, json);
+                    prefsEditor.apply();
 
-                        Intent goto_main = new Intent(SplashActivity.this,
-                                MainActivity.class);
-                        goto_main.putExtra(GET_PROFILE_FROM_SERVER, false);
-                        goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Intent goto_main = new Intent(SplashActivity.this,
+                            MainActivity.class);
+                    goto_main.putExtra(GET_PROFILE_FROM_SERVER, false);
+                    goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(goto_main);
+
+
+                } else if (response.code() == 401) {
+
+                    final boolean tutorialIsShown = settings.getBoolean("tutorialIsShown", false);
+
+                    if (tutorialIsShown == false) {
+
+                        Intent goto_login = new Intent(SplashActivity.this,
+                                SliderActivity.class);
+                        goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
-                        startActivity(goto_main);
+                        startActivity(goto_login);
 
+                    } else if (tutorialIsShown == true) {
 
-                    } else if (response.code() == 401) {
+                        Intent goto_login = new Intent(SplashActivity.this,
+                                SplashSelectActivity.class);
+                        goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(goto_login);
 
-                        final boolean tutorialIsShown = settings.getBoolean("tutorialIsShown", false);
-
-                        if (tutorialIsShown == false) {
-
-                            Intent goto_login = new Intent(SplashActivity.this,
-                                    SliderActivity.class);
-                            goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            finish();
-                            startActivity(goto_login);
-
-                        } else if (tutorialIsShown == true) {
-
-                            Intent goto_login = new Intent(SplashActivity.this,
-                                    SplashSelectActivity.class);
-                            goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            finish();
-                            startActivity(goto_login);
-
-                        }
-
+                    }
 
 
                 }
@@ -236,10 +236,13 @@ public class SplashActivity extends AppCompatActivity {
                 retry.setVisibility(View.VISIBLE);
                 err.setVisibility(View.VISIBLE);
                 progress.smoothToHide();
-                Toast.makeText(
-                        SplashActivity.this
-                        , R.string.network_error,
-                        Toast.LENGTH_LONG).show();
+
+//                Toast.makeText(
+//                        SplashActivity.this
+//                        , R.string.network_error,
+//                        Toast.LENGTH_LONG).show();
+
+                Utility.showSnackbar(findViewById(R.id.activity_splash), R.string.network_error, Snackbar.LENGTH_LONG);
 
             }
         });

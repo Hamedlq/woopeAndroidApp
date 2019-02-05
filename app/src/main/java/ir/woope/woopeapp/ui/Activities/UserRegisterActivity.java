@@ -3,6 +3,7 @@ package ir.woope.woopeapp.ui.Activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -37,11 +38,15 @@ public class UserRegisterActivity extends AppCompatActivity {
     TextView txt_rules;
     Toolbar toolbar;
 
+    View layout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_user_register);
+
+        layout = findViewById(R.id.activity_userRegister);
 
         toolbar = (Toolbar) findViewById(R.id.register_toolbar);
         setSupportActionBar(toolbar);
@@ -80,10 +85,14 @@ public class UserRegisterActivity extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 if (!isUserNameValid(username.getText().toString())) {
-                    Toast.makeText(
-                            UserRegisterActivity.this
-                            , "نام کاربری معتبر نیست",
-                            Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(
+//                            UserRegisterActivity.this
+//                            , "نام کاربری معتبر نیست",
+//                            Toast.LENGTH_SHORT).show();
+
+                    Utility.showSnackbar(layout, R.string.invalidUsername, Snackbar.LENGTH_SHORT);
+
                 } else {
                     progress.smoothToShow();
                     register.setVisibility(View.GONE);
@@ -96,10 +105,13 @@ public class UserRegisterActivity extends AppCompatActivity {
 
                                 progress.smoothToHide();
 
-                                Toast.makeText(
-                                        UserRegisterActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        UserRegisterActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
+
 
                                 final Intent goto_sms_validation = new Intent(UserRegisterActivity.this,
                                         SmsVerification_RegisterActivity.class);
@@ -116,10 +128,12 @@ public class UserRegisterActivity extends AppCompatActivity {
 
                                             progress.smoothToHide();
 
-                                            Toast.makeText(
-                                                    UserRegisterActivity.this
-                                                    , response.body().getMessage(),
-                                                    Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(
+//                                                    UserRegisterActivity.this
+//                                                    , response.body().getMessage(),
+//                                                    Toast.LENGTH_SHORT).show();
+
+                                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                                             startActivity(goto_sms_validation);
                                             finish();
@@ -129,10 +143,13 @@ public class UserRegisterActivity extends AppCompatActivity {
                                             progress.smoothToHide();
                                             register.setVisibility(View.VISIBLE);
 
-                                            Toast.makeText(
-                                                    UserRegisterActivity.this
-                                                    , response.body().getMessage(),
-                                                    Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(
+//                                                    UserRegisterActivity.this
+//                                                    , response.body().getMessage(),
+//                                                    Toast.LENGTH_SHORT).show();
+
+                                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
+
 
                                         }
 
@@ -142,10 +159,14 @@ public class UserRegisterActivity extends AppCompatActivity {
                                     public void onFailure(Call<ApiResponse> call, Throwable t) {
                                         progress.smoothToHide();
                                         register.setVisibility(View.VISIBLE);
-                                        Toast.makeText(
-                                                UserRegisterActivity.this
-                                                , "خطای اتصال",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(
+//                                                UserRegisterActivity.this
+//                                                , "خطای اتصال",
+//                                                Toast.LENGTH_SHORT).show();
+
+                                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
+
+
                                     }
                                 });
 
@@ -166,10 +187,13 @@ public class UserRegisterActivity extends AppCompatActivity {
                                 }
 
 
-                                Toast.makeText(
-                                        UserRegisterActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        UserRegisterActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
+
 
                             }
 
@@ -181,10 +205,13 @@ public class UserRegisterActivity extends AppCompatActivity {
                             progress.smoothToHide();
                             register.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(
-                                    UserRegisterActivity.this
-                                    , "خطای اتصال",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    UserRegisterActivity.this
+//                                    , "خطای اتصال",
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
+
                         }
                     });
 

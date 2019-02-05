@@ -1,5 +1,7 @@
 package ir.woope.woopeapp.interfaces;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 import ir.woope.woopeapp.helpers.Constants;
@@ -8,6 +10,7 @@ import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.MallModel;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.models.StoreGalleryItem;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

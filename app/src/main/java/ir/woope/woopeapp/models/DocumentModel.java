@@ -21,6 +21,7 @@ public class DocumentModel extends ApiResponse implements Serializable {
     public String logoSrc;
     public String returnWoop;
     public List<TransactionModel> transactionList;
+
     public DocumentModel() {
 
     }

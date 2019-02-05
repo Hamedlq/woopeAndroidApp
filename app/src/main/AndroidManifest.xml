@@ -67,15 +67,17 @@
         <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
 
         <activity
-            android:name=".ui.Activities.MainActivity"
 
+            android:name=".ui.Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="">
+            android:label=""
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".ui.Activities.PayActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter android:label="">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -87,26 +89,33 @@
         </activity>
         <activity android:name=".ui.Activities.CashPayActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.PayCodeActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.TransactionActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.StoreActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.SmsVerification_RegisterActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".ui.Activities.UserRegisterActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.BankActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label=""/>
@@ -115,11 +124,13 @@
             android:label=""/>
         <activity android:name=".ui.Activities.GiftActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".ui.Activities.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -127,49 +138,65 @@
         </activity>
         <activity android:name=".ui.Activities.SendNumber_ChangePassActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.TransHistoryActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.SplashSelectActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".ui.Activities.EditProfileActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".ui.Activities.VerifyPhoneActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.Activities.ContactUsActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label=""/>
+            android:label=""
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.Activities.NewPass_ChangePassActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label=""/>
+            android:label=""
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.Activities.SmsVerification_ChangePassActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label=""/>
+            android:label=""
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.Activities.SliderActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="">
-
+            android:label=""
+            android:screenOrientation="portrait"
+            >
         </activity>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ui.Activities.RulesActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label=""/>
+            android:label=""
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.Activities.ProductActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""
+            android:screenOrientation="portrait"/>
 
     </application>
 

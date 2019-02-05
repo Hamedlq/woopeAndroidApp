@@ -28,7 +28,7 @@ public class PayListModel extends ApiResponse implements Serializable {
     }
 
     public String getWoopePriceString() {
-        long wprice = totalPrice - (pointPay*1000);
+        long wprice = totalPrice - (pointPay * 1000);
         return String.valueOf(wprice);
     }
 

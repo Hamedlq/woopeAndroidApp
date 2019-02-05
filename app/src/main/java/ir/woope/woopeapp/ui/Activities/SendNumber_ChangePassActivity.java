@@ -2,6 +2,7 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ChangePassInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import retrofit2.Call;
@@ -33,11 +35,15 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
     AVLoadingIndicatorView progress;
 
+    View layout;
+
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sendnumber_changepass);
+
+        layout = findViewById(R.id.activity_sendNumber_changePass);
 
         toolbar = (Toolbar) findViewById(R.id.sendnumber_changepass_toolbar);
         setSupportActionBar(toolbar);
@@ -62,10 +68,13 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(number.getText()))
 
                 {
-                    Toast.makeText(
-                            SendNumber_ChangePassActivity.this
-                            , "شماره موبایل خود را وارد کنید",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(
+//                            SendNumber_ChangePassActivity.this
+//                            , "شماره موبایل خود را وارد کنید",
+//                            Toast.LENGTH_SHORT).show();
+
+                    Utility.showSnackbar(layout, R.string.enter_phone_number, Snackbar.LENGTH_SHORT);
+
                 } else if (!TextUtils.isEmpty(number.getText())) {
 
                     progress.smoothToShow();
@@ -79,10 +88,12 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
 
                                 progress.smoothToHide();
 
-                                Toast.makeText(
-                                        SendNumber_ChangePassActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        SendNumber_ChangePassActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                                 Intent goto_changepass = new Intent(SendNumber_ChangePassActivity.this,
                                         SmsVerification_ChangePassActivity.class);
@@ -94,10 +105,12 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                                 progress.smoothToHide();
                                 send.setVisibility(View.VISIBLE);
 
-                                Toast.makeText(
-                                        SendNumber_ChangePassActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        SendNumber_ChangePassActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                             }
 
@@ -109,10 +122,13 @@ public class SendNumber_ChangePassActivity extends AppCompatActivity {
                             progress.smoothToHide();
                             send.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(
-                                    SendNumber_ChangePassActivity.this
-                                    , "خطای اتصال",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    SendNumber_ChangePassActivity.this
+//                                    , "خطای اتصال",
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
+
                         }
                     });
                 }

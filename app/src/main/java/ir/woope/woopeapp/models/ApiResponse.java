@@ -31,16 +31,22 @@ public class ApiResponse {
     @Expose
     public int status;
 
-    public List<String> getErrors() { return errors; }
+    public List<String> getErrors() {
+        return errors;
+    }
+
     public String getWarnings() {
         return warnings;
     }
+
     public String getInfo() {
         return info;
     }
+
     public String getMessage() {
         return message;
     }
+
     public int getStatus() {
         return status;
     }

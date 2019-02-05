@@ -6,7 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 public class ListPaddingDecoration extends RecyclerView.ItemDecoration {
-    private final int mPadding=70;
+    private final int mPadding = 70;
+
     public ListPaddingDecoration() {
     }
 

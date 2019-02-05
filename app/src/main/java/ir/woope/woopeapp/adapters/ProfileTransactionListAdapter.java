@@ -28,7 +28,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
     private TextView return_woop;
     private RelativeLayout tr1;
     private TextView tr1_ct;
-    private TextView tr1_am;  
+    private TextView tr1_am;
     private TextView tr1_tt;
     private TextView tr1_time;
     private RelativeLayout tr2;
@@ -52,7 +52,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
     private TextView tr5_tt;
     private TextView tr5_time;
 
-private Context context;
+    private Context context;
     private List<DocumentModel> orderModels;
 
     //private TransHistoryActivity.ProfileTransactionTouchListener payTransactionTouchListener;
@@ -66,8 +66,8 @@ private Context context;
     }
 
 
-    public ProfileTransactionListAdapter(Context context,List<DocumentModel> list) {
-        context=context;
+    public ProfileTransactionListAdapter(Context context, List<DocumentModel> list) {
+        context = context;
         this.orderModels = list;
         //this.payTransactionTouchListener=payTransactionTouchListener;
     }
@@ -89,10 +89,10 @@ private Context context;
         public MyViewHolder(View view) {
             super(view);
             total_price = view.findViewById(R.id.total_price);
-            name_tv= view.findViewById(R.id.store_name_textview);
-            paytype= view.findViewById(R.id.paytype);
-           // ic_item=view.findViewById(R.id.ic_item);
-            return_woop=view.findViewById(R.id.return_woop);
+            name_tv = view.findViewById(R.id.store_name_textview);
+            paytype = view.findViewById(R.id.paytype);
+            // ic_item=view.findViewById(R.id.ic_item);
+            return_woop = view.findViewById(R.id.return_woop);
             tr1 = view.findViewById(R.id.tr1);
             tr1_ct = view.findViewById(R.id.tr1_ct);
             tr1_am = view.findViewById(R.id.tr1_am);
@@ -129,17 +129,17 @@ private Context context;
 
     @Override
     public void onBindViewHolder(ProfileTransactionListAdapter.MyViewHolder holder, int position) {
-        DocumentModel model=orderModels.get(position);
-        total_price.setText(String.valueOf(orderModels.get(position).totalPrice)+" تومان ");
+        DocumentModel model = orderModels.get(position);
+        total_price.setText(String.valueOf(orderModels.get(position).totalPrice) + " تومان ");
         name_tv.setText(orderModels.get(position).storeName);
-        return_woop.setText(orderModels.get(position).returnWoop +" عدد ووپ ");
-        if(model.payType==1){
+        return_woop.setText(orderModels.get(position).returnWoop + " عدد ووپ ");
+        if (model.payType == 1) {
             paytype.setImageResource(R.drawable.wallet_mini);
-        }else {
+        } else {
             paytype.setImageResource(R.drawable.mini_woope);
         }
         //if(model.payType==10)
-        if(model.transactionList.size()>0){
+        if (model.transactionList.size() > 0) {
             tr1_ct.setText(model.transactionList.get(0).currencyType);
             tr1_am.setText(String.valueOf(model.transactionList.get(0).amount));
             tr1_tt.setText(model.transactionList.get(0).transType);
@@ -147,36 +147,36 @@ private Context context;
          }else {
             tr1.setVisibility(View.GONE);
         }
-        if(model.transactionList.size()>1){
+        if (model.transactionList.size() > 1) {
             tr2_ct.setText(model.transactionList.get(1).currencyType);
             tr2_am.setText(String.valueOf(model.transactionList.get(1).amount));
             tr2_tt.setText(model.transactionList.get(1).transType);
             tr2_time.setText(model.transactionList.get(1).time);
-        }else {
+        } else {
             tr2.setVisibility(View.GONE);
         }
-        if(model.transactionList.size()>2){
+        if (model.transactionList.size() > 2) {
             tr3_ct.setText(model.transactionList.get(2).currencyType);
             tr3_am.setText(String.valueOf(model.transactionList.get(2).amount));
             tr3_tt.setText(model.transactionList.get(2).transType);
             tr3_time.setText(model.transactionList.get(2).time);
-        }else {
+        } else {
             tr3.setVisibility(View.GONE);
         }
-        if(model.transactionList.size()>3){
+        if (model.transactionList.size() > 3) {
             tr4_ct.setText(model.transactionList.get(3).currencyType);
             tr4_am.setText(String.valueOf(model.transactionList.get(3).amount));
             tr4_tt.setText(model.transactionList.get(3).transType);
             tr4_time.setText(model.transactionList.get(3).time);
-        }else {
+        } else {
             tr4.setVisibility(View.GONE);
         }
-        if(model.transactionList.size()>4){
+        if (model.transactionList.size() > 4) {
             tr5_ct.setText(model.transactionList.get(4).currencyType);
             tr5_am.setText(String.valueOf(model.transactionList.get(4).amount));
             tr5_tt.setText(model.transactionList.get(4).transType);
             tr5_time.setText(model.transactionList.get(4).time);
-        }else {
+        } else {
             tr5.setVisibility(View.GONE);
         }
 

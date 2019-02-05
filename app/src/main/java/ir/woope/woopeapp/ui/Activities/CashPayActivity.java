@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.PayListModel;
@@ -55,11 +57,14 @@ public class CashPayActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    View layout;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_pay);
+        layout = findViewById(R.id.activity_cashpay);
         ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
@@ -68,6 +73,7 @@ public class CashPayActivity extends AppCompatActivity {
         }
         //TextView StoreName=(TextView) findViewById(R.id.StoreName);
         StoreName_tv.setText(payListModel.storeName);
+
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
@@ -144,15 +150,23 @@ public class CashPayActivity extends AppCompatActivity {
                     ApiResponse res = response.body();
                     String x = res.getMessage();
                     if (response.body().getStatus() == 101) {
-                        Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
+
+//                        Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
+
+                        Utility.showSnackbar(layout, x, Snackbar.LENGTH_LONG);
+
                         Intent goto_main = new Intent(CashPayActivity.this,
                                 MainActivity.class);
                         goto_main.putExtra(GET_PROFILE_FROM_SERVER, true);
                         goto_main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(goto_main);
+
                     } else {
-                        Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(CashPayActivity.this, x, Toast.LENGTH_LONG).show();
+
+                        Utility.showSnackbar(layout, x, Snackbar.LENGTH_LONG);
+
                     }
                 }
             }
@@ -160,6 +174,7 @@ public class CashPayActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
             }
 
         });

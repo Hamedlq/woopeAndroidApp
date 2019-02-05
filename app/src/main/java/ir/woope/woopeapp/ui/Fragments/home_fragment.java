@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -112,6 +113,8 @@ public class home_fragment extends Fragment {
 
     private boolean itShouldLoadMore = true;
 
+    View layout;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +123,7 @@ public class home_fragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+
 
         stores = new ArrayList<>();
 
@@ -268,13 +272,14 @@ public class home_fragment extends Fragment {
                 int code = response.code();
                 if (code == 200) {
                     ApiResponse ar = response.body();
-                    Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
+                    Utility.showSnackbar(layout, ar.getMessage(), Snackbar.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), "خطا در تغییر علاقمندی‌ها", Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
     }
@@ -424,6 +429,8 @@ public class home_fragment extends Fragment {
                 hideProgreeBar();
                 itShouldLoadMore = true;
                 size = 0;
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 
@@ -460,6 +467,7 @@ public class home_fragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        layout = getView().findViewById(R.id.activity_fragment_home);
 
     }
 

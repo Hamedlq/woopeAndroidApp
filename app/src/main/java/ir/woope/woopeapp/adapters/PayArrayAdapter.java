@@ -13,7 +13,7 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.models.PayState;
 
-public class PayArrayAdapter  extends ArrayAdapter<PayState> {
+public class PayArrayAdapter extends ArrayAdapter<PayState> {
 
     private List<PayState> items;
     private Activity activity;
@@ -61,12 +61,12 @@ public class PayArrayAdapter  extends ArrayAdapter<PayState> {
     public View getCustomView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = activity.getLayoutInflater();
         //LayoutInflater inflater=getLayoutInflater();
-        View row=inflater.inflate(R.layout.spinner_row, parent, false);
-        TextView label=(TextView)row.findViewById(R.id.mode);
+        View row = inflater.inflate(R.layout.spinner_row, parent, false);
+        TextView label = (TextView) row.findViewById(R.id.mode);
         label.setText(items.get(position).getMode());
 
-        TextView sub=(TextView)row.findViewById(R.id.tomanCredit);
-        sub.setText( " اعتبار "+items.get(position).getCredit());
+        TextView sub = (TextView) row.findViewById(R.id.tomanCredit);
+        sub.setText(" اعتبار " + items.get(position).getCredit());
 
         /*ImageView icon=(ImageView)row.findViewById(R.id.image);
         icon.setImageResource(arr_images[position]);*/

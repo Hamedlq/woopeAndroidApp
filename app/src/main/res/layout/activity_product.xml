@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/productActivity_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/viewBg"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/viewBg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:backgroundTint="@color/viewBg">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <ir.woope.woopeapp.Utils.SquareLayout
+                    android:id="@+id/sqPI"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/productImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorPrimary" />
+
+                        <com.wang.avi.AVLoadingIndicatorView
+                            android:id="@+id/loading_product"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:visibility="visible"
+                            app:indicatorColor="#59CC89"
+                            app:indicatorName="BallPulseIndicator" />
+
+                    </RelativeLayout>
+
+                </ir.woope.woopeapp.Utils.SquareLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sqPI"
+                    android:layout_marginTop="-25dp"
+                    android:background="@drawable/store_hover" />
+
+
+            </RelativeLayout>
+
+            <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/product_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layoutDirection="rtl"-->
+            <!--android:background="@color/colorPrimary">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/productName"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:layout_height="match_parent" />-->
+
+            <!--</android.support.v7.widget.Toolbar>-->
+
+            <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<ir.woope.woopeapp.Utils.SquareLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!--<ImageView-->
+            <!--android:id="@+id/productImage"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+            <!--</ir.woope.woopeapp.Utils.SquareLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="0dp"
+                android:background="@color/viewBg">
+
+                <com.varunest.sparkbutton.SparkButton
+                    android:id="@+id/product_likebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:sparkbutton_activeImage="@drawable/liked"
+                    app:sparkbutton_iconSize="25dp"
+                    app:sparkbutton_inActiveImage="@drawable/not_liked"
+                    app:sparkbutton_primaryColor="@color/alizarin"
+                    app:sparkbutton_secondaryColor="@color/sun_flower" />
+
+                <TextView
+                    android:id="@+id/txt_likeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/productDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textStyle="bold" />
+
+            <!--</LinearLayout>-->
+
+            <!--</ScrollView>-->
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

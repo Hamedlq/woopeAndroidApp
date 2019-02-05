@@ -330,8 +330,7 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (position > lastItemPosition) {
             // Scrolled Down
             scrollDirection = "DOWN";
-        }
-        else {
+        } else {
             // Scrolled Up
             scrollDirection = "UP";
         }
@@ -343,7 +342,9 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return albumList.size();
     }
 
-    public String getScrollDirection() { return scrollDirection;}
+    public String getScrollDirection() {
+        return scrollDirection;
+    }
 
     public void addItem(final List<Store> list) {
 

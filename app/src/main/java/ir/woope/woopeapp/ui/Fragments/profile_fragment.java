@@ -28,6 +28,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -178,6 +179,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     File f;
 
+    View layout;
 
 //    private ArrayList<Image> list = new ArrayList<Image>();
 //
@@ -247,7 +249,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
 
         history_layout.setOnClickListener(new View.OnClickListener() {
@@ -380,6 +381,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        layout = getView().findViewById(R.id.activity_fragment_user_profile);
 
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         //this.profilePhoto = getString(R.string.user_profile_photo);
@@ -585,25 +588,20 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                                    Response<ApiResponse> response) {
 
                 if (response.body().getStatus() == 101) {
-                    Toast.makeText(
-                            getActivity()
-                            , "آپلود شد",
-                            Toast.LENGTH_SHORT).show();
+                    Utility.showSnackbar(layout, "آپلود شد", Snackbar.LENGTH_SHORT);
                     GetProfilePicture();
                 } else {
-                    Toast.makeText(
-                            getActivity()
+                    Utility.showSnackbar(
+                            layout
                             , "آپلود نشد",
-                            Toast.LENGTH_SHORT).show();
+                            Snackbar.LENGTH_SHORT);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(
-                        getActivity()
-                        , t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
     }
@@ -647,10 +645,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
 
-                Toast.makeText(
-                        getContext()
-                        , t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
 
             }
         });
@@ -691,10 +687,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
 
-                Toast.makeText(
-                        getContext()
-                        , t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
 
             }
         });

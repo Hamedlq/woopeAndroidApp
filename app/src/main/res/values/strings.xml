@@ -64,6 +64,9 @@
     <string name="sms_msg">لطفا کد تایید پیامک شده را وارد کنید</string>
     <string name="rules">با ثبت نام در این برنامه تمام قوانین و مقررات را می‌پذیرم</string>
 
+
+
+
     <string name="rules_text">
 ووپ تابع قوانین و مقررات جمهوری اسلامی ایران می باشد.
         \n\n
@@ -94,5 +97,26 @@
 info@woope.ir
 \n
 </string>
+
+    <string name="confirmPhoneNumber">شماره موبایل خود را تایید کنید</string>
+
+    <string name="invalidUsernameOrPassword">نام کاربری یا رمز عبور نامعتبر!</string>
+
+    <string name="noPermission">عدم دسترسی</string>
+
+    <string name="passwordLenghtNotEnough">رمز عبور باید 4 رقم یا بیشتر باشد</string>
+
+    <string name="invalidUsername">نام کاربری معتبر نیست</string>
+
+    <string name="info">اطلاعات</string>
+    <string name="gallery">گالری</string>
+
+    <string name="store_gallery_noPhoto">عکسی موجود نیست</string>
+
+    <string name="report_store">گزارش عدم همکاری فروشگاه</string>
+
+    <string name="like">لایک</string>
+
+    <string name="loading">در حال بارگزاری ...</string>
 
 </resources>

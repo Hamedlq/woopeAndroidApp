@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +34,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
+import ir.woope.woopeapp.adapters.StoreViewPagerAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
@@ -54,30 +59,14 @@ public class StoreActivity extends AppCompatActivity {
     protected ImageView backdrop;
     @BindView(R.id.store_name)
     protected TextView store_name;
-    @BindView(R.id.store_desc)
-    protected TextView store_desc;
     @BindView(R.id.progressBar)
     protected ProgressBar progressBar;
     @BindView(R.id.store_point)
     protected TextView store_point;
     @BindView(R.id.store_discount)
     protected TextView store_discount;
-    @BindView(R.id.point_desc)
-    protected TextView point_desc;
-    @BindView(R.id.store_address)
-    protected TextView store_address;
-    @BindView(R.id.store_phones)
-    protected TextView store_phones;
-    @BindView(R.id.desc_layout)
-    protected CardView desc_layout;
-    @BindView(R.id.point_layout)
-    protected CardView point_layout;
-    @BindView(R.id.store_phones_layout)
-    protected CardView store_phones_layout;
-    @BindView(R.id.store_address_layout)
-    protected CardView store_address_layout;
     @BindView(R.id.payBtn)
-    protected Button payBtn;
+    protected CardView payBtn;
     ImageView close_btn;
     TextView confirm_pay;
     String STORE_FRAGMENT = "StoreFragment";
@@ -104,14 +93,10 @@ public class StoreActivity extends AppCompatActivity {
         getStore(store.storeId);
 
         //Button payBtn = (Button) findViewById(R.id.payBtn);
-        payBtn.setOnTouchListener(new View.OnTouchListener() {
+        payBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    //goToPaying();
-                    showPayDialog();
-                }
-                return false;
+            public void onClick(View v) {
+                showPayDialog();
             }
         });
 
@@ -124,6 +109,19 @@ public class StoreActivity extends AppCompatActivity {
         toolbar.setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // Find the view pager that will allow the user to swipe between fragments
+        ViewPager viewPager = findViewById(R.id.store_viewpager);
+
+        // Create an adapter that knows which fragment should be shown on each page
+        StoreViewPagerAdapter adapter = new StoreViewPagerAdapter(this, getSupportFragmentManager());
+
+        // Set the adapter onto the view pager
+        viewPager.setAdapter(adapter);
+
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.storeTabs);
+        tabLayout.setupWithViewPager(viewPager);
 
     }
 
@@ -234,33 +232,33 @@ public class StoreActivity extends AppCompatActivity {
                     Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(logo);
                     Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.coverSrc).into(backdrop);
                     store_name.setText(store.storeName);
-                    if (!TextUtils.isEmpty(store.storeDescription)) {
-                        desc_layout.setVisibility(View.VISIBLE);
-                        store_desc.setText(store.storeDescription);
-                    }
+//                    if (!TextUtils.isEmpty(store.storeDescription)) {
+//                        desc_layout.setVisibility(View.VISIBLE);
+//                        store_desc.setText(store.storeDescription);
+//                    }
                     String phones = "";
-                    if (!TextUtils.isEmpty(store.firstPhone)) {
-                        store_phones_layout.setVisibility(View.VISIBLE);
-                        phones = store.firstPhone;
-                    }
-                    if (!TextUtils.isEmpty(store.secondPhone)) {
-                        store_phones_layout.setVisibility(View.VISIBLE);
-                        phones += " - " + store.secondPhone;
-                    }
-                    store_phones.setText(phones);
+//                    if (!TextUtils.isEmpty(store.firstPhone)) {
+//                        store_phones_layout.setVisibility(View.VISIBLE);
+//                        phones = store.firstPhone;
+//                    }
+//                    if (!TextUtils.isEmpty(store.secondPhone)) {
+//                        store_phones_layout.setVisibility(View.VISIBLE);
+//                        phones += " - " + store.secondPhone;
+//                    }
+//                    store_phones.setText(phones);
                     if (!TextUtils.isEmpty(store.discountPercent)) {
                         store_discount.setVisibility(View.VISIBLE);
                         store_discount.setText(store.discountPercent + " درصد تخفیف ");
                     }
-                    if (!TextUtils.isEmpty(store.address)) {
-                        store_address_layout.setVisibility(View.VISIBLE);
-                        store_address.setText(store.address);
-                    }
+//                    if (!TextUtils.isEmpty(store.address)) {
+//                        store_address_layout.setVisibility(View.VISIBLE);
+//                        store_address.setText(store.address);
+//                    }
 
                     if (store.basePrice != 0) {
-                        point_layout.setVisibility(View.VISIBLE);
+//                        point_layout.setVisibility(View.VISIBLE);
                         store_point.setText(store.returnPoint + " عدد ووپ ");
-                        point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
+//                        point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
                     }
                 }
             }
@@ -269,6 +267,8 @@ public class StoreActivity extends AppCompatActivity {
             public void onFailure(Call<Store> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
+                Utility.showSnackbar(findViewById(R.id.activity_splash), R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
     }
@@ -314,5 +314,8 @@ public class StoreActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public long getBranchId() {
+        return store.storeId;
+    }
 
 }

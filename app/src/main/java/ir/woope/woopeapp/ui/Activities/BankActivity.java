@@ -93,9 +93,9 @@ public class BankActivity extends AppCompatActivity {
 
 //                    if(Utility.isJSONValid(response.body().toString())) {
 
-                        PayListModel trans = response.body();
+                    PayListModel trans = response.body();
 
-                        gotoPayCodeActivity(trans);
+                    gotoPayCodeActivity(trans);
 
 //                    }
                 }
