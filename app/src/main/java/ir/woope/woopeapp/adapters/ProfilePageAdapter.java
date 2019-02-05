@@ -10,7 +10,7 @@ import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
  * Created by alireza on 3/30/18.
  */
 
-public class ProfilePageAdapter  extends FragmentStatePagerAdapter {
+public class ProfilePageAdapter extends FragmentStatePagerAdapter {
 
     //integer to count number of tabs
     int tabCount;
@@ -19,7 +19,7 @@ public class ProfilePageAdapter  extends FragmentStatePagerAdapter {
     public ProfilePageAdapter(FragmentManager fm, int tabCount) {
         super(fm);
         //Initializing tab count
-        this.tabCount= tabCount;
+        this.tabCount = tabCount;
     }
 
     //Overriding method getItem

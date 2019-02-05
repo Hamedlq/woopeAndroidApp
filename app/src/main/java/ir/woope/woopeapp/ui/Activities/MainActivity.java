@@ -28,6 +28,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -68,6 +69,7 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
@@ -86,7 +88,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
     UCrop.Options options;
     private String pictureImagePath = "";
+
+    View layout;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -205,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        layout = findViewById(R.id.activity_main);
         if (getIntent() != null && getIntent().getExtras() != null) {
             getProfileFromServer = getIntent().getBooleanExtra(GET_PROFILE_FROM_SERVER, false);
         }
@@ -377,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
                     //Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_LONG).show();
+
                 }
             });
         } catch (Exception e) {
@@ -392,7 +397,8 @@ public class MainActivity extends AppCompatActivity {
             System.exit(1);
             return;
         }
-        Toast.makeText(MainActivity.this, R.string.press_again_to_exit, Toast.LENGTH_LONG).show();
+//        Toast.makeText(MainActivity.this, R.string.press_again_to_exit, Toast.LENGTH_LONG).show();
+        Utility.showSnackbar(layout, R.string.press_again_to_exit, Snackbar.LENGTH_LONG);
         this.doubleBackToExitPressedOnce = true;
         new Handler().postDelayed(new Runnable() {
 
@@ -587,13 +593,16 @@ public class MainActivity extends AppCompatActivity {
         catch (ActivityNotFoundException anfe) {
             // display an error message
             String errorMessage = "امکان آپلود عکس در گوشی شما وجود ندارد";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+//            toast.show();
+            Utility.showSnackbar(layout, errorMessage, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             // display an error message
             String errorMessage = "خطایی رخ داده است";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+//            toast.show();
+
+            Utility.showSnackbar(layout, errorMessage, Snackbar.LENGTH_LONG);
         }
     }
 
@@ -701,16 +710,24 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //nothing happen
                 } else {
-                    Toast.makeText(MainActivity.this, "عدم دسترسی",
-                            Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(MainActivity.this, "عدم دسترسی",
+//                            Toast.LENGTH_SHORT).show();
+
+                    Utility.showSnackbar(layout, R.string.noPermission, Snackbar.LENGTH_LONG);
+
                 }
                 break;
             case MY_PERMISSIONS_REQUEST_CAMERA:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //nothing happen
                 } else {
-                    Toast.makeText(MainActivity.this, "عدم دسترسی",
-                            Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(MainActivity.this, "عدم دسترسی",
+//                            Toast.LENGTH_SHORT).show();
+
+                    Utility.showSnackbar(layout, R.string.noPermission, Snackbar.LENGTH_LONG);
+
                 }
                 break;
             default:
@@ -753,13 +770,15 @@ public class MainActivity extends AppCompatActivity {
                         ((profile_fragment) fragment).setPhoto(i.getMessage());
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+                    Utility.showSnackbar(layout, R.string.upload_error, Snackbar.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, R.string.upload_error, Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.upload_error, Snackbar.LENGTH_LONG);
             }
         });
     }

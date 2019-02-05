@@ -57,6 +57,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
+
         ViewHolder(View view) {
             super(view);
             this.image = view.findViewById(R.id.card_background);

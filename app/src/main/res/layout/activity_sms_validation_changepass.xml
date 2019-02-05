@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login">
+    android:background="@drawable/login"
+    android:id="@+id/activity_smsVerification_changePass">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -108,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
-                    android:text= "@string/sms_msg"
+                    android:text="@string/sms_msg"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 

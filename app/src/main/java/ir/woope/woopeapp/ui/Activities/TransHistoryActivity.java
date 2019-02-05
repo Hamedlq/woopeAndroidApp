@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +24,7 @@ import ir.woope.woopeapp.adapters.ProfileTransactionListAdapter;
 import ir.woope.woopeapp.adapters.TransactionListAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.ListPaddingDecoration;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.DocumentModel;
 import ir.woope.woopeapp.models.PayListModel;
@@ -146,6 +148,8 @@ public class TransHistoryActivity extends AppCompatActivity {
             public void onFailure(Call<List<DocumentModel>> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
+                Utility.showSnackbar(findViewById(R.id.main_content), R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 

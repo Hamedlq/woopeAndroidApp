@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
@@ -54,11 +55,15 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
     String phoneNumber;
 
+    View layout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_changepass);
+
+        layout = findViewById(R.id.activity_smsVerification_changePass);
 
         toolbar = (Toolbar) findViewById(R.id.sms_validation_changepass_toolbar);
         setSupportActionBar(toolbar);
@@ -105,10 +110,12 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
 //                            progress.setVisibility(View.GONE);
 
-                            Toast.makeText(
-                                    SmsVerification_ChangePassActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+////                                    SmsVerification_ChangePassActivity.this
+////                                    , response.body().getMessage(),
+////                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                             accept.setVisibility(View.VISIBLE);
                             resend.animate().alpha(0.0f);
@@ -119,10 +126,12 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
 //                            progress.setVisibility(View.GONE);
 
-                            Toast.makeText(
-                                    SmsVerification_ChangePassActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    SmsVerification_ChangePassActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                         }
 
@@ -133,11 +142,14 @@ public class SmsVerification_ChangePassActivity extends AppCompatActivity {
 
 //                        progress.setVisibility(View.GONE);
 
-                        Toast.makeText(
+//                        Toast.makeText(
+//
+//                                SmsVerification_ChangePassActivity.this
+//                                , "خطای اتصال",
+//                                Toast.LENGTH_SHORT).show();
 
-                                SmsVerification_ChangePassActivity.this
-                                , "خطای اتصال",
-                                Toast.LENGTH_SHORT).show();
+                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
+
                     }
                 });
             }

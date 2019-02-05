@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -49,11 +50,15 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
     AVLoadingIndicatorView loading;
 
+    View layout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_register);
+
+        layout = findViewById(R.id.activity_smsValidation_register);
 
         toolbar = (Toolbar) findViewById(R.id.sms_validation_register_toolbar);
         setSupportActionBar(toolbar);
@@ -103,19 +108,23 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
 //                            progress.setVisibility(View.GONE);
 
-                            Toast.makeText(
-                                    SmsVerification_RegisterActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    SmsVerification_RegisterActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                         } else {
 
 //                            progress.setVisibility(View.GONE);
 
-                            Toast.makeText(
-                                    SmsVerification_RegisterActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    SmsVerification_RegisterActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                         }
 
@@ -126,11 +135,13 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
 //                        progress.setVisibility(View.GONE);
 
-                        Toast.makeText(
+//                        Toast.makeText(
+//
+//                                SmsVerification_RegisterActivity.this
+//                                , "خطای اتصال",
+//                                Toast.LENGTH_SHORT).show();
 
-                                SmsVerification_RegisterActivity.this
-                                , "خطای اتصال",
-                                Toast.LENGTH_SHORT).show();
+                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
                     }
                 });
             }
@@ -150,10 +161,12 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
                             loading.smoothToHide();
 
-                            Toast.makeText(
-                                    SmsVerification_RegisterActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    SmsVerification_RegisterActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                             login.send_info(getIntent().getStringExtra("phone_number"), getIntent().getStringExtra("password"), "password").enqueue(new Callback<AccessToken>() {
                                 @Override
@@ -165,10 +178,13 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                         SharedPreferences.Editor editor = settings.edit();
                                         editor.putString(TOKEN, response.body().getAccessToken()).apply();
 
-                                        Toast.makeText(
-                                                SmsVerification_RegisterActivity.this
-                                                , "ورود موفق!",
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(
+//                                                SmsVerification_RegisterActivity.this
+//                                                , "ورود موفق!",
+//                                                Toast.LENGTH_SHORT).show();
+
+                                        Utility.showSnackbar(layout, R.string.success_login, Snackbar.LENGTH_SHORT);
+
                                         Intent goto_mainpage = new Intent(SmsVerification_RegisterActivity.this,
                                                 MainActivity.class);
                                         goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
@@ -176,10 +192,13 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                         finish();
                                         startActivity(goto_mainpage);
                                     } else {
-                                        Toast.makeText(
-                                                SmsVerification_RegisterActivity.this
-                                                , "نام کاربری یا رمز عبور نامعتبر!",
-                                                Toast.LENGTH_SHORT).show();
+
+//                                        Toast.makeText(
+//                                                SmsVerification_RegisterActivity.this
+//                                                , "نام کاربری یا رمز عبور نامعتبر!",
+//                                                Toast.LENGTH_SHORT).show();
+
+                                        Utility.showSnackbar(layout, R.string.invalidUsernameOrPassword, Snackbar.LENGTH_SHORT);
                                     }
 
 
@@ -188,11 +207,12 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(Call<AccessToken> call, Throwable t) {
                                     // این متود هم فقط زمانی فرخوانی می‌شه که به هر دلیلی کانکشن ما با مشکل روبرو بشه
-                                    Toast.makeText(
-                                            SmsVerification_RegisterActivity.this
-                                            , "خطا!",
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(
+//                                            SmsVerification_RegisterActivity.this
+//                                            , "خطا!",
+//                                            Toast.LENGTH_SHORT).show();
 
+                                    Utility.showSnackbar(layout, R.string.error, Snackbar.LENGTH_SHORT);
 
                                 }
                             });
@@ -200,10 +220,12 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                         } else {
 
                             loading.smoothToHide();
-                            Toast.makeText(
-                                    SmsVerification_RegisterActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    SmsVerification_RegisterActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
                         }
 
 //                        Intent code_transfer = new Intent(getBaseContext(), sms_validation.class);
@@ -217,10 +239,13 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
                         loading.smoothToHide();
 
-                        Toast.makeText(
-                                SmsVerification_RegisterActivity.this
-                                , "خطای اتصال",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(
+//                                SmsVerification_RegisterActivity.this
+//                                , "خطای اتصال",
+//                                Toast.LENGTH_SHORT).show();
+
+                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
+
                     }
                 });
 

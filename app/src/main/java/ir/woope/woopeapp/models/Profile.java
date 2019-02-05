@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Hamed on 6/10/2018.
  */
 
-public class Profile extends ApiResponse implements Serializable{
+public class Profile extends ApiResponse implements Serializable {
     private String name;
     private String family;
     private String username;
@@ -17,21 +17,21 @@ public class Profile extends ApiResponse implements Serializable{
     private String imageSrc;
     private String mobile;
     private boolean phoneNumberConfirmed;
-    private int woopeCredit =0;
+    private int woopeCredit = 0;
     private long moneyCredit;
-    private int transactionCount =0;
+    private int transactionCount = 0;
 
     public Profile() {
-        name="";
-        family="";
-        username="";
-        userBio="";
-        imageSrc="";
-        moneyCredit=0;
+        name = "";
+        family = "";
+        username = "";
+        userBio = "";
+        imageSrc = "";
+        moneyCredit = 0;
     }
 
     public String getName() {
-        if(name!=null){
+        if (name != null) {
             return name;
         }
         return "";
@@ -42,7 +42,7 @@ public class Profile extends ApiResponse implements Serializable{
     }
 
     public String getFamily() {
-        if(name!=null){
+        if (name != null) {
             return family;
         }
         return "";
@@ -65,23 +65,26 @@ public class Profile extends ApiResponse implements Serializable{
     }
 
     public String getCreditString() {
-        if(moneyCredit != 0){
+        if (moneyCredit != 0) {
             return String.valueOf(Math.round(moneyCredit));
         }
         return "0";
     }
+
     public String getWoopeCreditString() {
-        if(woopeCredit >0){
+        if (woopeCredit > 0) {
             return String.valueOf(woopeCredit);
         }
         return "0";
     }
+
     public String getUseNumberString() {
-        if(transactionCount >0){
+        if (transactionCount > 0) {
             return String.valueOf(transactionCount);
         }
         return "0";
     }
+
     public void setTomanCredit(long moneyCredit) {
         this.moneyCredit = moneyCredit;
     }
@@ -122,7 +125,9 @@ public class Profile extends ApiResponse implements Serializable{
         return gender;
     }
 
-    public boolean getConfirmed() { return phoneNumberConfirmed; }
+    public boolean getConfirmed() {
+        return phoneNumberConfirmed;
+    }
 
     public String getMobile() {
         return mobile;

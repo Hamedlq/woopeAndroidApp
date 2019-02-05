@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ir.woope.woopeapp.Utils.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <io.supercharge.shimmerlayout.ShimmerLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:shimmer_animation_duration="1400"
+        app:shimmer_color="@color/white">
+
+        <ImageView
+            android:id="@+id/shimmerimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_centerInParent="true"
+            android:background="@drawable/w" />
+
+    </io.supercharge.shimmerlayout.ShimmerLayout>
+
+    <ImageView
+        android:id="@+id/galleryThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:layout_centerInParent="true" />
+
+</ir.woope.woopeapp.Utils.SquareLayout>

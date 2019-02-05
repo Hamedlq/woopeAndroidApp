@@ -3,6 +3,7 @@ package ir.woope.woopeapp.adapters;
 /**
  * Created by Hamed on 6/10/2018.
  */
+
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -44,7 +45,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count,point;
+        public TextView title, count, point;
         public ImageView followIcon;
         public ImageView thumbnail;
         public LinearLayout action_layout;
@@ -126,11 +127,11 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
                                 Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
                                 Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
 */
-                                if(!store.isFollowed){
-                                    store.isFollowed=true;
+                                if (!store.isFollowed) {
+                                    store.isFollowed = true;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-                                }else {
-                                    store.isFollowed=false;
+                                } else {
+                                    store.isFollowed = false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                                 }
                             }
@@ -170,11 +171,11 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
-        if(store.isFollowed){
-            store.isFollowed=true;
+        if (store.isFollowed) {
+            store.isFollowed = true;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-        }else {
-            store.isFollowed=false;
+        } else {
+            store.isFollowed = false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
 

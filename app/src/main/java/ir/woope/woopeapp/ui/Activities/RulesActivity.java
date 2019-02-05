@@ -27,7 +27,7 @@ public class RulesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-            finish();
+        finish();
 
     }
 
@@ -36,7 +36,7 @@ public class RulesActivity extends AppCompatActivity {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
 
-                finish();
+            finish();
 
         }
 

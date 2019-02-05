@@ -11,5 +11,4 @@ import ir.woope.woopeapp.R;
 public class TapSequence {
 
 
-
 }

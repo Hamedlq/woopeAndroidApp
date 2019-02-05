@@ -1,6 +1,6 @@
 package ir.woope.woopeapp.models;
 
-public class PayState extends ApiResponse{
+public class PayState extends ApiResponse {
     String mode;
     String credit;
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -45,12 +46,15 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
     Retrofit retrofit_changepass;
 
     Toolbar toolbar;
+    View layout;
 
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_newpass_changepass);
+
+        layout = findViewById(R.id.activity_newpass_changepass);
 
         toolbar = (Toolbar) findViewById(R.id.newpass_toolbar);
         setSupportActionBar(toolbar);
@@ -90,10 +94,12 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
 
                                 progress.smoothToHide();
 
-                                Toast.makeText(
-                                        NewPass_ChangePassActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        NewPass_ChangePassActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                                 login(phonenumber, newpass.getText().toString());
 
@@ -102,10 +108,12 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
                                 progress.smoothToHide();
                                 accept.setVisibility(View.VISIBLE);
 
-                                Toast.makeText(
-                                        NewPass_ChangePassActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        NewPass_ChangePassActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                                 finish();
 
@@ -119,17 +127,20 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
                             progress.smoothToHide();
                             accept.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(
-                                    NewPass_ChangePassActivity.this
-                                    , "خطای اتصال",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    NewPass_ChangePassActivity.this
+//                                    , "خطای اتصال",
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
                         }
                     });
                 } else if (newpass.getText().length() < 4)
-                    Toast.makeText(
-                            NewPass_ChangePassActivity.this
-                            , "رمز عبور باید 4 رقم یا بیشتر باشد",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(
+//                            NewPass_ChangePassActivity.this
+//                            , "رمز عبور باید 4 رقم یا بیشتر باشد",
+//                            Toast.LENGTH_SHORT).show();
+                    Utility.showSnackbar(layout, R.string.passwordLenghtNotEnough, Snackbar.LENGTH_SHORT);
             }
         });
 
@@ -193,10 +204,12 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
 
                                 if (response.body().getConfirmed() == false) {
 
-                                    Toast.makeText(
-                                            NewPass_ChangePassActivity.this
-                                            , "شماره موبایل خود را تایید کنید",
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(
+//                                            NewPass_ChangePassActivity.this
+//                                            , "شماره موبایل خود را تایید کنید",
+//                                            Toast.LENGTH_SHORT).show();
+
+                                    Utility.showSnackbar(layout, R.string.confirmPhoneNumber, Snackbar.LENGTH_SHORT);
 
                                     Intent goto_verifphone = new Intent(NewPass_ChangePassActivity.this,
                                             VerifyPhoneActivity.class);
@@ -229,11 +242,12 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<Profile> call, Throwable t) {
 
-                            Toast.makeText(
-                                    NewPass_ChangePassActivity.this
-                                    , "خطای اتصال!",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    NewPass_ChangePassActivity.this
+//                                    , "خطای اتصال!",
+//                                    Toast.LENGTH_SHORT).show();
 
+                            Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
 
                         }
                     });
@@ -242,22 +256,26 @@ public class NewPass_ChangePassActivity extends AppCompatActivity {
                 } else {
 
 
-                    Toast.makeText(
-                            NewPass_ChangePassActivity.this
-                            , "نام کاربری یا رمز عبور نامعتبر!",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(
+//                            NewPass_ChangePassActivity.this
+//                            , "نام کاربری یا رمز عبور نامعتبر!",
+//                            Toast.LENGTH_SHORT).show();
+
+                    Utility.showSnackbar(layout, R.string.invalidUsernameOrPassword, Snackbar.LENGTH_SHORT);
+
                 }
 
             }
 
             @Override
             public void onFailure(Call<AccessToken> call, Throwable t) {
-                // این متود هم فقط زمانی فرخوانی می‌شه که به هر دلیلی کانکشن ما با مشکل روبرو بشه
-                Toast.makeText(
-                        NewPass_ChangePassActivity.this
-                        , "خطا!",
-                        Toast.LENGTH_SHORT).show();
 
+//                Toast.makeText(
+//                        NewPass_ChangePassActivity.this
+//                        , "خطا!",
+//                        Toast.LENGTH_SHORT).show();
+
+                Utility.showSnackbar(layout, R.string.error, Snackbar.LENGTH_SHORT);
 
             }
         });

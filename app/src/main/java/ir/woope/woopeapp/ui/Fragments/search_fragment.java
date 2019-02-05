@@ -6,9 +6,12 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -36,6 +39,7 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.StoreSearchAdapter;
 import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
@@ -78,6 +82,16 @@ public class search_fragment extends Fragment {
     int PageNumber = 0, cPage = 0;
 
     String newquery;
+
+    View layout;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        layout = getView().findViewById(R.id.activity_search_fragment);
+
+    }
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -122,7 +136,7 @@ public class search_fragment extends Fragment {
         Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        findStoresByPage("",0);
+        findStoresByPage("", 0);
 
         //fab=(FloatingActionButton)mRecycler.findViewById(R.id.fab);
         /*fab.setOnClickListener(new View.OnClickListener() {
@@ -141,13 +155,12 @@ public class search_fragment extends Fragment {
                 //if(newQuery.length()>0){
                 //Toast.makeText(getActivity(), newQuery, Toast.LENGTH_LONG).show();
 
-                    newquery = newQuery;
-                    PageNumber = 0;
-                    adapter.emptyList();
-                if(newQuery.length()>=2) {
+                newquery = newQuery;
+                PageNumber = 0;
+                adapter.emptyList();
+                if (newQuery.length() >= 2) {
                     findStoresByPage(newQuery, PageNumber);
-                }
-                else if (newQuery.length()==0){
+                } else if (newQuery.length() == 0) {
                     findStoresByPage(newQuery, PageNumber);
                 }
             }
@@ -176,7 +189,7 @@ public class search_fragment extends Fragment {
                         // here we are now allowed to load more, but we need to be careful
                         // we must check if itShouldLoadMore variable is true [unlocked]
                         if (itShouldLoadMore) {
-                            findStoresByPage(newquery,PageNumber);
+                            findStoresByPage(newquery, PageNumber);
                         }
                     }
 
@@ -185,7 +198,7 @@ public class search_fragment extends Fragment {
         });
 
         //prepareAlbums();
-        findStoresByPage("",0);
+        findStoresByPage("", 0);
 
         return mRecycler;
     }
@@ -216,13 +229,14 @@ public class search_fragment extends Fragment {
                 int code = response.code();
                 if (code == 200) {
                     ApiResponse ar = response.body();
-                    Toast.makeText(getActivity(), ar.getMessage(), Toast.LENGTH_LONG).show();
+                    Utility.showSnackbar(layout, ar.getMessage(), Snackbar.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), "خطا در تغییر علاقمندی‌ها", Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
     }
@@ -266,7 +280,8 @@ public class search_fragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Store>> call, Throwable t) {
-                Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
                 hideProgreeBar();
             }
         });
@@ -317,12 +332,14 @@ public class search_fragment extends Fragment {
                     searchInProgress = false;
                     //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                     hideProgreeBar();
+                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
                 }
             });
         }
     }
 
-    private void findStoresByPage(String storeQuery,int pageNumber) {
+    private void findStoresByPage(String storeQuery, int pageNumber) {
 
         showProgreeBar();
 
@@ -343,7 +360,7 @@ public class search_fragment extends Fragment {
         if (!searchInProgress) {
             searchInProgress = true;
             Call<List<Store>> call =
-                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery,pageNumber);
+                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery, pageNumber);
 
             call.enqueue(new Callback<List<Store>>() {
                 @Override
@@ -380,7 +397,8 @@ public class search_fragment extends Fragment {
                     searchInProgress = false;
                     //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                     hideProgreeBar();
-                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
                     itShouldLoadMore = true;
 
                 }

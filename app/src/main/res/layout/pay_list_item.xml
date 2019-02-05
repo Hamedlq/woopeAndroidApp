@@ -49,10 +49,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@+id/thumbnail_layout"
+                android:layout_toRightOf="@id/remove_layout"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -97,6 +99,20 @@
                     android:textColor="@color/album_title"
                     android:textSize="@dimen/album_title"
                     android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/remove_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/alizarin"
+                android:padding="10dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/baseline_delete_24" />
             </LinearLayout>
 
         </RelativeLayout>

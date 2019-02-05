@@ -11,13 +11,13 @@ public class Store extends ApiResponse implements Serializable {
     public Store() {
     }
 
-    public Store(String name,long point, int numOfSongs, int thumbnail) {
+    public Store(String name, long point, int numOfSongs, int thumbnail) {
         this.storeName = name;
         this.returnPoint = point;
         this.thumbnail = thumbnail;
-        isFollowed=false;
-        isCashPayAllowed=true;
-        isAdvertise=false;
+        isFollowed = false;
+        isCashPayAllowed = true;
+        isAdvertise = false;
     }
 
     public long storeId;

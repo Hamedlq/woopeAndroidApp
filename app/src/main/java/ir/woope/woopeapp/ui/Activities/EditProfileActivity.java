@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,7 @@ import co.ceryle.radiorealbutton.RadioRealButton;
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.EditProfileInterface;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.RegisterInterface;
@@ -68,6 +70,7 @@ public class EditProfileActivity extends AppCompatActivity {
     RadioGroup genderGroup;
     RadioButton male, female;
 
+    View layout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_editprofile);
+        layout = findViewById(R.id.activity_editprofile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
@@ -164,6 +168,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
             }
         });
 
@@ -186,10 +191,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 editprogress.setVisibility(View.GONE);
 
-                                Toast.makeText(
-                                        EditProfileActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        EditProfileActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_LONG);
+
+
                                 Intent i = getIntent();
                                 setResult(RESULT_OK, i);
                                 finish();
@@ -199,10 +208,12 @@ public class EditProfileActivity extends AppCompatActivity {
                                 editprogress.setVisibility(View.GONE);
                                 sendedit.setVisibility(View.VISIBLE);
 
-                                Toast.makeText(
-                                        EditProfileActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        EditProfileActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
+
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_LONG);
 
                             }
 
@@ -214,19 +225,23 @@ public class EditProfileActivity extends AppCompatActivity {
                             editprogress.setVisibility(View.GONE);
                             sendedit.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(
+//                            Toast.makeText(
+//                                    EditProfileActivity.this
+//                                    , "خطای اتصال",
+//                                    Toast.LENGTH_SHORT).show();
 
-                                    EditProfileActivity.this
-                                    , "خطای اتصال",
-                                    Toast.LENGTH_SHORT).show();
+                            Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
                         }
                     });
                 } else {
-                    Toast.makeText(
+//                    Toast.makeText(
+//                            EditProfileActivity.this
+//                            , getResources().getString(R.string.invalid_email),
+//                            Toast.LENGTH_SHORT).show();
 
-                            EditProfileActivity.this
-                            , getResources().getString(R.string.invalid_email),
-                            Toast.LENGTH_SHORT).show();
+                    Utility.showSnackbar(layout, R.string.invalid_email, Snackbar.LENGTH_LONG);
+
                 }
             }
         });

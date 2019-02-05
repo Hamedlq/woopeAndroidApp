@@ -1,11 +1,13 @@
 package ir.woope.woopeapp.interfaces;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
-import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.models.StoreGalleryItem;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -45,5 +47,31 @@ public interface StoreInterface {
     @FormUrlEncoded
     Call<List<Store>> getStoresbyPage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Field("pageNumber") int pageNumber);
+
+    @GET("api/Product/GetActiveProduct")
+    Call<List<StoreGalleryItem>> getActiveBranchProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                        @Query("ProductId") Long productId,
+                                                        @Query("branchId") long branchId,
+                                                        @Query("page") int page,
+                                                        @Query("count") int count);
+
+    @GET("api/Product/GetActiveProduct")
+    Call<List<StoreGalleryItem>> getActiveBranchSingleProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                              @Query("ProductId") long productId,
+                                                              @Query("branchId") long branchId,
+                                                              @Query("page") int page,
+                                                              @Query("count") int count);
+
+    @POST("api/Product/ChangeLikeImage")
+    @FormUrlEncoded
+    Call<ApiResponse> LikeImage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                @Field("ImageID") long imageId);
+
+    @POST("api/Branch/NonCooperation")
+    @FormUrlEncoded
+    Call<ApiResponse> notCooperating(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                     @Field("BranchId") long branchId);
+
+//    api/Branch/NonCooperation(long BranchId)
 
 }

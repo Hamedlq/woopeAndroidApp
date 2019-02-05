@@ -32,4 +32,8 @@
     <dimen name="publish_photo_thumbnail_size">96dp</dimen>
     <dimen name="like_icon_width">25dp</dimen>
     <dimen name="like_icon_height">25dp</dimen>
+
+    <dimen name="gallery_thumb_height">119dp</dimen>
+    <dimen name="gallery_thumb_width">119dp</dimen>
+
 </resources>

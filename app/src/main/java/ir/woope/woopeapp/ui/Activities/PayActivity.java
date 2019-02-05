@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,7 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
@@ -149,6 +151,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
     Toolbar toolbar;
 
+    View layout;
+
 //    @Override
 //    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
 ////        helpButton=findViewById(R.id.action_support);
@@ -162,6 +166,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+
+        layout = findViewById(R.id.activity_pay);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
 //        setSupportActionBar(toolbar);
@@ -558,7 +564,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
             @Override
             public void onFailure(Call<PayListModel> call, Throwable t) {
-                Toast.makeText(PayActivity.this, R.string.error, Toast.LENGTH_LONG).show();
+//                Toast.makeText(PayActivity.this, R.string.error, Toast.LENGTH_LONG).show();
+
+                Utility.showSnackbar(layout, R.string.error, Snackbar.LENGTH_SHORT);
                 hideProgreeBar();
             }
         });
@@ -740,6 +748,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             public void onFailure(Call<Store> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
             }
         });
 
@@ -785,6 +794,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             @Override
             public void onFailure(Call<PayListModel> call, Throwable t) {
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 
@@ -825,6 +836,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 
@@ -870,6 +883,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             @Override
             public void onFailure(Call<PayResponseModel> call, Throwable t) {
                 hideProgreeBar();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 

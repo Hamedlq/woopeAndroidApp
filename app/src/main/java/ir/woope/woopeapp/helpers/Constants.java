@@ -16,13 +16,13 @@ public final class Constants {
 
         }
 
-        public static final String BASE_URL = "http://192.168.100.3:8090";
+        public static final String BASE_URL = "http://192.168.100.3:8090/";
 
 //        public static final String BASE_URL = "http://localhost/";
 //
 //        public static final String BASE_URL = "http://localhost:58795/";
 
-       //public static final String BASE_URL = "http://localhost:58795/";
+        //public static final String BASE_URL = "http://localhost:58795/";
 
 //        public static final String BASE_URL = "http://192.168.100.3:8090/";
 //        public static final String BASE_URL = "http://localhost:58795/";
@@ -31,6 +31,7 @@ public final class Constants {
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 
 //        public static final String BASE_URL = "http://mywoope.com/";
+
     }
 
     public final class GlobalConstants {
@@ -48,16 +49,16 @@ public final class Constants {
         public static final String PREF_PROFILE = "preferences_profile";
         public static final String POINTS_PAYED = "pointsPaid";
 
-        public static final String IMAGE_URL =BASE_URL + "api/Store/getImageByUid?uid=";
+        public static final String IMAGE_URL = BASE_URL + "api/Store/getImageByUid?uid=";
 
         public static final String GET_PROFILE_FROM_SERVER = "getProfileFromServer";
-        public static final String LOGO_URL = BASE_URL ;
-        public static final int RELOAD_LIST = 8735 ;
-        public static final int REQUEST_CAMERA =2356;
-        public static final int SELECT_FILE =8596;
-        public static final int CROP_IMAGE =22;
-        public static final int SHOULD_GET_PROFILE =2289;
-        public static final String FIRST_RUN_PROFILE_FRAGMENT ="firstRunProfileFragment";
+        public static final String LOGO_URL = BASE_URL;
+        public static final int RELOAD_LIST = 8735;
+        public static final int REQUEST_CAMERA = 2356;
+        public static final int SELECT_FILE = 8596;
+        public static final int CROP_IMAGE = 22;
+        public static final int SHOULD_GET_PROFILE = 2289;
+        public static final String FIRST_RUN_PROFILE_FRAGMENT = "firstRunProfileFragment";
     }
 
     public final class Actions {

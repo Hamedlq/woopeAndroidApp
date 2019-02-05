@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +51,8 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     AVLoadingIndicatorView progress;
 
     PinView code;
+
+    View layout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,11 +105,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                             if (response.body().getStatus() == 101) {
 
 
-                                Toast.makeText(
-                                        VerifyPhoneActivity.this
-                                        , response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(
+//                                        VerifyPhoneActivity.this
+//                                        , response.body().getMessage(),
+//                                        Toast.LENGTH_SHORT).show();
 
+                                Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                             }
 
@@ -115,19 +119,23 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ApiResponse> call, Throwable t) {
 
-                            Toast.makeText(
-                                    VerifyPhoneActivity.this
-                                    , "خطای اتصال",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    VerifyPhoneActivity.this
+//                                    , "خطای اتصال",
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
                         }
                     });
 
                 } else {
-                    Toast.makeText(
 
-                            VerifyPhoneActivity.this
-                            , "خطا",
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(
+//                            VerifyPhoneActivity.this
+//                            , "خطا",
+//                            Toast.LENGTH_SHORT).show();
+
+                    Utility.showSnackbar(layout, R.string.error, Snackbar.LENGTH_SHORT);
                 }
 
             }
@@ -137,11 +145,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
                 progress.setVisibility(View.GONE);
 
-                Toast.makeText(
+//                Toast.makeText(
+//                        VerifyPhoneActivity.this
+//                        , "خطای اتصال",
+//                        Toast.LENGTH_SHORT).show();
 
-                        VerifyPhoneActivity.this
-                        , "خطای اتصال",
-                        Toast.LENGTH_SHORT).show();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
             }
         });
 
@@ -164,20 +173,25 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                             progress.setVisibility(View.GONE);
                             resend.setVisibility(View.GONE);
                             accept.setVisibility(View.VISIBLE);
-                            Toast.makeText(
-                                    VerifyPhoneActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+
+//                            Toast.makeText(
+//                                    VerifyPhoneActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
 
                         } else {
 
                             resend.setVisibility(View.VISIBLE);
                             progress.setVisibility(View.GONE);
-                            Toast.makeText(
-                                    VerifyPhoneActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    VerifyPhoneActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
                         }
 
                     }
@@ -188,10 +202,13 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                         resend.setVisibility(View.VISIBLE);
                         progress.setVisibility(View.GONE);
 
-                        Toast.makeText(
-                                VerifyPhoneActivity.this
-                                , "خطای اتصال",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(
+//                                VerifyPhoneActivity.this
+//                                , "خطای اتصال",
+//                                Toast.LENGTH_SHORT).show();
+
+                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
+
                     }
                 });
 
@@ -219,10 +236,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
                             progress.setVisibility(View.GONE);
 
-                            Toast.makeText(
-                                    VerifyPhoneActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    VerifyPhoneActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                             Intent goto_mainpage = new Intent(VerifyPhoneActivity.this,
                                     MainActivity.class);
@@ -236,10 +255,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                             accept.setVisibility(View.VISIBLE);
                             progress.setVisibility(View.GONE);
 
-                            Toast.makeText(
-                                    VerifyPhoneActivity.this
-                                    , response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(
+//                                    VerifyPhoneActivity.this
+//                                    , response.body().getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
+
+                            Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                         }
 
@@ -252,11 +273,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                         accept.setVisibility(View.VISIBLE);
                         progress.setVisibility(View.GONE);
 
-                        Toast.makeText(
-                                VerifyPhoneActivity.this
-                                , "خطا اتصال!",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(
+//                                VerifyPhoneActivity.this
+//                                , "خطا اتصال!",
+//                                Toast.LENGTH_SHORT).show();
 
+                        Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
 
                     }
 

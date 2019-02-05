@@ -44,7 +44,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count,points,points_brief;
+        public TextView title, count, points, points_brief;
         public ImageView thumbnail;
         public ImageView followIcon;
         //public LinearLayout action_layout;
@@ -127,11 +127,11 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
                                 Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
                                 Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
 */
-                                if(!store.isFollowed){
-                                    store.isFollowed=true;
+                                if (!store.isFollowed) {
+                                    store.isFollowed = true;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-                                }else {
-                                    store.isFollowed=false;
+                                } else {
+                                    store.isFollowed = false;
                                     followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
                                 }
                             }
@@ -174,10 +174,10 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
 // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
-        if(store.isFollowed){
+        if (store.isFollowed) {
             //store.isFollowed=true;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-        }else {
+        } else {
             //store.isFollowed=false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
