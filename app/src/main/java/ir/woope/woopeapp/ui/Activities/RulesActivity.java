@@ -21,25 +21,19 @@ public class RulesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
     public void onBackPressed() {
-
-        finish();
-
+            finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-
-            finish();
-
+                finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

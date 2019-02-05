@@ -134,6 +134,7 @@ public class TransHistoryActivity extends AppCompatActivity {
                 hideProgreeBar();
                 int code = response.code();
                 if (code == 200) {
+                    orderModelList = new ArrayList<>();
                     orderModelList = response.body();
                     adapter.notifyDataSetChanged();
 

@@ -786,7 +786,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                                 PayActivity.this
                                 , response.body().getMessage(),
                                 Toast.LENGTH_SHORT).show();*/
-
                     }
                 }
             }
@@ -844,7 +843,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     }
 
     public void gotoPayCodeActivity(PayListModel trans) {
-
         Intent myIntent = new Intent(PayActivity.this, PayCodeActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
@@ -879,7 +877,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     //gotoPayCodeActivity(trans);
                 }
             }
-
             @Override
             public void onFailure(Call<PayResponseModel> call, Throwable t) {
                 hideProgreeBar();
@@ -887,7 +884,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
             }
         });
-
     }
 
     private void gotoBankPage(PayResponseModel bankModel) {
