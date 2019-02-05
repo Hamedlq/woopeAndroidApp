@@ -58,6 +58,8 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.MainListModel;
+import ir.woope.woopeapp.models.MallModel;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
@@ -65,6 +67,7 @@ import ir.woope.woopeapp.ui.Activities.GiftActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.PayActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
+import ir.woope.woopeapp.ui.Activities.StoreListActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import retrofit2.Call;
@@ -293,24 +296,7 @@ public class home_fragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_store:
-                Profile userobj = ((MainActivity) getActivity()).getUserProfile();
-                Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
-                giftIntent.putExtra(PREF_PROFILE, userobj);
-                getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
-                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
-                /*Profile obj =((MainActivity)getActivity()).getUserProfile();
-                Intent myIntent = new Intent(getActivity(), TransactionActivity.class);
-                myIntent.putExtra(PREF_PROFILE, obj);
-                getActivity().startActivity(myIntent);
-                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);*/
-                break;
-            /*case android.R.id.home:
-                Profile userobj =((MainActivity)getActivity()).getUserProfile();
-                Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
-                giftIntent.putExtra(PREF_PROFILE, userobj);
-                getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
-                getActivity().overridePendingTransition(R.anim.slide_up,R.anim.no_change);
-                break;*/
+                getActivity().finish();
             default:
                 break;
         }
@@ -369,7 +355,8 @@ public class home_fragment extends Fragment {
         showProgreeBar();
 
         itShouldLoadMore = false;
-
+        MainListModel model=((StoreListActivity)getActivity()).getMainListModel();
+        Integer mallModelId=((StoreListActivity)getActivity()).getMallModel();
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -384,7 +371,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.getStoresbyPage("bearer " + authToken, pageNumber);
+                providerApiInterface.GetStoresFilter("bearer " + authToken, pageNumber,model.listOrder,9,mallModelId);
 
         call.enqueue(new Callback<List<Store>>() {
             @Override

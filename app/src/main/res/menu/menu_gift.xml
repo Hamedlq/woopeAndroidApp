@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_store"
+        android:icon="@drawable/gift"
+        app:showAsAction="always"
+        android:title="@string/receive_gift" />
+
+</menu>

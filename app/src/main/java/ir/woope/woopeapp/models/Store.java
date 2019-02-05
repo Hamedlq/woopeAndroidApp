@@ -1,12 +1,15 @@
 package ir.woope.woopeapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by Hamed on 6/10/2018.
  */
 
-public class Store extends ApiResponse implements Serializable {
+public class Store extends ApiResponse implements Serializable{
 
     public Store() {
     }
@@ -38,4 +41,5 @@ public class Store extends ApiResponse implements Serializable {
     public String website;
     public String address;
     public String woopeThreshold;
+
 }
