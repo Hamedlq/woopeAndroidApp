@@ -111,7 +111,17 @@ public class StoreActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = findViewById(R.id.store_viewpager);
+        final ViewPager viewPager = findViewById(R.id.store_viewpager);
+        viewPager.getParent().requestDisallowInterceptTouchEvent(true);
+        viewPager.requestDisallowInterceptTouchEvent(true);
+        /*viewPager.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                viewPager.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });*/
 
         // Create an adapter that knows which fragment should be shown on each page
         StoreViewPagerAdapter adapter = new StoreViewPagerAdapter(this, getSupportFragmentManager());
@@ -283,6 +293,7 @@ public class StoreActivity extends AppCompatActivity {
         model.branchId = store.storeId;
         model.totalPrice = totalPrice;
         model.logoSrc = store.logoSrc;
+        model.categoryId=store.categoryId;
         model.switchWoope = false;
         model.switchCredit = false;
         model.basePrice = store.basePrice;

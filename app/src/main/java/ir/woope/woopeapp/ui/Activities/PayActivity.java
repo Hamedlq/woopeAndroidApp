@@ -46,6 +46,7 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.interfaces.TransactionInterface;
+import ir.woope.woopeapp.models.Categories;
 import ir.woope.woopeapp.models.PayResponseModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.PayListModel;
@@ -187,7 +188,14 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 profile = getUserProfile();
                 savedPayListModel = getSavedPayList();
                 ConfirmPayment(savedPayListModel);
+            }else{
+                for (long cId:savedPayListModel.categoryId) {
+                    if(cId == Categories.OnlineService.value()){
+                        cash_card.setVisibility(View.GONE);
+                    }
+                }
             }
+
             totalPrice = savedPayListModel.totalPrice;
             getStore(savedPayListModel.branchId);
             //amount.setText(String.valueOf(savedPayListModel.totalPrice));

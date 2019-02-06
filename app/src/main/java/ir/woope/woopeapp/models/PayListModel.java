@@ -2,6 +2,7 @@ package ir.woope.woopeapp.models;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Hamed on 6/10/2018.
@@ -22,6 +23,7 @@ public class PayListModel extends ApiResponse implements Serializable {
     public long basePrice;
     public long returnPoint;
     public boolean switchWoope;
+    public List<Long> categoryId;
 
     public PayListModel() {
 

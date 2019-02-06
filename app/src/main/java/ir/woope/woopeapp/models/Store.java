@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Hamed on 6/10/2018.
@@ -41,5 +42,5 @@ public class Store extends ApiResponse implements Serializable{
     public String website;
     public String address;
     public String woopeThreshold;
-
+    public List<Long> categoryId;
 }

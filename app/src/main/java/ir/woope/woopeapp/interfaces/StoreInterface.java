@@ -69,4 +69,30 @@ public interface StoreInterface {
     @GET("api/Branch/GetMainLists")
     Call<List<MainListModel>> getMainLists(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
+
+    @GET("api/Product/GetActiveProduct")
+    Call<List<StoreGalleryItem>> getActiveBranchProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                        @Query("ProductId") Long productId,
+                                                        @Query("branchId") long branchId,
+                                                        @Query("page") int page,
+                                                        @Query("count") int count);
+
+    @GET("api/Product/GetActiveProduct")
+    Call<List<StoreGalleryItem>> getActiveBranchSingleProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                              @Query("ProductId") long productId,
+                                                              @Query("branchId") long branchId,
+                                                              @Query("page") int page,
+                                                              @Query("count") int count);
+
+    @POST("api/Product/ChangeLikeImage")
+    @FormUrlEncoded
+    Call<ApiResponse> LikeImage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                @Field("ImageID") long imageId);
+
+    @POST("api/Branch/NonCooperation")
+    @FormUrlEncoded
+    Call<ApiResponse> notCooperating(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                     @Field("BranchId") long branchId);
+
+
 }
