@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.models.Categories;
 import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Profile;
 
@@ -37,6 +38,8 @@ public class PayCodeActivity extends AppCompatActivity {
     protected TextView StoreName_tv;
     @BindView(R.id.progressBar)
     protected ProgressBar progressBar;
+    @BindView(R.id.pay_msg)
+    protected TextView pay_msg;
     String profileString;
     String transactionString;
     String payedPoints;
@@ -55,6 +58,11 @@ public class PayCodeActivity extends AppCompatActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            for (long cId:payListModel.categoryId) {
+                if(cId == Categories.OnlineService.value()){
+                    pay_msg.setVisibility(View.GONE);
+                }
+            }
             //payedPoints = getIntent().getStringExtra(POINTS_PAYED);
         }
 

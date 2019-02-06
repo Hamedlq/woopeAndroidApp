@@ -6,6 +6,9 @@ import java.util.List;
 
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.MainListModel;
+import ir.woope.woopeapp.models.MallModel;
+import ir.woope.woopeapp.models.PayListModel;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
 import retrofit2.Call;
@@ -47,6 +50,25 @@ public interface StoreInterface {
     @FormUrlEncoded
     Call<List<Store>> getStoresbyPage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Field("pageNumber") int pageNumber);
+
+    @POST("api/Store/GetStoresFilter")
+    @FormUrlEncoded
+    Call<List<Store>> GetStoresFilter(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Field("pageNumber") int pageNumber,
+                                      @Field("listOrder") int listOrder,
+                                      @Field("countOfList") int countOfList,
+                                      @Field("MallId") Integer mallId);
+
+    @POST("api/Store/GetMallList")
+    @FormUrlEncoded
+    Call<List<MallModel>> GetMallList(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                      @Field("pageNumber") int pageNumber,
+                                      @Field("countOfList") int countOfList);
+
+
+    @GET("api/Branch/GetMainLists")
+    Call<List<MainListModel>> getMainLists(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
+
 
     @GET("api/Product/GetActiveProduct")
     Call<List<StoreGalleryItem>> getActiveBranchProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,

@@ -118,8 +118,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.Activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label=""
-            android:screenOrientation="portrait"/>
+            android:label=""/>
+        <activity android:name=".ui.Activities.StoreListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""/>
         <activity android:name=".ui.Activities.GiftActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"

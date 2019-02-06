@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
@@ -76,6 +77,7 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
+import ir.woope.woopeapp.ui.Fragments.main_fragment;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.profile_home_fragment;
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
+                                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
                                 .commit();
                         IsOnHome = true;
                         IsOnSearch = false;
@@ -232,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
                 final View iconView = item.findViewById(android.support.design.R.id.icon);
-                item.setShiftingMode(false);
+                item.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
                 item.setChecked(item.getItemData().isChecked());
                 final ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                 final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         //getProfileFromServer();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
+                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
                 .commit();
 
         Pushe.initialize(this, true);
