@@ -6,6 +6,8 @@ public class StoreGalleryItem extends ApiResponse implements Serializable {
 
     public long id;
 
+    public String storeName;
+
     public long branchId;
 
     public Float price;

@@ -83,6 +83,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         total_price.setText(String.valueOf(orderModels.get(position).totalPrice) + " تومان ");
         title.setText(orderModels.get(position).storeName);
         Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + orderModels.get(position).logoSrc).into(thumbnail);
+//        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + product.productImageAddress).fit().centerInside().into();
+
         if (orderModels.get(position).payType == 1) {
             paytype.setText("نقدی");
         } else {

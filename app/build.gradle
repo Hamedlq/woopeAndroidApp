@@ -119,4 +119,6 @@ dependencies {
 
     implementation 'io.supercharge:shimmerlayout:2.1.0'
 
+    implementation 'com.github.pedromassango:doubleClick:3.0'
+
 }

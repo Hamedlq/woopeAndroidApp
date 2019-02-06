@@ -86,7 +86,7 @@ public interface StoreInterface {
 
     @POST("api/Product/ChangeLikeImage")
     @FormUrlEncoded
-    Call<ApiResponse> LikeImage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+    Call<StoreGalleryItem> LikeImage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                 @Field("ImageID") long imageId);
 
     @POST("api/Branch/NonCooperation")
@@ -94,5 +94,11 @@ public interface StoreInterface {
     Call<ApiResponse> notCooperating(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                      @Field("BranchId") long branchId);
 
+    @GET("api/Product/GetAllActiveProducts")
+    Call<List<StoreGalleryItem>> getAllActiveProducts(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                              @Query("page") int page,
+                                                              @Query("count") int count);
+
+//    GetAllActiveProducts(string page, string count)
 
 }

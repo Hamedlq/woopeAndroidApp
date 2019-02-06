@@ -179,7 +179,6 @@ public class home_fragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_card_giftcard);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 */
-
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
@@ -271,8 +270,10 @@ public class home_fragment extends Fragment {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 int code = response.code();
                 if (code == 200) {
+
                     ApiResponse ar = response.body();
                     Utility.showSnackbar(layout, ar.getMessage(), Snackbar.LENGTH_LONG);
+
                 }
             }
 
@@ -288,7 +289,6 @@ public class home_fragment extends Fragment {
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -430,7 +430,6 @@ public class home_fragment extends Fragment {
                 itShouldLoadMore = true;
                 size = 0;
                 Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
-
             }
         });
 
@@ -439,11 +438,13 @@ public class home_fragment extends Fragment {
     }
 
     public interface ItemTouchListener {
+
         public void onCardViewTap(View view, int position);
 
         public void onAdvTap(View view, int position);
 
         public void onFollowTap(View view, int position);
+
     }
 
 
