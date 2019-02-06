@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Profile obj = getUserProfile();
-                Intent myIntent = new Intent(MainActivity.this, TransactionActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, ProductHomeActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 startActivity(myIntent);
                 overridePendingTransition(R.anim.slide_up, R.anim.no_change);

@@ -54,7 +54,6 @@ public class TransactionActivity extends AppCompatActivity {
     private List<PayListModel> orderModelList;
     private PayTransactionTouchListener payTransactionTouchListener;
 
-    /*private List<ItemModel> userOrderModelList;*/
     private TransactionListAdapter adapter;
     private String authToken;
 
@@ -62,9 +61,6 @@ public class TransactionActivity extends AppCompatActivity {
 
     View layout;
 
-    //Store store;
-    //String LIST_FRAGMENT = "ListFragment";
-    //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,12 +68,12 @@ public class TransactionActivity extends AppCompatActivity {
         layout = findViewById(R.id.activity_transaction);
         ButterKnife.bind(this);
 
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
-            //store = (Store) getIntent().getExtras().getSerializable(STORE);
-        }
+//        if (getIntent() != null && getIntent().getExtras() != null) {
+//            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
+//            //store = (Store) getIntent().getExtras().getSerializable(STORE);
+//        }
 
-        progressBar = findViewById(R.id.transaction_progressBar);
+//        progressBar = findViewById(R.id.transaction_progressBar);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();

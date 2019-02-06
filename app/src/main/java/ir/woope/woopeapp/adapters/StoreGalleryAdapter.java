@@ -34,7 +34,6 @@ import ir.woope.woopeapp.ui.Fragments.search_fragment;
 
 public class StoreGalleryAdapter extends RecyclerView.Adapter<StoreGalleryAdapter.MyViewHolder> {
 
-    private static final int MAX_CLICK_DURATION = 200;
     private Context mContext;
     private List<StoreGalleryItem> albumList;
     private long startClickTime;
@@ -59,29 +58,6 @@ public class StoreGalleryAdapter extends RecyclerView.Adapter<StoreGalleryAdapte
             thumbnail = (ImageView) view.findViewById(R.id.galleryThumbnail);
             itemView.setOnClickListener(this); // bind the listener
             shimmer = (ShimmerLayout) view.findViewById(R.id.shimmer_layout);
-
-            //overflow = (ImageView) view.findViewById(R.id.overflow);
-//            thumbnail.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    switch (event.getAction()) {
-//                        case MotionEvent.ACTION_DOWN: {
-//                            startClickTime = Calendar.getInstance().getTimeInMillis();
-//                            break;
-//                        }
-//                        case MotionEvent.ACTION_UP: {
-//                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-//                            if (clickDuration < MAX_CLICK_DURATION) {
-//                                onItemTouchListener.onCardViewTap(v, getPosition());
-//                            }
-//                            break;
-//                        }
-//                        default:
-//                            break;
-//                    }
-//                    return true;
-//                }
-//            });
 
         }
 

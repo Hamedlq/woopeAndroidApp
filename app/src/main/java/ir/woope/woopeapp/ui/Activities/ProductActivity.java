@@ -154,24 +154,24 @@ public class ProductActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
-        Call<ApiResponse> call =
+        Call<StoreGalleryItem> call =
                 providerApiInterface.LikeImage("bearer " + authToken, ImageId);
 
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<StoreGalleryItem>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(Call<StoreGalleryItem> call, Response<StoreGalleryItem> response) {
 
                 int code = response.code();
                 if (code == 200) {
 
                     loading.smoothToHide();
 
-                    if (response.body().getInfo().equals("0")) {
+                    if (response.body().countLike==0) {
                         LikeCount.setText("");
-                        likeButton.setChecked(false);
+
                     } else {
-                        LikeCount.setText(response.body().getInfo() + " " + getResources().getString(R.string.like));
-                        likeButton.setChecked(true);
+                        LikeCount.setText(response.body().countLike + " " + getResources().getString(R.string.like));
+
                     }
 
 
@@ -179,7 +179,7 @@ public class ProductActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(Call<StoreGalleryItem> call, Throwable t) {
                 loading.smoothToHide();
                 likeButton.setChecked(false);
 
