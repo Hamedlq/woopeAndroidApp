@@ -25,6 +25,7 @@ import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
 import ir.woope.woopeapp.ui.Activities.ProductHomeActivity;
 import ir.woope.woopeapp.ui.Activities.TransactionActivity;
+import ir.woope.woopeapp.ui.Fragments.profile_home_fragment;
 
 public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.MyViewHolder> {
 
@@ -40,7 +41,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     private DoubleClickListener doubleClickListener;
     private SparkEventListener sparkEventListener;
 
-    ProductHomeActivity.ItemTouchListener onItemTouchListener;
+    profile_home_fragment.ItemTouchListener onItemTouchListener;
 
     private ItemClickListener clickListener;
 
@@ -51,7 +52,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         this.clickListener = itemClickListener;
     }
 
-    public ProductHomeAdapter(Context context, List<StoreGalleryItem> list, ProductHomeActivity.ItemTouchListener onItemTouchListener) {
+    public ProductHomeAdapter(Context context, List<StoreGalleryItem> list, profile_home_fragment.ItemTouchListener onItemTouchListener) {
         this.Items = list;
         this.onItemTouchListener = onItemTouchListener;
 //        this.payTransactionTouchListener = payTransactionTouchListener;

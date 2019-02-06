@@ -78,6 +78,7 @@ import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
+import ir.woope.woopeapp.ui.Fragments.profile_home_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import okhttp3.MediaType;
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     String HOME_FRAGMENT = "HomeFragment";
     String SEARCH_FRAGMENT = "SearchFragment";
     String PROFILE_FRAGMENT = "ProfileFragment";
+    String PRODUCT_HOME_FRAGMENT = "ProductHomeFragment";
     boolean getProfileFromServer = false;
     String authToken = null;
     Profile profile = null;
@@ -247,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);*/
         sendRegistrationToServer();
         //getProfileFromServer();
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, new home_fragment(), HOME_FRAGMENT)
                 .commit();
@@ -272,11 +274,21 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Profile obj = getUserProfile();
-                Intent myIntent = new Intent(MainActivity.this, ProductHomeActivity.class);
-                myIntent.putExtra(PREF_PROFILE, obj);
-                startActivity(myIntent);
-                overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, new profile_home_fragment(), PRODUCT_HOME_FRAGMENT)
+                        .commit();
+
+                IsOnHome = false;
+                IsOnSearch = false;
+                IsOnProfile = false;
+                IsOnFavorite = false;
+
+//                Profile obj = getUserProfile();
+//                Intent myIntent = new Intent(MainActivity.this, ProductHomeActivity.class);
+//                myIntent.putExtra(PREF_PROFILE, obj);
+//                startActivity(myIntent);
+//                overridePendingTransition(R.anim.slide_up, R.anim.no_change);
             }
         });
 
