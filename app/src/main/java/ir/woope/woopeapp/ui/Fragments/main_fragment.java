@@ -82,7 +82,7 @@ public class main_fragment extends Fragment {
     private List<MainListModel> mainFilterList;
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
-
+private boolean isVisible=true;
     private CategoryAdapter category_adapter;
 
     Toolbar toolbar;
@@ -165,6 +165,7 @@ public class main_fragment extends Fragment {
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 int code = response.code();
                 if (code == 200) {
+                    if(isVisible){
                     if (response.body().size() > 1) {
                         Bundle arguments = new Bundle();
                         arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
@@ -175,7 +176,7 @@ public class main_fragment extends Fragment {
                         fragmentManager.beginTransaction()
                                 .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
                                 .commit();
-                    }
+                    }}
                 }
             }
 
@@ -186,6 +187,17 @@ public class main_fragment extends Fragment {
         });
 
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isVisible=true;
+        }
+        else {
+            isVisible=false;
+        }
     }
 
     private void getMalls(final FrameLayout childLayout, final MainListModel ml) {
@@ -213,6 +225,7 @@ public class main_fragment extends Fragment {
             public void onResponse(Call<List<MallModel>> call, Response<List<MallModel>> response) {
                 int code = response.code();
                 if (code == 200) {
+                    if(isVisible){
                     Bundle arguments = new Bundle();
                     arguments.putSerializable(MALL_LIST, (ArrayList<MallModel>) response.body());
                     arguments.putSerializable(LIST_MODEL, ml);
@@ -222,6 +235,7 @@ public class main_fragment extends Fragment {
                     fragmentManager.beginTransaction()
                             .replace(ml.listOrder, mallFilter, String.valueOf(ml.listOrder))
                             .commit();
+                }
                 }
             }
 
@@ -288,7 +302,6 @@ public class main_fragment extends Fragment {
                 container_layout.addView(childLayout, parentParams);
                 getStores(childLayout, ml);
             }
-
         }
     }
 

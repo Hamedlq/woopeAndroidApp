@@ -1,6 +1,5 @@
 package ir.woope.woopeapp.adapters;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,20 +19,11 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ItemClickListener;
-import ir.woope.woopeapp.models.PayListModel;
-import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
-import ir.woope.woopeapp.ui.Activities.ProductHomeActivity;
-import ir.woope.woopeapp.ui.Activities.TransactionActivity;
-import ir.woope.woopeapp.ui.Fragments.profile_home_fragment;
+import ir.woope.woopeapp.ui.Fragments.product_home_fragment;
 
 public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.MyViewHolder> {
 
-    private TextView storeName;
-    private TextView likeCount;
-    private TextView productDescription;
-    private ImageView productImage;
-    private SparkButton likeButton;
     private Context context;
 
     private List<StoreGalleryItem> Items;
@@ -41,18 +31,17 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     private DoubleClickListener doubleClickListener;
     private SparkEventListener sparkEventListener;
 
-    profile_home_fragment.ItemTouchListener onItemTouchListener;
+    product_home_fragment.ItemTouchListener onItemTouchListener;
 
     private ItemClickListener clickListener;
 
-    int countLike;
-    boolean isLiked;
+
 
     public void setLikeClickListener(ItemClickListener itemClickListener) {
         this.clickListener = itemClickListener;
     }
 
-    public ProductHomeAdapter(Context context, List<StoreGalleryItem> list, profile_home_fragment.ItemTouchListener onItemTouchListener) {
+    public ProductHomeAdapter(Context context, List<StoreGalleryItem> list, product_home_fragment.ItemTouchListener onItemTouchListener) {
         this.Items = list;
         this.onItemTouchListener = onItemTouchListener;
 //        this.payTransactionTouchListener = payTransactionTouchListener;
@@ -72,6 +61,13 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private TextView storeName;
+        private TextView likeCount;
+        private TextView productDescription;
+        private ImageView productImage;
+        private SparkButton likeButton;
+
+
         public MyViewHolder(View view) {
             super(view);
 
@@ -83,37 +79,26 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
             productImage = view.findViewById(R.id.product_home_item_Image);
 
+            likeButton = view.findViewById(R.id.product_home_item_likebutton);
+
             productImage.setOnClickListener(new DoubleClick(new DoubleClickListener() {
                 @Override
                 public void onSingleClick(View view) {
-
-                    // Single tap here.
                 }
 
                 @Override
                 public void onDoubleClick(View view) {
                     onItemTouchListener.onDoubleTap(view, getPosition());
-//
-//                    StoreGalleryItem product = Items.get(getPosition());
-//                               /* Drawable fDraw = followIcon.getBackground();
-//                                Drawable sDraw = getResources().getDrawable(R.drawable.twt_hover);
-//
-//                                Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
-//                                Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
-//*/
-//                    if (product.isLiked) {
-//                        likeButton.setChecked(true);
-//                    } else if (!product.isLiked){
-//                        likeButton.setChecked(false);
-//                    }
-
-                    // Double tap here.
+                    StoreGalleryItem s_item= Items.get(getPosition());
+                    if (!s_item.isLiked) {
+                        s_item.isLiked= true;
+                        likeButton.setChecked(true);
+                    } else {
+                        s_item.isLiked= false;
+                        likeButton.setChecked(false);
+                    }
                 }
             }));
-            //  use this to define your own interval
-            //  }, 100));
-
-            likeButton = view.findViewById(R.id.product_home_item_likebutton);
 
             likeButton.setEventListener(new SparkEventListener() {
                 @Override
@@ -121,23 +106,14 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
                     if (buttonState) {
                         // Button is active
                         onItemTouchListener.onLikeClicked(button, getPosition());
-                        if (countLike >= 0) {
-                            Items.get(getPosition()).countLike--;
-                            likeCount.setText(Items.get(getPosition()).countLike);
-//                            countLike--;
-                            Items.get(getPosition()).isLiked = false;
-                            likeButton.setChecked(Items.get(getPosition()).isLiked);
+                        StoreGalleryItem s_item= Items.get(getPosition());
+                        if (!s_item.isLiked) {
+                            s_item.isLiked= true;
+                            likeButton.setChecked(true);
+                        } else {
+                            s_item.isLiked= false;
+                            likeButton.setChecked(false);
                         }
-                    } else {
-                        // Button is inactive
-                        onItemTouchListener.onLikeClicked(button, getPosition());
-                        Items.get(getPosition()).countLike++;
-                        likeCount.setText(Items.get(getPosition()).countLike);
-//                            countLike--;
-                        Items.get(getPosition()).isLiked = true;
-                        likeButton.setChecked(Items.get(getPosition()).isLiked);
-//                        countLike++;
-//                        isLiked = true;
                     }
                 }
 
@@ -151,6 +127,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
                 }
             });
+
         }
 
         @Override
@@ -161,29 +138,25 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         if (Items.get(position).countLike == 0) {
-            likeCount.setText("");
+            holder.likeCount.setText("");
         } else {
-            likeCount.setText(Items.get(position).countLike + " " + context.getResources().getString(R.string.like));
+            holder.likeCount.setText(Items.get(position).countLike + " " + context.getResources().getString(R.string.like));
         }
 
-        countLike = Items.get(position).countLike;
+        holder.productDescription.setText(Items.get(position).description);
 
-        productDescription.setText(Items.get(position).description);
-
-        storeName.setText(Items.get(position).storeName);
+        holder.storeName.setText(Items.get(position).storeName);
 
         if (Items.get(position).isLiked) {
-            likeButton.setChecked(true);
+            holder.likeButton.setChecked(true);
         } else if (!Items.get(position).isLiked) {
-            likeButton.setChecked(false);
+            holder.likeButton.setChecked(false);
         }
 
-        isLiked = Items.get(position).isLiked;
-
-        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + Items.get(position).productImageAddress).into(productImage);
+        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + Items.get(position).productImageAddress).into(holder.productImage);
 
     }
 
@@ -192,6 +165,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         return Items.size();
     }
 
+
     public void addItem(final List<StoreGalleryItem> list) {
 
 //        final int oldsize = albumList.size();
@@ -199,7 +173,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 //            albumList.add(0, list.get(i));
 //        }
 
-        if (list.size() > 1) {
+        if (list.size() >= 1) {
             for (StoreGalleryItem s : list) {
                 Items.add(s);
             }
@@ -211,22 +185,9 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
     }
 
+    public void emptyList() {
 
-    public void updateProduct(StoreGalleryItem product) {
-        int index = findProduct(Items, product);
-        Items.set(index, product);
-        notifyItemChanged(index);
+        Items.clear();
+
     }
-
-    private int findProduct(List<StoreGalleryItem> list, StoreGalleryItem product) {
-
-        for (StoreGalleryItem p : list) {
-            if (p.id == product.id) {
-                return list.indexOf(p);
-            }
-        }
-        return -1;
-    }
-
-
 }
