@@ -1,38 +1,26 @@
 package ir.woope.woopeapp.ui.Fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.ProductHomeAdapter;
-import ir.woope.woopeapp.adapters.StoreGalleryAdapter;
 import ir.woope.woopeapp.helpers.Constants;
-import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ItemClickListener;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.StoreGalleryItem;
-import ir.woope.woopeapp.ui.Activities.ProductActivity;
-import ir.woope.woopeapp.ui.Activities.ProductHomeActivity;
-import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class profile_home_fragment extends Fragment implements ItemClickListener {
+public class product_home_fragment extends Fragment implements ItemClickListener {
 
     RecyclerView recyclerView;
     ProductHomeAdapter adapter;
@@ -52,12 +40,12 @@ public class profile_home_fragment extends Fragment implements ItemClickListener
 
     private List<StoreGalleryItem> albumList;
 
-    profile_home_fragment.ItemTouchListener itemTouchListener;
+    product_home_fragment.ItemTouchListener itemTouchListener;
 
     String authToken;
     int size;
 
-    public profile_home_fragment() {
+    public product_home_fragment() {
         // Required empty public constructor
     }
 
@@ -82,30 +70,24 @@ public class profile_home_fragment extends Fragment implements ItemClickListener
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.product_home_recyclerview);
 
-//        itemTouchListener = new profile_home_fragment().ItemTouchListener() {
-//
-//            @Override
-//            public void onLikeClicked(View view, int position) {
-//
-//                StoreGalleryItem s = albumList.get(position);
-//                LikeImage(s.id);
-//
-//                //open activity
-//                //Toast.makeText(getActivity(), "شد", Toast.LENGTH_LONG).show();
-//
-//            }
-//
-//            @Override
-//            public void onDoubleTap(View view, int position) {
-//
-//                StoreGalleryItem s = albumList.get(position);
-//                LikeImage(s.id);
-//
-//            }
-//
-//        };
+        itemTouchListener = new ItemTouchListener() {
+            @Override
+            public void onLikeClicked(View view, int position) {
+                StoreGalleryItem s = albumList.get(position);
+                //s.isLiked=true;
+                LikeImage(s.id);
+            }
+
+            @Override
+            public void onDoubleTap(View view, int position) {
+                StoreGalleryItem s = albumList.get(position);
+                //s.isLiked=true;
+                LikeImage(s.id);
+            }
+        };
 
         albumList = new ArrayList<>();
+
         adapter = new ProductHomeAdapter(this.getActivity(), albumList,itemTouchListener);
 
         recyclerView.setAdapter(adapter);
@@ -177,7 +159,7 @@ public class profile_home_fragment extends Fragment implements ItemClickListener
 
                     itShouldLoadMore = true;
 
-                    if (response.body().size() > 1) {
+                    if (response.body().size() >= 1) {
 
                         adapter.addItem(response.body());
 

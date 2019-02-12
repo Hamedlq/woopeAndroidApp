@@ -5,15 +5,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,9 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -36,21 +31,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.target.ViewTarget;
 import com.google.gson.Gson;
 
 import com.yalantis.ucrop.UCrop;
@@ -62,27 +48,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
-import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
-import ir.woope.woopeapp.interfaces.SplashInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
-import ir.woope.woopeapp.models.Store;
-import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.main_fragment;
+import ir.woope.woopeapp.ui.Fragments.product_home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
-import ir.woope.woopeapp.ui.Fragments.profile_home_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
-import me.toptas.fancyshowcase.FancyShowCaseView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -94,13 +72,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 import co.ronash.pushe.Pushe;
 
@@ -278,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 fragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, new profile_home_fragment(), PRODUCT_HOME_FRAGMENT)
+                        .replace(R.id.frame_layout, new product_home_fragment(), PRODUCT_HOME_FRAGMENT)
                         .commit();
 
                 IsOnHome = false;

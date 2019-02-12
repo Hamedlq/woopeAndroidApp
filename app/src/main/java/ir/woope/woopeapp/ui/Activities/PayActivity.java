@@ -189,11 +189,12 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 savedPayListModel = getSavedPayList();
                 ConfirmPayment(savedPayListModel);
             }else{
+                if(savedPayListModel.categoryId!=null){
                 for (long cId:savedPayListModel.categoryId) {
                     if(cId == Categories.OnlineService.value()){
                         cash_card.setVisibility(View.GONE);
                     }
-                }
+                }}
             }
 
             totalPrice = savedPayListModel.totalPrice;
@@ -558,7 +559,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 int code = response.code();
                 if (code == 200) {
                     PayListModel model = response.body();
+                    PayListModel temp=savedPayListModel;
                     savedPayListModel = model;
+                    savedPayListModel.categoryId=temp.categoryId;
                     //PayState sp = (PayState) spinner.getSelectedItem();
                     if (!isOnline) {
                         //go to cash pay
