@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.AttributeSet;
@@ -72,7 +73,7 @@ public class main_fragment extends Fragment {
     @BindView(R.id.container_layout)
     LinearLayout container_layout;
     @BindView(R.id.all_button)
-    TextView all_button;
+    RelativeLayout all_button;
 
     String MOST_WOOPE_FILTER = "MOST_WOOPE";
     String MOST_PURCHASE_FILTER = "MOST_PURCHASE";
