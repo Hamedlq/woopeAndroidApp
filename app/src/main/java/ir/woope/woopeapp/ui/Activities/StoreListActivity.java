@@ -59,7 +59,7 @@ public class StoreListActivity extends AppCompatActivity {
     protected FrameLayout main_container;
     String HOME_FRAGMENT = "HOME_FRAGMENT";
     private MainListModel model;
-    private MallModel mallModel=null;
+    private MallModel mallModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class StoreListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             model = (MainListModel) getIntent().getExtras().getSerializable(LIST_MODEL);
-            mallModel=(MallModel) getIntent().getExtras().getSerializable(MALL_MODEL);
+            mallModel = (MallModel) getIntent().getExtras().getSerializable(MALL_MODEL);
             //store = (Store) getIntent().getExtras().getSerializable(STORE);
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -78,14 +78,14 @@ public class StoreListActivity extends AppCompatActivity {
 
     }
 
-    public MainListModel getMainListModel(){
+    public MainListModel getMainListModel() {
         return model;
     }
 
-    public Integer getMallModel(){
-        if(mallModel!=null){
+    public Integer getMallModel() {
+        if (mallModel != null) {
             return mallModel.id;
-        }else return null;
+        } else return null;
 
     }
 

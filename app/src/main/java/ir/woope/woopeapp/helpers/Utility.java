@@ -3,9 +3,11 @@ package ir.woope.woopeapp.helpers;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -20,7 +22,11 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -29,10 +35,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.ui.Activities.LoginActivity;
+import ir.woope.woopeapp.ui.Activities.StoreActivity;
 
 import static android.accounts.AccountManager.KEY_ERROR_MESSAGE;
 
@@ -41,6 +51,7 @@ import static android.accounts.AccountManager.KEY_ERROR_MESSAGE;
  */
 
 public class Utility {
+
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -163,5 +174,26 @@ public class Utility {
         snack.show();
 
     }
+
+    public static void showPayDialog(Context context, String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.vip_confirm_dialog);
+        dialog.setTitle("");
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        TextView confirm_pay = (TextView) dialog.findViewById(R.id.confirm_message);
+        TextView messageText = (TextView) dialog.findViewById(R.id.message_text);
+        messageText.setText(message);
+        confirm_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
+
 
 }

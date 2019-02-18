@@ -44,6 +44,7 @@ import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.MallModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.ContactUsActivity;
 import ir.woope.woopeapp.ui.Activities.GiftActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.StoreListActivity;
@@ -83,7 +84,7 @@ public class main_fragment extends Fragment {
     private List<MainListModel> mainFilterList;
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
-private boolean isVisible=true;
+    private boolean isVisible = true;
     private CategoryAdapter category_adapter;
 
     Toolbar toolbar;
@@ -193,10 +194,9 @@ private boolean isVisible=true;
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            isVisible=true;
-        }
-        else {
-            isVisible=false;
+            isVisible = true;
+        } else {
+            isVisible = false;
         }
     }
 
@@ -225,17 +225,17 @@ private boolean isVisible=true;
             public void onResponse(Call<List<MallModel>> call, Response<List<MallModel>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    if(isVisible){
-                    Bundle arguments = new Bundle();
-                    arguments.putSerializable(MALL_LIST, (ArrayList<MallModel>) response.body());
-                    arguments.putSerializable(LIST_MODEL, ml);
-                    arguments.putString(LIST_TITLE, ml.listTitle);
-                    Fragment mallFilter = new mall_fragment();
-                    mallFilter.setArguments(arguments);
-                    fragmentManager.beginTransaction()
-                            .replace(ml.listOrder, mallFilter, String.valueOf(ml.listOrder))
-                            .commit();
-                }
+                    if (isVisible) {
+                        Bundle arguments = new Bundle();
+                        arguments.putSerializable(MALL_LIST, (ArrayList<MallModel>) response.body());
+                        arguments.putSerializable(LIST_MODEL, ml);
+                        arguments.putString(LIST_TITLE, ml.listTitle);
+                        Fragment mallFilter = new mall_fragment();
+                        mallFilter.setArguments(arguments);
+                        fragmentManager.beginTransaction()
+                                .replace(ml.listOrder, mallFilter, String.valueOf(ml.listOrder))
+                                .commit();
+                    }
                 }
             }
 
@@ -322,6 +322,13 @@ private boolean isVisible=true;
                 getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
                 getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
                 break;
+
+            case R.id.nav_help:
+                Intent intentContactUs = new Intent(getActivity(), ContactUsActivity.class);
+                getActivity().startActivityForResult(intentContactUs, SHOULD_GET_PROFILE);
+                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+                break;
+
             default:
                 break;
         }

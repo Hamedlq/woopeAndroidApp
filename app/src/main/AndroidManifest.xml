@@ -66,6 +66,10 @@
         <meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_442079978483"/>
         <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f78e951e381c0c8c7bc45ea029c0dff045027403" />
+
         <activity
 
             android:name=".ui.Activities.MainActivity"

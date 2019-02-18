@@ -46,4 +46,6 @@ public interface ProfileInterface {
     @POST("api/Gift/SubmitGiftCode")
     Call<ApiResponse> sendGiftCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                    @Field("GiftCode") String giftCode);
+
+
 }

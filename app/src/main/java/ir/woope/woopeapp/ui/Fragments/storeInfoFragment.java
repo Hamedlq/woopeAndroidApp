@@ -1,6 +1,9 @@
 package ir.woope.woopeapp.ui.Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +15,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -27,6 +35,7 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.SocialModel;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import retrofit2.Call;
@@ -72,10 +81,13 @@ public class storeInfoFragment extends Fragment {
     CardView store_phones_layout;
     CardView store_address_layout;
     CardView report_store_layout;
+    CardView vip_store_layout;
 
     String authToken = null;
 
     Store store;
+
+    LinearLayout socialsLayout;
 
     public storeInfoFragment() {
         // Required empty public constructor
@@ -101,6 +113,8 @@ public class storeInfoFragment extends Fragment {
         store_phones_layout = rootView.findViewById(R.id.store_phones_layout);
         store_address_layout = rootView.findViewById(R.id.store_address_layout);
         report_store_layout = rootView.findViewById(R.id.report_store_layout);
+        vip_store_layout = rootView.findViewById(R.id.vip_store_layout);
+        socialsLayout = rootView.findViewById(R.id.store_socials_layout);
 
         report_store_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,8 +122,8 @@ public class storeInfoFragment extends Fragment {
                 // item clicked
 
                 Snackbar snackbar = Snackbar
-                        .make(layout, "آیا مطمعنید؟", Snackbar.LENGTH_LONG)
-                        .setAction("بله", new View.OnClickListener() {
+                        .make(layout, R.string.areYouSureAboutReportingStore, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.yes, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 reportStore(store.storeId);
@@ -126,6 +140,16 @@ public class storeInfoFragment extends Fragment {
                 }
 
                 snackbar.show();
+
+            }
+        });
+
+        vip_store_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // item clicked
+
+                sendOnlineRequestStore(store.storeId);
 
             }
         });
@@ -166,6 +190,7 @@ public class storeInfoFragment extends Fragment {
                 int code = response.code();
                 if (code == 200) {
                     store = response.body();
+
 //                    Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(logo);
 //                    Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.coverSrc).into(backdrop);
 //                    store_name.setText(store.storeName);
@@ -196,6 +221,13 @@ public class storeInfoFragment extends Fragment {
                         point_layout.setVisibility(View.VISIBLE);
 //                        store_point.setText(store.returnPoint + " عدد ووپ ");
                         point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
+                    }
+
+                    if (!store.socialList.isEmpty()) {
+                        socialsLayout.setVisibility(View.VISIBLE);
+                        for (SocialModel social : store.socialList) {
+                            addSocial(social.keySocial, social.valueSocial);
+                        }
                     }
                 }
             }
@@ -251,6 +283,125 @@ public class storeInfoFragment extends Fragment {
 
             }
         });
+    }
+
+    private void addSocial(String key, String value) {
+        //set the properties for button
+        CardView cardView = new CardView(getContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(15, 15, 15, 15);
+        cardView.setLayoutParams(params);
+        cardView.setVisibility(View.VISIBLE);
+        cardView.setCardElevation(5);
+        cardView.setRadius(5);
+
+        ImageView icon = new ImageView(getContext());
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(125, 125);
+        layoutParams.gravity = Gravity.RIGHT;
+        icon.setLayoutParams(layoutParams);
+
+        if (key.equals("وبسایت")) {
+            Drawable img = getContext().getResources().getDrawable(R.drawable.website_icon);
+            icon.setBackground(img);
+        } else if (key.equals("تلگرام")) {
+            Drawable img = getContext().getResources().getDrawable(R.drawable.telegram_icon);
+            icon.setBackground(img);
+        } else if (key.equals("اینستاگرام")) {
+            Drawable img = getContext().getResources().getDrawable(R.drawable.instagram_icon);
+            icon.setBackground(img);
+        } else if (key.equals("توئیتر")) {
+            Drawable img = getContext().getResources().getDrawable(R.drawable.twiiter_icon);
+            icon.setBackground(img);
+        } else if (key.equals("فیسبوک")) {
+            Drawable img = getContext().getResources().getDrawable(R.drawable.facebook_icon);
+            icon.setBackground(img);
+        }
+
+        //add button to the layout
+        cardView.addView(icon);
+
+        TextView text = new TextView(getContext());
+        FrameLayout.LayoutParams layoutParamss = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParamss.gravity = Gravity.CENTER;
+//        layoutParamss.setMargins(10,10,10,10);
+        text.setLayoutParams(layoutParamss);
+        if (key.equals("وبسایت")) {
+            text.setText(value);
+        } else if (key.equals("تلگرام")) {
+            text.setText(value);
+
+        } else if (key.equals("اینستاگرام")) {
+            text.setText(value);
+
+        } else if (key.equals("توئیتر")) {
+            text.setText(value);
+
+        } else if (key.equals("فیسبوک")) {
+            text.setText(value);
+
+        } else {
+            text.setText(key + " " + value);
+        }
+
+        cardView.addView(text);
+
+        socialsLayout.addView(cardView);
+    }
+
+    private void sendOnlineRequestStore(long branchId) {
+
+        final Snackbar snack = Snackbar.make(layout, R.string.sending_vip_request, 999999999);
+        View view = snack.getView();
+        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        }
+
+        snack.show();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+
+        Call<ApiResponse> call =
+                providerApiInterface.sendOnlineRequestStore("bearer " + authToken, branchId);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+                hideProgreeBar();
+                snack.dismiss();
+                Utility.showPayDialog(getContext(), response.body().getMessage());
+
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                hideProgreeBar();
+                snack.dismiss();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
+            }
+        });
+
     }
 
 }

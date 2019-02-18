@@ -318,7 +318,7 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     }
                                 });
 
-                        sequence.start();
+//                        sequence.start();
 
                     }
 

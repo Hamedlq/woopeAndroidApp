@@ -79,6 +79,10 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PRO
 
 import co.ronash.pushe.Pushe;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -106,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
     private String pictureImagePath = "";
 
     View layout;
+
+    BottomNavigationView navigation;
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -177,6 +183,20 @@ public class MainActivity extends AppCompatActivity {
                         IsOnFavorite = false;
                         return true;
                     } else break;
+                case R.id.navigation_woope:
+                    if (!IsOnProfile) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            break;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        //mTextMessage.setText(R.string.title_notifications);
+
+                        IsOnProfile = false;
+                        IsOnHome = false;
+                        IsOnSearch = false;
+                        IsOnFavorite = false;
+                        return true;
+                    } else break;
             }
             return false;
         }
@@ -197,8 +217,10 @@ public class MainActivity extends AppCompatActivity {
             getUserProfile();
         }
 
+        Fabric.with(this, new Crashlytics());
+
         //mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
         try {
@@ -255,6 +277,10 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.frame_layout, new product_home_fragment(), PRODUCT_HOME_FRAGMENT)
                         .commit();
+
+                View v = navigation.findViewById(R.id.navigation_woope);
+                v.performClick();
+
 
                 IsOnHome = false;
                 IsOnSearch = false;

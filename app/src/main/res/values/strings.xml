@@ -69,7 +69,7 @@
 
     <string name="rules_text">
 ووپ تابع قوانین و مقررات جمهوری اسلامی ایران می باشد.
-        \n\n
+\n\n
 ثبت نام در ووپ و ایجاد حساب کاربری به منزله پذیرفتن کلیه قوانین و مقررات ووپ است.
 \n\n
 حساب کاربری پس از ایجاد قابل نقل و انتقال نمی باشد و هر شخص تنها می تواند یک حساب کاربری برای خود داشته باشد.
@@ -118,5 +118,17 @@ info@woope.ir
     <string name="like">لایک</string>
 
     <string name="loading">در حال بارگزاری ...</string>
+
+    <string name="online_sell">خرید غیرحضوری</string>
+
+    <string name="areYouSureAboutReportingStore">از گزارش عدم همکاری اطمینان دارید؟</string>
+
+    <string name="yes">بله</string>
+
+    <string name="vip_store">درخواست خدمات VIP</string>
+
+    <string name="sending_vip_request">در حال ارسال درخواست خرید غیرحضوری</string>
+
+    <string name="help">راهنما</string>
 
 </resources>

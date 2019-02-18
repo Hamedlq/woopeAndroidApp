@@ -360,8 +360,8 @@ public class home_fragment extends Fragment {
         showProgreeBar();
 
         itShouldLoadMore = false;
-        MainListModel model=((StoreListActivity)getActivity()).getMainListModel();
-        Integer mallModelId=((StoreListActivity)getActivity()).getMallModel();
+        MainListModel model = ((StoreListActivity) getActivity()).getMainListModel();
+        Integer mallModelId = ((StoreListActivity) getActivity()).getMallModel();
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -376,7 +376,7 @@ public class home_fragment extends Fragment {
 
         showProgreeBar();
         Call<List<Store>> call =
-                providerApiInterface.GetStoresFilter("bearer " + authToken, pageNumber,model.listOrder,9,mallModelId);
+                providerApiInterface.GetStoresFilter("bearer " + authToken, pageNumber, model.listOrder, 9, mallModelId);
 
         call.enqueue(new Callback<List<Store>>() {
             @Override
