@@ -22,4 +22,6 @@ public class StoreGalleryItem extends ApiResponse implements Serializable {
 
     public boolean isLiked;
 
+    public boolean canBeSold;
+
 }

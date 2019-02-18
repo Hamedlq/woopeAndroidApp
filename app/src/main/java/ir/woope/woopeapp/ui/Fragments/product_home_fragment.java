@@ -66,21 +66,18 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
     View layout;
 
-    public product_home_fragment() {
+    public product_home_fragment(){
         // Required empty public constructor
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
 
     @Override
     public void onClick(View view, int position) {
         // The onClick implementation of the RecyclerView item click
-
     }
 
 
@@ -245,7 +242,6 @@ public class product_home_fragment extends Fragment implements ItemClickListener
         return size;
 
     }
-
 
     String countLike;
 

@@ -105,12 +105,12 @@
                         android:id="@+id/store_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:foregroundGravity="center"
-                        android:gravity="center"
+                        android:gravity = "center"
                         android:text="Woope"
                         android:textColor="@color/white"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                         />
 
                 </android.support.v7.widget.Toolbar>
 

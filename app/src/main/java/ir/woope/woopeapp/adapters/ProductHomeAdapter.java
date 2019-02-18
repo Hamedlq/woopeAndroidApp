@@ -213,6 +213,11 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
         Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + Items.get(position).productImageAddress).into(holder.productImage);
 
+        if(Items.get(position).canBeSold)
+            holder.sendOnlineRequest.setVisibility(View.VISIBLE);
+        else if(!Items.get(position).canBeSold)
+            holder.sendOnlineRequest.setVisibility(View.GONE);
+
     }
 
     @Override
