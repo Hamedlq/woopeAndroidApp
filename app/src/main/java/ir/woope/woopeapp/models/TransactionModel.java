@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 public class TransactionModel implements Serializable {
 
+    public long id;
     public long payListId;
     public String currencyType;
     public long amount;

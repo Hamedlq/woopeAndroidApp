@@ -10,6 +10,7 @@ import java.util.List;
 
 public class DocumentModel extends ApiResponse implements Serializable {
 
+    public long id;
     public long payListId;
     public String storeName;
     public long totalPrice;

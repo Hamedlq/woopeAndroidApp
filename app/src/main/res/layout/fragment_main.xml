@@ -91,24 +91,38 @@
         card_view:cardBackgroundColor="@color/white"
         card_view:cardCornerRadius="10dp">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/all_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_margin="8dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/left_arrow" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:id="@+id/all_button"
-                android:layout_gravity="center"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:gravity="center"
-                android:text="لیست همه فروشگاه‌ها"
-                android:layout_height="wrap_content" />
 
-        </LinearLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:text="مشاهده همه فروشگاه‌ها"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>
