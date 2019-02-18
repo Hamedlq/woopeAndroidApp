@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,6 +73,13 @@ public class ProductActivity extends AppCompatActivity {
         layout = findViewById(R.id.productActivity_layout);
         likeButton = findViewById(R.id.product_likebutton);
         sendOnlineRequest = findViewById(R.id.btn_send_onlineRequest_productActivity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.product_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
+        toolbar.setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
 
@@ -297,6 +305,11 @@ public class ProductActivity extends AppCompatActivity {
                     } else {
                         LikeCount.setText(product.countLike + " " + getResources().getString(R.string.like));
                     }
+
+                    if(product.canBeSold)
+                        sendOnlineRequest.setVisibility(View.VISIBLE);
+                    else if(!product.canBeSold)
+                        sendOnlineRequest.setVisibility(View.GONE);
 
                 }
             }

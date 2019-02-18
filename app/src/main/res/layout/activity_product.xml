@@ -1,136 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/productActivity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/viewBg"
     android:orientation="vertical">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/viewBg">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:backgroundTint="@color/viewBg">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:backgroundTint="@color/viewBg"
+                android:orientation="vertical">
 
-                <ir.woope.woopeapp.Utils.SquareLayout
-                    android:id="@+id/sqPI"
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center">
-
+                    app:contentScrim="@drawable/profile"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
 
-                        <ImageView
-                            android:id="@+id/productImage"
+                        <ir.woope.woopeapp.Utils.SquareLayout
+                            android:id="@+id/sqPI"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/colorPrimary" />
+                            android:gravity="center">
 
-                        <com.wang.avi.AVLoadingIndicatorView
-                            android:id="@+id/loading_product"
-                            android:layout_width="wrap_content"
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:id="@+id/productImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/colorPrimary" />
+
+                                <com.wang.avi.AVLoadingIndicatorView
+                                    android:id="@+id/loading_product"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:visibility="visible"
+                                    app:indicatorColor="#59CC89"
+                                    app:indicatorName="BallPulseIndicator" />
+
+                            </RelativeLayout>
+
+                        </ir.woope.woopeapp.Utils.SquareLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:visibility="visible"
-                            app:indicatorColor="#59CC89"
-                            app:indicatorName="BallPulseIndicator" />
+                            android:layout_below="@+id/sqPI"
+                            android:layout_marginTop="-25dp"
+                            android:background="@drawable/store_hover" />
 
                     </RelativeLayout>
 
-                </ir.woope.woopeapp.Utils.SquareLayout>
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/product_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:layoutDirection="rtl"
+                        app:layout_collapseMode="pin"
+                        app:layout_scrollFlags="scroll|enterAlways">
 
-                <ImageView
+
+
+                    </android.support.v7.widget.Toolbar>
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@color/white">-->
+
+                    <!--<ir.woope.woopeapp.Utils.SquareLayout-->
+                        <!--android:id="@+id/sqPI"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center">-->
+
+
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center">-->
+
+                            <!--<ImageView-->
+                                <!--android:id="@+id/productImage"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="match_parent"-->
+                                <!--android:background="@color/colorPrimary" />-->
+
+                            <!--<com.wang.avi.AVLoadingIndicatorView-->
+                                <!--android:id="@+id/loading_product"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_centerInParent="true"-->
+                                <!--android:visibility="visible"-->
+                                <!--app:indicatorColor="#59CC89"-->
+                                <!--app:indicatorName="BallPulseIndicator" />-->
+
+                        <!--</RelativeLayout>-->
+
+                    <!--</ir.woope.woopeapp.Utils.SquareLayout>-->
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@+id/sqPI"-->
+                        <!--android:layout_marginTop="-25dp"-->
+                        <!--android:background="@drawable/store_hover" />-->
+
+                <!--</RelativeLayout>-->
+
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/sqPI"
-                    android:layout_marginTop="-25dp"
-                    android:background="@drawable/store_hover" />
+                    android:background="@color/viewBg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
 
-            </RelativeLayout>
+                    <com.varunest.sparkbutton.SparkButton
+                        android:id="@+id/product_likebutton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:sparkbutton_activeImage="@drawable/liked"
+                        app:sparkbutton_iconSize="25dp"
+                        app:sparkbutton_inActiveImage="@drawable/not_liked"
+                        app:sparkbutton_primaryColor="@color/alizarin"
+                        app:sparkbutton_secondaryColor="@color/sun_flower" />
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/viewBg"
-                android:orientation="horizontal"
-                android:padding="0dp"
-                android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/txt_likeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/product_likebutton"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.varunest.sparkbutton.SparkButton
-                    android:id="@+id/product_likebutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:sparkbutton_activeImage="@drawable/liked"
-                    app:sparkbutton_iconSize="25dp"
-                    app:sparkbutton_inActiveImage="@drawable/not_liked"
-                    app:sparkbutton_primaryColor="@color/alizarin"
-                    app:sparkbutton_secondaryColor="@color/sun_flower" />
+                    <Button
+                        android:id="@+id/btn_send_onlineRequest_productActivity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/purple_button_border"
+                        android:padding="7dp"
+                        android:text="@string/online_sell"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/txt_likeCount"
+                    android:id="@+id/productDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/product_home_item_likebutton"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btn_send_onlineRequest_productActivity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/purple_button_border"
-                    android:padding="7dp"
-                    android:text="@string/online_sell"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--</LinearLayout>-->
 
-            </android.support.constraint.ConstraintLayout>
+                <!--</ScrollView>-->
 
-            <TextView
-                android:id="@+id/productDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textStyle="bold" />
+            </LinearLayout>
 
-            <!--</LinearLayout>-->
-
-            <!--</ScrollView>-->
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </ScrollView>
 

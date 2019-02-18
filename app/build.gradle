@@ -124,4 +124,6 @@ dependencies {
         transitive = true;
     }
 
+//    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
 }

@@ -100,7 +100,6 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
-
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -114,6 +113,7 @@ public class StoreActivity extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.store_viewpager);
         viewPager.getParent().requestDisallowInterceptTouchEvent(true);
         viewPager.requestDisallowInterceptTouchEvent(true);
+
         /*viewPager.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -134,7 +134,6 @@ public class StoreActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
     }
-
 
     private void showPayDialog() {
         final Dialog dialog = new Dialog(StoreActivity.this);
