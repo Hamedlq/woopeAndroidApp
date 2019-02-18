@@ -195,21 +195,21 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                             cash_card.setVisibility(View.GONE);
                         }
                     }
-                }}
-                if(savedPayListModel.returnPoint>savedPayListModel.woopeThreshold){
-                    cash_card.setVisibility(View.GONE);
                 }
             }
-
-            totalPrice = savedPayListModel.totalPrice;
-            getStore(savedPayListModel.branchId);
-            //amount.setText(String.valueOf(savedPayListModel.totalPrice));
-            StoreName_tv.setText(savedPayListModel.storeName);
-            Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).transform(new CircleTransformation()).into(backdrop);
-            calculateValues();
+            if (savedPayListModel.returnPoint > savedPayListModel.woopeThreshold) {
+                cash_card.setVisibility(View.GONE);
+            }
         } else {
             savedPayListModel = new PayListModel();
         }
+        totalPrice = savedPayListModel.totalPrice;
+        getStore(savedPayListModel.branchId);
+        //amount.setText(String.valueOf(savedPayListModel.totalPrice));
+        StoreName_tv.setText(savedPayListModel.storeName);
+        Picasso.with(PayActivity.this).load(Constants.GlobalConstants.LOGO_URL + savedPayListModel.logoSrc).transform(new CircleTransformation()).into(backdrop);
+        calculateValues();
+
         ConfirmPayment(savedPayListModel);
         if (profile != null) {
             woope_credit = (TextView) findViewById(R.id.woope_credit);
@@ -745,7 +745,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<Store> call =
-                providerApiInterface. getStore("bearer " + authToken, storeId);
+                providerApiInterface.getStore("bearer " + authToken, storeId);
 
 
         call.enqueue(new Callback<Store>() {
@@ -756,7 +756,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 if (code == 200) {
                     store = response.body();
                     calculateValues();
-                    if(savedPayListModel.returnPoint>store.woopeThreshold){
+                    if (savedPayListModel.returnPoint > store.woopeThreshold) {
                         cash_card.setVisibility(View.GONE);
                     }
                 }
