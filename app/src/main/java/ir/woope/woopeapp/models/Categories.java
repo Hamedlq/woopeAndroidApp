@@ -6,7 +6,9 @@ public enum Categories {
     @SerializedName("8")
     OnlineService("OnlineService", 8),
     @SerializedName("9")
-    ChargeStore("ChargeStore", 9);
+    ChargeStore("ChargeStore", 9),
+    @SerializedName("10")
+    VipService ("VipService", 10);
 
     private String stringValue;
     private int intValue;
