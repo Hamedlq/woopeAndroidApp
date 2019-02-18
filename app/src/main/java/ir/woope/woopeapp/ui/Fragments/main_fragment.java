@@ -167,7 +167,6 @@ private boolean isVisible=true;
                 int code = response.code();
                 if (code == 200) {
                     if(isVisible){
-                    if (response.body().size() > 1) {
                         Bundle arguments = new Bundle();
                         arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
                         arguments.putSerializable(LIST_MODEL, ml);
@@ -177,7 +176,7 @@ private boolean isVisible=true;
                         fragmentManager.beginTransaction()
                                 .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
                                 .commit();
-                    }}
+                    }
                 }
             }
 

@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public enum Categories {
     @SerializedName("8")
-    OnlineService("OnlineService", 8);
+    OnlineService("OnlineService", 8),
+    @SerializedName("9")
+    ChargeStore("ChargeStore", 9);
 
     private String stringValue;
     private int intValue;

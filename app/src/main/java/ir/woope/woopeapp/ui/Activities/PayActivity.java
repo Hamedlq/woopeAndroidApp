@@ -195,6 +195,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         cash_card.setVisibility(View.GONE);
                     }
                 }}
+                if(savedPayListModel.returnPoint>savedPayListModel.woopeThreshold){
+                    cash_card.setVisibility(View.GONE);
+                }
             }
 
             totalPrice = savedPayListModel.totalPrice;
@@ -741,7 +744,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<Store> call =
-                providerApiInterface.getStore("bearer " + authToken, storeId);
+                providerApiInterface. getStore("bearer " + authToken, storeId);
 
 
         call.enqueue(new Callback<Store>() {
@@ -752,6 +755,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 if (code == 200) {
                     store = response.body();
                     calculateValues();
+                    if(savedPayListModel.returnPoint>store.woopeThreshold){
+                        cash_card.setVisibility(View.GONE);
+                    }
                 }
             }
 

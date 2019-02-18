@@ -28,7 +28,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
     private List<StoreGalleryItem> Items;
 
-    profile_home_fragment.ItemTouchListener onItemTouchListener;
+    product_home_fragment.ItemTouchListener onItemTouchListener;
 
     private ItemClickListener clickListener;
 

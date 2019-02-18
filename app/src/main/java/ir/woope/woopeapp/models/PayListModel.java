@@ -23,6 +23,7 @@ public class PayListModel extends ApiResponse implements Serializable {
     public long basePrice;
     public long returnPoint;
     public boolean switchWoope;
+    public int woopeThreshold;
     public List<Long> categoryId;
 
     public PayListModel() {

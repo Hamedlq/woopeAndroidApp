@@ -155,7 +155,7 @@ public class ProductActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<StoreGalleryItem> call =
-                providerApiInterface.LikeImage("bearer " + authToken, ImageId);
+                providerApiInterface .LikeImage("bearer " + authToken, ImageId);
 
         call.enqueue(new Callback<StoreGalleryItem>() {
             @Override
