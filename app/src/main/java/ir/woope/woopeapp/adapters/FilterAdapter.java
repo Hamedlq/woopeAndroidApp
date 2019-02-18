@@ -45,7 +45,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count,point;
+        public TextView title, count, point;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {

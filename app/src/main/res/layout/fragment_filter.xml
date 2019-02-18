@@ -30,6 +30,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="match_parent"
@@ -67,8 +68,10 @@
                 android:id="@+id/filter_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
                 android:clipToPadding="false"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

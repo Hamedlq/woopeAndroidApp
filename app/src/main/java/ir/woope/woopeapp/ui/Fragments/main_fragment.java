@@ -82,7 +82,7 @@ public class main_fragment extends Fragment {
     private List<MainListModel> mainFilterList;
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
-private boolean isVisible=true;
+    private boolean isVisible = true;
     private CategoryAdapter category_adapter;
 
     Toolbar toolbar;
@@ -165,18 +165,19 @@ private boolean isVisible=true;
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    if(isVisible){
-                    if (response.body().size() > 1) {
-                        Bundle arguments = new Bundle();
-                        arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
-                        arguments.putSerializable(LIST_MODEL, ml);
-                        arguments.putString(LIST_TITLE, ml.listTitle);
-                        Fragment woopeFilter = new filter_fragment();
-                        woopeFilter.setArguments(arguments);
-                        fragmentManager.beginTransaction()
-                                .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
-                                .commit();
-                    }}
+                    if (isVisible) {
+                        if (response.body().size() > 1) {
+                            Bundle arguments = new Bundle();
+                            arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
+                            arguments.putSerializable(LIST_MODEL, ml);
+                            arguments.putString(LIST_TITLE, ml.listTitle);
+                            Fragment woopeFilter = new filter_fragment();
+                            woopeFilter.setArguments(arguments);
+                            fragmentManager.beginTransaction()
+                                    .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
+                                    .commit();
+                        }
+                    }
                 }
             }
 
@@ -193,10 +194,9 @@ private boolean isVisible=true;
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            isVisible=true;
-        }
-        else {
-            isVisible=false;
+            isVisible = true;
+        } else {
+            isVisible = false;
         }
     }
 
@@ -225,17 +225,17 @@ private boolean isVisible=true;
             public void onResponse(Call<List<MallModel>> call, Response<List<MallModel>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    if(isVisible){
-                    Bundle arguments = new Bundle();
-                    arguments.putSerializable(MALL_LIST, (ArrayList<MallModel>) response.body());
-                    arguments.putSerializable(LIST_MODEL, ml);
-                    arguments.putString(LIST_TITLE, ml.listTitle);
-                    Fragment mallFilter = new mall_fragment();
-                    mallFilter.setArguments(arguments);
-                    fragmentManager.beginTransaction()
-                            .replace(ml.listOrder, mallFilter, String.valueOf(ml.listOrder))
-                            .commit();
-                }
+                    if (isVisible) {
+                        Bundle arguments = new Bundle();
+                        arguments.putSerializable(MALL_LIST, (ArrayList<MallModel>) response.body());
+                        arguments.putSerializable(LIST_MODEL, ml);
+                        arguments.putString(LIST_TITLE, ml.listTitle);
+                        Fragment mallFilter = new mall_fragment();
+                        mallFilter.setArguments(arguments);
+                        fragmentManager.beginTransaction()
+                                .replace(ml.listOrder, mallFilter, String.valueOf(ml.listOrder))
+                                .commit();
+                    }
                 }
             }
 

@@ -293,7 +293,7 @@ public class StoreActivity extends AppCompatActivity {
         model.branchId = store.storeId;
         model.totalPrice = totalPrice;
         model.logoSrc = store.logoSrc;
-        model.categoryId=store.categoryId;
+        model.categoryId = store.categoryId;
         model.switchWoope = false;
         model.switchCredit = false;
         model.basePrice = store.basePrice;

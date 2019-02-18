@@ -15,6 +15,7 @@ public class Category extends ApiResponse implements Serializable {
         this.categoryName = name;
         this.thumbnail = thumbnail;
     }
+
     public long categoryId;
     public String categoryName;
     public int thumbnail;

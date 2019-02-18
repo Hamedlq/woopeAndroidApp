@@ -689,7 +689,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
                 Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
 
-
             }
         });
 

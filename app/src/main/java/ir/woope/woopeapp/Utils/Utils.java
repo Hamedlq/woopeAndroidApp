@@ -1,11 +1,17 @@
 package ir.woope.woopeapp.Utils;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
+
+import ir.woope.woopeapp.R;
 
 /**
  * Created by froger_mcs on 05.11.14.
@@ -45,4 +51,6 @@ public class Utils {
     public static boolean isAndroid5() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
+
+
 }

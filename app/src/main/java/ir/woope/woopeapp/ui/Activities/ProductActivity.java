@@ -2,12 +2,15 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.Utils;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
@@ -53,6 +57,8 @@ public class ProductActivity extends AppCompatActivity {
 
     AVLoadingIndicatorView loading;
 
+    Button sendOnlineRequest;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -65,6 +71,16 @@ public class ProductActivity extends AppCompatActivity {
         LikeCount = findViewById(R.id.txt_likeCount);
         layout = findViewById(R.id.productActivity_layout);
         likeButton = findViewById(R.id.product_likebutton);
+        sendOnlineRequest = findViewById(R.id.btn_send_onlineRequest_productActivity);
+
+        sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+
+                sendOnlineRequest(product.id);
+
+            }
+        });
 
         loading = findViewById(R.id.loading_product);
 
@@ -80,18 +96,6 @@ public class ProductActivity extends AppCompatActivity {
             getProduct(product.id, product.branchId);
 
         }
-
-//        likeButton.setOnLikeListener(new OnLikeListener() {
-//            @Override
-//            public void liked(LikeButton likeButton) {
-//
-//            }
-//
-//            @Override
-//            public void unLiked(LikeButton likeButton) {
-//
-//            }
-//        });
 
         likeButton.setEventListener(new SparkEventListener() {
             @Override
@@ -166,14 +170,16 @@ public class ProductActivity extends AppCompatActivity {
 
                     loading.smoothToHide();
 
-                    if (response.body().countLike==0) {
+                    if (response.body().countLike == 0) {
                         LikeCount.setText("");
-
                     } else {
                         LikeCount.setText(response.body().countLike + " " + getResources().getString(R.string.like));
-
                     }
 
+                    if (response.body().isLiked)
+                        likeButton.setChecked(true);
+                    else
+                        likeButton.setChecked(false);
 
                 }
             }
@@ -190,6 +196,59 @@ public class ProductActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void sendOnlineRequest(long productId) {
+
+        final Snackbar snack = Snackbar.make(layout, R.string.sending_vip_request, 999999999);
+        View view = snack.getView();
+        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        }
+
+        snack.show();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs =
+                getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        showProgreeBar();
+
+        Call<ApiResponse> call =
+                providerApiInterface.sendOnlineRequest("bearer " + authToken, productId);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+                hideProgreeBar();
+                snack.dismiss();
+                Utility.showPayDialog(context, response.body().getMessage());
+
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                hideProgreeBar();
+                snack.dismiss();
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
+            }
+        });
+
     }
 
     private void getProduct(long productId, long branchId) {
@@ -255,6 +314,14 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void hideProgreeBar() {
+        loading.smoothToHide();
+    }
+
+    private void showProgreeBar() {
+        loading.smoothToShow();
     }
 
 }

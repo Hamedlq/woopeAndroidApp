@@ -10,6 +10,7 @@ public class MallModel extends ApiResponse implements Serializable {
 
     public MallModel() {
     }
+
     public int id;
     public String name;
     public String address;

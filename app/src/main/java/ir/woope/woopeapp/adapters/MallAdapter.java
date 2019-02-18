@@ -133,7 +133,7 @@ public class MallAdapter extends RecyclerView.Adapter<MallAdapter.MyViewHolder> 
             } else {
                 holder.card_view2.setVisibility(View.GONE);
             }
-        }else {
+        } else {
             holder.card_view2.setVisibility(View.GONE);
             holder.card_view.setVisibility(View.GONE);
         }

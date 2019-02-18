@@ -201,7 +201,6 @@ public class storeGalleryFragment extends Fragment implements ItemClickListener 
         }
     }
 
-
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -241,6 +240,5 @@ public class storeGalleryFragment extends Fragment implements ItemClickListener 
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-
 
 }

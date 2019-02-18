@@ -126,7 +126,7 @@ public class ProductHomeActivity extends AppCompatActivity {
 
 //        showProgreeBar();
         Call<List<StoreGalleryItem>> call =
-                providerApiInterface.getAllActiveProducts("bearer " + authToken, pageNumber,10);
+                providerApiInterface.getAllActiveProducts("bearer " + authToken, pageNumber, 10);
 
         call.enqueue(new Callback<List<StoreGalleryItem>>() {
             @Override
@@ -163,7 +163,9 @@ public class ProductHomeActivity extends AppCompatActivity {
         return size;
 
     }
+
     String countLike;
+
     private String LikeImage(long ImageId) {
 
 //        loading.smoothToShow() ;

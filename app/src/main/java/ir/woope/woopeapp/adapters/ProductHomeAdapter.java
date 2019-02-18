@@ -2,14 +2,17 @@ package ir.woope.woopeapp.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pedromassango.doubleclick.DoubleClick;
-import com.pedromassango.doubleclick.DoubleClickListener;
+
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
@@ -17,6 +20,7 @@ import com.varunest.sparkbutton.SparkEventListener;
 import java.util.List;
 
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.DoubleClickListener;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.ItemClickListener;
 import ir.woope.woopeapp.models.StoreGalleryItem;
@@ -28,10 +32,9 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
     private List<StoreGalleryItem> Items;
 
-    profile_home_fragment.ItemTouchListener onItemTouchListener;
+    product_home_fragment.ItemTouchListener onItemTouchListener;
 
     private ItemClickListener clickListener;
-
 
 
     public void setLikeClickListener(ItemClickListener itemClickListener) {
@@ -63,12 +66,35 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         private TextView productDescription;
         private ImageView productImage;
         private SparkButton likeButton;
+        private LinearLayout storeNameLayout;
+        private Button sendOnlineRequest;
 
-
-        public MyViewHolder(View view) {
+        public MyViewHolder(final View view) {
             super(view);
 
             storeName = view.findViewById(R.id.store_name_product_home_item);
+
+            storeNameLayout = view.findViewById(R.id.storeNameLayout_product_home_item);
+
+            storeNameLayout.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View arg0) {
+
+                    onItemTouchListener.onStoreNameClicked(arg0, getPosition());
+
+                }
+            });
+
+            sendOnlineRequest = view.findViewById(R.id.btn_send_onlineRequest_productHome_item);
+
+            sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View arg0) {
+
+                    onItemTouchListener.onSendOnlineRequest(arg0, getPosition());
+
+                }
+            });
 
             likeCount = view.findViewById(R.id.txt_likeCount_product_home_item);
 
@@ -78,24 +104,45 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
             likeButton = view.findViewById(R.id.product_home_item_likebutton);
 
-            productImage.setOnClickListener(new DoubleClick(new DoubleClickListener() {
+            productImage.setOnClickListener(new DoubleClickListener() {
+
                 @Override
-                public void onSingleClick(View view) {
+                public void onSingleClick(View v) {
+
                 }
 
                 @Override
-                public void onDoubleClick(View view) {
-                    onItemTouchListener.onDoubleTap(view, getPosition());
-                    StoreGalleryItem s_item= Items.get(getPosition());
+                public void onDoubleClick(View v) {
+                    onItemTouchListener.onLikeClicked(v, getPosition());
+                    StoreGalleryItem s_item = Items.get(getPosition());
                     if (!s_item.isLiked) {
-                        s_item.isLiked= true;
+//                            s_item.isLiked = true;
                         likeButton.setChecked(true);
                     } else {
-                        s_item.isLiked= false;
+//                            s_item.isLiked = false;
                         likeButton.setChecked(false);
                     }
                 }
-            }));
+            });
+
+//            productImage.setOnClickListener(new DoubleClick(new DoubleClickListener() {
+//                @Override
+//                public void onSingleClick(View view) {
+//                }
+//
+//                @Override
+//                public void onDoubleClick(View view) {
+////                    onItemTouchListener.onDoubleTap(view, getPosition());
+////                    StoreGalleryItem s_item = Items.get(getPosition());
+////                    if (!s_item.isLiked) {
+////                        s_item.isLiked = true;
+////                        likeButton.setChecked(true);
+////                    } else {
+////                        s_item.isLiked = false;
+////                        likeButton.setChecked(false);
+////                    }
+//                }
+//            }));
 
             likeButton.setEventListener(new SparkEventListener() {
                 @Override
@@ -103,12 +150,23 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
                     if (buttonState) {
                         // Button is active
                         onItemTouchListener.onLikeClicked(button, getPosition());
-                        StoreGalleryItem s_item= Items.get(getPosition());
+                        StoreGalleryItem s_item = Items.get(getPosition());
                         if (!s_item.isLiked) {
-                            s_item.isLiked= true;
+//                            s_item.isLiked = true;
                             likeButton.setChecked(true);
                         } else {
-                            s_item.isLiked= false;
+//                            s_item.isLiked = false;
+                            likeButton.setChecked(false);
+                        }
+                    } else {
+                        // Button is inactive
+                        onItemTouchListener.onLikeClicked(button, getPosition());
+                        StoreGalleryItem s_item = Items.get(getPosition());
+                        if (s_item.isLiked) {
+//                            s_item.isLiked= true;
+                            likeButton.setChecked(true);
+                        } else {
+//                            s_item.isLiked= false;
                             likeButton.setChecked(false);
                         }
                     }
@@ -183,8 +241,44 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     }
 
     public void emptyList() {
-
         Items.clear();
+    }
 
+    public void updateProduct(StoreGalleryItem s, int position) {
+        Items.set(position, s);
+    }
+
+    public StoreGalleryItem getProduct(int position) {
+        return Items.get(position);
+    }
+
+    public void clearProducts() {
+        Items.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<StoreGalleryItem> getProductList() {
+        return Items;
+    }
+
+    public void LikeProduct(int position) {
+        if (Items.get(position).isLiked) {
+            Items.get(position).countLike--;
+            Items.get(position).isLiked = false;
+        } else if (!Items.get(position).isLiked) {
+            Items.get(position).countLike++;
+            Items.get(position).isLiked = true;
+        }
+        notifyItemChanged(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

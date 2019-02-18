@@ -25,14 +25,14 @@ public class RulesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-            finish();
+        finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-                finish();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

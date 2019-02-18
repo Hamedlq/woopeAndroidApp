@@ -144,7 +144,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
             tr1_am.setText(String.valueOf(model.transactionList.get(0).amount));
             tr1_tt.setText(model.transactionList.get(0).transType);
             tr1_time.setText(model.transactionList.get(0).time);
-         }else {
+        } else {
             tr1.setVisibility(View.GONE);
         }
         if (model.transactionList.size() > 1) {

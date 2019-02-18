@@ -56,15 +56,16 @@ public class mall_fragment extends Fragment {
     private MallAdapter filter_adapter;
 
     mall_fragment.ItemTouchListener itemTouchListener;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            malls = (List<MallModel>)bundle.getSerializable(MALL_LIST);
-            listTitle=bundle.getString(LIST_TITLE);
-            model=(MainListModel)bundle.getSerializable(LIST_MODEL);
+            malls = (List<MallModel>) bundle.getSerializable(MALL_LIST);
+            listTitle = bundle.getString(LIST_TITLE);
+            model = (MainListModel) bundle.getSerializable(LIST_MODEL);
         }
     }
 
@@ -72,7 +73,7 @@ public class mall_fragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         mRecycler = inflater.inflate(R.layout.fragment_mall, null);
-        ButterKnife.bind(this,mRecycler);
+        ButterKnife.bind(this, mRecycler);
         title.setText(listTitle);
         List<MallModel> albumList = new ArrayList<>();
         MallAdapter adapter = new MallAdapter(getActivity(), albumList, itemTouchListener);
@@ -100,7 +101,8 @@ public class mall_fragment extends Fragment {
                 myIntent.putExtra(MALL_MODEL, s);
                 getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
-            }};
+            }
+        };
         adapter = new MallAdapter(getActivity(), malls, itemTouchListener);
         filter_recycler.setAdapter(adapter);
 

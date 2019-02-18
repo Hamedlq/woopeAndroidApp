@@ -64,17 +64,21 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/viewBg"
                 android:orientation="horizontal"
                 android:padding="0dp"
-                android:background="@color/viewBg">
+                android:gravity="center_vertical">
 
                 <com.varunest.sparkbutton.SparkButton
                     android:id="@+id/product_likebutton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:sparkbutton_activeImage="@drawable/liked"
                     app:sparkbutton_iconSize="25dp"
                     app:sparkbutton_inActiveImage="@drawable/not_liked"
@@ -86,9 +90,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/product_home_item_likebutton"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+                <Button
+                    android:id="@+id/btn_send_onlineRequest_productActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/purple_button_border"
+                    android:padding="7dp"
+                    android:text="@string/online_sell"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/productDescription"
