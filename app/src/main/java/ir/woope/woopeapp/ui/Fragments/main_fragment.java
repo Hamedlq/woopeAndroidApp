@@ -43,6 +43,7 @@ import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.MallModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.ContactUsActivity;
 import ir.woope.woopeapp.ui.Activities.GiftActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.StoreListActivity;
@@ -322,6 +323,13 @@ public class main_fragment extends Fragment {
                 getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
                 getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
                 break;
+
+            case R.id.nav_help:
+                Intent intentContactUs = new Intent(getActivity(), ContactUsActivity.class);
+                getActivity().startActivityForResult(intentContactUs, SHOULD_GET_PROFILE);
+                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+                break;
+
             default:
                 break;
         }
