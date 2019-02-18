@@ -41,7 +41,7 @@ public class Store extends ApiResponse implements Serializable {
     public boolean isAdvertise;
     public String website;
     public String address;
-    public String woopeThreshold;
+    public int woopeThreshold;
     public List<Long> categoryId;
     public List<SocialModel> socialList;
 }

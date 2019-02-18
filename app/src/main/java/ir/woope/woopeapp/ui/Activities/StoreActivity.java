@@ -295,6 +295,7 @@ public class StoreActivity extends AppCompatActivity {
         model.categoryId = store.categoryId;
         model.switchWoope = false;
         model.switchCredit = false;
+        model.woopeThreshold=store.woopeThreshold;
         model.basePrice = store.basePrice;
         model.returnPoint = store.returnPoint;
         myIntent.putExtra(PAY_LIST_ITEM, model);

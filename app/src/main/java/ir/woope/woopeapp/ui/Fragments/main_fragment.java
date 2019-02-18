@@ -167,18 +167,16 @@ public class main_fragment extends Fragment {
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    if (isVisible) {
-                        if (response.body().size() > 1) {
-                            Bundle arguments = new Bundle();
-                            arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
-                            arguments.putSerializable(LIST_MODEL, ml);
-                            arguments.putString(LIST_TITLE, ml.listTitle);
-                            Fragment woopeFilter = new filter_fragment();
-                            woopeFilter.setArguments(arguments);
-                            fragmentManager.beginTransaction()
-                                    .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
-                                    .commit();
-                        }
+                    if(isVisible){
+                        Bundle arguments = new Bundle();
+                        arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
+                        arguments.putSerializable(LIST_MODEL, ml);
+                        arguments.putString(LIST_TITLE, ml.listTitle);
+                        Fragment woopeFilter = new filter_fragment();
+                        woopeFilter.setArguments(arguments);
+                        fragmentManager.beginTransaction()
+                                .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
+                                .commit();
                     }
                 }
             }
