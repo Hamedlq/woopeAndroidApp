@@ -197,9 +197,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     }
                 }
             }
-            if (savedPayListModel.returnPoint > savedPayListModel.woopeThreshold) {
-                cash_card.setVisibility(View.GONE);
-            }
+
         } else {
             savedPayListModel = new PayListModel();
         }
@@ -328,6 +326,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         long rw = 0;
         if (savedPayListModel.returnPoint != 0) {
             rw = ((totalPrice) / savedPayListModel.basePrice) * savedPayListModel.returnPoint;
+            if (rw > savedPayListModel.woopeThreshold) {
+                cash_card.setVisibility(View.GONE);
+            }
         }
 
         return_woope.setText(String.valueOf(rw));
