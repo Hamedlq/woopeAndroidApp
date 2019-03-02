@@ -39,6 +39,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
+
 public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int MAX_CLICK_DURATION = 200;
     private Context mContext;

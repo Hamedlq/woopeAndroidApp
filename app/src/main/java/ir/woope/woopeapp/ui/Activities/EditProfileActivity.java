@@ -3,10 +3,12 @@ package ir.woope.woopeapp.ui.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,6 +29,9 @@ import com.google.gson.Gson;
 
 import co.ceryle.radiorealbutton.RadioRealButton;
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
+import ir.hamsaa.persiandatepicker.Listener;
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
+import ir.hamsaa.persiandatepicker.util.PersianCalendar;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
@@ -53,12 +58,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
     Retrofit retrofit_splash;
 
-    EditText name, family, age, phonenumber, email, bio;
+    EditText name, family, phonenumber, email, bio;
     ProgressBar editprogress;
     Button sendedit;
     Retrofit retrofit_editprofile;
     private String gender;
-    Profile profile = null;
+    Profile profile;
 
     public TextView userNameFamily;
     public TextView username;
@@ -71,6 +76,13 @@ public class EditProfileActivity extends AppCompatActivity {
     RadioButton male, female;
 
     View layout;
+
+    CardView birthDateCard;
+    TextView birthDateText;
+
+    int year,month,day;
+
+    PersianDatePickerDialog picker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,27 +100,17 @@ public class EditProfileActivity extends AppCompatActivity {
 
         name = findViewById(R.id.txtbx_name_editprofile);
         family = findViewById(R.id.txtbx_family_editprofile);
-        age = findViewById(R.id.txtbx_age_editprofile);
         email = findViewById(R.id.txtbx_email_editprofile);
         bio = findViewById(R.id.txtbx_userbio_editprofile);
         editprogress = findViewById(R.id.progressBar);
         sendedit = findViewById(R.id.button);
 
-//        final RadioRealButtonGroup group = findViewById(R.id.realradiogroup_gender_editprofile);
         genderGroup = findViewById(R.id.radiogroup_gender_editprofile);
         male = findViewById(R.id.radiobutton_male_editprofile);
         female = findViewById(R.id.radiobutton_female_editprofile);
 
-        // onClickButton listener detects any click performed on buttons by touch
-//        genderGroup.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
-//            @Override
-//            public void onClickedButton(RadioRealButton button, int position) {
-//                if (position == 0)
-//                    gender = "1";
-//                else if (position == 1)
-//                    gender = "2";
-//            }
-//        });
+        birthDateCard = findViewById(R.id.birthDateCard);
+        birthDateText = findViewById(R.id.birthDateText);
 
         genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -143,38 +145,44 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {
+
                 hideProgreeBar();
+
                 if (response.code() == 200) {
+
                     name.setText(response.body().getName());
+
                     family.setText(response.body().getFamily());
 
-                    if (response.body().getAge().equals("0")) {
-                        age.setText("");
+                    if (response.body().getAgeYear()==0) {
+                        birthDateText.setText(getResources().getString(R.string.choose));
                     } else
-                        age.setText(response.body().getAge());
+                        birthDateText.setText(response.body().getAgeYear() + "/" + response.body().getAgeMonth() + "/" + response.body().getAgeDay());
 
                     email.setText(response.body().getEmail());
+
                     bio.setText(response.body().getUserBio());
+
 //                    genderGroup.setPosition(response.body().getGender());
+
                     if (response.body().getGender() == 1)
                         male.setChecked(true);
-//                        genderGroup.setPosition(0);
                     else if (response.body().getGender() == 2)
                         female.setChecked(true);
-//                        genderGroup.setPosition(1);
+
                 }
             }
 
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
+
                 hideProgreeBar();
                 Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
             }
         });
 
-        sendedit.setOnClickListener(new View.OnClickListener()
-
-        {
+        sendedit.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
 
@@ -183,7 +191,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     editprogress.setVisibility(View.VISIBLE);
                     sendedit.setVisibility(View.GONE);
 
-                    edit.send_edit("bearer " + token, name.getText().toString(), family.getText().toString(), bio.getText().toString(), email.getText().toString(), gender, age.getText().toString()).enqueue(new Callback<ApiResponse>() {
+                    edit.send_edit("bearer " + token, name.getText().toString(), family.getText().toString(), bio.getText().toString(), email.getText().toString(), gender, "25",year,month,day).enqueue(new Callback<ApiResponse>() {
                         @Override
                         public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
@@ -198,7 +206,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_LONG);
 
-
                                 Intent i = getIntent();
                                 setResult(RESULT_OK, i);
                                 finish();
@@ -209,9 +216,9 @@ public class EditProfileActivity extends AppCompatActivity {
                                 sendedit.setVisibility(View.VISIBLE);
 
 //                                Toast.makeText(
-//                                        EditProfileActivity.this
-//                                        , response.body().getMessage(),
-//                                        Toast.LENGTH_SHORT).show();
+////                                        EditProfileActivity.this
+////                                        , response.body().getMessage(),
+////                                        Toast.LENGTH_SHORT).show();
 
                                 Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_LONG);
 
@@ -235,10 +242,6 @@ public class EditProfileActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-//                    Toast.makeText(
-//                            EditProfileActivity.this
-//                            , getResources().getString(R.string.invalid_email),
-//                            Toast.LENGTH_SHORT).show();
 
                     Utility.showSnackbar(layout, R.string.invalid_email, Snackbar.LENGTH_LONG);
 
@@ -246,8 +249,15 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-    }
+        birthDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // item clicked
+                showDatePicker();
+            }
+        });
 
+    }
 
     public Profile getUserProfile() {
         if (profile == null) {
@@ -314,12 +324,10 @@ public class EditProfileActivity extends AppCompatActivity {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-
     public void showProgreeBar() {
         editprogress.setVisibility(View.VISIBLE);
         sendedit.setEnabled(false);
     }
-
 
     public void hideProgreeBar() {
         editprogress.setVisibility(View.GONE);
@@ -330,7 +338,6 @@ public class EditProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("آیا می‌خواهید از حساب کاربری خود خارج شوید؟").setPositiveButton("بله", ConfirmDialogClickListener).setNegativeButton("نه فعلا", ConfirmDialogClickListener).show();
     }
-
 
     DialogInterface.OnClickListener ConfirmDialogClickListener = new DialogInterface.OnClickListener() {
         @Override
@@ -347,4 +354,41 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void showDatePicker()
+    {
+
+        PersianCalendar initDate = new PersianCalendar();
+        initDate.setPersianDate(year, month, day);
+
+
+
+        picker = new PersianDatePickerDialog(this)
+                .setPositiveButtonString("باشه")
+                .setNegativeButton("بیخیال")
+                .setTodayButtonVisible(false)
+                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                .setMinYear(1300)
+                .setActionTextColor(Color.GRAY)
+                .setListener(new Listener() {
+                    @Override
+                    public void onDateSelected(PersianCalendar persianCalendar) {
+                        birthDateText.setText(persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay());
+                        day=persianCalendar.getPersianDay();
+                        month=persianCalendar.getPersianMonth();
+                        year=persianCalendar.getPersianYear();
+                    }
+
+                    @Override
+                    public void onDismissed() {
+
+                    }
+                });
+
+        picker.setInitDate(initDate);
+
+        picker.show();
+
+    }
+
 }

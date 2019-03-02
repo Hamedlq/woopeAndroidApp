@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.jsibbold.zoomage.ZoomageView;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
@@ -64,7 +65,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         private TextView storeName;
         private TextView likeCount;
         private TextView productDescription;
-        private ImageView productImage;
+        private ZoomageView productImage;
         private SparkButton likeButton;
         private LinearLayout storeNameLayout;
         private Button sendOnlineRequest;

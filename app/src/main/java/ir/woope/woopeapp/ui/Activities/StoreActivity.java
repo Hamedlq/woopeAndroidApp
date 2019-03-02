@@ -144,22 +144,26 @@ public class StoreActivity extends AppCompatActivity {
         close_btn = (ImageView) dialog.findViewById(R.id.close_btn);
         confirm_pay = (TextView) dialog.findViewById(R.id.confirm_pay);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        final EditText amount = (EditText) dialog.findViewById(R.id.amount);
+        final TextView invalidPrice = (TextView) dialog.findViewById(R.id.pay_dialog_invalidPrice);
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                //Do your code here
             }
         });
 
         confirm_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToPaying();
+                if(totalPrice>0) {
+                    goToPaying();
+                }
+                else
+                    invalidPrice.setVisibility(View.VISIBLE);
             }
         });
 
-        final EditText amount = (EditText) dialog.findViewById(R.id.amount);
         amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -183,7 +187,7 @@ public class StoreActivity extends AppCompatActivity {
                     if (originalString.contains(",")) {
                         originalString = originalString.replaceAll(",", "");
                     }
-                    longval = Long.parseLong(originalString);
+                    longval = Long.parseLong(Utility.arabicToDecimal(originalString));
                     totalPrice = longval;
                     DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
                     formatter.applyPattern("#,###,###,###");
@@ -202,7 +206,6 @@ public class StoreActivity extends AppCompatActivity {
         dialog.show();
 
     }
-
 
     /* DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
          @Override
@@ -303,7 +306,6 @@ public class StoreActivity extends AppCompatActivity {
         this.finish();
     }
 
-
     public void showProgreeBar() {
         progressBar.setVisibility(View.VISIBLE);
         payBtn.setEnabled(false);
@@ -313,7 +315,6 @@ public class StoreActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         payBtn.setEnabled(true);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

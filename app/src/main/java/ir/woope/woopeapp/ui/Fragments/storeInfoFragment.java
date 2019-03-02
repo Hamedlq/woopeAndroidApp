@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,7 +76,7 @@ public class storeInfoFragment extends Fragment {
     TextView store_discount;
     TextView point_desc;
     TextView store_address;
-    TextView store_phones;
+    EditText store_phones;
     CardView desc_layout;
     CardView point_layout;
     CardView store_phones_layout;
@@ -104,7 +105,7 @@ public class storeInfoFragment extends Fragment {
         store_desc = rootView.findViewById(R.id.store_desc);
         progressBar = rootView.findViewById(R.id.progressBar_store_info);
 //        store_point = rootView.findViewById(R.id.store_point);
-        store_discount = rootView.findViewById(R.id.store_discount);
+//        store_discount = rootView.findViewById(R.id.store_discount);
         point_desc = rootView.findViewById(R.id.point_desc);
         store_address = rootView.findViewById(R.id.store_address);
         store_phones = rootView.findViewById(R.id.store_phones);

@@ -80,7 +80,7 @@
                     android:text="با ارایه این کد به فروشگاه خرید کامل خواهد شد" />
 
                 <TextView
-                    android:id="@+id/ConfirmCode"
+                    android:id="@+id/ConfirmCode_code_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
