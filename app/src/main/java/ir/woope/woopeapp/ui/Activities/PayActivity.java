@@ -190,7 +190,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             } else {
                 if (savedPayListModel.categoryId != null) {
                     for (long cId : savedPayListModel.categoryId) {
-                        if (cId == Categories.OnlineService.value()) {
+                        if (cId == Categories.OnlineService.value()||cId == Categories.ChargeStore.value()) {
                             cash_card.setVisibility(View.GONE);
                         }
                     }

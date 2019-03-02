@@ -60,7 +60,7 @@ public class PayCodeActivity extends AppCompatActivity {
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
             if (payListModel.categoryId != null) {
                 for (long cId : payListModel.categoryId) {
-                    if (cId == Categories.OnlineService.value()) {
+                    if (cId == Categories.OnlineService.value() ||cId == Categories.ChargeStore.value()) {
                         pay_msg.setVisibility(View.GONE);
                     }
                 }
