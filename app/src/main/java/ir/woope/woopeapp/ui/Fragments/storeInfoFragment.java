@@ -35,6 +35,7 @@ import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.Categories;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.SocialModel;
 import ir.woope.woopeapp.models.Store;
@@ -58,6 +59,14 @@ public class storeInfoFragment extends Fragment {
         if (getActivity().getIntent() != null && getActivity().getIntent().getExtras() != null) {
 //            profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             store = (Store) getActivity().getIntent().getExtras().getSerializable(STORE);
+            vip_store_layout.setVisibility(View.GONE);
+            if (store.categoryId != null) {
+                for (long cId : store.categoryId) {
+                    if (cId == Categories.VipService.value()) {
+                        vip_store_layout.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
 //            Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(logo);
         }
 

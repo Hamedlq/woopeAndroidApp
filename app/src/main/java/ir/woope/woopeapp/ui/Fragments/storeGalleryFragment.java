@@ -155,7 +155,7 @@ public class storeGalleryFragment extends Fragment implements ItemClickListener 
         if (!searchInProgress) {
             searchInProgress = true;
             Call<List<StoreGalleryItem>> call =
-                    providerApiInterface.getActiveBranchProduct("bearer " + authToken, null, branchId, pageNumber, 9);
+                    providerApiInterface.getActiveBranchProduct("bearer " + authToken, null, branchId, pageNumber, 500);
 
             call.enqueue(new Callback<List<StoreGalleryItem>>() {
                 @Override
