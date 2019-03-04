@@ -68,9 +68,10 @@ public class PayCodeActivity extends AppCompatActivity {
             //payedPoints = getIntent().getStringExtra(POINTS_PAYED);
         }
 
-        TextView ConfirmCode = findViewById(R.id.ConfirmCode);
+        TextView ConfirmCode = findViewById(R.id.ConfirmCode_code_pay);
 
         //TextView StoreName_tv=findViewById(R.id.StoreName);
+
         StoreName_tv.setText(payListModel.storeName);
 
         ConfirmCode.setText(payListModel.confirmationCode);

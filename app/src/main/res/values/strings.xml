@@ -131,4 +131,9 @@ info@woope.ir
 
     <string name="help">راهنما</string>
 
+    <string name="invalid_price">مبلغ نامعتبر</string>
+
+    <string name="BirthDate">تاریخ تولد</string>
+    <string name="choose">انتخاب کنید</string>
+
 </resources>

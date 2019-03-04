@@ -16,9 +16,15 @@ public final class Constants {
 
         }
 
-//        public static final String BASE_URL = "http://192.168.100.3:8090";
+<<<<<<< Updated upstream
+//        public static final String BASE_URL = "http://192.168.100.3:80";
 
 //        public static final String BASE_URL = "http://192.168.100.3/";
+=======
+//        public static final String BASE_URL = "http://192.168.100.3:8090";
+        //public static final String BASE_URL = "http://192.168.100.2/";
+        //public static final String BASE_URL = "http://localhost/";
+>>>>>>> Stashed changes
 //
 //        public static final String BASE_URL = "http://localhost:58795/";
 
@@ -32,7 +38,7 @@ public final class Constants {
 
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 
-        public static final String BASE_URL = "http://mywoope.com/";
+        public static final String BASE_URL = "https://mywoope.com/";
 
     }
 

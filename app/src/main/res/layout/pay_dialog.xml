@@ -34,7 +34,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="center"
                 android:text="مبلغ پرداختی خود را وارد کنید"
                 android:textSize="12sp" />
@@ -62,6 +61,19 @@
 
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/pay_dialog_invalidPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/invalid_price"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

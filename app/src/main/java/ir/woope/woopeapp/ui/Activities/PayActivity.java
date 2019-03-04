@@ -176,7 +176,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
         ButterKnife.bind(this);
         //amount.addTextChangedListener(onTextChangedListener());
 
@@ -811,6 +810,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
             @Override
             public void onFailure(Call<PayListModel> call, Throwable t) {
+
                 hideProgreeBar();
                 Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
 

@@ -21,6 +21,10 @@ public class Profile extends ApiResponse implements Serializable {
     private long moneyCredit;
     private int transactionCount = 0;
 
+    private int birthYear;
+    private int birthMonth;
+    private int birthDay;
+
     public Profile() {
         name = "";
         family = "";
@@ -136,4 +140,20 @@ public class Profile extends ApiResponse implements Serializable {
     public String getImageSrc() {
         return imageSrc;
     }
+
+    public int getAgeYear() {
+        return birthYear;
+    }
+    public int getAgeMonth() {
+        return birthMonth;
+    }
+    public int getAgeDay() {
+        return birthDay;
+    }
+
+    public void setBirthYear(int year) { this.birthYear = year; }
+    public void setBirthMonth(int month) {
+        this.birthMonth = month;
+    }
+    public void setBirthDay(int day) { this.birthDay = day; }
 }

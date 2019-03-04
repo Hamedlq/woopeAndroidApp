@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long mLastClickTime = 0;
 
-    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite = false;
+//    boolean IsOnHome = false, IsOnSearch = false, IsOnProfile = false, IsOnFavorite = false;
 
     UCrop.Options options;
     private String pictureImagePath = "";
@@ -113,7 +113,103 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView navigation;
 
-    FragmentManager fragmentManager = getSupportFragmentManager();
+    final Fragment homeFragment = new main_fragment();
+    final Fragment searchFragment = new search_fragment();
+    final Fragment favoritesFragment = new profileBookmarkFragment();
+    final Fragment productHomeFragment = new product_home_fragment();
+    final Fragment profileFragment = new profile_fragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active = homeFragment;
+
+//    FragmentManager fragmentManager = getSupportFragmentManager();
+//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//
+//        @Override
+//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.navigation_home:
+//                    if (!IsOnHome) {
+//                        //mTextMessage.setText(R.string.title_home);
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+//                            break;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        fragmentManager.beginTransaction()
+//                                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
+//                                .commit();
+//                        IsOnHome = true;
+//                        IsOnSearch = false;
+//                        IsOnProfile = false;
+//                        IsOnFavorite = false;
+//                        return true;
+//                    } else break;
+//                case R.id.navigation_‌search:
+//                    if (!IsOnSearch) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+//                            break;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        fragmentManager.beginTransaction()
+//                                .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
+//                                .commit();
+//                        IsOnSearch = true;
+//                        IsOnHome = false;
+//                        IsOnProfile = false;
+//                        IsOnFavorite = false;
+//                        return true;
+//                    } else break;
+//                case R.id.navigation_favorite:
+//                    if (!IsOnFavorite) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+//                            break;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        fragmentManager.beginTransaction()
+//                                .replace(R.id.frame_layout, new profileBookmarkFragment(), SEARCH_FRAGMENT)
+//                                .commit();
+//                        IsOnFavorite = true;
+//                        IsOnSearch = false;
+//                        IsOnHome = false;
+//                        IsOnHome = false;
+//                        IsOnProfile = false;
+//                        return true;
+//                    } else break;
+//                case R.id.navigation_profile:
+//                    if (!IsOnProfile) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+//                            break;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        //mTextMessage.setText(R.string.title_notifications);
+//                        fragmentManager.beginTransaction()
+//                                .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
+//                                .commit();
+//                        IsOnProfile = true;
+//                        IsOnHome = false;
+//                        IsOnSearch = false;
+//                        IsOnFavorite = false;
+//                        return true;
+//                    } else break;
+//                case R.id.navigation_woope:
+//                    if (!IsOnProfile) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+//                            break;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        //mTextMessage.setText(R.string.title_notifications);
+//
+//                        IsOnProfile = false;
+//                        IsOnHome = false;
+//                        IsOnSearch = false;
+//                        IsOnFavorite = false;
+//                        return true;
+//                    } else break;
+//            }
+//            return false;
+//        }
+//    };
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -121,92 +217,55 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    if (!IsOnHome) {
-                        //mTextMessage.setText(R.string.title_home);
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                            break;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
-                                .commit();
-                        IsOnHome = true;
-                        IsOnSearch = false;
-                        IsOnProfile = false;
-                        IsOnFavorite = false;
-                        return true;
-                    } else break;
-                case R.id.navigation_‌search:
-                    if (!IsOnSearch) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                            break;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
-                                .commit();
-                        IsOnSearch = true;
-                        IsOnHome = false;
-                        IsOnProfile = false;
-                        IsOnFavorite = false;
-                        return true;
-                    } else break;
-                case R.id.navigation_favorite:
-                    if (!IsOnFavorite) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                            break;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout, new profileBookmarkFragment(), SEARCH_FRAGMENT)
-                                .commit();
-                        IsOnFavorite = true;
-                        IsOnSearch = false;
-                        IsOnHome = false;
-                        IsOnHome = false;
-                        IsOnProfile = false;
-                        return true;
-                    } else break;
-                case R.id.navigation_profile:
-                    if (!IsOnProfile) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                            break;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        //mTextMessage.setText(R.string.title_notifications);
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
-                                .commit();
-                        IsOnProfile = true;
-                        IsOnHome = false;
-                        IsOnSearch = false;
-                        IsOnFavorite = false;
-                        return true;
-                    } else break;
-                case R.id.navigation_woope:
-                    if (!IsOnProfile) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                            break;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        //mTextMessage.setText(R.string.title_notifications);
 
-                        IsOnProfile = false;
-                        IsOnHome = false;
-                        IsOnSearch = false;
-                        IsOnFavorite = false;
-                        return true;
-                    } else break;
+                    //mTextMessage.setText(R.string.title_home);
+                    fm.beginTransaction().hide(active).show(homeFragment).commit();
+                    active = homeFragment;
+                    return true;
+
+                case R.id.navigation_‌search:
+
+                    fm.beginTransaction().hide(active).show(searchFragment).commit();
+                    active = searchFragment;
+                    return true;
+
+                case R.id.navigation_favorite:
+
+                    fm.beginTransaction().hide(active).show(favoritesFragment).commit();
+                    active = favoritesFragment;
+                    return true;
+
+                case R.id.navigation_profile:
+
+                    fm.beginTransaction().hide(active).show(profileFragment).commit();
+                    active = profileFragment;
+                    return true;
+
+                case R.id.navigation_woope:
+
+                    fm.beginTransaction().hide(active).show(productHomeFragment).commit();
+                    active = productHomeFragment;
+                    return true;
+
             }
             return false;
         }
     };
+
+
 
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, productHomeFragment, "3").hide(productHomeFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, searchFragment, "2").hide(searchFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").commit();
+
         layout = findViewById(R.id.activity_main);
         if (getIntent() != null && getIntent().getExtras() != null) {
             getProfileFromServer = getIntent().getBooleanExtra(GET_PROFILE_FROM_SERVER, false);
@@ -248,10 +307,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);*/
         sendRegistrationToServer();
         //getProfileFromServer();
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
-                .commit();
+//        final FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
+//                .commit();
 
         Pushe.initialize(this, true);
 
@@ -274,18 +333,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, new product_home_fragment(), PRODUCT_HOME_FRAGMENT)
-                        .commit();
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.frame_layout, new product_home_fragment(), PRODUCT_HOME_FRAGMENT)
+//                        .commit();
+
+
 
                 View v = navigation.findViewById(R.id.navigation_woope);
                 v.performClick();
 
 
-                IsOnHome = false;
-                IsOnSearch = false;
-                IsOnProfile = false;
-                IsOnFavorite = false;
+//                IsOnHome = false;
+//                IsOnSearch = false;
+//                IsOnProfile = false;
+//                IsOnFavorite = false;
 
 //                Profile obj = getUserProfile();
 //                Intent myIntent = new Intent(MainActivity.this, ProductHomeActivity.class);
@@ -350,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
                     String json = gson.toJson(profile);
                     prefsEditor.putString(PROFILE, json);
                     prefsEditor.apply();
-                    Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+                    Fragment fragment = fm.findFragmentByTag(PROFILE_FRAGMENT);
                     if (fragment != null) {
                         ((profile_fragment) fragment).setValues(profile);
                     }
@@ -780,7 +841,7 @@ public class MainActivity extends AppCompatActivity {
                 int code = response.code();
                 if (code == 200) {
                     ApiResponse i = response.body();
-                    Fragment fragment = fragmentManager.findFragmentByTag(PROFILE_FRAGMENT);
+                    Fragment fragment = fm.findFragmentByTag(PROFILE_FRAGMENT);
                     if (fragment != null) {
                         ((profile_fragment) fragment).setPhoto(i.getMessage());
                     }

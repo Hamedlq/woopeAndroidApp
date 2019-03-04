@@ -104,6 +104,7 @@ public class main_fragment extends Fragment {
         mRecycler = inflater.inflate(R.layout.fragment_main, null);
         ButterKnife.bind(this, mRecycler);
         setHasOptionsMenu(true);
+
        /* categoryList = new ArrayList<>();
         categoryList.add(new Category("همه", 5));
         categoryList.add(new Category("dolam", 5));*/
@@ -112,7 +113,6 @@ public class main_fragment extends Fragment {
         //category_recycler.setLayoutManager(layoutManager);
         //category_adapter = new CategoryAdapter(getActivity(), categoryList);
         //category_recycler.setAdapter(category_adapter);
-
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -123,7 +123,7 @@ public class main_fragment extends Fragment {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     MainListModel ml = new MainListModel();
                     ml.listOrder = 81;
-                    Intent store_list = new Intent(getActivity(),
+                    Intent store_list = new Intent(getContext(),
                             StoreListActivity.class);
                     store_list.putExtra(LIST_MODEL, ml);
 
@@ -152,7 +152,7 @@ public class main_fragment extends Fragment {
                 retrofit.create(StoreInterface.class);
 
         SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
@@ -211,7 +211,7 @@ public class main_fragment extends Fragment {
                 retrofit.create(StoreInterface.class);
 
         SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
@@ -259,7 +259,7 @@ public class main_fragment extends Fragment {
                 retrofit.create(StoreInterface.class);
 
         SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
@@ -290,13 +290,13 @@ public class main_fragment extends Fragment {
     private void showLists() {
         for (MainListModel ml : mainFilterList) {
             if (ml.listType == ListTypes.MallList) {
-                FrameLayout childLayout = new FrameLayout(getActivity());
+                FrameLayout childLayout = new FrameLayout(getContext());
                 childLayout.setId(ml.listOrder);
                 FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 container_layout.addView(childLayout, parentParams);
                 getMalls(childLayout, ml);
             } else if (ml.listType == ListTypes.StoreList) {
-                FrameLayout childLayout = new FrameLayout(getActivity());
+                FrameLayout childLayout = new FrameLayout(getContext());
                 childLayout.setId(ml.listOrder);
                 FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 container_layout.addView(childLayout, parentParams);

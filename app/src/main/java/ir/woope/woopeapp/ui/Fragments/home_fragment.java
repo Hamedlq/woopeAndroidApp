@@ -136,11 +136,11 @@ public class home_fragment extends Fragment {
             public void onCardViewTap(View view, int position) {
                 Store s = albumList.get(position);
                 final SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                        getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
                 Gson gson = new Gson();
                 String json = prefs.getString(PROFILE, "");
                 Profile obj = gson.fromJson(json, Profile.class);
-                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
+                Intent myIntent = new Intent(getContext(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra(STORE, s); //Optional parameters
                 getActivity().startActivityForResult(myIntent, RELOAD_LIST);
@@ -182,8 +182,8 @@ public class home_fragment extends Fragment {
         //toolbar.setTitle(R.string.app_name);
 
         albumList = new ArrayList<>();
-        adapter = new StoresAdapter(getActivity(), albumList, itemTouchListener, this);
-        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity());
+        adapter = new StoresAdapter(getContext(), albumList, itemTouchListener, this);
+        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getContext());
         mLayoutManager = linearlayoutmanager;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new ListPaddingDecoration());
@@ -258,7 +258,7 @@ public class home_fragment extends Fragment {
         StoreInterface providerApiInterface =
                 retrofit.create(StoreInterface.class);
 
-        final SharedPreferences settings = getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        final SharedPreferences settings = getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = settings.getString(TOKEN, null);
 
         Call<ApiResponse> call =
@@ -371,7 +371,7 @@ public class home_fragment extends Fragment {
                 retrofit.create(StoreInterface.class);
 
         SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
@@ -524,7 +524,7 @@ public class home_fragment extends Fragment {
                     public void onSequenceFinish() {
 
                         SharedPreferences prefs =
-                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
 
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean("HOMEFIRSTRUN", false);

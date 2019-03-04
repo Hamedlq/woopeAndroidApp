@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jsibbold.zoomage.ZoomageView;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
@@ -41,7 +42,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 
 public class ProductActivity extends AppCompatActivity {
 
-    ImageView productImage;
+    ZoomageView productImage;
     TextView productDescription;
 
     StoreGalleryItem product;
@@ -65,6 +66,7 @@ public class ProductActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
+
         setContentView(R.layout.activity_product);
         context = this;
         productImage = findViewById(R.id.productImage);
@@ -82,11 +84,8 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View arg0) {
-
                 sendOnlineRequest(product.id);
-
             }
         });
 
@@ -100,7 +99,6 @@ public class ProductActivity extends AppCompatActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
 
             product = (StoreGalleryItem) getIntent().getSerializableExtra("product");
-
             getProduct(product.id, product.branchId);
 
         }
@@ -136,9 +134,7 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         return true;
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

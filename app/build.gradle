@@ -124,6 +124,8 @@ dependencies {
         transitive = true;
     }
 
-//    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.jsibbold:zoomage:1.2.0'
+
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.4'
 
 }

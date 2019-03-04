@@ -75,6 +75,7 @@
             android:name=".ui.Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label=""
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
 
         </activity>
