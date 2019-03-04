@@ -274,7 +274,6 @@ public class profileBookmarkFragment extends Fragment {
 
     }
 
-
     public interface BookmarkTouchListener {
         public void onCardViewTap(int position);
 
@@ -287,6 +286,15 @@ public class profileBookmarkFragment extends Fragment {
 
     public void hideProgreeBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        boolean isHidden = hidden;
+        if (!isHidden) {
+            getOrderListFromServer();
+        }
     }
 
 }

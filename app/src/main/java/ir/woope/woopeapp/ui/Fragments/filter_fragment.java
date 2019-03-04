@@ -81,9 +81,9 @@ public class filter_fragment extends Fragment {
         ButterKnife.bind(this, mRecycler);
         title.setText(listTitle);
         List<Store> albumList = new ArrayList<>();
-        FilterAdapter adapter = new FilterAdapter(getActivity(), albumList, itemTouchListener);
+        FilterAdapter adapter = new FilterAdapter(getContext(), albumList, itemTouchListener);
         LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true);
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         filter_recycler.setLayoutManager(layoutManager);
 
         filter_recycler.setItemAnimator(new DefaultItemAnimator());
@@ -93,7 +93,7 @@ public class filter_fragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
 
-                    Intent store_list = new Intent(getActivity(),
+                    Intent store_list = new Intent(getContext(),
                             StoreListActivity.class);
                     store_list.putExtra(LIST_MODEL, model);
 
@@ -110,18 +110,18 @@ public class filter_fragment extends Fragment {
 
                 Store s = stores.get(position);
                 final SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                        getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
                 Gson gson = new Gson();
                 String json = prefs.getString(PROFILE, "");
                 Profile obj = gson.fromJson(json, Profile.class);
-                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
+                Intent myIntent = new Intent(getContext(), StoreActivity.class);
                 myIntent.putExtra(PREF_PROFILE, obj);
                 myIntent.putExtra(STORE, s); //Optional parameters
                 getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
             }
         };
-        adapter = new FilterAdapter(getActivity(), stores, itemTouchListener);
+        adapter = new FilterAdapter(getContext(), stores, itemTouchListener);
         filter_recycler.setAdapter(adapter);
 
         return mRecycler;

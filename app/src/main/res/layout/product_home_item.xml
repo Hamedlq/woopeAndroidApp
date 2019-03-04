@@ -56,11 +56,24 @@
                     android:layout_height="match_parent"
                     android:gravity="center">
 
-                    <ImageView
+                    <!--<ImageView-->
+                        <!--android:id="@+id/product_home_item_Image"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:background="@color/colorPrimary" />-->
+
+                    <com.jsibbold.zoomage.ZoomageView
                         android:id="@+id/product_home_item_Image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/colorPrimary" />
+                        app:zoomage_animateOnReset="true"
+                        app:zoomage_autoResetMode="ALWAYS"
+                        app:zoomage_zoomable="true"
+                        app:zoomage_doubleTapToZoom="false"
+                        app:zoomage_minScale="0.6"
+                        app:zoomage_maxScale="8"
+                        android:background="@color/colorPrimary"
+                        />
 
                     <com.wang.avi.AVLoadingIndicatorView
                         android:id="@+id/loading_product_home_item"

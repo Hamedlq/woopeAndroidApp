@@ -250,6 +250,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        UpdateProfileDetails();
 
         history_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -378,11 +379,15 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         return Uri.parse(path);
     }
 
+    Bundle savedState;
+
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         layout = getView().findViewById(R.id.activity_fragment_user_profile);
+
+        savedState = savedInstanceState;
 
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         //this.profilePhoto = getString(R.string.user_profile_photo);
@@ -410,7 +415,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                         @Override
                         public void run() {
                             // Code to run once
-                            showHint();
+//                            showHint();
                         }
                     });
                 }
@@ -606,7 +611,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         });
     }
 
-
     public void GetProfilePicture() {
 
         Retrofit getProfile;
@@ -673,7 +677,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
                     Profile user = response.body();
 
-
                     userNameFamily.setText(user.getName() + " " + user.getFamily());
                     username.setText(user.getUsername());
                     userBio.setText(user.getUserBio());
@@ -693,7 +696,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         });
 
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -716,167 +718,186 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         return true;
     }
 
-    public void showHint() {
-
-
-        final TapTargetSequence sequence = new TapTargetSequence(getActivity())
-                .targets(
-                        // Likewise, this tap target will target the search button
-                        TapTarget.forToolbarMenuItem(toolbar, R.id.nav_edit_profile, "ویرایش پروفایل", "از اینجا پروفایل خودتون رو ویرایش کنید\n یا از حساب کاربریتون خارج شید")
-                                // All options below are optional
-                                .outerCircleColor(R.color.emerald)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(true)                   // Whether to tint the target view's color
-                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(60),
-                        TapTarget.forView(getView().findViewById(R.id.ivUserProfilePhoto), "عکس پروفایل", "عکس پروفایل خودتون رو ویرایش کنید")
-                                // All options below are optional
-                                .outerCircleColor(R.color.sun_flower)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(false)                   // Whether to tint the target view's color
-                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(60),
-                        TapTarget.forView(getView().findViewById(R.id.buyCountCard), "تعداد خرید", "تعداد دفعات خریدتون رو میتونید در اینجا ببینید")
-                                // All options below are optional
-                                .outerCircleColor(R.color.peter_river)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(false)                   // Whether to tint the target view's color
-                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(70),
-                        TapTarget.forView(getView().findViewById(R.id.woopeCountCard), "تعداد ووپ", "اینجا میتونید ببینید چند تا ووپ دارین \n هر ووپ 1000 تومان")
-                                // All options below are optional
-                                .outerCircleColor(R.color.alizarin)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(false)                   // Whether to tint the target view's color
-                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(70),
-                        TapTarget.forView(getView().findViewById(R.id.creditCountCard), "اعتبار", "اینجا میتونید ببینید چقدر اعتبار تومانی توی کیف پولتون هست")
-                                // All options below are optional
-                                .outerCircleColor(R.color.carrot)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(false)                   // Whether to tint the target view's color
-                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(70),
-                        TapTarget.forView(getView().findViewById(R.id.transactionHistoryText), "تاریخچه پرداخت ها", "در اینجا میتونید تاریخچه پرداخت هاتون رو با جزییات ببینید")
-                                // All options below are optional
-                                .outerCircleColor(R.color.silver)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(true)                   // Whether to tint the target view's color
-                                .transparentTarget(true)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(60),
-                        TapTarget.forView(getActivity().findViewById(R.id.fab), "لیست پرداخت ها", "پیش فاکتور هایی را که توسط فروشنده برای شما ایجاد میشود را میتوانید در اینجا ببینید")
-                                // All options below are optional
-                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
-                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                                .tintTarget(true)                   // Whether to tint the target view's color
-                                .transparentTarget(true)// Specify whether the target is transparent (displays the content underneath)
-                                .targetRadius(35)
-
-                )
-                .listener(new TapTargetSequence.Listener() {
-                    // This listener will tell us when interesting(tm) events happen in regards
-                    // to the sequence
-                    @Override
-                    public void onSequenceFinish() {
-
-                        SharedPreferences prefs =
-                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean(FIRST_RUN_PROFILE_FRAGMENT, false);
-                        editor.commit();
-
-                    }
-
-                    @Override
-                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-//                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
-                    }
-
-                    @Override
-                    public void onSequenceCanceled(TapTarget lastTarget) {
-//                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
-//                                .setTitle("Uh oh")
-//                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
+//    public void showHint() {
 //
-//                        TapTargetView.showFor(dialog,
-//                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
-//                                        .cancelable(false)
-//                                        .tintTarget(false), new TapTargetView.Listener() {
-//                                    @Override
-//                                    public void onTargetClick(TapTargetView view) {
-//                                        super.onTargetClick(view);
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-                    }
-                });
+//
+//        final TapTargetSequence sequence = new TapTargetSequence(getActivity())
+//                .targets(
+//                        // Likewise, this tap target will target the search button
+//                        TapTarget.forToolbarMenuItem(toolbar, R.id.nav_edit_profile, "ویرایش پروفایل", "از اینجا پروفایل خودتون رو ویرایش کنید\n یا از حساب کاربریتون خارج شید")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.emerald)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(true)                   // Whether to tint the target view's color
+//                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(60),
+//                        TapTarget.forView(getView().findViewById(R.id.ivUserProfilePhoto), "عکس پروفایل", "عکس پروفایل خودتون رو ویرایش کنید")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.sun_flower)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(false)                   // Whether to tint the target view's color
+//                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(60),
+//                        TapTarget.forView(getView().findViewById(R.id.buyCountCard), "تعداد خرید", "تعداد دفعات خریدتون رو میتونید در اینجا ببینید")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.peter_river)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(false)                   // Whether to tint the target view's color
+//                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(70),
+//                        TapTarget.forView(getView().findViewById(R.id.woopeCountCard), "تعداد ووپ", "اینجا میتونید ببینید چند تا ووپ دارین \n هر ووپ 1000 تومان")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.alizarin)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(false)                   // Whether to tint the target view's color
+//                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(70),
+//                        TapTarget.forView(getView().findViewById(R.id.creditCountCard), "اعتبار", "اینجا میتونید ببینید چقدر اعتبار تومانی توی کیف پولتون هست")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.carrot)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(false)                   // Whether to tint the target view's color
+//                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(70),
+//                        TapTarget.forView(getView().findViewById(R.id.transactionHistoryText), "تاریخچه پرداخت ها", "در اینجا میتونید تاریخچه پرداخت هاتون رو با جزییات ببینید")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.silver)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(true)                   // Whether to tint the target view's color
+//                                .transparentTarget(true)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(60),
+//                        TapTarget.forView(getActivity().findViewById(R.id.fab), "لیست پرداخت ها", "پیش فاکتور هایی را که توسط فروشنده برای شما ایجاد میشود را میتوانید در اینجا ببینید")
+//                                // All options below are optional
+//                                .outerCircleColor(R.color.colorPrimary)      // Specify a color for the outer circle
+//                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+//                                .tintTarget(true)                   // Whether to tint the target view's color
+//                                .transparentTarget(true)// Specify whether the target is transparent (displays the content underneath)
+//                                .targetRadius(35)
+//
+//                )
+//                .listener(new TapTargetSequence.Listener() {
+//                    // This listener will tell us when interesting(tm) events happen in regards
+//                    // to the sequence
+//                    @Override
+//                    public void onSequenceFinish() {
+//
+//                        SharedPreferences prefs =
+//                                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//
+//                        SharedPreferences.Editor editor = prefs.edit();
+//                        editor.putBoolean(FIRST_RUN_PROFILE_FRAGMENT, false);
+//                        editor.commit();
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+////                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+//                    }
+//
+//                    @Override
+//                    public void onSequenceCanceled(TapTarget lastTarget) {
+////                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
+////                                .setTitle("Uh oh")
+////                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
+////
+////                        TapTargetView.showFor(dialog,
+////                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
+////                                        .cancelable(false)
+////                                        .tintTarget(false), new TapTargetView.Listener() {
+////                                    @Override
+////                                    public void onTargetClick(TapTargetView view) {
+////                                        super.onTargetClick(view);
+////                                        dialog.dismiss();
+////                                    }
+////                                });
+//                    }
+//                });
+//
+//        sequence.start();
+//
+//    }
 
-        sequence.start();
-
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        boolean isHidden = hidden;
+        if (!isHidden && savedState == null) {
+            setupRevealBackground(savedState);
+            UpdateProfileDetails();
+        }
+    }
 }
