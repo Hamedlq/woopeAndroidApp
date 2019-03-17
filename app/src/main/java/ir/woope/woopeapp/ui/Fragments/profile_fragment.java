@@ -240,8 +240,27 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
         //Initializing viewPager
         //viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
-        toolbar = (Toolbar) mRecycler.findViewById(R.id.toolbar);
+        toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_profile);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_edit_profile:
+                        Intent giftIntent = new Intent(getActivity(), EditProfileActivity.class);
+                        getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
+                        getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+
+            }
+        });
+
         return mRecycler;
     }
 
@@ -399,7 +418,6 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         setupRevealBackground(savedInstanceState);
 
         GetProfilePicture();
-
 
         SharedPreferences prefs =
                 getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
@@ -699,8 +717,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_profile, menu);
+//        menu.clear();
+//        inflater.inflate(R.menu.menu_profile, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
