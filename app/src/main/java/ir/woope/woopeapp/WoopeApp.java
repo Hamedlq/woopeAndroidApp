@@ -2,7 +2,7 @@ package ir.woope.woopeapp;
 
 import android.app.Application;
 import android.os.StrictMode;
-
+import android.support.v7.app.AppCompatDelegate;
 
 
 import ir.woope.woopeapp.helpers.FontsOverride;
@@ -22,5 +22,6 @@ public class WoopeApp extends Application {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 }

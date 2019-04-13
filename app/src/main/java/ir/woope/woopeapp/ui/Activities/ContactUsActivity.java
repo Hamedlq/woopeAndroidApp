@@ -64,20 +64,20 @@ public class ContactUsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
 
-//        WebView myWebView = (WebView) findViewById(R.id.contactUs_webView);
-////        myWebView.getSettings().setJavaScriptEnabled(true);
-////        myWebView.loadUrl("https://woope.ir/#tellus");
-////        showProgreeBar();
-////
-////        myWebView.setWebViewClient(new WebViewClient() {
-////
-////            public void onPageFinished(WebView view, String url) {
-////
-////                hideProgreeBar();
-////
-////            }
-////
-////        });
+        WebView myWebView = (WebView) findViewById(R.id.contactUs_webView);
+        myWebView.getSettings().setJavaScriptEnabled(true);
+        myWebView.loadUrl("https://woope.ir/contactus");
+        showProgreeBar();
+
+        myWebView.setWebViewClient(new WebViewClient() {
+
+            public void onPageFinished(WebView view, String url) {
+
+                hideProgreeBar();
+
+            }
+
+        });
 
     }
 

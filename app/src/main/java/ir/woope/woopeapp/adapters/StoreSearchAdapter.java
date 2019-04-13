@@ -178,8 +178,6 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
             store.isFollowed = false;
             holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
         }
-
-
     }
 
     /**
