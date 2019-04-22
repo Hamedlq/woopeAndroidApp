@@ -196,7 +196,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     }
                 }
             }
-
         } else {
             savedPayListModel = new PayListModel();
         }
@@ -567,13 +566,13 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     savedPayListModel = model;
                     savedPayListModel.categoryId = temp.categoryId;
                     //PayState sp = (PayState) spinner.getSelectedItem();
-                    if (!isOnline) {
-                        //go to cash pay
-                        gotoPayCash(model);
-                    } else {
+//                    if (!isOnline) {
+//                        //go to cash pay
+//                        gotoPayCash(model);
+//                    } else {
                         //go to credit pay
                         setNext(model);
-                    }
+                    //}
                 }
             }
 

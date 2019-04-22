@@ -32,7 +32,7 @@ public interface TransactionInterface {
     );
 
     @FormUrlEncoded
-    @POST("api/Transaction/GetConfirmCode")
+    @POST("api/Transaction/GetConfirmCodeNew")
     Call<PayListModel> GetConfirmCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Field("Id") long paylistId);
 
