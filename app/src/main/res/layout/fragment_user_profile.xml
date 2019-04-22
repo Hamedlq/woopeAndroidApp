@@ -64,14 +64,12 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-
                     </android.support.constraint.ConstraintLayout>
-
 
                 </android.support.constraint.ConstraintLayout>
 
                 <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/home_fragment_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:background="@drawable/profile"

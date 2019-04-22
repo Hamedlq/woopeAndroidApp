@@ -90,7 +90,6 @@ public interface StoreInterface {
                                      @Field("ImageID") long imageId);
 
     @GET("api/Branch/NonCooperation")
-    @FormUrlEncoded
     Call<ApiResponse> notCooperating(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                      @Query("BranchId") long branchId);
 

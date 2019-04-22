@@ -65,14 +65,18 @@ public class ContactUsActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
 
         WebView myWebView = (WebView) findViewById(R.id.contactUs_webView);
-        myWebView.loadUrl("http://www.google.com");
+        myWebView.getSettings().setJavaScriptEnabled(true);
+        myWebView.loadUrl("https://woope.ir/contactus");
         showProgreeBar();
 
         myWebView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
+
                 hideProgreeBar();
+
             }
+
         });
 
     }
@@ -83,7 +87,6 @@ public class ContactUsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         return true;
-
     }
 
 

@@ -187,7 +187,7 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
     private int getProductsByPage(final int pageNumber) {
 
-//        showProgreeBar();
+        showProgreeBar();
 
         itShouldLoadMore = false;
 
@@ -210,7 +210,7 @@ public class product_home_fragment extends Fragment implements ItemClickListener
         call.enqueue(new Callback<List<StoreGalleryItem>>() {
             @Override
             public void onResponse(Call<List<StoreGalleryItem>> call, Response<List<StoreGalleryItem>> response) {
-//                hideProgreeBar();
+
                 int code = response.code();
                 if (code == 200) {
 
@@ -223,6 +223,8 @@ public class product_home_fragment extends Fragment implements ItemClickListener
                         adapter.addItem(response.body());
 
                         PageNumber++;
+
+                        hideProgreeBar();
 
                     }
 
@@ -376,6 +378,8 @@ public class product_home_fragment extends Fragment implements ItemClickListener
     private void showProgreeBar() {
         progressBar.smoothToShow();
     }
+
+    private void showLoading(){}
 
 
 }

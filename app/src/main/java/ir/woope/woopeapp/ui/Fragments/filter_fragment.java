@@ -57,9 +57,7 @@ public class filter_fragment extends Fragment {
     private List<Store> stores;
     private String listTitle;
     private MainListModel model;
-
     private FilterAdapter filter_adapter;
-
     filter_fragment.ItemTouchListener itemTouchListener;
 
     @Override

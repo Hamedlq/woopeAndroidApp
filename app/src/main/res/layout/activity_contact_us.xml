@@ -35,7 +35,6 @@
 
         <WebView
             android:id="@+id/contactUs_webView"
-            android:layout_alignTop="@id/toolbar_shadow"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

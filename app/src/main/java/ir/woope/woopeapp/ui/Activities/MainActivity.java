@@ -465,7 +465,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -514,7 +513,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -576,7 +574,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;

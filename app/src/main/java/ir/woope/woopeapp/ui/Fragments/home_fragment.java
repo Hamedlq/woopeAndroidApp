@@ -124,7 +124,6 @@ public class home_fragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
 
-
         stores = new ArrayList<>();
 
         getActivity().setTitle("");
@@ -171,7 +170,6 @@ public class home_fragment extends Fragment {
         progressBar = (ProgressBar) mRecycler.findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) mRecycler.findViewById(R.id.recycler_view);
-
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -293,7 +291,7 @@ public class home_fragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_navigation, menu);
+//        inflater.inflate(R.menu.menu_navigation, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

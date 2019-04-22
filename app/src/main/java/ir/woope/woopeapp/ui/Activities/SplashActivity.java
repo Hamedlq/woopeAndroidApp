@@ -154,7 +154,7 @@ public class SplashActivity extends AppCompatActivity {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://woope.ir/app/woope.apk"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://woope.ir/app/woope.apk"));
                     startActivity(browserIntent);
 
                     break;
