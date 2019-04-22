@@ -165,7 +165,8 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Store store = albumList.get(position);
         holder.title.setText(store.storeName);
-        holder.count.setText(store.discountPercent + "٪ تخفیف");
+        //holder.count.setText(store.discountPercent + "٪ تخفیف");
+        holder.count.setText("");
         holder.point.setText(store.returnPoint + " عدد ووپ");
 
         // loading album cover using Glide library

@@ -120,7 +120,8 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Store store = albumList.get(position);
         holder.title.setText(store.storeName);
-        holder.count.setText(store.discountPercent + "٪ تخفیف");
+        //holder.count.setText(store.discountPercent + "٪ تخفیف");
+        holder.count.setText("");
         holder.point.setText(store.returnPoint + " عدد ووپ");
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);

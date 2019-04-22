@@ -182,11 +182,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
-            if (savedPayListModel == null) {
+            if (savedPayListModel == null ) {
                 //fetch from shared preferences because of going to bank page and return
                 profile = getUserProfile();
                 savedPayListModel = getSavedPayList();
-                ConfirmPayment(savedPayListModel);
+                    ConfirmPayment(savedPayListModel);
             } else {
                 if (savedPayListModel.categoryId != null) {
                     for (long cId : savedPayListModel.categoryId) {
@@ -566,13 +566,14 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     savedPayListModel = model;
                     savedPayListModel.categoryId = temp.categoryId;
                     //PayState sp = (PayState) spinner.getSelectedItem();
-//                    if (!isOnline) {
-//                        //go to cash pay
-//                        gotoPayCash(model);
-//                    } else {
+                    if (!isOnline) {
+                        ConfirmPayment(savedPayListModel);
+                        //go to cash pay
+                        //gotoPayCash(model);
+                    } else {
                         //go to credit pay
                         setNext(model);
-                    //}
+                    }
                 }
             }
 
@@ -785,37 +786,38 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        Call<PayListModel> call =
-                providerApiInterface.GetConfirmCode("Bearer " + authToken, payListModel.id);
-        call.enqueue(new Callback<PayListModel>() {
-            @Override
-            public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
-                hideProgreeBar();
-                int code = response.code();
-                if (code == 200) {
-                    if (response.body().getStatus() == 101) {
-                        //PayListModel trans = response.body();
-                        payListModel.confirmationCode = response.body().getMessage();
-                        gotoPayCodeActivity(payListModel);
-                    } else {
-                        calculateValues();
+        if(payListModel.id !=0 ) {
+            Call<PayListModel> call =
+                    providerApiInterface.GetConfirmCode("Bearer " + authToken, payListModel.id);
+            call.enqueue(new Callback<PayListModel>() {
+                @Override
+                public void onResponse(Call<PayListModel> call, Response<PayListModel> response) {
+                    hideProgreeBar();
+                    int code = response.code();
+                    if (code == 200) {
+                        if (response.body().getStatus() == 101) {
+                            //PayListModel trans = response.body();
+                            payListModel.confirmationCode = response.body().getMessage();
+                            gotoPayCodeActivity(payListModel);
+                        } else {
+                            calculateValues();
                         /*Toast.makeText(
                                 PayActivity.this
                                 , response.body().getMessage(),
                                 Toast.LENGTH_SHORT).show();*/
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<PayListModel> call, Throwable t) {
+                @Override
+                public void onFailure(Call<PayListModel> call, Throwable t) {
 
-                hideProgreeBar();
-                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+                    hideProgreeBar();
+                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
 
-            }
-        });
-
+                }
+            });
+        }
     }
 
     public void getProfileFromServer() {

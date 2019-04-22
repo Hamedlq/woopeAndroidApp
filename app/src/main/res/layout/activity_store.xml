@@ -82,7 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="درصد تخفیف"
+                            android:text=""
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="12sp" />
 

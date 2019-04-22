@@ -165,8 +165,8 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Store store = albumList.get(position);
         holder.title.setText(store.storeName);
-        holder.count.setText(store.discountPercent + "٪ تخفیف");
-
+        //holder.count.setText(store.discountPercent + "٪ تخفیف");
+        holder.count.setText("");
         holder.points_brief.setText(store.returnPoint + " عدد ووپ");
         holder.points.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
 

@@ -236,7 +236,8 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Store store = albumList.get(position);
                 holder.title.setText(store.storeName);
                 holder.points_brief.setText(store.returnPoint + " عدد ووپ");
-                holder.count.setText(store.discountPercent + "٪ تخفیف");
+                //holder.count.setText(store.discountPercent + "٪ تخفیف");
+                holder.count.setText("");
                 holder.points.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
 
                 // loading album cover using Glide library
