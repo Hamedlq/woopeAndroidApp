@@ -136,4 +136,6 @@ info@woope.ir
     <string name="BirthDate">تاریخ تولد</string>
     <string name="choose">انتخاب کنید</string>
 
+    <string name="doYouHaveDiscountCode">کد تفیف اختصاصی دارید؟</string>
+
 </resources>

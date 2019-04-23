@@ -8,7 +8,9 @@ public enum ListTypes {
     @SerializedName("32")
     MallList("MallList", 32),
     @SerializedName("33")
-    ProductList("ProductList", 33);
+    ProductList("ProductList", 33),
+    @SerializedName("34")
+    BannerList("BannerList", 34);
 
     private String stringValue;
     private int intValue;

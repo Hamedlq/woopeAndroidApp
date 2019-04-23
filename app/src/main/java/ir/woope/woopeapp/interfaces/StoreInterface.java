@@ -106,4 +106,13 @@ public interface StoreInterface {
     Call<ApiResponse> sendOnlineRequestStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                              @Query("branchId") long branchId);
 
+//    @GET("api/store/GetBannerList")
+//    Call<List<Store>> getBanners(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+//                                @Query("countOfList") int count);
+
+    @POST("api/store/GetBannerList")
+    @FormUrlEncoded
+    Call<List<Store>> getBanners(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                     @Field("countOfList") int count);
+
 }

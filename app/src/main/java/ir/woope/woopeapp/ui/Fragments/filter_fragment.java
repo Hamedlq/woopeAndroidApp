@@ -44,8 +44,6 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_LIST;
 
 public class filter_fragment extends Fragment {
 
-
-
     @BindView(R.id.filter_recycler)
     RecyclerView filter_recycler;
     @BindView(R.id.title)

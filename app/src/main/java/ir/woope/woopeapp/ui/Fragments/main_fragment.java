@@ -3,14 +3,19 @@ package ir.woope.woopeapp.ui.Fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +33,8 @@ import android.util.AttributeSet;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.view.TransformImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +44,7 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.CategoryAdapter;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Category;
@@ -302,8 +311,122 @@ public class main_fragment extends Fragment {
                 container_layout.addView(childLayout, parentParams);
                 getStores(childLayout, ml);
             }
+            else if (ml.listType == ListTypes.BannerList) {
+
+                FrameLayout childLayout = new FrameLayout(getContext());
+                childLayout.setId(ml.listOrder);
+                FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                container_layout.addView(childLayout, parentParams);
+                getBanners(childLayout, ml);
+
+            }
         }
     }
+
+    private CardView createAdCard(String imageSrc, final String adLink)
+    {
+
+        CardView cardview;
+        ViewGroup.LayoutParams layoutparams;
+        ViewGroup.LayoutParams layoutparams2;
+        ImageView imageview;
+        RelativeLayout relativeLayout;
+
+        cardview = new CardView(getContext());
+        relativeLayout = new RelativeLayout(getContext());
+
+        layoutparams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                150
+        );
+        layoutparams2 = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                150
+        );
+
+        relativeLayout.setLayoutParams(layoutparams);
+
+        cardview.setLayoutParams(layoutparams);
+
+        cardview.setRadius(10);
+
+        cardview.setPadding(25, 25, 25, 25);
+
+        cardview.setMaxCardElevation(30);
+
+        cardview.setMaxCardElevation(6);
+
+        imageview = new ImageView(getContext());
+
+        imageview.setLayoutParams(layoutparams2);
+
+        Picasso.with(getContext()).load(Constants.GlobalConstants.LOGO_URL + imageSrc).into(imageview);
+
+        imageview.setPadding(25,25,25,25);
+
+        relativeLayout.addView(imageview);
+
+        cardview.addView(relativeLayout);
+
+        imageview.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(adLink));
+                startActivity(browserIntent);
+            }
+        });
+
+        return cardview;
+
+    }
+
+    private void getBanners(final FrameLayout childLayout, final MainListModel ml) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//        showProgreeBar();
+
+        Call<List<Store>> call =
+                providerApiInterface.getBanners("bearer " + authToken, 1);
+
+        call.enqueue(new Callback<List<Store>>() {
+            @Override
+            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+
+                Bundle arguments = new Bundle();
+                arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
+                Fragment banner = new banner_fragment();
+                banner.setArguments(arguments);
+                fragmentManager.beginTransaction()
+                        .replace(ml.listOrder, banner, String.valueOf(ml.listOrder))
+                        .commit();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Store>> call, Throwable t) {
+
+                String s = t.getMessage();
+//                hideProgreeBar();
+//                snack.dismiss();
+//                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
+            }
+        });
+
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
