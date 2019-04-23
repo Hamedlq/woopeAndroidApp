@@ -260,7 +260,8 @@ public class StoreActivity extends AppCompatActivity {
 //                    store_phones.setText(phones);
                     if (!TextUtils.isEmpty(store.discountPercent)) {
                         store_discount.setVisibility(View.VISIBLE);
-                        store_discount.setText(store.discountPercent + " درصد تخفیف ");
+                        //store_discount.setText(store.discountPercent + " درصد تخفیف ");
+                        store_discount.setText("");
                     }
 //                    if (!TextUtils.isEmpty(store.address)) {
 //                        store_address_layout.setVisibility(View.VISIBLE);

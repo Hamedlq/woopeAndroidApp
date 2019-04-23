@@ -69,7 +69,7 @@
                     android:layout_marginTop="20dp"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:text="کد تایید پرداخت" />
+                    android:text=" تایید پرداخت" />
 
                 <TextView
                     android:id="@+id/pay_msg"
