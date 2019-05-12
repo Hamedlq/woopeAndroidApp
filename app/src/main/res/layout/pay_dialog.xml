@@ -49,7 +49,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="تومان" />
+                    android:text="تومان"
+                    android:gravity="center" />
 
                 <EditText
                     android:id="@+id/amount"
@@ -57,13 +58,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="10" />
 
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/pay_dialog_invalidPrice"
+                android:id="@+id/pay_dialog_priceError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -80,10 +82,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="number"
+                android:textSize="12sp"
                 android:hint="@string/doYouHaveDiscountCode"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"/>
+
+            <TextView
+                android:id="@+id/pay_dialog_invalidDiscountCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/invalidDiscountCode"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                android:visibility="gone"/>
 
 
         </LinearLayout>
@@ -99,19 +113,36 @@
         android:background="@drawable/ic_nok"
         android:elevation="6dp" />
 
-
-    <TextView
-        android:id="@+id/confirm_pay"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/amount_layout"
         android:layout_centerInParent="true"
         android:layout_marginBottom="-40dp"
-        android:background="@drawable/round_green_button_background"
-        android:elevation="6dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="تایید" />
+        android:elevation="6dp">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/progressBar_payDialog"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:indicatorColor="#FFFFFF"
+            app:indicatorName="BallPulseIndicator"
+            android:elevation="2dp"/>
+
+        <TextView
+            android:id="@+id/confirm_pay"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/round_green_button_background"
+            android:gravity="center"
+            android:text="@string/accept"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

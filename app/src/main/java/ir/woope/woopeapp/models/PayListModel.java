@@ -16,6 +16,7 @@ public class PayListModel extends ApiResponse implements Serializable {
     public long pointPay;
     public long totalPrice;
     public long returnWoope;
+    public String extraDiscountWoope;
     public int payType;
     public String confirmationCode;
     public String logoSrc;
@@ -24,6 +25,7 @@ public class PayListModel extends ApiResponse implements Serializable {
     public long returnPoint;
     public boolean switchWoope;
     public int woopeThreshold;
+    public String discountCode;
     public List<Long> categoryId;
 
     public PayListModel() {

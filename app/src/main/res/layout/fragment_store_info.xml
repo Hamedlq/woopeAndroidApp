@@ -56,7 +56,50 @@
                     android:gravity="center"
                     android:padding="8dp"
                     android:text=" "
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@color/black"/>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/dedicated_giftCode_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp">
+
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right|center_vertical"-->
+                    <!--android:layout_marginRight="3dp"-->
+                    <!--android:background="@drawable/share_white"-->
+                    <!--android:layout_marginEnd="3dp" />-->
+
+                <TextView
+                    android:id="@+id/dedicated_giftCode_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textColor="@color/white"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:drawableRight="@drawable/share_white"/>
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/progressBar_shareStore_storeinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:indicatorColor="#FFFFFF"
+                    app:indicatorName="BallPulseIndicator"
+                    android:layout_gravity="center"/>
 
             </android.support.v7.widget.CardView>
 
@@ -71,12 +114,12 @@
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="3dp"
-                    android:background="@drawable/mini_woope" />
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right|center_vertical"-->
+                    <!--android:layout_marginRight="3dp"-->
+                    <!--android:background="@drawable/mini_woope" />-->
 
                 <TextView
                     android:id="@+id/point_desc"
@@ -85,7 +128,9 @@
                     android:gravity="center"
                     android:padding="8dp"
                     android:text=" "
-                    android:textSize="12sp" />
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:drawableRight="@drawable/mini_woope"/>
 
             </android.support.v7.widget.CardView>
 
@@ -100,12 +145,12 @@
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="3dp"
-                    android:background="@drawable/ic_local_phone" />
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right|center_vertical"-->
+                    <!--android:layout_marginRight="3dp"-->
+                    <!--android:background="@drawable/ic_local_phone" />-->
 
                 <EditText
                     android:id="@+id/store_phones"
@@ -117,7 +162,8 @@
                     android:textIsSelectable="true"
                     android:backgroundTint="@color/transparent"
                     android:text=" "
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:drawableRight="@drawable/ic_local_phone"/>
 
             </android.support.v7.widget.CardView>
 
@@ -129,25 +175,28 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="3dp"
-                    android:background="@drawable/ic_location" />
+
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right|center_vertical"-->
+                    <!--android:layout_marginRight="3dp"-->
+                    <!--android:background="@drawable/ic_location" />-->
 
                 <TextView
                     android:id="@+id/store_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_location"
                     android:gravity="center"
                     android:padding="8dp"
                     android:text=" "
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@color/black"/>
 
             </android.support.v7.widget.CardView>
 
@@ -184,13 +233,13 @@
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="3dp"
-                    android:background="@drawable/baseline_report_problem_24"
-                    android:layout_marginEnd="3dp" />
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="right|center_vertical"-->
+                    <!--android:layout_marginRight="3dp"-->
+                    <!--android:background="@drawable/baseline_report_problem_24"-->
+                    <!--android:layout_marginEnd="3dp" />-->
 
                 <TextView
                     android:id="@+id/report_store"
@@ -200,9 +249,12 @@
                     android:padding="8dp"
                     android:text="@string/report_store"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:drawableRight="@drawable/baseline_report_problem_24"/>
 
             </android.support.v7.widget.CardView>
+
+
 
         </LinearLayout>
 

@@ -85,6 +85,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static Activity main;
 
     boolean doubleBackToExitPressedOnce = false;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
@@ -259,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        main = this;
 
         fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();

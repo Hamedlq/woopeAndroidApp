@@ -57,7 +57,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
             point = (TextView) view.findViewById(R.id.point);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             followIcon = (ImageView) view.findViewById(R.id.follow);
-            action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
+//            action_layout = (LinearLayout) view.findViewById(R.id.action_layout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -102,47 +102,47 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
                 }
             });
 
-            action_layout.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
-            followIcon.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN: {
-                            startClickTime = Calendar.getInstance().getTimeInMillis();
-                            break;
-                        }
-                        case MotionEvent.ACTION_UP: {
-                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                            if (clickDuration < MAX_CLICK_DURATION) {
-                                onItemTouchListener.onFollowTap(getPosition());
-                                Store store = albumList.get(getPosition());
-                               /* Drawable fDraw = followIcon.getBackground();
-                                Drawable sDraw = getResources().getDrawable(R.drawable.twt_hover);
-
-                                Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
-                                Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
-*/
-                                if (!store.isFollowed) {
-                                    store.isFollowed = true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-                                } else {
-                                    store.isFollowed = false;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
-                                }
-                            }
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    return true;
-                }
-            });
+//            action_layout.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    return true;
+//                }
+//            });
+//            followIcon.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_DOWN: {
+//                            startClickTime = Calendar.getInstance().getTimeInMillis();
+//                            break;
+//                        }
+//                        case MotionEvent.ACTION_UP: {
+//                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+//                            if (clickDuration < MAX_CLICK_DURATION) {
+//                                onItemTouchListener.onFollowTap(getPosition());
+//                                Store store = albumList.get(getPosition());
+//                               /* Drawable fDraw = followIcon.getBackground();
+//                                Drawable sDraw = getResources().getDrawable(R.drawable.twt_hover);
+//
+//                                Bitmap bitmap = ((BitmapDrawable)fDraw).getBitmap();
+//                                Bitmap bitmap2 = ((BitmapDrawable)sDraw).getBitmap();
+//*/
+//                                if (!store.isFollowed) {
+//                                    store.isFollowed = true;
+//                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+//                                } else {
+//                                    store.isFollowed = false;
+//                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
+//                                }
+//                            }
+//                            break;
+//                        }
+//                        default:
+//                            break;
+//                    }
+//                    return true;
+//                }
+//            });
         }
     }
 
@@ -167,18 +167,23 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         holder.title.setText(store.storeName);
         //holder.count.setText(store.discountPercent + "٪ تخفیف");
         holder.count.setText("");
-        holder.point.setText(store.returnPoint + " عدد ووپ");
+        if (store.returnPoint == 0)
+            holder.point.setVisibility(View.INVISIBLE);
+        else if (store.returnPoint != 0) {
+            holder.point.setVisibility(View.VISIBLE);
+            holder.point.setText(store.returnPoint + " عدد ووپ");
+        }
 
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
-        if (store.isFollowed) {
-            store.isFollowed = true;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-        } else {
-            store.isFollowed = false;
-            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
-        }
+//        if (store.isFollowed) {
+//            store.isFollowed = true;
+//            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+//        } else {
+//            store.isFollowed = false;
+//            holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
+//        }
     }
 
     /**

@@ -105,7 +105,6 @@
                     android:layout_marginEnd="30dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
-
                     android:background="@drawable/online_ico" />
 
             </android.support.v7.widget.CardView>
@@ -134,7 +133,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="" />
+                    android:text=""
+                    android:visibility="invisible"/>
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/toman_loading"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="visible"
+                    app:indicatorColor="@color/emerald"
+                    app:indicatorName="BallPulseIndicator"
+                    android:layout_centerInParent="true"/>
+
 
                 <TextView
                     android:id="@+id/toman_credit"
@@ -142,13 +152,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="استفاده از موجودی تومانی"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
 
 
         </android.support.v7.widget.CardView>
-
 
         <android.support.v7.widget.CardView
             android:id="@+id/woope_layout"
@@ -173,7 +183,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="" />
+                    android:text=""
+                    android:visibility="invisible"/>
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/woope_loading"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="visible"
+                    app:indicatorColor="@color/emerald"
+                    app:indicatorName="BallPulseIndicator"
+                    android:layout_centerInParent="true"/>
 
                 <TextView
                     android:id="@+id/woope_credit"
@@ -181,7 +201,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:text="استفاده از ووپ"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
 
@@ -189,7 +210,6 @@
         </android.support.v7.widget.CardView>
 
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -209,12 +229,30 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/price_drawer" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:gravity="center">
+
             <ImageView
                 android:id="@+id/drawer_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:background="@drawable/up_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="جزییات پرداخت"
+                android:layout_centerHorizontal="true"
+                android:textSize="9sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="2dp"
+                android:layout_alignTop="@id/drawer_icon"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -277,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="مبلغ کل"
+                    android:text="@string/totalPrice"
                     android:textSize="10sp" />
 
 
@@ -307,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="استفاده از موجودی تومانی"
+                    android:text="@string/useStockToman"
                     android:textSize="10sp" />
 
 
@@ -337,7 +375,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="استفاده از ووپ"
+                    android:text="@string/useWoope"
                     android:textSize="10sp" />
 
 
@@ -367,42 +405,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="ووپ بازگشتی"
+                    android:text="@string/returnWooope"
                     android:textSize="10sp" />
 
 
                 <TextView
                     android:id="@+id/return_woope"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:textSize="12sp" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/tr4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tr4_ct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:text="باقیمانده تومانی"
-                    android:textSize="10sp" />
-
-
-                <TextView
-                    android:id="@+id/remain_toman"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -427,12 +435,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="مالیات"
+                    android:text="@string/giftWoope"
                     android:textSize="10sp" />
 
 
                 <TextView
-                    android:id="@+id/tax"
+                    android:id="@+id/giftWoope"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -442,6 +450,38 @@
 
 
             </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/tr4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tr4_ct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/remainingToman"
+                    android:textSize="10sp" />
+
+
+                <TextView
+                    android:id="@+id/remain_toman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:textSize="12sp" />
+
+
+            </RelativeLayout>
+
 
         </LinearLayout>
     </LinearLayout>

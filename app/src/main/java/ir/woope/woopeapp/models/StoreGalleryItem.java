@@ -16,7 +16,7 @@ public class StoreGalleryItem extends ApiResponse implements Serializable {
 
     public String description;
 
-    public String productImageAddress;
+    public String postImageAddress;
 
     public int countLike;
 

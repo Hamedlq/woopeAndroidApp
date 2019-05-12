@@ -84,8 +84,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
-                    android:textSize="22sp"
-                    android:text="00000" />
+                    android:text="00000"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"/>
             </LinearLayout>
 
 

@@ -22,9 +22,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
@@ -45,12 +49,16 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class SplashActivity extends AppCompatActivity {
 
-    Retrofit retrofit_splash;
+    @BindView(R.id.btn_retry)
     Button retry;
+    @BindView(R.id.txt_errorconnection)
     TextView err;
+    @BindView(R.id.progressBar_splash)
     AVLoadingIndicatorView progress;
-    ImageView wpelogo;
+    @BindView(R.id.splash_connecting)
+    TextView connecting;
 
+    Retrofit retrofit_splash;
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -58,12 +66,8 @@ public class SplashActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_splash);
 
-        retry = (Button) findViewById(R.id.btn_retry);
-        err = (TextView) findViewById(R.id.txt_errorconnection);
-        progress = (AVLoadingIndicatorView) findViewById(R.id.progressBar_splash);
-        wpelogo = (ImageView) findViewById(R.id.img_wplogo);
+        ButterKnife.bind(this);
 
-        View splashLayout = findViewById(R.id.activity_splash);
         checkVersion();
         //GetProfileFromServer();
 
@@ -74,11 +78,17 @@ public class SplashActivity extends AppCompatActivity {
                 retry.setVisibility(View.GONE);
                 err.setVisibility(View.GONE);
                 progress.smoothToShow();
+
                 //GetProfileFromServer();
                 checkVersion();
 
             }
         });
+
+        YoYo.with(Techniques.FadeIn)
+                .duration(1500)
+                .repeat(9999999)
+                .playOn(connecting);
 
     }
 
@@ -120,15 +130,8 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                retry.setVisibility(View.VISIBLE);
-                err.setVisibility(View.VISIBLE);
-                progress.smoothToHide();
 
-//                Toast.makeText(
-//                        SplashActivity.this
-//                        , R.string.network_error,
-//                        Toast.LENGTH_LONG).show();
-
+                hideLoading();
                 Utility.showSnackbar(findViewById(R.id.activity_splash), R.string.network_error, Snackbar.LENGTH_LONG);
 
             }
@@ -165,11 +168,27 @@ public class SplashActivity extends AppCompatActivity {
         }
     };
 
+    private void showLoading(){
+        retry.setVisibility(View.GONE);
+        err.setVisibility(View.GONE);
+        progress.smoothToShow();
+        connecting.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading(){
+        progress.smoothToHide();
+        connecting.setVisibility(View.GONE);
+        retry.setVisibility(View.VISIBLE);
+        err.setVisibility(View.VISIBLE);
+    }
+
     private void finishIt() {
         finish();
     }
 
     public void GetProfileFromServer() {
+
+        showLoading();
         retrofit_splash = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -233,9 +252,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
 
-                retry.setVisibility(View.VISIBLE);
-                err.setVisibility(View.VISIBLE);
-                progress.smoothToHide();
+                hideLoading();
 
 //                Toast.makeText(
 //                        SplashActivity.this

@@ -131,15 +131,15 @@
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/userNameFamily" />
 
-                    <TextView
-                        android:id="@+id/userBio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_vertical|center"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="12sp"
-                        app:layout_constraintTop_toBottomOf="@+id/username" />
+                    <!--<TextView-->
+                        <!--android:id="@+id/userBio"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="5dp"-->
+                        <!--android:gravity="center_vertical|center"-->
+                        <!--android:textColor="@color/colorPrimary"-->
+                        <!--android:textSize="12sp"-->
+                        <!--app:layout_constraintTop_toBottomOf="@+id/username" />-->
 
                     <!--<Button
                         android:id="@+id/btnEditProfile"
@@ -257,7 +257,7 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
-                        android:id="@+id/buyCountCard"
+                        android:id="@+id/shareCountCard"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -276,16 +276,16 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="35dp"
                                 android:layout_marginTop="5dp"
-                                android:src="@drawable/group101" />
+                                app:srcCompat="@drawable/share_purple" />
 
                             <TextView
-                                android:id="@+id/transactionCount"
+                                android:id="@+id/giftWoopeCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1"
+                                android:text="0"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -293,7 +293,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="تعداد خرید"
+                                android:text="اشتراک گذاری موفق"
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -334,7 +334,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerInParent="true"
-                            android:text="تاریخچه پرداخت ها"
+                            android:text="صورتحساب"
                             android:textColor="@color/colorPrimary"
                             android:textSize="14sp"
                             android:textStyle="bold" />

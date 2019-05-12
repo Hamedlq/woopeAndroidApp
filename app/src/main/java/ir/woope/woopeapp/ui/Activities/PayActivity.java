@@ -28,10 +28,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -100,8 +102,8 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     protected TextView remain_toman;
     @BindView(R.id.tr5)
     protected RelativeLayout tr5;
-    @BindView(R.id.tax)
-    protected TextView tax;
+    @BindView(R.id.giftWoope)
+    protected TextView giftWoope;
     @BindView(R.id.cash_card)
     protected CardView cash_card;
     @BindView(R.id.online_card)
@@ -122,6 +124,11 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     @BindView(R.id.detail_layout)
     protected LinearLayout detail_layout;
 
+    @BindView(R.id.toman_loading)
+    protected AVLoadingIndicatorView tomanLoading;
+    @BindView(R.id.woope_loading)
+    protected AVLoadingIndicatorView woopeLoading;
+
 
     @BindView(R.id.payBtn)
     protected Button btn;
@@ -130,7 +137,9 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     //long totalPrice;
     //Spinner spinner;
     //EditText amount;
+    @BindView(R.id.woope_credit)
     TextView woope_credit;
+    @BindView(R.id.toman_credit)
     TextView toman_credit;
     String authToken;
     Profile profile;
@@ -163,12 +172,17 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 //        return super.onCreateView(parent, name, context, attrs);
 //    }
 
+    String logoUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
 
         layout = findViewById(R.id.activity_pay);
+
+//        woope_credit = (TextView) findViewById(R.id.woope_credit);
+//        toman_credit = (TextView) findViewById(R.id.toman_credit);
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.pay_toolbar);
 //        setSupportActionBar(toolbar);
@@ -182,15 +196,16 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
-            if (savedPayListModel == null ) {
+            logoUrl = getIntent().getExtras().getString("LogoUrl");
+            if (savedPayListModel == null) {
                 //fetch from shared preferences because of going to bank page and return
                 profile = getUserProfile();
                 savedPayListModel = getSavedPayList();
-                    ConfirmPayment(savedPayListModel);
+                ConfirmPayment(savedPayListModel);
             } else {
                 if (savedPayListModel.categoryId != null) {
                     for (long cId : savedPayListModel.categoryId) {
-                        if (cId == Categories.OnlineService.value()||cId == Categories.ChargeStore.value()) {
+                        if (cId == Categories.OnlineService.value() || cId == Categories.ChargeStore.value()) {
                             cash_card.setVisibility(View.GONE);
                         }
                     }
@@ -207,13 +222,15 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         calculateValues();
 
         ConfirmPayment(savedPayListModel);
-        if (profile != null) {
-            woope_credit = (TextView) findViewById(R.id.woope_credit);
-            woope_credit.setText(" استفاده از ووپ (" + String.valueOf(profile.getWoopeCreditString()) + ")");
+//        if (profile != null) {
+//            woope_credit = (TextView) findViewById(R.id.woope_credit);
+//            woope_credit.setText(" استفاده از ووپ (" + String.valueOf(profile.getWoopeCreditString()) + ")");
+//
+//            toman_credit = (TextView) findViewById(R.id.toman_credit);
+//            toman_credit.setText("استفاده از موجودی تومانی(" + String.valueOf(profile.getCreditString()) + ")");
+//        }
 
-            toman_credit = (TextView) findViewById(R.id.toman_credit);
-            toman_credit.setText("استفاده از موجودی تومانی(" + String.valueOf(profile.getCreditString()) + ")");
-        }
+        setWoopeAndToman();
 
         //progressBar = (ProgressBar) findViewById(R.id.progressBar);
         hideProgreeBar();
@@ -278,49 +295,54 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-    }
-
-
-    public void showhint() {
-
-        final TapTargetSequence sequence = new TapTargetSequence(this)
-                .targets(
-                        // Likewise, this tap target will target the search button
-                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "تماس با پشتیبانی", "در صورت وجود هرگونه مشکل یا ابهام در پرداخت با پشتیبانی تماس بگیرید")
-                                .dimColor(android.R.color.black)
-                                .outerCircleColor(R.color.colorAccent)
-                                .targetCircleColor(android.R.color.black)
-                                .transparentTarget(true)
-                                .textColor(android.R.color.black)
-                                .id(2)
-                )
-                .listener(new TapTargetSequence.Listener() {
-                    // This listener will tell us when interesting(tm) events happen in regards
-                    // to the sequence
-                    @Override
-                    public void onSequenceFinish() {
-
-                    }
-
-                    @Override
-                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-
-                    }
-
-                    @Override
-                    public void onSequenceCanceled(TapTarget lastTarget) {
-
-                    }
-                });
-
-        sequence.start();
+        YoYo.with(Techniques.Flash)
+                .duration(1500)
+                .repeat(9999999)
+                .playOn(drawer_icon);
 
     }
+
+
+//    public void showhint() {
+//
+//        final TapTargetSequence sequence = new TapTargetSequence(this)
+//                .targets(
+//                        // Likewise, this tap target will target the search button
+//                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "تماس با پشتیبانی", "در صورت وجود هرگونه مشکل یا ابهام در پرداخت با پشتیبانی تماس بگیرید")
+//                                .dimColor(android.R.color.black)
+//                                .outerCircleColor(R.color.colorAccent)
+//                                .targetCircleColor(android.R.color.black)
+//                                .transparentTarget(true)
+//                                .textColor(android.R.color.black)
+//                                .id(2)
+//                )
+//                .listener(new TapTargetSequence.Listener() {
+//                    // This listener will tell us when interesting(tm) events happen in regards
+//                    // to the sequence
+//                    @Override
+//                    public void onSequenceFinish() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceCanceled(TapTarget lastTarget) {
+//
+//                    }
+//                });
+//
+//        sequence.start();
+//
+//    }
 
     private void calculateValues() {
         //int selectedId = payType.getCheckedRadioButtonId();
 
-        total_price.setText(String.valueOf(totalPrice));
+        total_price.setText(String.valueOf(commaSeprate(totalPrice)));
         long rw = 0;
         if (savedPayListModel.returnPoint != 0) {
             rw = ((totalPrice) / savedPayListModel.basePrice) * savedPayListModel.returnPoint;
@@ -337,7 +359,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             toman_use.setText("0");
             woope_use.setText("0");
             remain_toman.setText("0");
-            tax.setText("0");
+            giftWoope.setText(savedPayListModel.extraDiscountWoope);
         } else {
             long alpha = totalPrice - profile.getTomanCredit();
             long beta = totalPrice - (profile.getWoopeCredit() * 1000);
@@ -352,7 +374,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                 toman_use.setText("0");
                 woope_use.setText("0");
                 remain_toman.setText("0");
-                tax.setText("0");
+                giftWoope.setText(savedPayListModel.extraDiscountWoope);
             }
             if (switch_credit.isChecked() && !switch_woope.isChecked()) {
                 if (alpha == 0) {
@@ -362,7 +384,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 } else if (alpha < 0) {
                     pay_price.setText("0");
                     btn.setText("پرداخت (" + "0" + " تومان)");
@@ -370,7 +392,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 } else if (alpha > 0) {
                     pay_price.setText(commaSeprate(alpha));
                     btn.setText("پرداخت (" + commaSeprate(alpha) + " تومان)");
@@ -378,7 +400,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(profile.getTomanCredit()));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 }
             }
             if (!switch_credit.isChecked() && switch_woope.isChecked()) {
@@ -389,7 +411,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 } else if (beta < 0) {
                     double integerPart = Math.ceil((double) totalPrice / 1000);
                     int remainder = (int) Math.abs(beta % 1000);
@@ -399,7 +421,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText("0");
                     woope_use.setText(String.valueOf(Math.abs(integerPart)));
                     remain_toman.setText(commaSeprate(remainder));
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 } else if (beta > 0) {
                     pay_price.setText(commaSeprate(beta));
                     btn.setText("پرداخت (" + commaSeprate(beta) + " تومان)");
@@ -407,7 +429,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 }
             }
             if (switch_credit.isChecked() && switch_woope.isChecked()) {
@@ -418,7 +440,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    tax.setText("0");
+                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
                 } else {
                     if (gama == 0) {
                         pay_price.setText("0");
@@ -427,7 +449,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
-                        tax.setText("0");
+                        giftWoope.setText(savedPayListModel.extraDiscountWoope);
                     } else if (gama > 0) {
                         pay_price.setText(commaSeprate(gama));
                         btn.setText("پرداخت (" + commaSeprate(gama) + " تومان)");
@@ -435,7 +457,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
-                        tax.setText("0");
+                        giftWoope.setText(savedPayListModel.extraDiscountWoope);
                     } else if (gama < 0) {
                         double integerPart = Math.ceil((double) alpha / 1000);
                         int remainder = (int) Math.abs(gama % 1000);
@@ -445,7 +467,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(String.valueOf(Math.abs(integerPart)));
                         remain_toman.setText(String.valueOf(remainder));
-                        tax.setText("0");
+                        giftWoope.setText(savedPayListModel.extraDiscountWoope);
                     }
                 }
             }
@@ -455,6 +477,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     @Override
     protected void onResume() {
         super.onResume();
+        setWoopeAndToman();
         calculateValues();
         if (automaticPayFlag) {
             ConfirmPayment(savedPayListModel);
@@ -495,7 +518,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         boolean isFirstRun = prefs.getBoolean("PAYACTIVITYFIRSTRUN", true);
         if (isFirstRun) {
-            showhint();
+//            showhint();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("PAYACTIVITYFIRSTRUN", false);
             editor.commit();
@@ -533,7 +556,6 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         TransactionInterface providerApiInterface =
                 retrofit.create(TransactionInterface.class);
 
-
         //int selectedId = payType.getCheckedRadioButtonId();
         int pt = 0;
         //String payType = sp.getMode();
@@ -552,8 +574,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         showProgreeBar();
         Call<PayListModel> call =
-                providerApiInterface.InsertTransaction("bearer " + authToken, savedPayListModel.id, savedPayListModel.branchId, String.valueOf(totalPrice), pt, switch_credit.isChecked(), switch_woope.isChecked());
-
+                providerApiInterface.InsertTransaction("bearer " + authToken, savedPayListModel.id, savedPayListModel.branchId, String.valueOf(totalPrice), pt, switch_credit.isChecked(), switch_woope.isChecked(), savedPayListModel.discountCode);
 
         call.enqueue(new Callback<PayListModel>() {
             @Override
@@ -786,7 +807,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         showProgreeBar();
-        if(payListModel.id !=0 ) {
+        if (payListModel.id != 0) {
             Call<PayListModel> call =
                     providerApiInterface.GetConfirmCode("Bearer " + authToken, payListModel.id);
             call.enqueue(new Callback<PayListModel>() {
@@ -820,7 +841,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         }
     }
 
-    public void getProfileFromServer() {
+    public void getProfileFromServers() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -866,6 +887,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         Intent myIntent = new Intent(PayActivity.this, PayCodeActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
+        myIntent.putExtra("LogoUrl",logoUrl);
         //myIntent.putExtra(POINTS_PAYED, payedPoints);
         startActivity(myIntent);
         this.finish();
@@ -945,4 +967,73 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             return new PayListModel();
         }
     }
+
+    public void setWoopeAndToman() {
+
+        hideToman();
+        hideWoope();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        ProfileInterface providerApiInterface =
+                retrofit.create(ProfileInterface.class);
+
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+        Call<Profile> call =
+                providerApiInterface.getProfileFromServer("bearer " + authToken);
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                int code = response.code();
+                if (code == 200) {
+
+
+                    woope_credit.setText(" استفاده از ووپ (" + String.valueOf(response.body().getWoopeCreditString()) + ")");
+
+
+                    toman_credit.setText("استفاده از موجودی تومانی(" + commaSeprate(Math.round(response.body().moneyCredit)) + ")");
+
+                    showToman();
+                    showWoope();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void showToman() {
+        toman_credit.setVisibility(View.VISIBLE);
+        switch_credit.setVisibility(View.VISIBLE);
+        tomanLoading.hide();
+    }
+
+    private void hideToman() {
+        toman_credit.setVisibility(View.INVISIBLE);
+        switch_credit.setVisibility(View.INVISIBLE);
+        tomanLoading.show();
+    }
+
+    private void showWoope() {
+        woope_credit.setVisibility(View.VISIBLE);
+        switch_woope.setVisibility(View.VISIBLE);
+        woopeLoading.hide();
+    }
+
+    private void hideWoope() {
+        woope_credit.setVisibility(View.INVISIBLE);
+        switch_woope.setVisibility(View.INVISIBLE);
+        woopeLoading.show();
+    }
+
 }

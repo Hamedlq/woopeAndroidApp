@@ -285,7 +285,7 @@ public class ProductActivity extends AppCompatActivity {
 
                     StoreGalleryItem product = response.body().get(0);
 
-                    Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + product.productImageAddress).fit().centerInside().into(productImage);
+                    Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + product.postImageAddress).fit().centerInside().into(productImage);
 
                     productDescription.setText(product.description);
 

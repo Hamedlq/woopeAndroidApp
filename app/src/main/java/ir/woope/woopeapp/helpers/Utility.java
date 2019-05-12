@@ -195,5 +195,12 @@ public class Utility {
 
     }
 
+    public static String commaSeprate(long longval) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        formatter.applyPattern("#,###,###,###");
+        String formattedString = formatter.format(longval);
+        return formattedString;
+    }
+
 
 }

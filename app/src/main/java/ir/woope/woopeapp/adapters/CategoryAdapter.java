@@ -18,8 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;

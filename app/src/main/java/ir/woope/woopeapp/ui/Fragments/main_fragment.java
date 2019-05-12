@@ -31,8 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.AttributeSet;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.view.TransformImageView;
 
@@ -176,7 +174,7 @@ public class main_fragment extends Fragment {
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    if(isVisible){
+                    if (isVisible) {
                         Bundle arguments = new Bundle();
                         arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
                         arguments.putSerializable(LIST_MODEL, ml);
@@ -298,20 +296,20 @@ public class main_fragment extends Fragment {
 
     private void showLists() {
         for (MainListModel ml : mainFilterList) {
-            if (ml.listType == ListTypes.MallList) {
-                FrameLayout childLayout = new FrameLayout(getContext());
-                childLayout.setId(ml.listOrder);
-                FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                container_layout.addView(childLayout, parentParams);
-                getMalls(childLayout, ml);
-            } else if (ml.listType == ListTypes.StoreList) {
+//            if (ml.listType == ListTypes.MallList) {
+//                FrameLayout childLayout = new FrameLayout(getContext());
+//                childLayout.setId(ml.listOrder);
+//                FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+//                container_layout.addView(childLayout, parentParams);
+//                getMalls(childLayout, ml);
+//            }
+            if (ml.listType == ListTypes.StoreList) {
                 FrameLayout childLayout = new FrameLayout(getContext());
                 childLayout.setId(ml.listOrder);
                 FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 container_layout.addView(childLayout, parentParams);
                 getStores(childLayout, ml);
-            }
-            else if (ml.listType == ListTypes.BannerList) {
+            } else if (ml.listType == ListTypes.BannerList) {
 
                 FrameLayout childLayout = new FrameLayout(getContext());
                 childLayout.setId(ml.listOrder);
@@ -323,8 +321,7 @@ public class main_fragment extends Fragment {
         }
     }
 
-    private CardView createAdCard(String imageSrc, final String adLink)
-    {
+    private CardView createAdCard(String imageSrc, final String adLink) {
 
         CardView cardview;
         ViewGroup.LayoutParams layoutparams;
@@ -362,7 +359,7 @@ public class main_fragment extends Fragment {
 
         Picasso.with(getContext()).load(Constants.GlobalConstants.LOGO_URL + imageSrc).into(imageview);
 
-        imageview.setPadding(25,25,25,25);
+        imageview.setPadding(25, 25, 25, 25);
 
         relativeLayout.addView(imageview);
 
@@ -426,7 +423,6 @@ public class main_fragment extends Fragment {
         });
 
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

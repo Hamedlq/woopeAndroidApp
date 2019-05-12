@@ -49,6 +49,8 @@ public class PayCodeActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
+    String logoUrl;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class PayCodeActivity extends AppCompatActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             payListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
+            logoUrl = getIntent().getStringExtra("LogoUrl");
             pay_msg.setVisibility(View.GONE);
             if (payListModel.categoryId != null) {
                 for (long cId : payListModel.categoryId) {
@@ -77,7 +80,7 @@ public class PayCodeActivity extends AppCompatActivity {
 
         ConfirmCode.setText(payListModel.confirmationCode);
 
-        Picasso.with(PayCodeActivity.this).load(Constants.GlobalConstants.LOGO_URL + payListModel.logoSrc).transform(new CircleTransformation()).into(backdrop);
+        Picasso.with(PayCodeActivity.this).load(Constants.GlobalConstants.LOGO_URL + logoUrl).transform(new CircleTransformation()).into(backdrop);
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

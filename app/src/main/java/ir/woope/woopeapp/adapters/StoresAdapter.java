@@ -19,9 +19,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,6 +28,7 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
+import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.home_fragment;
 
@@ -139,10 +137,10 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 */
                                 if (!store.isFollowed) {
                                     store.isFollowed = true;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bookmarked));
                                 } else {
                                     store.isFollowed = false;
-                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
+                                    followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.notbookmarked));
                                 }
                             }
                             break;
@@ -235,20 +233,25 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 MyViewHolder holder = (MyViewHolder) vholder;
                 Store store = albumList.get(position);
                 holder.title.setText(store.storeName);
-                holder.points_brief.setText(store.returnPoint + " عدد ووپ");
+                if (store.returnPoint == 0)
+                    holder.points_brief.setVisibility(View.INVISIBLE);
+                else if (store.returnPoint != 0) {
+                    holder.points_brief.setVisibility(View.VISIBLE);
+                    holder.points_brief.setText(store.returnPoint + " عدد ووپ");
+                }
                 //holder.count.setText(store.discountPercent + "٪ تخفیف");
                 holder.count.setText("");
-                holder.points.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
+                holder.points.setText("به ازای هر " + Utility.commaSeprate(store.basePrice) + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
 
                 // loading album cover using Glide library
                 Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
 
                 if (store.isFollowed) {
                     //store.isFollowed = true;
-                    holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                    holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bookmarked));
                 } else {
                     //store.isFollowed = false;
-                    holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_border));
+                    holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.notbookmarked));
                 }
 
                 SharedPreferences prefs =
@@ -259,66 +262,66 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                     if (position == 1) {
 
-                        final TapTargetSequence sequence = new TapTargetSequence((Activity) mContext)
-                                .targets(
-                                        // Likewise, this tap target will target the search button
-                                        TapTarget.forView(holder.followIcon, "علاقمندی ها", "فروشگاه رو به لیست علاقمندی های خودتون اضافه کنید")
-                                                // All options below are optional
-                                                .outerCircleColor(R.color.red)      // Specify a color for the outer circle
-                                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                                                .titleTextColor(R.color.white)      // Specify the color of the title text
-                                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
-                                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
-                                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
-                                                .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
-                                                .tintTarget(true)                   // Whether to tint the target view's color
-                                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
-                                                .targetRadius(60)
-                                )
-                                .listener(new TapTargetSequence.Listener() {
-                                    // This listener will tell us when interesting(tm) events happen in regards
-                                    // to the sequence
-                                    @Override
-                                    public void onSequenceFinish() {
-
-                                        SharedPreferences prefs =
-                                                mContext.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-
-                                        SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putBoolean("HOMEFIRSTRUN", false);
-                                        editor.commit();
-
-                                        f.showHint();
-
-                                    }
-
-                                    @Override
-                                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-//                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
-                                    }
-
-                                    @Override
-                                    public void onSequenceCanceled(TapTarget lastTarget) {
-//                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
-//                                .setTitle("Uh oh")
-//                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
-//
-//                        TapTargetView.showFor(dialog,
-//                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
-//                                        .cancelable(false)
-//                                        .tintTarget(false), new TapTargetView.Listener() {
+//                        final TapTargetSequence sequence = new TapTargetSequence((Activity) mContext)
+//                                .targets(
+//                                        // Likewise, this tap target will target the search button
+//                                        TapTarget.forView(holder.followIcon, "علاقمندی ها", "فروشگاه رو به لیست علاقمندی های خودتون اضافه کنید")
+//                                                // All options below are optional
+//                                                .outerCircleColor(R.color.red)      // Specify a color for the outer circle
+//                                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+//                                                .targetCircleColor(R.color.white)   // Specify a color for the target circle
+//                                                .titleTextSize(20)                  // Specify the size (in sp) of the title text
+//                                                .titleTextColor(R.color.white)      // Specify the color of the title text
+//                                                .descriptionTextSize(14)            // Specify the size (in sp) of the description text
+//                                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+//                                                .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+//                                                .dimColor(R.color.black)            // If set, will dim behind the view with 30% opacity of the given color
+//                                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+//                                                .tintTarget(true)                   // Whether to tint the target view's color
+//                                                .transparentTarget(false)// Specify whether the target is transparent (displays the content underneath)
+//                                                .targetRadius(60)
+//                                )
+//                                .listener(new TapTargetSequence.Listener() {
+//                                    // This listener will tell us when interesting(tm) events happen in regards
+//                                    // to the sequence
 //                                    @Override
-//                                    public void onTargetClick(TapTargetView view) {
-//                                        super.onTargetClick(view);
-//                                        dialog.dismiss();
+//                                    public void onSequenceFinish() {
+//
+//                                        SharedPreferences prefs =
+//                                                mContext.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//
+//                                        SharedPreferences.Editor editor = prefs.edit();
+//                                        editor.putBoolean("HOMEFIRSTRUN", false);
+//                                        editor.commit();
+//
+//                                        f.showHint();
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+////                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+//                                    }
+//
+//                                    @Override
+//                                    public void onSequenceCanceled(TapTarget lastTarget) {
+////                        final AlertDialog dialog = new AlertDialog.Builder(PayActivity.this)
+////                                .setTitle("Uh oh")
+////                                .setMessage("You canceled the seque.setPositiveButton("Oops", null).show();nce")
+////
+////                        TapTargetView.showFor(dialog,
+////                                TapTarget.forView(dialog.getButton(DialogInterface.BUTTON_POSITIVE), "Uh oh!", "You canceled the sequence at step " + lastTarget.id())
+////                                        .cancelable(false)
+////                                        .tintTarget(false), new TapTargetView.Listener() {
+////                                    @Override
+////                                    public void onTargetClick(TapTargetView view) {
+////                                        super.onTargetClick(view);
+////                                        dialog.dismiss();
+////                                    }
+////                                });
 //                                    }
 //                                });
-                                    }
-                                });
 
 //                        sequence.start();
 

@@ -19,8 +19,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +141,7 @@ public class TransactionActivity extends AppCompatActivity {
        /* getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);*/
 
-        showhint();
+//        showhint();
         return true;
     }
 
@@ -244,40 +243,40 @@ public class TransactionActivity extends AppCompatActivity {
         startActivityForResult(myIntent, RELOAD_LIST);
     }
 
-    public void showhint() {
-
-        final TapTargetSequence sequence = new TapTargetSequence(this)
-                .targets(
-                        // Likewise, this tap target will target the search button
-                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "تماس با پشتیبانی", "در صورت وجود هرگونه مشکل یا ابهام در پرداخت با پشتیبانی تماس بگیرید")
-                                .dimColor(android.R.color.black)
-                                .outerCircleColor(R.color.colorAccent)
-                                .targetCircleColor(android.R.color.black)
-                                .transparentTarget(true)
-                                .textColor(android.R.color.black)
-                                .id(2)
-                )
-                .listener(new TapTargetSequence.Listener() {
-                    // This listener will tell us when interesting(tm) events happen in regards
-                    // to the sequence
-                    @Override
-                    public void onSequenceFinish() {
-
-                    }
-
-                    @Override
-                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-
-                    }
-
-                    @Override
-                    public void onSequenceCanceled(TapTarget lastTarget) {
-
-                    }
-                });
-
-        sequence.start();
-
-    }
+//    public void showhint() {
+//
+//        final TapTargetSequence sequence = new TapTargetSequence(this)
+//                .targets(
+//                        // Likewise, this tap target will target the search button
+//                        TapTarget.forToolbarMenuItem(toolbar, R.id.action_support, "تماس با پشتیبانی", "در صورت وجود هرگونه مشکل یا ابهام در پرداخت با پشتیبانی تماس بگیرید")
+//                                .dimColor(android.R.color.black)
+//                                .outerCircleColor(R.color.colorAccent)
+//                                .targetCircleColor(android.R.color.black)
+//                                .transparentTarget(true)
+//                                .textColor(android.R.color.black)
+//                                .id(2)
+//                )
+//                .listener(new TapTargetSequence.Listener() {
+//                    // This listener will tell us when interesting(tm) events happen in regards
+//                    // to the sequence
+//                    @Override
+//                    public void onSequenceFinish() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceCanceled(TapTarget lastTarget) {
+//
+//                    }
+//                });
+//
+//        sequence.start();
+//
+//    }
 
 }

@@ -15,6 +15,8 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.models.DocumentModel;
 import ir.woope.woopeapp.ui.Activities.TransHistoryActivity;
 
+import static ir.woope.woopeapp.helpers.Utility.commaSeprate;
+
 /**
  * Created by alireza on 3/30/18.
  */
@@ -130,7 +132,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
     @Override
     public void onBindViewHolder(ProfileTransactionListAdapter.MyViewHolder holder, int position) {
         DocumentModel model = orderModels.get(position);
-        total_price.setText(String.valueOf(orderModels.get(position).totalPrice) + " تومان ");
+        total_price.setText(commaSeprate(orderModels.get(position).totalPrice) + " تومان " );
         name_tv.setText(orderModels.get(position).storeName);
         return_woop.setText(orderModels.get(position).returnWoop + " عدد ووپ ");
         if (model.payType == 1) {
@@ -141,7 +143,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
         //if(model.payType==10)
         if (model.transactionList.size() > 0) {
             tr1_ct.setText(model.transactionList.get(0).currencyType);
-            tr1_am.setText(String.valueOf(model.transactionList.get(0).amount));
+            tr1_am.setText(commaSeprate(model.transactionList.get(0).amount) );
             tr1_tt.setText(model.transactionList.get(0).transType);
             tr1_time.setText(model.transactionList.get(0).time);
         } else {
@@ -149,7 +151,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
         }
         if (model.transactionList.size() > 1) {
             tr2_ct.setText(model.transactionList.get(1).currencyType);
-            tr2_am.setText(String.valueOf(model.transactionList.get(1).amount));
+            tr2_am.setText(commaSeprate(model.transactionList.get(1).amount) );
             tr2_tt.setText(model.transactionList.get(1).transType);
             tr2_time.setText(model.transactionList.get(1).time);
         } else {
@@ -157,7 +159,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
         }
         if (model.transactionList.size() > 2) {
             tr3_ct.setText(model.transactionList.get(2).currencyType);
-            tr3_am.setText(String.valueOf(model.transactionList.get(2).amount));
+            tr3_am.setText(commaSeprate(model.transactionList.get(2).amount) );
             tr3_tt.setText(model.transactionList.get(2).transType);
             tr3_time.setText(model.transactionList.get(2).time);
         } else {
@@ -165,7 +167,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
         }
         if (model.transactionList.size() > 3) {
             tr4_ct.setText(model.transactionList.get(3).currencyType);
-            tr4_am.setText(String.valueOf(model.transactionList.get(3).amount));
+            tr4_am.setText(commaSeprate(model.transactionList.get(3).amount) );
             tr4_tt.setText(model.transactionList.get(3).transType);
             tr4_time.setText(model.transactionList.get(3).time);
         } else {
@@ -173,7 +175,7 @@ public class ProfileTransactionListAdapter extends RecyclerView.Adapter<ProfileT
         }
         if (model.transactionList.size() > 4) {
             tr5_ct.setText(model.transactionList.get(4).currencyType);
-            tr5_am.setText(String.valueOf(model.transactionList.get(4).amount));
+            tr5_am.setText(commaSeprate(model.transactionList.get(4).amount) );
             tr5_tt.setText(model.transactionList.get(4).transType);
             tr5_time.setText(model.transactionList.get(4).time);
         } else {

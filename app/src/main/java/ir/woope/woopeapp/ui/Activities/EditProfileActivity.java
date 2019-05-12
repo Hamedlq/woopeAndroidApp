@@ -310,6 +310,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     Intent goto_splash = new Intent(EditProfileActivity.this,
                             SplashActivity.class);
+                    goto_splash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                  MainActivity.main.finish();
                     finish();
                     startActivity(goto_splash);
                     break;

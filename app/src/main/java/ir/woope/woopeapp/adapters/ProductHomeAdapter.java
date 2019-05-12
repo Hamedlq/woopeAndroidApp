@@ -86,16 +86,16 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
                 }
             });
 
-            sendOnlineRequest = view.findViewById(R.id.btn_send_onlineRequest_productHome_item);
+//            sendOnlineRequest = view.findViewById(R.id.btn_send_onlineRequest_productHome_item);
 
-            sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View arg0) {
-
-                    onItemTouchListener.onSendOnlineRequest(arg0, getPosition());
-
-                }
-            });
+//            sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
+//
+//                public void onClick(View arg0) {
+//
+//                    onItemTouchListener.onSendOnlineRequest(arg0, getPosition());
+//
+//                }
+//            });
 
             likeCount = view.findViewById(R.id.txt_likeCount_product_home_item);
 
@@ -212,12 +212,12 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
             holder.likeButton.setChecked(false);
         }
 
-        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + Items.get(position).productImageAddress).into(holder.productImage);
+        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + Items.get(position).postImageAddress).into(holder.productImage);
 
-        if(Items.get(position).canBeSold)
-            holder.sendOnlineRequest.setVisibility(View.VISIBLE);
-        else if(!Items.get(position).canBeSold)
-            holder.sendOnlineRequest.setVisibility(View.GONE);
+//        if(Items.get(position).canBeSold)
+//            holder.sendOnlineRequest.setVisibility(View.VISIBLE);
+//        else if(!Items.get(position).canBeSold)
+//            holder.sendOnlineRequest.setVisibility(View.GONE);
 
     }
 

@@ -99,6 +99,11 @@ public class storeInfoFragment extends Fragment {
 
     LinearLayout socialsLayout;
 
+    TextView giftWoopeDescription;
+    CardView giftWoopeLayout;
+
+    AVLoadingIndicatorView shareLoading;
+
     public storeInfoFragment() {
         // Required empty public constructor
     }
@@ -125,6 +130,11 @@ public class storeInfoFragment extends Fragment {
         report_store_layout = rootView.findViewById(R.id.report_store_layout);
         vip_store_layout = rootView.findViewById(R.id.vip_store_layout);
         socialsLayout = rootView.findViewById(R.id.store_socials_layout);
+
+        giftWoopeDescription = rootView.findViewById(R.id.dedicated_giftCode_desc);
+        giftWoopeLayout = rootView.findViewById(R.id.dedicated_giftCode_layout);
+
+        shareLoading = rootView.findViewById(R.id.progressBar_shareStore_storeinfo);
 
         report_store_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +174,16 @@ public class storeInfoFragment extends Fragment {
             }
         });
 
+        giftWoopeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // item clicked
+
+                shareStore(store.storeId);
+
+            }
+        });
+
         return rootView;
 
     }
@@ -179,10 +199,12 @@ public class storeInfoFragment extends Fragment {
     }
 
     private void getStore(long storeId) {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         StoreInterface providerApiInterface =
                 retrofit.create(StoreInterface.class);
 
@@ -200,7 +222,6 @@ public class storeInfoFragment extends Fragment {
                 int code = response.code();
                 if (code == 200) {
                     store = response.body();
-
 //                    Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(logo);
 //                    Picasso.with(StoreActivity.this).load(Constants.GlobalConstants.LOGO_URL + store.coverSrc).into(backdrop);
 //                    store_name.setText(store.storeName);
@@ -230,15 +251,21 @@ public class storeInfoFragment extends Fragment {
                     if (store.basePrice != 0) {
                         point_layout.setVisibility(View.VISIBLE);
 //                        store_point.setText(store.returnPoint + " عدد ووپ ");
-                        point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
+                        point_desc.setText("به ازای هر " + Utility.commaSeprate(store.basePrice) + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
                     }
 
-                    if (!store.socialList.isEmpty()) {
+                    if (store.socialList!=null) {
                         socialsLayout.setVisibility(View.VISIBLE);
                         for (SocialModel social : store.socialList) {
                             addSocial(social.keySocial, social.valueSocial);
                         }
                     }
+
+                    if (store.describeCountDiscountCode!=null) {
+                        giftWoopeLayout.setVisibility(View.VISIBLE);
+                        giftWoopeDescription.setText(store.describeCountDiscountCode);
+                    }
+
                 }
             }
 
@@ -413,5 +440,71 @@ public class storeInfoFragment extends Fragment {
         });
 
     }
+
+    private void shareStore(long branchId) {
+
+        giftWoopeLayout.setEnabled(false);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        Call<ApiResponse> call =
+                providerApiInterface.shareStore("bearer " + authToken, branchId);
+
+        showShareProgreeBar();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                hideShareProgreeBar();
+                int code = response.body().status;
+                giftWoopeLayout.setEnabled(true);
+                if (code == 101)
+                {
+
+                    shareText(response.body().getMessage());}
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                giftWoopeLayout.setEnabled(true);
+                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+                hideShareProgreeBar();
+                Utility.showSnackbar(getActivity().findViewById(R.id.activity_store_layout), R.string.network_error, Snackbar.LENGTH_LONG);
+            }
+        });
+    }
+
+    private void shareText(String text) {
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");// Plain format text
+
+        // You can add subject also
+        /*
+         * sharingIntent.putExtra( android.content.Intent.EXTRA_SUBJECT,
+         * "Subject Here");
+         */
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(sharingIntent, "Share Text Using"));
+    }
+
+    public void hideShareProgreeBar() {
+        shareLoading.hide();
+        giftWoopeDescription.setVisibility(View.VISIBLE);
+    }
+
+    public void showShareProgreeBar() {
+        shareLoading.smoothToShow();
+        giftWoopeDescription.setVisibility(View.GONE);
+    }
+
 
 }

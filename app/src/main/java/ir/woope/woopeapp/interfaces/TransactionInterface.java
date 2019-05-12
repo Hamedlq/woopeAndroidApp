@@ -28,7 +28,8 @@ public interface TransactionInterface {
                                          @Field("TotalPrice") String Amount,
                                          @Field("PayType") int payType,
                                          @Field("SwitchCredit") boolean switch_credit,
-                                         @Field("SwitchWoope") boolean switch_woope
+                                         @Field("SwitchWoope") boolean switch_woope,
+                                         @Field("DiscountCode") String discountCode
     );
 
     @FormUrlEncoded

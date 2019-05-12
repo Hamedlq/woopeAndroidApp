@@ -70,21 +70,21 @@ public interface StoreInterface {
     Call<List<MainListModel>> getMainLists(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
 
-    @GET("api/Product/GetActiveProduct")
+    @GET("api/Post/GetActivePost")
     Call<List<StoreGalleryItem>> getActiveBranchProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                         @Query("ProductId") Long productId,
                                                         @Query("branchId") long branchId,
                                                         @Query("page") int page,
                                                         @Query("count") int count);
 
-    @GET("api/Product/GetActiveProduct")
+    @GET("api/Post/GetActivePost")
     Call<List<StoreGalleryItem>> getActiveBranchSingleProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                               @Query("ProductId") long productId,
                                                               @Query("branchId") long branchId,
                                                               @Query("page") int page,
                                                               @Query("count") int count);
 
-    @POST("api/Product/ChangeLikeImage")
+    @POST("api/Post/ChangeLikeImage")
     @FormUrlEncoded
     Call<StoreGalleryItem> LikeImage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                      @Field("ImageID") long imageId);
@@ -93,12 +93,12 @@ public interface StoreInterface {
     Call<ApiResponse> notCooperating(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                      @Query("BranchId") long branchId);
 
-    @GET("api/Product/GetAllActiveProducts")
+    @GET("api/Post/GetAllActivePosts")
     Call<List<StoreGalleryItem>> getAllActiveProducts(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                       @Query("page") int page,
                                                       @Query("count") int count);
 
-    @GET("api/Product/SaveOnlineRequest")
+    @GET("api/Post/SaveOnlineRequest")
     Call<ApiResponse> sendOnlineRequest(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                         @Query("productId") long productId);
 
@@ -113,6 +113,17 @@ public interface StoreInterface {
     @POST("api/store/GetBannerList")
     @FormUrlEncoded
     Call<List<Store>> getBanners(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                     @Field("countOfList") int count);
+                                 @Field("countOfList") int count);
+
+    @POST("api/store/ShareStore")
+    @FormUrlEncoded
+    Call<ApiResponse> shareStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                 @Field("branchId") long branchId);
+
+    @POST("api/Transaction/CheckDiscountCode")
+    @FormUrlEncoded
+    Call<ApiResponse> checkDiscountCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                        @Field("discountCode") String code,
+                                        @Field("branchId") long branchId);
 
 }

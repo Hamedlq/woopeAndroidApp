@@ -44,4 +44,5 @@ public class Store extends ApiResponse implements Serializable {
     public int woopeThreshold;
     public List<Long> categoryId;
     public List<SocialModel> socialList;
+    public String describeCountDiscountCode;
 }

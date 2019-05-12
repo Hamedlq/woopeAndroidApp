@@ -43,8 +43,10 @@
     <string name="upload_error">خطا در آپلود عکس</string>
     <string name="support">پشتیبانی</string>
     <string name="logout_profile">خروج</string>
-    <string name="support_phoneNumber">021-40445047</string>
+    <string name="support_phoneNumber">021-40445086</string>
     <string name="support_telegram_id">t.me/woope</string>
+    <string name="support_website">woope.ir</string>
+    <string name="support_instagram">@woope.ir</string>
     <string name="contact_woope_support">تماس با پشتیبانی ووپ</string>
     <string name="name">نام</string>
     <string name="familyName">نام خانوادگی</string>
@@ -132,10 +134,27 @@ info@woope.ir
     <string name="help">راهنما</string>
 
     <string name="invalid_price">مبلغ نامعتبر</string>
+    <string name="overflowed_price">حداکث مبلغ مجاز 10,000,000 تومان است</string>
+    <string name="invalidDiscountCode">کد تخفیف نامعتبر</string>
 
     <string name="BirthDate">تاریخ تولد</string>
     <string name="choose">انتخاب کنید</string>
 
-    <string name="doYouHaveDiscountCode">کد تفیف اختصاصی دارید؟</string>
+    <string name="doYouHaveDiscountCode">کد هدیه اختصاصی دارید؟</string>
+
+    <string name="shareGiftCode">به اشتراک گذاری کد تخفیف</string>
+
+    <string name="connecting">در حال اتصال</string>
+    
+    <string name="totalPrice">مبلغ کل</string>
+    <string name="useStockToman">استفاده از موجودی تومانی</string>
+    <string name="useWoope">استفاده از ووپ</string>
+    <string name="returnWooope">ووپ بازگشتی</string>
+    <string name="remainingToman">باقیمانده تومانی</string>
+    <string name="giftWoope">ووپ هدیه</string>
+
+    <string name="woope">با معرفی این فروشگاه به دوستانتان 5 ووپ به آنها هدیه دهید
+        \n
+        و پس از خریدشان 2 ووپ دریافت کنید</string>
 
 </resources>

@@ -122,7 +122,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         holder.title.setText(store.storeName);
         //holder.count.setText(store.discountPercent + "٪ تخفیف");
         holder.count.setText("");
-        holder.point.setText(store.returnPoint + " عدد ووپ");
+        if (store.returnPoint == 0)
+            holder.point.setVisibility(View.INVISIBLE);
+        else if (store.returnPoint != 0) {
+            holder.point.setVisibility(View.VISIBLE);
+            holder.point.setText(store.returnPoint + " عدد ووپ");
+        }
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
     }

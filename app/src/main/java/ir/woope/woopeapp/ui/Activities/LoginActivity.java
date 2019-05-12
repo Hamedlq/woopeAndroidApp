@@ -43,11 +43,13 @@ public class LoginActivity extends AppCompatActivity {
     MaterialRippleLayout enter;
 
     View layout;
+    AVLoadingIndicatorView enterprogress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
+
         setContentView(R.layout.activity_login);
 
         layout = findViewById(R.id.activity_login);
@@ -83,14 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Retrofit retrofit_getProf = new Retrofit.Builder()
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+
 
         final LoginInterface login = retrofit_login.create(LoginInterface.class);
-        final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
-        final AVLoadingIndicatorView enterprogress = findViewById(R.id.progressBar_login);
+        enterprogress = findViewById(R.id.progressBar_login);
 
         enter.setOnClickListener(new View.OnClickListener() {
 
@@ -110,63 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             final String tk = response.body().getAccessToken();
 
-                            getProfile.getProfileFromServer("bearer " + tk).enqueue(new Callback<Profile>() {
-                                @Override
-                                public void onResponse(Call<Profile> call, Response<Profile> response) {
-
-                                    if (response.code() == 200) {
-
-                                        if (response.body().getConfirmed() == false) {
-
-//                                            Toast.makeText(
-//                                                    LoginActivity.this
-//                                                    , getResources().getString(R.string.confirmPhoneNumber),
-//                                                    Toast.LENGTH_SHORT).show();
-
-                                            Utility.showSnackbar(layout, R.string.confirmPhoneNumber, Snackbar.LENGTH_LONG);
-
-                                            Intent goto_verifphone = new Intent(LoginActivity.this,
-                                                    VerifyPhoneActivity.class);
-                                            goto_verifphone.putExtra(TOKEN, tk);
-                                            startActivity(goto_verifphone);
-
-                                        } else {
-
-                                            SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                                            SharedPreferences.Editor editor = settings.edit();
-                                            editor.putString(TOKEN, tk);
-                                            editor.apply();
-
-//                                            Toast.makeText(
-//                                                    LoginActivity.this
-//                                                    , "ورود موفق!",
-//                                                    Toast.LENGTH_SHORT).show();
-                                            Intent goto_mainpage = new Intent(LoginActivity.this,
-                                                    MainActivity.class);
-                                            goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
-                                            goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            finish();
-                                            startActivity(goto_mainpage);
-
-                                        }
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<Profile> call, Throwable t) {
-
-//                                    Toast.makeText(
-//                                            LoginActivity.this
-//                                            , "خطای اتصال!",
-//                                            Toast.LENGTH_SHORT).show();
-
-                                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
-
-                                    enter.setVisibility(View.VISIBLE);
-                                    enterprogress.smoothToHide();
-                                }
-                            });
+                            getProfile(tk);
 
 
                         } else {
@@ -202,6 +144,67 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 
+        });
+    }
+
+    private void getProfile(final String token){
+        Retrofit retrofit_getProf = new Retrofit.Builder()
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
+        getProfile.getProfileFromServer("bearer " + token).enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+                if (response.code() == 200) {
+
+                    if (response.body().getConfirmed() == false) {
+
+//                                            Toast.makeText(
+//                                                    LoginActivity.this
+//                                                    , getResources().getString(R.string.confirmPhoneNumber),
+//                                                    Toast.LENGTH_SHORT).show();
+
+                        Utility.showSnackbar(layout, R.string.confirmPhoneNumber, Snackbar.LENGTH_LONG);
+
+                        Intent goto_verifphone = new Intent(LoginActivity.this,
+                                VerifyPhoneActivity.class);
+                        goto_verifphone.putExtra(TOKEN, token);
+                        startActivity(goto_verifphone);
+
+                    } else {
+
+                        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(TOKEN, token);
+                        editor.apply();
+
+                        Intent goto_mainpage = new Intent(LoginActivity.this,
+                                MainActivity.class);
+                        goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
+                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(goto_mainpage);
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+//                                    Toast.makeText(
+//                                            LoginActivity.this
+//                                            , "خطای اتصال!",
+//                                            Toast.LENGTH_SHORT).show();
+
+                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
+                enter.setVisibility(View.VISIBLE);
+                enterprogress.smoothToHide();
+            }
         });
     }
 

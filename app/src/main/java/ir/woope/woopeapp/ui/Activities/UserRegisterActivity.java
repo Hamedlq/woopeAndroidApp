@@ -150,7 +150,6 @@ public class UserRegisterActivity extends AppCompatActivity {
 
                                             Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
-
                                         }
 
                                     }
@@ -165,7 +164,6 @@ public class UserRegisterActivity extends AppCompatActivity {
 //                                                Toast.LENGTH_SHORT).show();
 
                                         Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_SHORT);
-
 
                                     }
                                 });

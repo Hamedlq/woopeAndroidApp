@@ -91,7 +91,7 @@ public class StoreGalleryAdapter extends RecyclerView.Adapter<StoreGalleryAdapte
         holder.shimmer.startShimmerAnimation();
 
         // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.productImageAddress).fit().centerInside().into(holder.thumbnail, new com.squareup.picasso.Callback() {
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.postImageAddress).fit().centerInside().into(holder.thumbnail, new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
                 //do smth when picture is loaded successfully

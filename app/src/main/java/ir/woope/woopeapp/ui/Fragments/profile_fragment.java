@@ -33,6 +33,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,9 +52,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -91,6 +89,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.config.Gravity;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -103,6 +104,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
+import static ir.woope.woopeapp.helpers.Utility.commaSeprate;
 
 
 /**
@@ -146,10 +148,10 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     public TextView userNameFamily;
     public TextView username;
-    public TextView userBio;
+//    public TextView userBio;
     public TextView cashCredit;
     public TextView woopeCredit;
-    public TextView useNumber;
+    public TextView giftWoope;
     public RelativeLayout history_layout;
 
 
@@ -193,6 +195,8 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     TabLayout user_tabs;
 
+    CardView cashCard,woopeCard,shareCard;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
 
@@ -217,11 +221,11 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 //        userNameFamily.setAlpha(0);
         username = mRecycler.findViewById(R.id.username);
 //        username.setAlpha(0);
-        userBio = mRecycler.findViewById(R.id.userBio);
+//        userBio = mRecycler.findViewById(R.id.userBio);
 //        userBio.setAlpha(0);
         cashCredit = mRecycler.findViewById(R.id.cashCredit);
         woopeCredit = mRecycler.findViewById(R.id.woope_credit);
-        useNumber = mRecycler.findViewById(R.id.transactionCount);
+        giftWoope = mRecycler.findViewById(R.id.giftWoopeCount);
 
         history_layout = mRecycler.findViewById(R.id.history_layout);
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
@@ -237,6 +241,28 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
         vTransactionHistoryCard = mRecycler.findViewById(R.id.transactionHistoryCard);
         vTransactionHistoryCard.setAlpha(0);
+
+        cashCard = mRecycler.findViewById(R.id.creditCountCard);
+        woopeCard = mRecycler.findViewById(R.id.woopeCountCard);
+        shareCard = mRecycler.findViewById(R.id.shareCountCard);
+
+        shareCard.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+
+                new GuideView.Builder(getContext())
+                        .setTitle("اشتراک گذاری موفق")
+                        .setContentText("با اشتراک گذاری فروشگاه ها بین دوستان خود،ووپ هدیه بگیرید")
+                        .setGravity(Gravity.auto) //optional
+                        .setDismissType(DismissType.anywhere) //optional - default DismissType.targetView
+                        .setTargetView(shareCard)
+                        .setContentTextSize(12)//optional
+                        .setTitleTextSize(14)//optional
+                        .build()
+                        .show();
+
+            }
+        });
 
         //Initializing viewPager
         //viewPager = (ViewPager) mRecycler.findViewById(R.id.pager);
@@ -285,17 +311,17 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         if (pp == null) {
             userNameFamily.setText("");
             username.setText("");
-            userBio.setText("");
+//            userBio.setText("");
             cashCredit.setText("0");
             woopeCredit.setText("0");
-            useNumber.setText("0");
+            giftWoope.setText("0");
         } else {
             userNameFamily.setText(pp.getName() + " " + pp.getFamily());
             username.setText(pp.getUsername());
-            userBio.setText(pp.getUserBio());
-            cashCredit.setText(pp.getCreditString());
+//            userBio.setText(pp.getUserBio());
+            cashCredit.setText(commaSeprate(pp.moneyCredit));
             woopeCredit.setText(pp.getWoopeCreditString());
-            useNumber.setText(pp.getUseNumberString());
+            giftWoope.setText(pp.getCountDiscountCode());
         }
 
         ivUserProfilePhoto.setOnTouchListener(new View.OnTouchListener() {
@@ -548,10 +574,10 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public void setValues(Profile pp) {
         userNameFamily.setText(pp.getName() + " " + pp.getFamily());
         username.setText(pp.getUsername());
-        userBio.setText(pp.getUserBio());
-        cashCredit.setText(pp.getCreditString());
+//        userBio.setText(pp.getUserBio());
+        cashCredit.setText(Utility.commaSeprate(pp.moneyCredit));
         woopeCredit.setText(pp.getWoopeCreditString());
-        useNumber.setText(pp.getUseNumberString());
+        giftWoope.setText(pp.getCountDiscountCode());
     }
 
     public void setPhoto(String filePath) {
@@ -697,10 +723,10 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
                     userNameFamily.setText(user.getName() + " " + user.getFamily());
                     username.setText(user.getUsername());
-                    userBio.setText(user.getUserBio());
-                    cashCredit.setText(user.getCreditString());
+//                    userBio.setText(user.getUserBio());
+                    cashCredit.setText(commaSeprate(user.moneyCredit));
                     woopeCredit.setText(user.getWoopeCreditString());
-                    useNumber.setText(user.getUseNumberString());
+                    giftWoope.setText(user.getCountDiscountCode());
 
                 }
             }

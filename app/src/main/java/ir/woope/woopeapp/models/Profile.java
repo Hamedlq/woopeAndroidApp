@@ -18,12 +18,14 @@ public class Profile extends ApiResponse implements Serializable {
     private String mobile;
     private boolean phoneNumberConfirmed;
     private int woopeCredit = 0;
-    private long moneyCredit;
+    public long moneyCredit;
     private int transactionCount = 0;
 
     private int birthYear;
     private int birthMonth;
     private int birthDay;
+
+    private int countDiscountCode;
 
     public Profile() {
         name = "";
@@ -156,4 +158,9 @@ public class Profile extends ApiResponse implements Serializable {
         this.birthMonth = month;
     }
     public void setBirthDay(int day) { this.birthDay = day; }
+
+    public String getCountDiscountCode()
+    {
+        return String.valueOf(countDiscountCode);
+    }
 }

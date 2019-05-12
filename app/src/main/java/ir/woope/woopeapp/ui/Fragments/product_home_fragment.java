@@ -135,13 +135,13 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
             }
 
-            @Override
-            public void onSendOnlineRequest(View view, int position) {
-
-                StoreGalleryItem s = adapter.getProduct(position);
-                sendOnlineRequest(s.id);
-
-            }
+//            @Override
+//            public void onSendOnlineRequest(View view, int position) {
+//
+//                StoreGalleryItem s = adapter.getProduct(position);
+//                sendOnlineRequest(s.id);
+//
+//            }
 
         };
 
@@ -367,7 +367,7 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
         public void onStoreNameClicked(View view, int position);
 
-        public void onSendOnlineRequest(View view, int position);
+//        public void onSendOnlineRequest(View view, int position);
 
     }
 
