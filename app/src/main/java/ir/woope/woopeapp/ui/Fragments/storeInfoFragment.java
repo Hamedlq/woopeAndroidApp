@@ -85,7 +85,7 @@ public class storeInfoFragment extends Fragment {
     TextView store_discount;
     TextView point_desc;
     TextView store_address;
-    EditText store_phones;
+    TextView store_phones;
     CardView desc_layout;
     CardView point_layout;
     CardView store_phones_layout;

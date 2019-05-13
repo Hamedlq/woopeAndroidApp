@@ -86,7 +86,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
                 }
             });
 
-//            sendOnlineRequest = view.findViewById(R.id.btn_send_onlineRequest_productHome_item);
+            sendOnlineRequest = view.findViewById(R.id.btn_send_onlineRequest_productHome_item);
 
 //            sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
 //
@@ -217,7 +217,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 //        if(Items.get(position).canBeSold)
 //            holder.sendOnlineRequest.setVisibility(View.VISIBLE);
 //        else if(!Items.get(position).canBeSold)
-//            holder.sendOnlineRequest.setVisibility(View.GONE);
+            holder.sendOnlineRequest.setVisibility(View.GONE);
 
     }
 
