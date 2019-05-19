@@ -31,6 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MY_SHARED_PREFERENCES;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class SmsVerification_RegisterActivity extends AppCompatActivity {
@@ -47,7 +48,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
     MaterialRippleLayout accept;
     TextView resend;
-
+    boolean openMainActivity = true;
     AVLoadingIndicatorView loading;
 
     View layout;
@@ -59,7 +60,9 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms_validation_register);
 
         layout = findViewById(R.id.activity_smsValidation_register);
-
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            openMainActivity =  getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
+        }
         toolbar = (Toolbar) findViewById(R.id.sms_validation_register_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
@@ -175,7 +178,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                     if (response.message().toString().equals("OK")) {
 
                                         SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = settings.edit();
+                                        SharedPreferences.Editor editor = settings.edit() ;
                                         editor.putString(TOKEN, response.body().getAccessToken()).apply();
 
 //                                        Toast.makeText(
@@ -188,9 +191,11 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                         Intent goto_mainpage = new Intent(SmsVerification_RegisterActivity.this,
                                                 MainActivity.class);
                                         goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
-                                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         finish();
-                                        startActivity(goto_mainpage);
+                                        if(openMainActivity){
+                                            startActivity(goto_mainpage);
+                                        }
                                     } else {
 
 //                                        Toast.makeText(

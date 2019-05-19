@@ -58,6 +58,7 @@ import smartdevelop.ir.eram.showcaseviewlib.GuideView;
 import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
 import smartdevelop.ir.eram.showcaseviewlib.config.Gravity;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PAY_LIST_ITEM;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
@@ -122,7 +123,17 @@ public class StoreActivity extends AppCompatActivity {
         payBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPayDialog();
+                if(IsLogedIn()){
+                    showPayDialog();
+                }else {
+                    Intent goto_login = new Intent(StoreActivity.this,
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY,false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
+                }
+
             }
         });
 
@@ -243,7 +254,16 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
     }
-
+    private boolean IsLogedIn() {
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String tokenString = prefs.getString(TOKEN, null);
+        if(tokenString==null){
+            return false;
+        }else {
+            return true;
+        }
+    }
     private void showPayDialog() {
         final Dialog dialog = new Dialog(StoreActivity.this);
         dialog.setContentView(R.layout.pay_dialog);

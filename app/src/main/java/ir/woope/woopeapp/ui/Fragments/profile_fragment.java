@@ -744,7 +744,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        menu.clear();
-//        inflater.inflate(R.menu.menu_profile, menu);
+        inflater.inflate(R.menu.menu_profile, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

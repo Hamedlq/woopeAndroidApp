@@ -307,11 +307,9 @@ public class EditProfileActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString(TOKEN, null);
                     editor.apply();
-
                     Intent goto_splash = new Intent(EditProfileActivity.this,
                             SplashActivity.class);
-                    goto_splash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                  MainActivity.main.finish();
+                    goto_splash.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     finish();
                     startActivity(goto_splash);
                     break;

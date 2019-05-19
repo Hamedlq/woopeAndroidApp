@@ -36,6 +36,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
@@ -45,22 +46,25 @@ public class SplashSelectActivity extends AppCompatActivity {
     protected MaterialRippleLayout btn_enter_login;
     @BindView(R.id.btn_register)
     protected MaterialRippleLayout btn_register;
-
+    boolean openMainActivity = true;
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_select_splash);
         ButterKnife.bind(this);
-
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            openMainActivity =  getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
+        }
         btn_register.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 Intent goto_register = new Intent(SplashSelectActivity.this,
                         UserRegisterActivity.class);
                 {
-                    startActivity(goto_register);
+                    goto_register.putExtra(OPEN_MAIN_ACTIVITY,openMainActivity);
                     finish();
+                    startActivity(goto_register);
                 }
             }
         });
@@ -71,8 +75,10 @@ public class SplashSelectActivity extends AppCompatActivity {
                 Intent goto_login = new Intent(SplashSelectActivity.this,
                         LoginActivity.class);
                 {
-                    startActivity(goto_login);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY,openMainActivity);
                     finish();
+                    startActivity(goto_login);
+
                 }
             }
         });

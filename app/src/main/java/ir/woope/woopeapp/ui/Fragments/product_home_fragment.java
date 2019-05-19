@@ -172,7 +172,6 @@ public class product_home_fragment extends Fragment implements ItemClickListener
                             getProductsByPage(PageNumber);
                         }
                     }
-
                 }
             }
         });

@@ -56,6 +56,7 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.ui.Fragments.login_select_fragment;
 import ir.woope.woopeapp.ui.Fragments.main_fragment;
 import ir.woope.woopeapp.ui.Fragments.product_home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
@@ -72,10 +73,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LOGIN_SIGN_UP;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SELECT_FILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 import co.ronash.pushe.Pushe;
 
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     String HOME_FRAGMENT = "HomeFragment";
     String SEARCH_FRAGMENT = "SearchFragment";
     String PROFILE_FRAGMENT = "ProfileFragment";
+    String LOGIN_SELECT_FRAGMENT = "LoginSelectFragment";
     String PRODUCT_HOME_FRAGMENT = "ProductHomeFragment";
     boolean getProfileFromServer = false;
     String authToken = null;
@@ -119,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment favoritesFragment = new profileBookmarkFragment();
     final Fragment productHomeFragment = new product_home_fragment();
     final Fragment profileFragment = new profile_fragment();
+    final Fragment loginSelectFragment = new login_select_fragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = homeFragment;
 
@@ -231,19 +236,27 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_favorite:
+                    if(IsLogedIn()) {
+                        fm.beginTransaction().hide(active).show(favoritesFragment).commit();
+                        active = favoritesFragment;
+                    }else{
+                        fm.beginTransaction().hide(active).show(loginSelectFragment).commit();
+                        active = loginSelectFragment;
+                    }
 
-                    fm.beginTransaction().hide(active).show(favoritesFragment).commit();
-                    active = favoritesFragment;
                     return true;
 
                 case R.id.navigation_profile:
-
-                    fm.beginTransaction().hide(active).show(profileFragment).commit();
-                    active = profileFragment;
+                    if(IsLogedIn()) {
+                        fm.beginTransaction().hide(active).show(profileFragment).commit();
+                        active = profileFragment;
+                    }else{
+                        fm.beginTransaction().hide(active).show(loginSelectFragment).commit();
+                        active = loginSelectFragment;
+                    }
                     return true;
 
                 case R.id.navigation_woope:
-
                     fm.beginTransaction().hide(active).show(productHomeFragment).commit();
                     active = productHomeFragment;
                     return true;
@@ -261,12 +274,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        main = this;
-
-        fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
-        fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, productHomeFragment, "3").hide(productHomeFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, searchFragment, "2").hide(searchFragment).commit();
+        if(IsLogedIn()) {
+            fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
+            fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
+        } else {
+            fm.beginTransaction().add(R.id.frame_layout, loginSelectFragment, LOGIN_SELECT_FRAGMENT).hide(loginSelectFragment).commit();
+        }
         fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").commit();
 
         layout = findViewById(R.id.activity_main);
@@ -366,6 +381,17 @@ public class MainActivity extends AppCompatActivity {
         options.setCompressionQuality(100);
         options.setMaxBitmapSize(10000);
 
+    }
+
+    private boolean IsLogedIn() {
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String tokenString = prefs.getString(TOKEN, null);
+        if(tokenString==null){
+            return false;
+        }else {
+            return true;
+        }
     }
 
 
