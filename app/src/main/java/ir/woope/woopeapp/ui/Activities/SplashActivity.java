@@ -259,7 +259,8 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(goto_main);
 
 
-                } else if (response.code() == 401) {
+                }
+                else if (response.code() == 401) {
 
                     final boolean tutorialIsShown = settings.getBoolean("tutorialIsShown", false);
 
@@ -273,15 +274,15 @@ public class SplashActivity extends AppCompatActivity {
 
                     } else if (tutorialIsShown == true) {
 
+                        /*Intent goto_login = new Intent(SplashActivity.this,
+                                SplashSelectActivity.class);*/
                         Intent goto_login = new Intent(SplashActivity.this,
-                                SplashSelectActivity.class);
+                                MainActivity.class);
                         goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(goto_login);
 
                     }
-
-
                 }
             }
 

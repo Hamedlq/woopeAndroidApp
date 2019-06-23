@@ -17,9 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.gson.Gson;
 
 import butterknife.BindView;
@@ -39,6 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class GiftActivity extends AppCompatActivity {
     Profile profile;
@@ -60,6 +63,15 @@ public class GiftActivity extends AppCompatActivity {
     protected ImageView ok_res;
     @BindView(R.id.nok_res)
     protected ImageView nok_res;
+    @BindView(R.id.gift_view)
+    protected ScrollView gift_view;
+    @BindView(R.id.vUserStats)
+    protected LinearLayout loginPanel;
+    @BindView(R.id.btn_enter_login)
+    protected MaterialRippleLayout btn_enter_login;
+    @BindView(R.id.btn_register)
+    protected MaterialRippleLayout btn_register;
+
 
     String authToken;
 
@@ -79,6 +91,41 @@ public class GiftActivity extends AppCompatActivity {
             //store = (Store) getIntent().getExtras().getSerializable(STORE);
         }
 
+        if(IsLogedIn()) {
+            loginPanel.setVisibility(View.GONE);
+            gift_view.setVisibility(View.VISIBLE);
+            button.setVisibility(View.VISIBLE);
+        }else{
+            loginPanel.setVisibility(View.VISIBLE);
+            gift_view.setVisibility(View.GONE);
+            button.setVisibility(View.GONE);
+        }
+
+        btn_register.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                Intent goto_register = new Intent(GiftActivity.this,
+                        UserRegisterActivity.class);
+                {
+                    startActivity(goto_register);
+                    //getActivity().finish();
+                }
+            }
+        });
+
+        btn_enter_login.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                Intent goto_login = new Intent(GiftActivity.this,
+                        LoginActivity.class);
+                {
+                    startActivity(goto_login);
+                    //getActivity().finish();
+                }
+            }
+        });
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
@@ -95,6 +142,17 @@ public class GiftActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean IsLogedIn() {
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String tokenString = prefs.getString(TOKEN, null);
+        if(tokenString==null){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     private void SendGiftCode() {
@@ -114,7 +172,7 @@ public class GiftActivity extends AppCompatActivity {
 
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+        authToken = prefs.getString(TOKEN, "null");
 
         showProgreeBar();
         Call<ApiResponse> call =

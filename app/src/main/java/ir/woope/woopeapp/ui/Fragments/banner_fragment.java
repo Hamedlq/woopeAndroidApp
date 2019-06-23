@@ -47,12 +47,13 @@ public class banner_fragment extends Fragment {
     ImageView banner;
 
     private List<Store> banners;
+    Bundle bundle;
     filter_fragment.ItemTouchListener itemTouchListener;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
+        bundle = this.getArguments();
         if (bundle != null) {
             banners = (List<Store>) bundle.getSerializable(STORE_LIST);
         }
@@ -65,8 +66,9 @@ public class banner_fragment extends Fragment {
                              final Bundle savedInstanceState) {
         mRecycler = inflater.inflate(R.layout.adv_card, null);
         ButterKnife.bind(this, mRecycler);
-        Picasso.with(getContext()).load(Constants.GlobalConstants.LOGO_URL + banners.get(0).logoSrc).into(banner);
-
+        if (banners!=null && banners.size() >0) {
+            Picasso.with(getContext()).load(Constants.GlobalConstants.LOGO_URL + banners.get(0).logoSrc).into(banner);
+        }
         banner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

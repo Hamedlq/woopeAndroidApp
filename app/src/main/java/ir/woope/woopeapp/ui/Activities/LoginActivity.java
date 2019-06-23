@@ -31,6 +31,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,17 +42,18 @@ public class LoginActivity extends AppCompatActivity {
     Retrofit retrofit_login;
 
     MaterialRippleLayout enter;
-
+    Boolean openMainActivity=true;
     View layout;
-    AVLoadingIndicatorView enterprogress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
-
         setContentView(R.layout.activity_login);
 
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            openMainActivity =  getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
+        }
         layout = findViewById(R.id.activity_login);
 
         final EditText username = (EditText) findViewById(R.id.txtbx_userphone_login);
@@ -85,10 +87,14 @@ public class LoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-
+        Retrofit retrofit_getProf = new Retrofit.Builder()
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         final LoginInterface login = retrofit_login.create(LoginInterface.class);
-        enterprogress = findViewById(R.id.progressBar_login);
+        final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
+        final AVLoadingIndicatorView enterprogress = findViewById(R.id.progressBar_login);
 
         enter.setOnClickListener(new View.OnClickListener() {
 
@@ -108,7 +114,62 @@ public class LoginActivity extends AppCompatActivity {
 
                             final String tk = response.body().getAccessToken();
 
-                            getProfile(tk);
+                            getProfile.getProfileFromServer("bearer " + tk).enqueue(new Callback<Profile>() {
+                                @Override
+                                public void onResponse(Call<Profile> call, Response<Profile> response) {
+
+                                    if (response.code() == 200) {
+
+                                        if (response.body().getConfirmed() == false) {
+
+//                                            Toast.makeText(
+//                                                    LoginActivity.this
+//                                                    , getResources().getString(R.string.confirmPhoneNumber),
+//                                                    Toast.LENGTH_SHORT).show();
+
+                                            Utility.showSnackbar(layout, R.string.confirmPhoneNumber, Snackbar.LENGTH_LONG);
+
+                                            Intent goto_verifphone = new Intent(LoginActivity.this,
+                                                    VerifyPhoneActivity.class);
+                                            goto_verifphone.putExtra(TOKEN, tk);
+                                            startActivity(goto_verifphone);
+
+                                        } else {
+                                            SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = settings.edit();
+                                            editor.putString(TOKEN, tk);
+                                            editor.apply();
+//                                            Toast.makeText(
+//                                                    LoginActivity.this
+//                                                    , "ورود موفق!",
+//                                                    Toast.LENGTH_SHORT).show();
+                                            Intent goto_mainpage = new Intent(LoginActivity.this,
+                                                    MainActivity.class);
+                                            goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
+                                            goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            finish();
+                                            if(openMainActivity){
+                                                startActivity(goto_mainpage);
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<Profile> call, Throwable t) {
+
+//                                    Toast.makeText(
+//                                            LoginActivity.this
+//                                            , "خطای اتصال!",
+//                                            Toast.LENGTH_SHORT).show();
+
+                                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+
+                                    enter.setVisibility(View.VISIBLE);
+                                    enterprogress.smoothToHide();
+                                }
+                            });
 
 
                         } else {
@@ -147,87 +208,32 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void getProfile(final String token){
-        Retrofit retrofit_getProf = new Retrofit.Builder()
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final ProfileInterface getProfile = retrofit_getProf.create(ProfileInterface.class);
-        getProfile.getProfileFromServer("bearer " + token).enqueue(new Callback<Profile>() {
-            @Override
-            public void onResponse(Call<Profile> call, Response<Profile> response) {
-
-                if (response.code() == 200) {
-
-                    if (response.body().getConfirmed() == false) {
-
-//                                            Toast.makeText(
-//                                                    LoginActivity.this
-//                                                    , getResources().getString(R.string.confirmPhoneNumber),
-//                                                    Toast.LENGTH_SHORT).show();
-
-                        Utility.showSnackbar(layout, R.string.confirmPhoneNumber, Snackbar.LENGTH_LONG);
-
-                        Intent goto_verifphone = new Intent(LoginActivity.this,
-                                VerifyPhoneActivity.class);
-                        goto_verifphone.putExtra(TOKEN, token);
-                        startActivity(goto_verifphone);
-
-                    } else {
-
-                        SharedPreferences settings = getApplicationContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(TOKEN, token);
-                        editor.apply();
-
-                        Intent goto_mainpage = new Intent(LoginActivity.this,
-                                MainActivity.class);
-                        goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
-                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(goto_mainpage);
-
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Profile> call, Throwable t) {
-
-//                                    Toast.makeText(
-//                                            LoginActivity.this
-//                                            , "خطای اتصال!",
-//                                            Toast.LENGTH_SHORT).show();
-
-                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
-
-                enter.setVisibility(View.VISIBLE);
-                enterprogress.smoothToHide();
-            }
-        });
-    }
-
     @Override
     public void onBackPressed() {
-        Intent goto_select = new Intent(LoginActivity.this,
+        /*Intent goto_select = new Intent(LoginActivity.this,
                 SplashSelectActivity.class);
         {
             startActivity(goto_select);
             finish();
-        }
+        }*/
+        Intent data = new Intent();
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            Intent goto_select = new Intent(LoginActivity.this,
+            /*Intent goto_select = new Intent(LoginActivity.this,
                     SplashSelectActivity.class);
             {
                 startActivity(goto_select);
                 finish();
-            }
+            }*/
+            Intent data = new Intent();
+            setResult(RESULT_OK, data);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

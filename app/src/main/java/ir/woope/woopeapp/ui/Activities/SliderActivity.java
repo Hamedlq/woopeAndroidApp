@@ -123,7 +123,8 @@ public class SliderActivity extends AppCompatActivity implements CardStackListen
             editor.putBoolean("tutorialIsShown", true);
             editor.apply();
 
-            startActivity(new Intent(this, SplashSelectActivity.class));
+            //startActivity(new Intent(this, SplashSelectActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finishAffinity();
         }
 

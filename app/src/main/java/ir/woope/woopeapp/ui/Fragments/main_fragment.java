@@ -95,6 +95,7 @@ public class main_fragment extends Fragment {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setHasOptionsMenu(true);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class main_fragment extends Fragment {
         getActivity().setTitle("");
         mRecycler = inflater.inflate(R.layout.fragment_main, null);
         ButterKnife.bind(this, mRecycler);
-        setHasOptionsMenu(true);
+        this.setHasOptionsMenu(true);
 
 //        categoryTab =(TabLayout) mRecycler.findViewById(R.id.categoryTabLayout);
 
@@ -321,8 +322,6 @@ public class main_fragment extends Fragment {
 
             }
         });
-
-
     }
 
     private void showLists() {
@@ -500,8 +499,9 @@ public class main_fragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_gift, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_gift, menu);
     }
 
     @Override

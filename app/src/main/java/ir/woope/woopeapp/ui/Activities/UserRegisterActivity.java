@@ -27,6 +27,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
+
 public class UserRegisterActivity extends AppCompatActivity {
 
     EditText username, password, phonenumber;
@@ -37,7 +39,7 @@ public class UserRegisterActivity extends AppCompatActivity {
     RegisterInterface reg;
     TextView txt_rules;
     Toolbar toolbar;
-
+    boolean openMainActivity = true;
     View layout;
 
     @Override
@@ -45,7 +47,9 @@ public class UserRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_user_register);
-
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            openMainActivity =  getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
+        }
         layout = findViewById(R.id.activity_userRegister);
 
         toolbar = (Toolbar) findViewById(R.id.register_toolbar);
@@ -119,6 +123,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                 goto_sms_validation.putExtra("phone_number", phonenumber.getText().toString());
                                 goto_sms_validation.putExtra("username", username.getText().toString());
                                 goto_sms_validation.putExtra("password", password.getText().toString());
+                                goto_sms_validation.putExtra(OPEN_MAIN_ACTIVITY,openMainActivity);
 
                                 reg.send_code(phonenumber.getText().toString()).enqueue(new Callback<ApiResponse>() {
                                     @Override
@@ -223,24 +228,30 @@ public class UserRegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent goto_select = new Intent(UserRegisterActivity.this,
+        /*Intent goto_select = new Intent(UserRegisterActivity.this,
                 SplashSelectActivity.class);
         {
             startActivity(goto_select);
             finish();
-        }
+        }*/
+        Intent data = new Intent();
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            Intent goto_select = new Intent(UserRegisterActivity.this,
+            /*Intent goto_select = new Intent(UserRegisterActivity.this,
                     SplashSelectActivity.class);
             {
                 startActivity(goto_select);
                 finish();
-            }
+            }*/
+            Intent data = new Intent();
+            setResult(RESULT_OK, data);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
