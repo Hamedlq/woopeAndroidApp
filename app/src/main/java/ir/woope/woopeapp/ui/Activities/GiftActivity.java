@@ -79,7 +79,6 @@ public class GiftActivity extends AppCompatActivity {
             //store = (Store) getIntent().getExtras().getSerializable(STORE);
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.right_arrow);
@@ -175,7 +174,6 @@ public class GiftActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -188,6 +186,15 @@ public class GiftActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
+
     }
 
     @Override
@@ -210,13 +217,6 @@ public class GiftActivity extends AppCompatActivity {
         button.setEnabled(true);
     }
 
-    @Override
-    public void onBackPressed() {
 
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK, returnIntent);
-        finish();
-
-    }
 
 }

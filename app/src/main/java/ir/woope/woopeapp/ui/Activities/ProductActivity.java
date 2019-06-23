@@ -59,7 +59,7 @@ public class ProductActivity extends AppCompatActivity {
 
     AVLoadingIndicatorView loading;
 
-    Button sendOnlineRequest;
+//    Button sendOnlineRequest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class ProductActivity extends AppCompatActivity {
         LikeCount = findViewById(R.id.txt_likeCount);
         layout = findViewById(R.id.productActivity_layout);
         likeButton = findViewById(R.id.product_likebutton);
-        sendOnlineRequest = findViewById(R.id.btn_send_onlineRequest_productActivity);
+//        sendOnlineRequest = findViewById(R.id.btn_send_onlineRequest_productActivity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.product_toolbar);
         setSupportActionBar(toolbar);
@@ -83,11 +83,11 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                sendOnlineRequest(product.id);
-            }
-        });
+//        sendOnlineRequest.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View arg0) {
+//                sendOnlineRequest(product.id);
+//            }
+//        });
 
         loading = findViewById(R.id.loading_product);
 
@@ -302,10 +302,10 @@ public class ProductActivity extends AppCompatActivity {
                         LikeCount.setText(product.countLike + " " + getResources().getString(R.string.like));
                     }
 
-                    if(product.canBeSold)
-                        sendOnlineRequest.setVisibility(View.VISIBLE);
-                    else if(!product.canBeSold)
-                        sendOnlineRequest.setVisibility(View.GONE);
+//                    if(product.canBeSold)
+//                        sendOnlineRequest.setVisibility(View.VISIBLE);
+//                    else if(!product.canBeSold)
+//                        sendOnlineRequest.setVisibility(View.GONE);
 
                 }
             }

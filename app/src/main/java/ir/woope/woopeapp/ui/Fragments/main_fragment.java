@@ -2,37 +2,29 @@ package ir.woope.woopeapp.ui.Fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.util.AttributeSet;
 
 import com.squareup.picasso.Picasso;
-import com.yalantis.ucrop.view.TransformImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +34,8 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.CategoryAdapter;
 import ir.woope.woopeapp.helpers.Constants;
-import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
-import ir.woope.woopeapp.models.ApiResponse;
-import ir.woope.woopeapp.models.Category;
+import ir.woope.woopeapp.models.CategoryModel;
 import ir.woope.woopeapp.models.ListTypes;
 import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.MallModel;
@@ -54,7 +44,6 @@ import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Activities.ContactUsActivity;
 import ir.woope.woopeapp.ui.Activities.GiftActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
-import ir.woope.woopeapp.ui.Activities.StoreListActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,13 +51,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_BRANCHES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_MODEL;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_TITLE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.MALL_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.SHOULD_GET_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE_LIST;
-import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 /**
  * Created by Hamed on 6/11/2018.
@@ -76,31 +65,43 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class main_fragment extends Fragment {
 
-    /*@BindView(R.id.category_recycler)
-    RecyclerView category_recycler;*/
+    @BindView(R.id.categoryRecycler)
+    RecyclerView category_recycler;
     @BindView(R.id.container_layout)
     LinearLayout container_layout;
-    @BindView(R.id.all_button)
-    RelativeLayout all_button;
+
+//    TabLayout categoryTab;
+//
+//    @BindView(R.id.all_button)
+//    RelativeLayout all_button;
 
     String MOST_WOOPE_FILTER = "MOST_WOOPE";
     String MOST_PURCHASE_FILTER = "MOST_PURCHASE";
 
     private View mRecycler;
-    private List<Category> categoryList;
+    private List<CategoryModel> categoryList;
+    CategoryAdapter categoryAdapter;
     private List<MainListModel> mainFilterList;
     String ALBUM_FRAGMENT = "AlbumFragment";
     String authToken;
     private boolean isVisible = true;
-    private CategoryAdapter category_adapter;
 
     Toolbar toolbar;
 
     List<Store> stores;
 
+    public CategoryTouchListener categoryTouchListener;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        getListItems();
+        getCategories();
+        super.onResume();
     }
 
     @Override
@@ -112,40 +113,71 @@ public class main_fragment extends Fragment {
         ButterKnife.bind(this, mRecycler);
         setHasOptionsMenu(true);
 
-       /* categoryList = new ArrayList<>();
-        categoryList.add(new Category("همه", 5));
-        categoryList.add(new Category("dolam", 5));*/
-//        LinearLayoutManager layoutManager
-//                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        //category_recycler.setLayoutManager(layoutManager);
-        //category_adapter = new CategoryAdapter(getActivity(), categoryList);
-        //category_recycler.setAdapter(category_adapter);
+//        categoryTab =(TabLayout) mRecycler.findViewById(R.id.categoryTabLayout);
+
+        categoryList = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getContext(), categoryList,categoryTouchListener);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        category_recycler.setLayoutManager(layoutManager);
+        category_recycler.setItemAnimator(new DefaultItemAnimator());
+        category_recycler.setAdapter(categoryAdapter);
 
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        all_button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    MainListModel ml = new MainListModel();
-                    ml.listOrder = 81;
-                    Intent store_list = new Intent(getContext(),
-                            StoreListActivity.class);
-                    store_list.putExtra(LIST_MODEL, ml);
+//        all_button.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    MainListModel ml = new MainListModel();
+//                    ml.listOrder = 81;
+//                    Intent store_list = new Intent(getContext(),
+//                            StoreListActivity.class);
+//                    store_list.putExtra(LIST_MODEL, ml);
+//
+//                    startActivity(store_list);
+//
+//                }
+//                return true;
+//            }
+//        });
 
-                    startActivity(store_list);
-
-                }
-                return true;
-            }
-        });
+//        setupTabView(categoryNames,categoryIcons);
 
         getListItems();
+        getCategories();
         //getStoresByPage(MOST_WOOPE_FILTER);
         //getStoresByPage(MOST_PURCHASE_FILTER);
+
+        categoryTouchListener = new main_fragment.CategoryTouchListener() {
+            @Override
+            public void onCategoryTap(View v, int position) {
+                search_fragment.getInstance().categoryId = categoryList.get(position).id;
+                search_fragment.getInstance().adapter.emptyList();
+                search_fragment.getInstance().findStoresByPage("",0,null,categoryList.get(position).id,null);
+                search_fragment.getInstance().categoryButton.setText(categoryList.get(position).name);
+                search_fragment.getInstance().categoryId = categoryList.get(position).id;
+                search_fragment.getInstance().categoryAdapter.deselectItem(search_fragment.getInstance().selectedCategory);
+                search_fragment.getInstance().categoryAdapter.selectItem(position);
+                search_fragment.getInstance().selectedCategory = position;
+//                ((MainActivity)getActivity()).switchPage(R.id.navigation_‌search);
+                ((MainActivity)getActivity()).switchToSearch();
+            }
+        };
+
         return mRecycler;
     }
+
+//    public void setupTabView(String[] categoryNames,int[] categoryIcons){
+//        for (int i = 0; i < categoryTab.getTabCount(); i++) {
+//            categoryTab.getTabAt(i).setCustomView(R.layout.category_item);
+//            TextView categoryName =  categoryTab.getTabAt(i).getCustomView().findViewById(R.id.category_label);
+//            categoryName.setText(categoryNames[i]);
+//            ImageView CategoryIcon =  categoryTab.getTabAt(i).getCustomView().findViewById(R.id.category_icon);
+//            Picasso.with(getContext()).load(categoryIcons[i]).into(CategoryIcon);
+//        }
+//    }
 
     //private void getStoresByPage(final String filter) {
     private void getStores(final FrameLayout childLayout, final MainListModel ml) {
@@ -179,6 +211,7 @@ public class main_fragment extends Fragment {
                         arguments.putSerializable(STORE_LIST, (ArrayList<Store>) response.body());
                         arguments.putSerializable(LIST_MODEL, ml);
                         arguments.putString(LIST_TITLE, ml.listTitle);
+                        arguments.putBoolean(LIST_BRANCHES, ml.hasMoreBranches);
                         Fragment woopeFilter = new filter_fragment();
                         woopeFilter.setArguments(arguments);
                         fragmentManager.beginTransaction()
@@ -193,8 +226,6 @@ public class main_fragment extends Fragment {
 
             }
         });
-
-
     }
 
     @Override
@@ -389,6 +420,7 @@ public class main_fragment extends Fragment {
 
         SharedPreferences prefs =
                 getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -414,7 +446,7 @@ public class main_fragment extends Fragment {
             @Override
             public void onFailure(Call<List<Store>> call, Throwable t) {
 
-                String s = t.getMessage();
+//                String s = t.getMessage();
 //                hideProgreeBar();
 //                snack.dismiss();
 //                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
@@ -422,6 +454,47 @@ public class main_fragment extends Fragment {
             }
         });
 
+    }
+
+    private void getCategories() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs =
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+
+        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        Call<List<CategoryModel>> call =
+                providerApiInterface.getCategories("bearer " + authToken);
+
+        call.enqueue(new Callback<List<CategoryModel>>() {
+            @Override
+            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
+                int code = response.code();
+                if (code == 200) {
+                    categoryList =  response.body();
+                    categoryAdapter = new CategoryAdapter(getContext(), categoryList,categoryTouchListener);
+                    category_recycler.setAdapter(categoryAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public interface CategoryTouchListener {
+        public void onCategoryTap(View v, int position);
     }
 
     @Override
@@ -439,13 +512,13 @@ public class main_fragment extends Fragment {
                 Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
                 giftIntent.putExtra(PREF_PROFILE, userobj);
                 getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
-                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+                getActivity().overridePendingTransition(R.anim.slide_down, R.anim.no_change);
                 break;
 
             case R.id.nav_help:
                 Intent intentContactUs = new Intent(getActivity(), ContactUsActivity.class);
                 getActivity().startActivityForResult(intentContactUs, SHOULD_GET_PROFILE);
-                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+                getActivity().overridePendingTransition(R.anim.slide_down, R.anim.no_change);
                 break;
 
             default:

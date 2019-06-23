@@ -35,10 +35,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ir.metrix.sdk.Metrix;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.adapters.StoreViewPagerAdapter;
@@ -272,7 +275,7 @@ public class StoreActivity extends AppCompatActivity {
                     if (discountCode.getText().toString().matches("")) {
                         goToPaying(null, null);
                     } else if (!discountCode.getText().toString().matches("")) {
-                        checkCode(discountCode.getText().toString(), store.storeId);
+                        checkCode(discountCode.getText().toString(), store.storeId,totalPrice);
                     }
                 } else if(totalPrice>10000000){
                     invalidPrice.setText(R.string.overflowed_price);
@@ -355,7 +358,6 @@ public class StoreActivity extends AppCompatActivity {
         Call<Store> call =
                 providerApiInterface.getStore("bearer " + authToken, storeId);
 
-
         call.enqueue(new Callback<Store>() {
             @Override
             public void onResponse(Call<Store> call, Response<Store> response) {
@@ -395,6 +397,11 @@ public class StoreActivity extends AppCompatActivity {
 //                        store_point.setText(store.returnPoint + " عدد ووپ ");
 ////                        point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
 //                    }
+
+                    if(store.isFollowed)
+                        bookmark.setChecked(true);
+                    else if(!store.isFollowed)
+                        bookmark.setChecked(false);
 
                     if (store.returnPoint == 0)
                         store_point.setVisibility(View.INVISIBLE);
@@ -468,7 +475,7 @@ public class StoreActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Share Text Using"));
     }
 
-    private void checkCode(final String Code, long branchId) {
+    private void checkCode(final String Code, long branchId,long amount) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -482,7 +489,7 @@ public class StoreActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<ApiResponse> call =
-                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId);
+                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId,amount);
 
         showDialogProgreeBar();
 
@@ -532,6 +539,15 @@ public class StoreActivity extends AppCompatActivity {
         model.discountCode = discountCode;
         myIntent.putExtra(PAY_LIST_ITEM, model);
         myIntent.putExtra("LogoUrl",store.logoSrc);
+
+//        Map<String, String> attributes = new HashMap<>();
+//        attributes.put("store_name", model.storeName);
+//
+//        Map<String, Double> metrics = new HashMap<>();
+//        metrics.put("price", Double.valueOf(model.totalPrice));
+//
+//        Metrix.getInstance().newEvent("hogju", attributes, metrics);
+
         this.startActivity(myIntent);
         this.finish();
     }

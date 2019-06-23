@@ -124,7 +124,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                                        if (response.message().toString().equals("OK")) {
+                                        if (response.body().status==101) {
 
                                             progress.smoothToHide();
 
@@ -136,7 +136,6 @@ public class UserRegisterActivity extends AppCompatActivity {
                                             Utility.showSnackbar(layout, response.body().getMessage(), Snackbar.LENGTH_SHORT);
 
                                             startActivity(goto_sms_validation);
-                                            finish();
 
                                         } else {
 

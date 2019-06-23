@@ -6,11 +6,13 @@ import java.util.List;
 
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.models.CategoryModel;
 import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.MallModel;
-import ir.woope.woopeapp.models.PayListModel;
+import ir.woope.woopeapp.models.SortType;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
+import ir.woope.woopeapp.models.ZoneModel;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -31,7 +33,10 @@ public interface StoreInterface {
     @FormUrlEncoded
     Call<List<Store>> FindStoreByPage(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                       @Query("query") String query,
-                                      @Field("pageNumber") int pageNumber);
+                                      @Field("pageNumber") int pageNumber,
+                                      @Nullable @Field("Zones") List<Long> zones,
+                                      @Nullable @Field("CategoryId") Long categoryId,
+                                      @Nullable @Field("SortType") Short sortType );
 
     @POST(Constants.Actions.FOLLOW_STORE)
     @FormUrlEncoded
@@ -69,17 +74,16 @@ public interface StoreInterface {
     @GET("api/Branch/GetMainLists")
     Call<List<MainListModel>> getMainLists(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
-
     @GET("api/Post/GetActivePost")
     Call<List<StoreGalleryItem>> getActiveBranchProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                        @Query("ProductId") Long productId,
+                                                        @Query("PostId") Long productId,
                                                         @Query("branchId") long branchId,
                                                         @Query("page") int page,
                                                         @Query("count") int count);
 
     @GET("api/Post/GetActivePost")
     Call<List<StoreGalleryItem>> getActiveBranchSingleProduct(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
-                                                              @Query("ProductId") long productId,
+                                                              @Query("PostId") long productId,
                                                               @Query("branchId") long branchId,
                                                               @Query("page") int page,
                                                               @Query("count") int count);
@@ -124,6 +128,18 @@ public interface StoreInterface {
     @FormUrlEncoded
     Call<ApiResponse> checkDiscountCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                         @Field("discountCode") String code,
-                                        @Field("branchId") long branchId);
+                                        @Field("branchId") long branchId,
+                                        @Field("Amount") long Amount);
+
+    @POST("api/Branch/GetCategories")
+    Call<List<CategoryModel>> getCategories(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
+
+    @POST("api/Location/GetAllActiveZones")
+    @FormUrlEncoded
+    Call<List<ZoneModel>> getAllActiveZones(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                            @Field("cityId") long cityId);
+
+    @POST("api/Store/SortingItems")
+    Call<List<SortType>> getSortItems(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
 
 }

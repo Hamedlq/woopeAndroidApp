@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -27,8 +29,11 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ir.metrix.sdk.Metrix;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
@@ -44,6 +49,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.METRIX_APP_ID;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
@@ -65,6 +71,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_splash);
+
+        Metrix.initialize(this, METRIX_APP_ID);
+        Metrix.getInstance().enableLogging(true);
+        Metrix.getInstance().setLogLevel(Log.DEBUG);
+        Metrix.getInstance().setScreenFlowsAutoFill(true);
+        Metrix.getInstance().setFlushEventsOnClose(true);
 
         ButterKnife.bind(this);
 
@@ -157,8 +169,9 @@ public class SplashActivity extends AppCompatActivity {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://woope.ir/app/woope.apk"));
-                    startActivity(browserIntent);
+//                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://woope.ir/app/woope.apk"));
+//                    startActivity(browserIntent);
+                    shareViaApp("com.farsitel.bazaar","https://cafebazaar.ir/app/ir.woope.woopeapp/");
 
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -167,6 +180,29 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void shareViaApp(String appPackageName, String url) {
+        boolean found = false;
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+
+        List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(intent, 0);
+        if (!resInfo.isEmpty()){
+            for (ResolveInfo info : resInfo) {
+                if (info.activityInfo.packageName.toLowerCase().contains(appPackageName) ||
+                        info.activityInfo.name.toLowerCase().contains(appPackageName) ) {
+
+                    intent.setPackage(info.activityInfo.packageName);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                return;
+
+            startActivity(Intent.createChooser(intent, "Select"));
+        }
+    }
 
     private void showLoading(){
         retry.setVisibility(View.GONE);

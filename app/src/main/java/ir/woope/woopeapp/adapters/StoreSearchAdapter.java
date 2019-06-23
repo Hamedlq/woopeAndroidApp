@@ -35,6 +35,7 @@ import ir.woope.woopeapp.ui.Fragments.search_fragment;
  * Created by Ravi Tamada on 18/05/16.
  */
 public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.MyViewHolder> {
+
     private static final int MAX_CLICK_DURATION = 200;
     private Context mContext;
     private List<Store> albumList;
@@ -43,7 +44,6 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     private float mDownY;
     private search_fragment.ItemTouchListener onItemTouchListener;
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, count, point;
         public ImageView followIcon;
@@ -51,6 +51,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         public LinearLayout action_layout;
 
         public MyViewHolder(View view) {
+
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
@@ -169,7 +170,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
         holder.count.setText("");
         if (store.returnPoint == 0)
             holder.point.setVisibility(View.INVISIBLE);
-        else if (store.returnPoint != 0) {
+        else if (store.returnPoint != 0){
             holder.point.setVisibility(View.VISIBLE);
             holder.point.setText(store.returnPoint + " عدد ووپ");
         }
@@ -248,6 +249,7 @@ public class StoreSearchAdapter extends RecyclerView.Adapter<StoreSearchAdapter.
     public void emptyList() {
 
         albumList.clear();
+        notifyDataSetChanged();
 
     }
 

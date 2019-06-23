@@ -61,11 +61,23 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name="ir.metrix.sdk.MetrixReferrerReceiver"
+            android:permission="android.permission.INSTALL_PACKAGES"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <!--<meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_442079978483"/>-->
         <!--<meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>-->
 
         <meta-data android:name="co.ronash.pushe.token" android:value="PUSHE_442079978483"/>
         <meta-data android:name="co.ronash.pushe.cr" android:value="Tm9uZQ=="/>
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -77,7 +89,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label=""
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            >
 
         </activity>
         <activity android:name=".ui.Activities.PayActivity"

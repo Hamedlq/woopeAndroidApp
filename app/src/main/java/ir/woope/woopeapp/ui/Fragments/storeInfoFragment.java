@@ -383,6 +383,8 @@ public class storeInfoFragment extends Fragment {
             text.setText(key + " " + value);
         }
 
+        text.setTextColor(getResources().getColor(R.color.black));
+
         cardView.addView(text);
 
         socialsLayout.addView(cardView);
