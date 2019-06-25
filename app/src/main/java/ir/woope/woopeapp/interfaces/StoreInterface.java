@@ -129,10 +129,7 @@ public interface StoreInterface {
     Call<ApiResponse> checkDiscountCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                         @Field("discountCode") String code,
                                         @Field("branchId") long branchId,
-<<<<<<< HEAD
                                         @Field("Amount") long amount);
-=======
-                                        @Field("Amount") long Amount);
 
     @POST("api/Branch/GetCategories")
     Call<List<CategoryModel>> getCategories(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
@@ -144,6 +141,4 @@ public interface StoreInterface {
 
     @POST("api/Store/SortingItems")
     Call<List<SortType>> getSortItems(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken);
->>>>>>> master
-
 }

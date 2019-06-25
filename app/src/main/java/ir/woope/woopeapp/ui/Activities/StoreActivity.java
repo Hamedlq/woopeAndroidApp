@@ -318,11 +318,7 @@ public class StoreActivity extends AppCompatActivity {
                     if (discountCode.getText().toString().matches("")) {
                         goToPaying(null, null);
                     } else if (!discountCode.getText().toString().matches("")) {
-<<<<<<< HEAD
                         checkCode(discountCode.getText().toString(), store.storeId,totalPrice);
-=======
-                        checkCode(discountCode.getText().toString(), store.storeId, totalPrice);
->>>>>>> master
                     }
                 } else if (totalPrice > 10000000) {
                     invalidPrice.setText(R.string.overflowed_price);
@@ -524,11 +520,7 @@ public class StoreActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Share Text Using"));
     }
 
-<<<<<<< HEAD
-    private void checkCode(final String Code, long branchId,long amount) {
-=======
     private void checkCode(final String Code, long branchId, long amount) {
->>>>>>> master
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -542,11 +534,7 @@ public class StoreActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<ApiResponse> call =
-<<<<<<< HEAD
                 providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId,amount);
-=======
-                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId, amount);
->>>>>>> master
 
         showDialogProgreeBar();
 

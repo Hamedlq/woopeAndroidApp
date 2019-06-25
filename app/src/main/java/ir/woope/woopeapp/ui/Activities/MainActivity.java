@@ -326,10 +326,10 @@ public class MainActivity extends AppCompatActivity {
 
         fm.beginTransaction().add(R.id.frame_layout, productHomeFragment, "3").hide(productHomeFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, searchFragment, "2").hide(searchFragment).commit();
-        if(IsLogedIn()) {
-            fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
-            fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
-        } else {
+        fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
+
+        if(!IsLogedIn()) {
             fm.beginTransaction().add(R.id.frame_layout, loginSelectFragment, LOGIN_SELECT_FRAGMENT).hide(loginSelectFragment).commit();
         }
         fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").commit();
