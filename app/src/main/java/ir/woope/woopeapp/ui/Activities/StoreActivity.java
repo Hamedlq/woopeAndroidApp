@@ -292,7 +292,7 @@ public class StoreActivity extends AppCompatActivity {
                     if (discountCode.getText().toString().matches("")) {
                         goToPaying(null, null);
                     } else if (!discountCode.getText().toString().matches("")) {
-                        checkCode(discountCode.getText().toString(), store.storeId);
+                        checkCode(discountCode.getText().toString(), store.storeId,totalPrice);
                     }
                 } else if(totalPrice>10000000){
                     invalidPrice.setText(R.string.overflowed_price);
@@ -488,7 +488,7 @@ public class StoreActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Share Text Using"));
     }
 
-    private void checkCode(final String Code, long branchId) {
+    private void checkCode(final String Code, long branchId,long amount) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -502,7 +502,7 @@ public class StoreActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<ApiResponse> call =
-                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId);
+                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId,amount);
 
         showDialogProgreeBar();
 

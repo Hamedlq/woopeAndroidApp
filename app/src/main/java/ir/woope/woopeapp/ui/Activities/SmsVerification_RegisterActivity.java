@@ -1,12 +1,16 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,6 +18,11 @@ import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.chaos.view.PinView;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import ir.woope.woopeapp.R;
@@ -23,6 +32,7 @@ import ir.woope.woopeapp.interfaces.LoginInterface;
 import ir.woope.woopeapp.interfaces.RegisterInterface;
 import ir.woope.woopeapp.models.AccessToken;
 import ir.woope.woopeapp.models.ApiResponse;
+import ir.woope.woopeapp.receivers.SMSBroadcastReceiver;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +71,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
         layout = findViewById(R.id.activity_smsValidation_register);
         if (getIntent() != null && getIntent().getExtras() != null) {
-            openMainActivity =  getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
+            openMainActivity = getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
         }
         toolbar = (Toolbar) findViewById(R.id.sms_validation_register_toolbar);
         setSupportActionBar(toolbar);
@@ -93,7 +103,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
         resend = findViewById(R.id.btn_resendcode_register);
 
         timer();
-
+        smsReceiver();
         resend.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -178,7 +188,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                     if (response.message().toString().equals("OK")) {
 
                                         SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = settings.edit() ;
+                                        SharedPreferences.Editor editor = settings.edit();
                                         editor.putString(TOKEN, response.body().getAccessToken()).apply();
 
 //                                        Toast.makeText(
@@ -191,9 +201,9 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                         Intent goto_mainpage = new Intent(SmsVerification_RegisterActivity.this,
                                                 MainActivity.class);
                                         goto_mainpage.putExtra(GET_PROFILE_FROM_SERVER, true);
-                                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        goto_mainpage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         finish();
-                                        if(openMainActivity){
+                                        if (openMainActivity) {
                                             startActivity(goto_mainpage);
                                         }
                                     } else {
@@ -289,5 +299,62 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 
     }
 
+    private SMSBroadcastReceiver smsBroadcastReceiver;
 
+    public void smsReceiver() {
+
+        Log.d("smsReceiver","start smsReceiver");
+        // Get an instance of SmsRetrieverClient, used to start listening for a matching
+        // SMS message.
+        SmsRetrieverClient client = SmsRetriever.getClient(this /* context */);
+
+        // Starts SmsRetriever, which waits for ONE matching SMS message until timeout
+        // (5 minutes). The matching SMS message will be sent via a Broadcast Intent with
+        // action SmsRetriever#SMS_RETRIEVED_ACTION.
+        Task<Void> task = client.startSmsRetriever();
+
+        // Listen for success/failure of the start Task. If in a background thread, this
+        // can be made blocking using Tasks.await(task, [timeout]);
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Successfully started retriever, expect broadcast intent
+
+                //Utility.showSnackbar(layout, R.string.error, Snackbar.LENGTH_SHORT);
+
+
+                // Add this inside your class
+                SMSBroadcastReceiver broadcastReceiver = new SMSBroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        Log.d("smsReceiver","start SMSBroadcastReceiver");
+                        Bundle b = intent.getExtras();
+
+                        String message = b.getString("message");
+                        Log.d("smsReceiver",message);
+                        Utility.showSnackbar(layout, message, Snackbar.LENGTH_SHORT);
+                    }
+                };
+                registerReceiver(broadcastReceiver, new IntentFilter("SMSBroadcastReceiver"));
+
+            }
+
+        }) ;
+
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("smsReceiver",e.getMessage());
+                // Failed to start retriever, inspect Exception for more details
+                // ...
+            }
+        });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(smsBroadcastReceiver);
+    }
 }

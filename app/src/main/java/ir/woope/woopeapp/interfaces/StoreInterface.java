@@ -124,6 +124,7 @@ public interface StoreInterface {
     @FormUrlEncoded
     Call<ApiResponse> checkDiscountCode(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                         @Field("discountCode") String code,
-                                        @Field("branchId") long branchId);
+                                        @Field("branchId") long branchId,
+                                        @Field("Amount") long amount);
 
 }

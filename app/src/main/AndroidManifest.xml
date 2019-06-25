@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove"/>
 
     <uses-feature android:name="android.hardware.camera"
@@ -58,6 +58,13 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="ir.woope.woopeapp" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receivers.SMSBroadcastReceiver" android:exported="true">
+            <intent-filter>
+                <!--<action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>-->
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
