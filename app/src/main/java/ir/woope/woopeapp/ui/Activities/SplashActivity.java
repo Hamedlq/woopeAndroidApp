@@ -225,6 +225,7 @@ public class SplashActivity extends AppCompatActivity {
     public void GetProfileFromServer() {
 
         showLoading();
+
         retrofit_splash = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)

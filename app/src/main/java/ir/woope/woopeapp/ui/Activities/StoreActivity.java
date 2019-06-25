@@ -13,6 +13,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -79,10 +81,10 @@ public class StoreActivity extends AppCompatActivity {
     protected ProgressBar progressBar;
     @BindView(R.id.store_point)
     protected TextView store_point;
-//    @BindView(R.id.store_discount)
+    //    @BindView(R.id.store_discount)
 //    protected TextView store_discount;
     @BindView(R.id.payBtn)
-    protected CardView payBtn;
+    protected Button payBtn;
     @BindView(R.id.bookmark_storeActivity)
     SparkButton bookmark;
     ImageView close_btn;
@@ -114,6 +116,8 @@ public class StoreActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        disablePayButton();
+
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             store = (Store) getIntent().getExtras().getSerializable(STORE);
@@ -123,40 +127,50 @@ public class StoreActivity extends AppCompatActivity {
         getStore(store.storeId);
 
         //Button payBtn = (Button) findViewById(R.id.payBtn);
-        payBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(IsLogedIn()){
-                    showPayDialog();
-                }else {
-                    Intent goto_login = new Intent(StoreActivity.this,
-                            SplashSelectActivity.class);
-                    goto_login.putExtra(OPEN_MAIN_ACTIVITY,false);
-                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //finish();
-                    startActivity(goto_login);
-                }
-
-            }
-        });
+//        payBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (IsLogedIn()) {
+//                    showPayDialog();
+//                } else {
+//                    Intent goto_login = new Intent(StoreActivity.this,
+//                            SplashSelectActivity.class);
+//                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+//                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    //finish();
+//                    startActivity(goto_login);
+//                }
+//
+//            }
+//        });
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (store.describeCountDiscountCode == null)
-                    new GuideView.Builder(context)
-                            .setTitle(" ")
-                            .setContentText("برای این فروشگاه طرح اشتراک گذاری فعال نگردیده است")
-                            .setGravity(Gravity.auto) //optional
-                            .setDismissType(DismissType.anywhere) //optional - default DismissType.targetView
-                            .setTargetView(share)
-                            .setContentTextSize(12)//optional
-                            .setTitleTextSize(14)//optional
-                            .build()
-                            .show();
-                else
-                    shareStore(store.storeId);
+                if (IsLogedIn()) {
+                    if (store.describeCountDiscountCode == null)
+                        new GuideView.Builder(context)
+                                .setTitle(" ")
+                                .setContentText("برای این فروشگاه طرح اشتراک گذاری فعال نگردیده است")
+                                .setGravity(Gravity.auto) //optional
+                                .setDismissType(DismissType.anywhere) //optional - default DismissType.targetView
+                                .setTargetView(share)
+                                .setContentTextSize(12)//optional
+                                .setTitleTextSize(14)//optional
+                                .build()
+                                .show();
+                    else
+                        shareStore(store.storeId);
+
+                } else {
+                    Intent goto_login = new Intent(StoreActivity.this,
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
+                }
 
             }
         });
@@ -207,7 +221,16 @@ public class StoreActivity extends AppCompatActivity {
         bookmark.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
-                followStore(store);
+                if (IsLogedIn())
+                    followStore(store);
+                else {
+                    Intent goto_login = new Intent(StoreActivity.this,
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
+                }
             }
 
             @Override
@@ -239,7 +262,6 @@ public class StoreActivity extends AppCompatActivity {
         Call<ApiResponse> call =
                 providerApiInterface.followStore("bearer " + authToken, s.storeId);
 
-
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -253,20 +275,21 @@ public class StoreActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Utility.showSnackbar(findViewById(R.id.activity_store_layout), R.string.network_error, Snackbar.LENGTH_LONG);
-
             }
         });
     }
+
     private boolean IsLogedIn() {
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         String tokenString = prefs.getString(TOKEN, null);
-        if(tokenString==null){
+        if (tokenString == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
+
     private void showPayDialog() {
         final Dialog dialog = new Dialog(StoreActivity.this);
         dialog.setContentView(R.layout.pay_dialog);
@@ -291,18 +314,16 @@ public class StoreActivity extends AppCompatActivity {
         confirm_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (totalPrice > 0 && totalPrice<=10000000) {
+                if (totalPrice > 0 && totalPrice <= 10000000) {
                     if (discountCode.getText().toString().matches("")) {
                         goToPaying(null, null);
                     } else if (!discountCode.getText().toString().matches("")) {
-                        checkCode(discountCode.getText().toString(), store.storeId,totalPrice);
+                        checkCode(discountCode.getText().toString(), store.storeId, totalPrice);
                     }
-                } else if(totalPrice>10000000){
+                } else if (totalPrice > 10000000) {
                     invalidPrice.setText(R.string.overflowed_price);
                     invalidPrice.setVisibility(View.VISIBLE);
-                }
-
-                else{
+                } else {
                     invalidPrice.setText(R.string.invalid_price);
                     invalidPrice.setVisibility(View.VISIBLE);
                 }
@@ -364,6 +385,7 @@ public class StoreActivity extends AppCompatActivity {
          }
      };*/
     private void getStore(long storeId) {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
@@ -418,9 +440,9 @@ public class StoreActivity extends AppCompatActivity {
 ////                        point_desc.setText("به ازای هر " + store.basePrice + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
 //                    }
 
-                    if(store.isFollowed)
+                    if (store.isFollowed)
                         bookmark.setChecked(true);
-                    else if(!store.isFollowed)
+                    else if (!store.isFollowed)
                         bookmark.setChecked(false);
 
                     if (store.returnPoint == 0)
@@ -430,10 +452,13 @@ public class StoreActivity extends AppCompatActivity {
                         store_point.setText(store.returnPoint + " عدد ووپ");
                     }
 
-                    if(store.describeCountDiscountCode==null)
-                        share.setBackground(ContextCompat.getDrawable(context,R.drawable.share_gray));
-                    else if(store.describeCountDiscountCode!=null)
-                        share.setBackground(ContextCompat.getDrawable(context,R.drawable.share_purple));
+                    if (store.describeCountDiscountCode == null)
+                        share.setBackground(ContextCompat.getDrawable(context, R.drawable.share_gray));
+                    else if (store.describeCountDiscountCode != null)
+                        share.setBackground(ContextCompat.getDrawable(context, R.drawable.share_purple));
+
+                    enablePayButton();
+
                 }
             }
 
@@ -442,7 +467,7 @@ public class StoreActivity extends AppCompatActivity {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
                 Utility.showSnackbar(findViewById(R.id.activity_store_layout), R.string.network_error, Snackbar.LENGTH_LONG);
-
+                disablePayButton();
             }
         });
     }
@@ -495,7 +520,7 @@ public class StoreActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, "Share Text Using"));
     }
 
-    private void checkCode(final String Code, long branchId,long amount) {
+    private void checkCode(final String Code, long branchId, long amount) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -509,7 +534,7 @@ public class StoreActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<ApiResponse> call =
-                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId,amount);
+                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId, amount);
 
         showDialogProgreeBar();
 
@@ -558,7 +583,7 @@ public class StoreActivity extends AppCompatActivity {
             model.extraDiscountWoope = extraWoope;
         model.discountCode = discountCode;
         myIntent.putExtra(PAY_LIST_ITEM, model);
-        myIntent.putExtra("LogoUrl",store.logoSrc);
+        myIntent.putExtra("LogoUrl", store.logoSrc);
 
 //        Map<String, String> attributes = new HashMap<>();
 //        attributes.put("store_name", model.storeName);
@@ -600,6 +625,36 @@ public class StoreActivity extends AppCompatActivity {
     public void hideDialogProgreeBar() {
         dialogProgressBar.hide();
         confirm_pay.setText(R.string.accept);
+    }
+
+    public void enablePayButton() {
+        payBtn.setEnabled(true);
+        payBtn.setClickable(true);
+//        payBtn.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
+        payBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (IsLogedIn()) {
+                    showPayDialog();
+                } else {
+                    Intent goto_login = new Intent(StoreActivity.this,
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
+                }
+
+            }
+        });
+        payBtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    public void disablePayButton() {
+        payBtn.setEnabled(false);
+        payBtn.setClickable(false);
+        payBtn.setOnClickListener(null);
+        payBtn.setBackgroundColor(getResources().getColor(R.color.concrete));
     }
 
     @Override

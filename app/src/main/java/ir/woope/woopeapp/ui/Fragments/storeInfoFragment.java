@@ -39,6 +39,7 @@ import ir.woope.woopeapp.models.Categories;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.SocialModel;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.SplashSelectActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,8 +48,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class storeInfoFragment extends Fragment {
 
@@ -108,6 +111,17 @@ public class storeInfoFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private boolean IsLogedIn() {
+        final SharedPreferences prefs =
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String tokenString = prefs.getString(TOKEN, null);
+        if (tokenString == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_store_info, container, false);
@@ -140,26 +154,35 @@ public class storeInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // item clicked
+                if (IsLogedIn()) {
+                    Snackbar snackbar = Snackbar
+                            .make(layout, R.string.areYouSureAboutReportingStore, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.yes, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    reportStore(store.storeId);
+                                }
+                            });
 
-                Snackbar snackbar = Snackbar
-                        .make(layout, R.string.areYouSureAboutReportingStore, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.yes, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                reportStore(store.storeId);
-                            }
-                        });
+                    View view = snackbar.getView();
+                    TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
 
-                View view = snackbar.getView();
-                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                    tv.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
+
+                } else {
+                    Intent goto_login = new Intent(getActivity(),
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
                 }
-
-                snackbar.show();
 
             }
         });
@@ -254,14 +277,14 @@ public class storeInfoFragment extends Fragment {
                         point_desc.setText("به ازای هر " + Utility.commaSeprate(store.basePrice) + " تومان خرید " + store.returnPoint + " ووپ دریافت می‌کنید");
                     }
 
-                    if (store.socialList!=null) {
+                    if (store.socialList != null) {
                         socialsLayout.setVisibility(View.VISIBLE);
                         for (SocialModel social : store.socialList) {
                             addSocial(social.keySocial, social.valueSocial);
                         }
                     }
 
-                    if (store.describeCountDiscountCode!=null) {
+                    if (store.describeCountDiscountCode != null) {
                         giftWoopeLayout.setVisibility(View.VISIBLE);
                         giftWoopeDescription.setText(store.describeCountDiscountCode);
                     }
@@ -468,10 +491,10 @@ public class storeInfoFragment extends Fragment {
                 hideShareProgreeBar();
                 int code = response.body().status;
                 giftWoopeLayout.setEnabled(true);
-                if (code == 101)
-                {
+                if (code == 101) {
 
-                    shareText(response.body().getMessage());}
+                    shareText(response.body().getMessage());
+                }
             }
 
             @Override
