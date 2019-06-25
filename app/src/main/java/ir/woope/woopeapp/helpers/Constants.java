@@ -16,31 +16,22 @@ public final class Constants {
 
         }
 
-//        public static final String BASE_URL = "http://192.168.100.3:80";
+//        public static final String BASE_URL = "http://192.168.100.3:80/";
 
 //        public static final String BASE_URL = "http://192.168.100.3/";
 
-//        public static final String BASE_URL = "http://192.168.100.3:8090";
 //        public static final String BASE_URL = "http://192.168.100.6/";
         //public static final String BASE_URL = "http://localhost/";
 
-        public static final String BASE_URL = "http://192.168.100.3/";
-
+//        public static final String BASE_URL = "http://192.168.100.2/";
 //
 //        public static final String BASE_URL = "http://localhost:58795/";
 
-        //public static final String BASE_URL = "http://localhost:58795/";
-
 //        public static final String BASE_URL = "http://192.168.100.4/";
 
-//        public static final String BASE_URL = "http://localhost:58795/";
-
 //        public static final String BASE_URL = "http://test.mywoope.com/";
 
-//        public static final String BASE_URL = "http://test.mywoope.com/";
-
-//        public static final String BASE_URL = "http://mywoope.com/";
-
+        public static final String BASE_URL = "https://mywoope.com/";
 
     }
 
@@ -60,6 +51,7 @@ public final class Constants {
         public static final String POINTS_PAYED = "pointsPaid";
         public static final String LIST_MODEL = "ListModel";
         public static final String LIST_TITLE = "ListTitle";
+        public static final String LIST_BRANCHES = "ListHasMoreBranches";
         public static final String STORE_LIST = "StoreList";
         public static final String MALL_LIST = "MallList";
         public static final String MALL_MODEL = "MallModel";
@@ -76,6 +68,8 @@ public final class Constants {
         public static final String OPEN_MAIN_ACTIVITY = "ShouldOpenMainActivity";
         public static final int SHOULD_GET_PROFILE = 2289;
         public static final String FIRST_RUN_PROFILE_FRAGMENT = "firstRunProfileFragment";
+
+        public static final String METRIX_APP_ID="yncgxtiyybvfkhw";
     }
 
     public final class Actions {

@@ -48,4 +48,6 @@
     <color name="concrete">#95a5a6</color>
     <color name="asbestos">#7f8c8d</color>
 
+    <color name="categoryBackground">#792ecc71</color>
+
 </resources>

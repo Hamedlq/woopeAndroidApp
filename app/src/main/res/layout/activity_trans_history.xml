@@ -48,7 +48,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/home2"
         android:layoutDirection="rtl"
-
         android:layout_gravity="center_vertical"
         android:gravity="center">
 

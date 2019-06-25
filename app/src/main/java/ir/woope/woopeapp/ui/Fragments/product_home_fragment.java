@@ -80,7 +80,6 @@ public class product_home_fragment extends Fragment implements ItemClickListener
         // The onClick implementation of the RecyclerView item click
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_product_home, container, false);
@@ -113,8 +112,6 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
             @Override
             public void onDoubleTap(View view, int position) {
-
-
             }
 
             @Override

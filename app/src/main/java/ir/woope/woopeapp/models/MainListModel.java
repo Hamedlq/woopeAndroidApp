@@ -15,4 +15,5 @@ public class MainListModel extends ApiResponse implements Serializable {
     public int numberPerList;
     public int listOrder;
     public String listTitle;
+    public Boolean hasMoreBranches;
 }

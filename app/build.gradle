@@ -3,8 +3,11 @@ apply plugin: 'io.fabric'
 buildscript {
     repositories {
 
-        maven { url 'https://plugins.gradle.org/m2/'}
+        maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'https://dl.bintray.com/metrixorg/maven'
+        }
 
     }
     dependencies {
@@ -16,6 +19,9 @@ repositories {
 
     maven { url 'https://maven.google.com' }
     maven { url 'https://maven.fabric.io/public' }
+    maven {
+        url 'https://dl.bintray.com/metrixorg/maven'
+    }
 }
 
 //apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
@@ -27,10 +33,10 @@ android {
         applicationId "ir.woope.woopeapp"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 12
-        versionName "1.3"
+        versionCode 18
+        versionName "1.3.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary= true
+        vectorDrawables.useSupportLibrary = true
         /*manifestPlaceholders = [
                 onesignal_app_id: 'd88972c0-59f1-4cb6-8501-07091ee7bd83',
                 // Project number pulled from dashboard, local value is ignored.
@@ -46,6 +52,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
+    }
+
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
     }
 }
 
@@ -84,10 +95,10 @@ dependencies {
     implementation 'com.github.arimorty:floatingsearchview:2.1.1'
 
     implementation 'com.github.ceryle:RadioRealButton:v2.1.1'
-    
+
     implementation 'com.github.faruktoptas:FancyShowCaseView:1.1.0'
 
-    implementation  'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
@@ -135,6 +146,13 @@ dependencies {
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
 
     implementation 'com.github.mreram:showcaseview:1.1'
+
+    implementation 'net.igenius:customcheckbox:1.3'
+
+    implementation 'ir.metrix:metrix:0.9.1'
+
+    implementation 'com.android.installreferrer:installreferrer:1.0'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.7'
 
 
 }

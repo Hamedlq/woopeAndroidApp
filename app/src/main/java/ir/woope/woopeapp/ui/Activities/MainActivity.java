@@ -32,6 +32,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ir.metrix.sdk.Metrix;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
@@ -73,6 +75,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.CROP_IMAGE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.GET_PROFILE_FROM_SERVER;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.METRIX_APP_ID;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LOGIN_SIGN_UP;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.REQUEST_CAMERA;
@@ -266,6 +269,49 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    public void switchToSearch(){
+        View v = navigation.findViewById(R.id.navigation_‌search);
+        v.performClick();
+    }
+
+    public void switchPage(int ItemId){
+
+        switch (ItemId) {
+            case R.id.navigation_home:
+
+                //mTextMessage.setText(R.string.title_home);
+                fm.beginTransaction().hide(active).show(homeFragment).commit();
+                active = homeFragment;
+
+
+            case R.id.navigation_‌search:
+
+                fm.beginTransaction().hide(active).show(searchFragment).commit();
+                active = searchFragment;
+
+
+            case R.id.navigation_favorite:
+
+                fm.beginTransaction().hide(active).show(favoritesFragment).commit();
+                active = favoritesFragment;
+
+
+            case R.id.navigation_profile:
+
+                fm.beginTransaction().hide(active).show(profileFragment).commit();
+                active = profileFragment;
+
+
+            case R.id.navigation_woope:
+
+                fm.beginTransaction().hide(active).show(productHomeFragment).commit();
+                active = productHomeFragment;
+
+
+        }
+
+    }
+
 
 
     @SuppressLint("RestrictedApi")
@@ -273,6 +319,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        main = this;
 
         fm.beginTransaction().add(R.id.frame_layout, productHomeFragment, "3").hide(productHomeFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, searchFragment, "2").hide(searchFragment).commit();

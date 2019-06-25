@@ -65,6 +65,16 @@ public class StoreListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_list);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.store_list_toolbar);
+        toolbar.setNavigationIcon(R.drawable.right_arrow); // your drawable
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         ButterKnife.bind(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             model = (MainListModel) getIntent().getExtras().getSerializable(LIST_MODEL);
@@ -86,6 +96,29 @@ public class StoreListActivity extends AppCompatActivity {
         if (mallModel != null) {
             return mallModel.id;
         } else return null;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+            this.finish(); // close this activity and return to preview activity (if there is any)
+
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
 
     }
 

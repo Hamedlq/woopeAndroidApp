@@ -232,7 +232,6 @@ public class GiftActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -245,6 +244,15 @@ public class GiftActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
+
     }
 
     @Override
@@ -267,13 +275,6 @@ public class GiftActivity extends AppCompatActivity {
         button.setEnabled(true);
     }
 
-    @Override
-    public void onBackPressed() {
 
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK, returnIntent);
-        finish();
-
-    }
 
 }

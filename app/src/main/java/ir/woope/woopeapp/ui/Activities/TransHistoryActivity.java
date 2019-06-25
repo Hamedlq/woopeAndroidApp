@@ -56,6 +56,7 @@ public class TransHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_history);
+
         if (getIntent() != null && getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             //store = (Store) getIntent().getExtras().getSerializable(STORE);
@@ -72,6 +73,7 @@ public class TransHistoryActivity extends AppCompatActivity {
         /*fragmentManager.beginTransaction()
                 .add(R.id.frame_layout, new TransListFragment(), LIST_FRAGMENT)
                 .commit();*/
+
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recycler_view);
         orderModelList = new ArrayList<>();

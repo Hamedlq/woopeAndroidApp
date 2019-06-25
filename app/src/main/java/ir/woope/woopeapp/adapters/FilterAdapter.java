@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,15 +46,18 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count, point;
+        public TextView title, count, pointCount;
+        public RelativeLayout pointCountLayout;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
-            point = (TextView) view.findViewById(R.id.point);
+//            point = (TextView) view.findViewById(R.id.point);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            pointCount = (TextView) view.findViewById(R.id.storePointCountText);
+            pointCountLayout = (RelativeLayout) view.findViewById(R.id.storePointCountLayout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
             thumbnail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -122,12 +126,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         holder.title.setText(store.storeName);
         //holder.count.setText(store.discountPercent + "٪ تخفیف");
         holder.count.setText("");
-        if (store.returnPoint == 0)
-            holder.point.setVisibility(View.INVISIBLE);
-        else if (store.returnPoint != 0) {
-            holder.point.setVisibility(View.VISIBLE);
-            holder.point.setText(store.returnPoint + " عدد ووپ");
-        }
+
+        holder.pointCountLayout.setVisibility(View.VISIBLE);
+        holder.pointCount.setText(store.returnPoint + " ووپ");
+
         // loading album cover using Glide library
         Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
     }

@@ -34,6 +34,7 @@ import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.StoreListActivity;
 
 import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_BRANCHES;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_MODEL;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_TITLE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
@@ -54,6 +55,7 @@ public class filter_fragment extends Fragment {
     private View mRecycler;
     private List<Store> stores;
     private String listTitle;
+    private Boolean hasMoreBranches;
     private MainListModel model;
     private FilterAdapter filter_adapter;
     filter_fragment.ItemTouchListener itemTouchListener;
@@ -67,6 +69,7 @@ public class filter_fragment extends Fragment {
             stores = (List<Store>) bundle.getSerializable(STORE_LIST);
             listTitle = bundle.getString(LIST_TITLE);
             model = (MainListModel) bundle.getSerializable(LIST_MODEL);
+            hasMoreBranches = bundle.getBoolean(LIST_BRANCHES);
         }
     }
 
@@ -84,6 +87,12 @@ public class filter_fragment extends Fragment {
 
         filter_recycler.setItemAnimator(new DefaultItemAnimator());
         filter_recycler.setAdapter(adapter);
+
+        if(hasMoreBranches)
+            more_store.setVisibility(View.VISIBLE);
+        else if(!hasMoreBranches||hasMoreBranches==null)
+            more_store.setVisibility(View.GONE);
+
         more_store.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

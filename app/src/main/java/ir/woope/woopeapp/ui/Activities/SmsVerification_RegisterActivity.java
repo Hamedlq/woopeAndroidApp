@@ -185,7 +185,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
 
-                                    if (response.message().toString().equals("OK")) {
+                                    if (response.body().getAccessToken()!=null && response.body().getAccessToken()!="") {
 
                                         SharedPreferences settings = getApplicationContext().getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
                                         SharedPreferences.Editor editor = settings.edit();
@@ -213,7 +213,7 @@ public class SmsVerification_RegisterActivity extends AppCompatActivity {
 //                                                , "نام کاربری یا رمز عبور نامعتبر!",
 //                                                Toast.LENGTH_SHORT).show();
 
-                                        Utility.showSnackbar(layout, R.string.invalidUsernameOrPassword, Snackbar.LENGTH_SHORT);
+                                        Utility.showSnackbar(layout, "خطای ورود به حساب کاربری", Snackbar.LENGTH_SHORT);
                                     }
 
 

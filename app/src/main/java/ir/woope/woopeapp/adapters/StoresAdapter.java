@@ -249,7 +249,7 @@ public class StoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (store.isFollowed) {
                     //store.isFollowed = true;
                     holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bookmarked));
-                } else {
+                } else if (!store.isFollowed) {
                     //store.isFollowed = false;
                     holder.followIcon.setBackground(ContextCompat.getDrawable(mContext, R.drawable.notbookmarked));
                 }

@@ -127,6 +127,16 @@ public class home_fragment extends Fragment {
         getActivity().setTitle("");
         mRecycler = inflater.inflate(R.layout.fragment_home, null);
         setHasOptionsMenu(true);
+
+//        Toolbar toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
+//        toolbar.setNavigationIcon(R.drawable.right_arrow);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getActivity().finish();
+//            }
+//        });
+
         itemTouchListener = new ItemTouchListener() {
 
             @Override

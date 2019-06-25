@@ -45,4 +45,5 @@ public class Store extends ApiResponse implements Serializable {
     public List<Long> categoryId;
     public List<SocialModel> socialList;
     public String describeCountDiscountCode;
+    public String zone;
 }

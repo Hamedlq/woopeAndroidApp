@@ -60,6 +60,8 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_sms_validation_register);
 
+        layout = findViewById(R.id.activity_smsValidation_register);
+
         Intent intent = getIntent();
         final String token = intent.getStringExtra(TOKEN);
 

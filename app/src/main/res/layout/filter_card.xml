@@ -5,7 +5,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
@@ -13,9 +13,40 @@
         card_view:cardCornerRadius="@dimen/card_album_radius">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/storePointCountLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/triangle_badge"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"/>
+
+            <TextView
+                android:id="@+id/storePointCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:elevation="5dp"
+                android:rotation="-45"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="6dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:textDirection="rtl"
-            android:paddingBottom="15dp"
+            android:paddingBottom="10dp"
             android:layout_height="match_parent">
 
             <ImageView
@@ -23,24 +54,27 @@
                 android:layout_width="@dimen/album_cover_width"
                 android:layout_height="@dimen/album_cover_height"
                 android:background="@drawable/default_store"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:scaleType="fitXY" />
 
-
             <TextView
                 android:id="@+id/title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/thumbnail"
+                android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:layout_below="@id/point"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/album_title"
-                android:textSize="@dimen/album_title" />
+                android:textSize="@dimen/album_title"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/count"
@@ -52,19 +86,17 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:textSize="@dimen/discount_size" />
 
-            <TextView
-                android:id="@+id/point"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/thumbnail"
-                android:layout_centerInParent="true"
-                android:background="@drawable/woope_bg"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:textSize="@dimen/discount_size" />
+            <!--<TextView-->
+                <!--android:id="@+id/point"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/thumbnail"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:background="@drawable/woope_bg"-->
+                <!--android:paddingBottom="@dimen/songs_count_padding_bottom"-->
+                <!--android:textSize="@dimen/discount_size" />-->
 
         </RelativeLayout>
 

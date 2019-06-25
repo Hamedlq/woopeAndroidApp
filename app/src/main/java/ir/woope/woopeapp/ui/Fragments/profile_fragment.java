@@ -754,7 +754,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
             case R.id.nav_edit_profile:
                 Intent giftIntent = new Intent(getActivity(), EditProfileActivity.class);
                 getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
-                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.no_change);
+//                getActivity().overridePendingTransition(R.anim.slide_down, R.anim.no_change);
                 break;
             default:
                 break;
