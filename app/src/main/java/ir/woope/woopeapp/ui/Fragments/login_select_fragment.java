@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -128,6 +130,12 @@ public class login_select_fragment extends Fragment {
         mRecycler = inflater.inflate(R.layout.fragment_login_select, container, false);
         ButterKnife.bind(this, mRecycler);
         setHasOptionsMenu(true);
+
+        LinearLayout linearLayout = (LinearLayout) mRecycler.findViewById(R.id.vUserStats);
+        AnimationDrawable animationDrawable = (AnimationDrawable) linearLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(4000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
 
         vUserProfileRoot = mRecycler.findViewById(R.id.vUserProfileRoot);
         //Initializing viewPager

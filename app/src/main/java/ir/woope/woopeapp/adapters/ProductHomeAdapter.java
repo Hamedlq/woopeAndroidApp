@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -67,7 +68,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         private TextView productDescription;
         private ZoomageView productImage;
         private SparkButton likeButton;
-        private LinearLayout storeNameLayout;
+        private RelativeLayout storeNameLayout;
         private Button sendOnlineRequest;
 
         public MyViewHolder(final View view) {

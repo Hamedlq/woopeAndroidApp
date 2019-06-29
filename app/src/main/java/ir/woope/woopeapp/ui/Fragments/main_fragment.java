@@ -217,7 +217,7 @@ public class main_fragment extends Fragment {
                         woopeFilter.setArguments(arguments);
                         fragmentManager.beginTransaction()
                                 .replace(ml.listOrder, woopeFilter, String.valueOf(ml.listOrder))
-                                .commit();
+                                .commitAllowingStateLoss();
                     }
                 }
             }

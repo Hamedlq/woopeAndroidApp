@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -56,6 +58,13 @@ public class SplashSelectActivity extends AppCompatActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             openMainActivity =  getIntent().getExtras().getBoolean(OPEN_MAIN_ACTIVITY);
         }
+
+        ConstraintLayout linearLayout = (ConstraintLayout) findViewById(R.id.activity_select_splash);
+        AnimationDrawable animationDrawable = (AnimationDrawable) linearLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(5000);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
+
         btn_register.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {

@@ -64,7 +64,7 @@
                                     app:zoomage_doubleTapToZoom="false"
                                     app:zoomage_minScale="0.6"
                                     app:zoomage_maxScale="8"
-                                    android:background="@color/colorPrimary" />
+                                    android:scaleType="centerCrop" />
 
                                 <com.wang.avi.AVLoadingIndicatorView
                                     android:id="@+id/loading_product"
@@ -153,10 +153,13 @@
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/viewBg"
+                    android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="0dp">
+                    android:padding="0dp"
+                    android:layout_marginTop="-20dp"
+                    android:clipToPadding="false"
+                    android:clipChildren="false">
 
                     <com.varunest.sparkbutton.SparkButton
                         android:id="@+id/product_likebutton"

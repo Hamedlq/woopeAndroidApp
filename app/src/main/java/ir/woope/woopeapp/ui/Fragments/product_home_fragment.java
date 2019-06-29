@@ -35,6 +35,7 @@ import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
+import ir.woope.woopeapp.ui.Activities.SplashSelectActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,10 +44,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.STORE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class product_home_fragment extends Fragment implements ItemClickListener {
 
@@ -66,7 +69,7 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
     View layout;
 
-    public product_home_fragment(){
+    public product_home_fragment() {
         // Required empty public constructor
     }
 
@@ -79,6 +82,18 @@ public class product_home_fragment extends Fragment implements ItemClickListener
     public void onClick(View view, int position) {
         // The onClick implementation of the RecyclerView item click
     }
+
+    private boolean IsLogedIn() {
+        final SharedPreferences prefs =
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String tokenString = prefs.getString(TOKEN, null);
+        if (tokenString == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,10 +118,19 @@ public class product_home_fragment extends Fragment implements ItemClickListener
             @Override
             public void onLikeClicked(View view, int position) {
 
-                StoreGalleryItem s = adapter.getProduct(position);
-                adapter.LikeProduct(position);
-                LikeImage(s.id);
-                adapter.notifyItemChanged(position);
+                if (IsLogedIn()) {
+                    StoreGalleryItem s = adapter.getProduct(position);
+                    adapter.LikeProduct(position);
+                    LikeImage(s.id);
+                    adapter.notifyItemChanged(position);
+                } else {
+                    Intent goto_login = new Intent(getActivity(),
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
+                }
 
             }
 
@@ -375,7 +399,8 @@ public class product_home_fragment extends Fragment implements ItemClickListener
         progressBar.smoothToShow();
     }
 
-    private void showLoading(){}
+    private void showLoading() {
+    }
 
 
 }

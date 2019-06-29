@@ -202,7 +202,16 @@ public class storeInfoFragment extends Fragment {
             public void onClick(View v) {
                 // item clicked
 
-                shareStore(store.storeId);
+                if (IsLogedIn())
+                    shareStore(store.storeId);
+                else {
+                    Intent goto_login = new Intent(getActivity(),
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
+                }
 
             }
         });

@@ -1,6 +1,7 @@
 package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +39,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTIVITY;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
+import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -106,13 +109,18 @@ public class ProductActivity extends AppCompatActivity {
         likeButton.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
-                if (buttonState) {
-                    // Button is active
+
+                if (IsLogedIn())
                     LikeImage(product.id);
-                } else {
-                    // Button is inactive
-                    LikeImage(product.id);
+                else {
+                    Intent goto_login = new Intent(ProductActivity.this,
+                            SplashSelectActivity.class);
+                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //finish();
+                    startActivity(goto_login);
                 }
+
             }
 
             @Override
@@ -126,6 +134,17 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean IsLogedIn() {
+        final SharedPreferences prefs =
+                this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String tokenString = prefs.getString(TOKEN, null);
+        if (tokenString == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -163,7 +182,7 @@ public class ProductActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<StoreGalleryItem> call =
-                providerApiInterface .LikeImage("bearer " + authToken, ImageId);
+                providerApiInterface.LikeImage("bearer " + authToken, ImageId);
 
         call.enqueue(new Callback<StoreGalleryItem>() {
             @Override

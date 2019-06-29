@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/productActivity_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/viewBg"
-    android:orientation="vertical">
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp"
+    app:cardElevation="10dp"
+    android:clipChildren="true"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:id="@+id/productActivity_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/viewBg"
+        android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/grayy" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/storeNameLayout_product_home_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="right">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/store_name_product_home_item"
@@ -31,7 +40,7 @@
             android:layout_marginBottom="10dp"
             android:textStyle="bold" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,6 +75,7 @@
                         android:id="@+id/product_home_item_Image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
                         app:zoomage_animateOnReset="true"
                         app:zoomage_autoResetMode="ALWAYS"
                         app:zoomage_zoomable="true"
@@ -107,10 +117,12 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/viewBg"
+            android:background="@color/transparent"
             android:orientation="horizontal"
             android:padding="0dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginTop="-30dp"
+            android:clipChildren="false">
 
             <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/product_home_item_likebutton"
@@ -163,11 +175,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textStyle="bold" />
 
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

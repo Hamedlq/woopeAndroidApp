@@ -2,6 +2,7 @@ package ir.woope.woopeapp.ui.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +63,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms_validation_register);
 
         layout = findViewById(R.id.activity_smsValidation_register);
+
+        RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.activity_smsValidation_register);
+        AnimationDrawable animationDrawable = (AnimationDrawable) linearLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(5000);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
 
         Intent intent = getIntent();
         final String token = intent.getStringExtra(TOKEN);
