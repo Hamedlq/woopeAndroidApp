@@ -10,6 +10,7 @@ import ir.woope.woopeapp.models.CategoryModel;
 import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.MallModel;
 import ir.woope.woopeapp.models.SortType;
+import ir.woope.woopeapp.models.SpecialOfferItem;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
 import ir.woope.woopeapp.models.ZoneModel;
@@ -101,6 +102,11 @@ public interface StoreInterface {
     Call<List<StoreGalleryItem>> getAllActiveProducts(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                                                       @Query("page") int page,
                                                       @Query("count") int count);
+
+    @GET("api/SpecialOffer/GetActiveSpecialOffers")
+    Call<List<SpecialOfferItem>> getAllActiveSpecialOffers(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                                                           @Query("page") int page,
+                                                           @Query("count") int count);
 
     @GET("api/Post/SaveOnlineRequest")
     Call<ApiResponse> sendOnlineRequest(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,

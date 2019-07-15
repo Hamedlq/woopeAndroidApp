@@ -85,6 +85,12 @@
                         android:background="@color/colorPrimary"
                         />
 
+                    <!--<com.daimajia.slider.library.SliderLayout-->
+                        <!--android:id="@+id/product_home_item_ImageSlider"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--/>-->
+
                     <com.wang.avi.AVLoadingIndicatorView
                         android:id="@+id/loading_product_home_item"
                         android:layout_width="wrap_content"
@@ -98,12 +104,12 @@
 
             </ir.woope.woopeapp.Utils.SquareLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/sqPI"
-                android:layout_marginTop="-25dp"
-                android:background="@drawable/store_hover" />
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/sqPI"-->
+                <!--android:layout_marginTop="-25dp"-->
+                <!--android:background="@drawable/store_hover" />-->
 
             <!--<ImageView-->
             <!--android:layout_width="match_parent"-->
@@ -121,7 +127,7 @@
             android:orientation="horizontal"
             android:padding="0dp"
             android:gravity="center_vertical"
-            android:layout_marginTop="-30dp"
+
             android:clipChildren="false">
 
             <com.varunest.sparkbutton.SparkButton
