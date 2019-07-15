@@ -1,7 +1,11 @@
 package ir.woope.woopeapp.ui.Fragments;
 
+import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -25,8 +29,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import ir.woope.woopeapp.R;
@@ -404,6 +412,66 @@ public class storeInfoFragment extends Fragment {
 
         } else if (key.equals("اینستاگرام")) {
             text.setText(value);
+            cardView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Uri uri = Uri.parse("http://instagram.com/_u/" + value);
+                    Intent insta = new Intent(Intent.ACTION_VIEW, uri);
+                    insta.setPackage("com.instagram.android");
+
+                    if (isIntentAvailable(getContext(), insta)) {
+                        YoYo.with(Techniques.Flash)
+                                .duration(1250)
+                                .withListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        startActivity(insta);
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+                                    }
+                                })
+                                .playOn(icon);
+
+                    } else {
+                        YoYo.with(Techniques.Wobble)
+                                .duration(1250)
+                                .withListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/" + value)));
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+                                    }
+                                })
+                                .playOn(icon);
+
+                    }
+
+                }
+
+            });
 
         } else if (key.equals("توئیتر")) {
             text.setText(value);
@@ -420,6 +488,12 @@ public class storeInfoFragment extends Fragment {
         cardView.addView(text);
 
         socialsLayout.addView(cardView);
+    }
+
+    private boolean isIntentAvailable(Context ctx, Intent intent) {
+        final PackageManager packageManager = ctx.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     private void sendOnlineRequestStore(long branchId) {

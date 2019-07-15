@@ -27,12 +27,14 @@ import java.util.List;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.Utils;
 import ir.woope.woopeapp.adapters.ProductHomeAdapter;
+import ir.woope.woopeapp.adapters.SpecialOffersAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ItemClickListener;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.models.SpecialOfferItem;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.StoreGalleryItem;
 import ir.woope.woopeapp.ui.Activities.SplashSelectActivity;
@@ -54,13 +56,15 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.TOKEN;
 public class product_home_fragment extends Fragment implements ItemClickListener {
 
     RecyclerView recyclerView;
-    ProductHomeAdapter adapter;
+//    ProductHomeAdapter adapter;
+    SpecialOffersAdapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
     private boolean itShouldLoadMore = true;
     boolean searchInProgress = false;
     int PageNumber = 0;
     AVLoadingIndicatorView progressBar;
-    private List<StoreGalleryItem> albumList;
+//    private List<StoreGalleryItem> albumList;
+    private List<SpecialOfferItem> albumList;
 
     product_home_fragment.ItemTouchListener itemTouchListener;
 
@@ -108,29 +112,30 @@ public class product_home_fragment extends Fragment implements ItemClickListener
             @Override
             public void onRefresh() {
                 adapter.clearProducts();
-                getProductsByPage(0);
+                getSpecialOffersByPage(0);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
         progressBar = rootView.findViewById(R.id.loading_product_home);
         itemTouchListener = new ItemTouchListener() {
             @Override
             public void onLikeClicked(View view, int position) {
 
-                if (IsLogedIn()) {
-                    StoreGalleryItem s = adapter.getProduct(position);
-                    adapter.LikeProduct(position);
-                    LikeImage(s.id);
-                    adapter.notifyItemChanged(position);
-                } else {
-                    Intent goto_login = new Intent(getActivity(),
-                            SplashSelectActivity.class);
-                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
-                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //finish();
-                    startActivity(goto_login);
-                }
+//                if (IsLogedIn()) {
+//                    StoreGalleryItem s = adapter.getProduct(position);
+//                    adapter.LikeProduct(position);
+//                    LikeImage(s.id);
+//                    adapter.notifyItemChanged(position);
+//                } else {
+//                    Intent goto_login = new Intent(getActivity(),
+//                            SplashSelectActivity.class);
+//                    goto_login.putExtra(OPEN_MAIN_ACTIVITY, false);
+//                    goto_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    //finish();
+//                    startActivity(goto_login);
+//                }
 
             }
 
@@ -141,18 +146,18 @@ public class product_home_fragment extends Fragment implements ItemClickListener
             @Override
             public void onStoreNameClicked(View view, int position) {
 
-                StoreGalleryItem s = adapter.getProduct(position);
-                Store st = new Store();
-                st.storeId = s.branchId;
-                final SharedPreferences prefs =
-                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = prefs.getString(PROFILE, "");
-                Profile obj = gson.fromJson(json, Profile.class);
-                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, obj);
-                myIntent.putExtra(STORE, st); //Optional parameters
-                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
+//                StoreGalleryItem s = adapter.getProduct(position);
+//                Store st = new Store();
+//                st.storeId = s.branchId;
+//                final SharedPreferences prefs =
+//                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//                Gson gson = new Gson();
+//                String json = prefs.getString(PROFILE, "");
+//                Profile obj = gson.fromJson(json, Profile.class);
+//                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
+//                myIntent.putExtra(PREF_PROFILE, obj);
+//                myIntent.putExtra(STORE, st); //Optional parameters
+//                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
             }
 
@@ -167,7 +172,9 @@ public class product_home_fragment extends Fragment implements ItemClickListener
         };
 
         albumList = new ArrayList<>();
-        adapter = new ProductHomeAdapter(this.getActivity(), albumList, itemTouchListener);
+//        adapter = new ProductHomeAdapter(this.getActivity(), albumList, itemTouchListener);
+
+        adapter = new SpecialOffersAdapter(this.getActivity(),albumList, itemTouchListener);
 
         recyclerView.setAdapter(adapter);
 
@@ -190,7 +197,7 @@ public class product_home_fragment extends Fragment implements ItemClickListener
                         // here we are now allowed to load more, but we need to be careful
                         // we must check if itShouldLoadMore variable is true [unlocked]
                         if (itShouldLoadMore) {
-                            getProductsByPage(PageNumber);
+                            getSpecialOffersByPage(PageNumber);
                         }
                     }
                 }
@@ -199,13 +206,73 @@ public class product_home_fragment extends Fragment implements ItemClickListener
 
 
         //prepareAlbums();
-        getProductsByPage(0);
+        getSpecialOffersByPage(0);
 
         return rootView;
 
     }
 
-    private int getProductsByPage(final int pageNumber) {
+//    private int getProductsByPage(final int pageNumber) {
+//
+//        showProgreeBar();
+//
+//        itShouldLoadMore = false;
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .baseUrl(Constants.HTTP.BASE_URL)
+//                .build();
+//
+//        StoreInterface providerApiInterface =
+//                retrofit.create(StoreInterface.class);
+//
+//        SharedPreferences prefs =
+//                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+//
+////        showProgreeBar();
+//        Call<List<StoreGalleryItem>> call =
+//                providerApiInterface.getAllActiveProducts("bearer " + authToken, pageNumber, 10);
+//
+//        call.enqueue(new Callback<List<StoreGalleryItem>>() {
+//            @Override
+//            public void onResponse(Call<List<StoreGalleryItem>> call, Response<List<StoreGalleryItem>> response) {
+//
+//                int code = response.code();
+//                if (code == 200) {
+//
+//                    hideProgreeBar();
+//
+//                    itShouldLoadMore = true;
+//
+//                    if (response.body().size() >= 1) {
+//
+//                        adapter.addItem(response.body());
+//
+//                        PageNumber++;
+//
+//                        hideProgreeBar();
+//
+//                    }
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<StoreGalleryItem>> call, Throwable t) {
+//                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+//                hideProgreeBar();
+//                itShouldLoadMore = true;
+//                size = 0;
+////                Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+//            }
+//        });
+//
+//        return size;
+//
+//    }
+
+    private int getSpecialOffersByPage(final int pageNumber) {
 
         showProgreeBar();
 
@@ -224,12 +291,12 @@ public class product_home_fragment extends Fragment implements ItemClickListener
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
 //        showProgreeBar();
-        Call<List<StoreGalleryItem>> call =
-                providerApiInterface.getAllActiveProducts("bearer " + authToken, pageNumber, 10);
+        Call<List<SpecialOfferItem>> call =
+                providerApiInterface.getAllActiveSpecialOffers("bearer " + authToken, pageNumber, 10);
 
-        call.enqueue(new Callback<List<StoreGalleryItem>>() {
+        call.enqueue(new Callback<List<SpecialOfferItem>>() {
             @Override
-            public void onResponse(Call<List<StoreGalleryItem>> call, Response<List<StoreGalleryItem>> response) {
+            public void onResponse(Call<List<SpecialOfferItem>> call, Response<List<SpecialOfferItem>> response) {
 
                 int code = response.code();
                 if (code == 200) {
@@ -252,7 +319,7 @@ public class product_home_fragment extends Fragment implements ItemClickListener
             }
 
             @Override
-            public void onFailure(Call<List<StoreGalleryItem>> call, Throwable t) {
+            public void onFailure(Call<List<SpecialOfferItem>> call, Throwable t) {
                 //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
                 hideProgreeBar();
                 itShouldLoadMore = true;

@@ -33,7 +33,7 @@ import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.OPEN_MAIN_ACTI
 
 public class UserRegisterActivity extends AppCompatActivity {
 
-    EditText username, password, phonenumber;
+    EditText password, phonenumber;
     TextInputLayout usernamelayout, passwordlayout, phonenumberlayout;
     AVLoadingIndicatorView progress;
     MaterialRippleLayout register;
@@ -65,7 +65,7 @@ public class UserRegisterActivity extends AppCompatActivity {
         animationDrawable.setExitFadeDuration(5000);
         animationDrawable.start();
 
-        username = (EditText) findViewById(R.id.txtbx_username_register);
+//        username = (EditText) findViewById(R.id.txtbx_username_register);
         password = (EditText) findViewById(R.id.txtbx_password_register);
         phonenumber = (EditText) findViewById(R.id.txtbx_phonenumber_register);
         txt_rules = (TextView) findViewById(R.id.txt_rules);
@@ -96,20 +96,20 @@ public class UserRegisterActivity extends AppCompatActivity {
 
             public void onClick(View arg0) {
 
-                if (!isUserNameValid(username.getText().toString())) {
-
-//                    Toast.makeText(
-//                            UserRegisterActivity.this
-//                            , "نام کاربری معتبر نیست",
-//                            Toast.LENGTH_SHORT).show();
-
-                    Utility.showSnackbar(layout, R.string.invalidUsername, Snackbar.LENGTH_SHORT);
-
-                } else {
+//                if (!isUserNameValid(username.getText().toString())) {
+//
+////                    Toast.makeText(
+////                            UserRegisterActivity.this
+////                            , "نام کاربری معتبر نیست",
+////                            Toast.LENGTH_SHORT).show();
+//
+//                    Utility.showSnackbar(layout, R.string.invalidUsername, Snackbar.LENGTH_SHORT);
+//
+//                } else {
                     progress.smoothToShow();
                     register.setVisibility(View.GONE);
 
-                    reg.send_info(username.getText().toString(), phonenumber.getText().toString(), Utility.arabicToDecimal(password.getText().toString())).enqueue(new Callback<ApiResponse>() {
+                    reg.send_info(null, phonenumber.getText().toString(), Utility.arabicToDecimal(password.getText().toString())).enqueue(new Callback<ApiResponse>() {
                         @Override
                         public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
@@ -129,7 +129,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                                         SmsVerification_RegisterActivity.class);
 
                                 goto_sms_validation.putExtra("phone_number", phonenumber.getText().toString());
-                                goto_sms_validation.putExtra("username", username.getText().toString());
+//                                goto_sms_validation.putExtra("username", username.getText().toString());
                                 goto_sms_validation.putExtra("password", password.getText().toString());
                                 goto_sms_validation.putExtra(OPEN_MAIN_ACTIVITY,openMainActivity);
 
@@ -186,9 +186,9 @@ public class UserRegisterActivity extends AppCompatActivity {
                                 progress.smoothToHide();
                                 register.setVisibility(View.VISIBLE);
 
-                                if (username.getText().toString() == "") {
-                                    usernamelayout.setError("نام کاربری را وارد کنید");
-                                }
+//                                if (username.getText().toString() == "") {
+//                                    usernamelayout.setError("نام کاربری را وارد کنید");
+//                                }
                                 if (phonenumber.getText().toString() == "") {
                                     phonenumberlayout.setError("شماره موبایل را وارد کنید");
                                 }
@@ -227,7 +227,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
 
                 }
-            }
+//            }
 
         });
 
