@@ -54,10 +54,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white">
 
-                <ir.woope.woopeapp.Utils.SquareLayout
+                <LinearLayout
                     android:id="@+id/sqPI"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="200dp"
                     android:gravity="center">
 
                     <RelativeLayout
@@ -102,7 +102,7 @@
 
                     </RelativeLayout>
 
-                </ir.woope.woopeapp.Utils.SquareLayout>
+                </LinearLayout>
 
                 <!--<ImageView-->
                 <!--android:layout_width="match_parent"-->
@@ -119,7 +119,26 @@
                 <!--android:background="@drawable/store_hover" />-->
 
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/titleLayout_product_home_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/title_product_home_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +148,7 @@
                 android:orientation="horizontal"
                 android:padding="0dp">
 
-                <com.varunest.sparkbutton.SparkButton
+                <!--<com.varunest.sparkbutton.SparkButton
                     android:id="@+id/product_home_item_likebutton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,7 +171,7 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/product_home_item_likebutton"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <TextView
                     android:id="@+id/dateText_offer_item"

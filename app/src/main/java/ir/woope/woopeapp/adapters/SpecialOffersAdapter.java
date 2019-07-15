@@ -67,11 +67,12 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView storeName;
+        private TextView storeTitle;
         //        private TextView likeCount;
         private TextView productDescription;
         TextView offerDate;
         private SliderLayout productImage;
-        private SparkButton likeButton;
+        //private SparkButton likeButton;
         private RelativeLayout storeNameLayout;
         RelativeLayout weekDayLayout;
         TextView weekDay;
@@ -81,6 +82,8 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
             super(view);
 
             storeName = view.findViewById(R.id.store_name_product_home_item);
+
+            storeTitle=view.findViewById(R.id.title_product_home_item);
 
             storeNameLayout = view.findViewById(R.id.storeNameLayout_product_home_item);
 
@@ -110,7 +113,7 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 
             productImage = view.findViewById(R.id.product_home_item_ImageSlider);
 
-            likeButton = view.findViewById(R.id.product_home_item_likebutton);
+            //likeButton = view.findViewById(R.id.product_home_item_likebutton);
 
             offerDate = view.findViewById(R.id.dateText_offer_item);
 
@@ -217,6 +220,8 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         holder.productDescription.setText(Items.get(position).description);
 
         holder.storeName.setText(Items.get(position).storeName);
+
+        holder.storeTitle.setText(Items.get(position).title);
 
 //        if (Items.get(position).isLiked) {
 //            holder.likeButton.setChecked(true);
