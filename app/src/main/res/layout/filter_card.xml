@@ -14,8 +14,10 @@
 
         <RelativeLayout
             android:id="@+id/storePointCountLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="left"
+            android:gravity="left"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true">
 
@@ -25,7 +27,6 @@
                 android:background="@drawable/triangle_badge"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"/>
-
             <TextView
                 android:id="@+id/storePointCountText"
                 android:layout_width="wrap_content"
