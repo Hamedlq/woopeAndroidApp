@@ -232,6 +232,7 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 //        Picasso.with(context).load(Constants.GlobalConstants.LOGO_URL + Items.get(position).postImageAddress).into(holder.productImage);
 
         if (Items.get(position).listOfImageAddress != null)
+            holder.productImage.removeAllSliders();
             for (int i = 0; i < Items.get(position).listOfImageAddress.size(); i++) {
                 DefaultSliderView textSliderView = new DefaultSliderView(context);
 

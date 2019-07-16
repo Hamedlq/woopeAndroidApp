@@ -22,7 +22,7 @@ public class SquareLayout extends LinearLayout {
     @Override
     protected void onMeasure(int width, int height) {
         // note we are applying the width value as the height
-        super.onMeasure(width, width/2);
+        super.onMeasure(width, width);
     }
 
 }

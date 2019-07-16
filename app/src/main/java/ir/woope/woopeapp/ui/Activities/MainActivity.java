@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static Activity main;
 
-    boolean doubleBackToExitPressedOnce = false;
+    //boolean doubleBackToExitPressedOnce = false;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
 
@@ -544,13 +544,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        //if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             System.exit(1);
             return;
-        }
+        //}
 //        Toast.makeText(MainActivity.this, R.string.press_again_to_exit, Toast.LENGTH_LONG).show();
-        Utility.showSnackbar(layout, R.string.press_again_to_exit, Snackbar.LENGTH_LONG);
+        /*Utility.showSnackbar(layout, R.string.press_again_to_exit, Snackbar.LENGTH_LONG);
         this.doubleBackToExitPressedOnce = true;
         new Handler().postDelayed(new Runnable() {
 
@@ -558,7 +558,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 4000);
+        }, 4000);*/
     }
 
     public void galleryIntent() {
