@@ -146,18 +146,18 @@ public class product_home_fragment extends Fragment implements ItemClickListener
             @Override
             public void onStoreNameClicked(View view, int position) {
 
-//                StoreGalleryItem s = adapter.getProduct(position);
-//                Store st = new Store();
-//                st.storeId = s.branchId;
-//                final SharedPreferences prefs =
-//                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-//                Gson gson = new Gson();
-//                String json = prefs.getString(PROFILE, "");
-//                Profile obj = gson.fromJson(json, Profile.class);
-//                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
-//                myIntent.putExtra(PREF_PROFILE, obj);
-//                myIntent.putExtra(STORE, st); //Optional parameters
-//                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
+                SpecialOfferItem s = adapter.getProduct(position);
+                Store st = new Store();
+                st.storeId = s.branchId;
+                final SharedPreferences prefs =
+                        getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+                Gson gson = new Gson();
+                String json = prefs.getString(PROFILE, "");
+                Profile obj = gson.fromJson(json, Profile.class);
+                Intent myIntent = new Intent(getActivity(), StoreActivity.class);
+                myIntent.putExtra(PREF_PROFILE, obj);
+                myIntent.putExtra(STORE, st); //Optional parameters
+                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
 
             }
 
@@ -314,6 +314,8 @@ public class product_home_fragment extends Fragment implements ItemClickListener
                         hideProgreeBar();
 
                     }
+
+
 
                 }
             }

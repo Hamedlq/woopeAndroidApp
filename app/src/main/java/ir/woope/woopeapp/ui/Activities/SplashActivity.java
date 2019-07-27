@@ -1,5 +1,6 @@
 package ir.woope.woopeapp.ui.Activities;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,19 +9,24 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +35,13 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.net.NetworkInterface;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -104,6 +116,42 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    private void showDialog(String text) {
+
+        final Dialog dialog = new Dialog(SplashActivity.this);
+        dialog.setContentView(R.layout.normal_dialog);
+        dialog.setTitle("");
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        RelativeLayout confirm = dialog.findViewById(R.id.confirm);
+        TextView message = dialog.findViewById(R.id.text);
+        message.setText(text);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
+    }
+
+    public static boolean isVpnConnectionActive(){
+        List<String> networks = new ArrayList<>();
+
+        try {
+            for (NetworkInterface networkInterface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (networkInterface.isUp()){
+                    networks.add(networkInterface.getName());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return true;
+    }
+
     public int getVersion() {
         int v = 1000;
         try {
@@ -114,6 +162,10 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void checkVersion() {
+
+//        if(isVpnConnectionActive())
+//            showDialog("Deactivate VPN");
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)

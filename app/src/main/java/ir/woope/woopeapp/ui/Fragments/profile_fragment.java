@@ -148,7 +148,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     public TextView userNameFamily;
     public TextView username;
-//    public TextView userBio;
+    //    public TextView userBio;
     public TextView cashCredit;
     public TextView woopeCredit;
     public TextView giftWoope;
@@ -195,7 +195,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
 
     TabLayout user_tabs;
 
-    CardView cashCard,woopeCard,shareCard;
+    CardView cashCard, woopeCard, shareCard;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -467,7 +467,45 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         }
     }
 
+    public void getProfileFromServer() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
 
+        ProfileInterface providerApiInterface =
+                retrofit.create(ProfileInterface.class);
+
+        final SharedPreferences prefs =
+                getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+        Call<Profile> call =
+                providerApiInterface.getProfileFromServer("bearer " + authToken);
+        call.enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                int code = response.code();
+                if (code == 200) {
+
+                    Profile profile;
+                    profile = response.body();
+                    //profile=user.getMessage();
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(profile);
+                    prefsEditor.putString(PROFILE, json);
+                    prefsEditor.apply();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+            }
+        });
+
+    }
 
     /*private void setupTabs() {
 

@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
@@ -315,17 +316,30 @@ public class StoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (totalPrice > 0 && totalPrice <= 10000000) {
-                    if (discountCode.getText().toString().matches("")) {
-                        goToPaying(null, null);
-                    } else if (!discountCode.getText().toString().matches("")) {
-                        checkCode(discountCode.getText().toString(), store.storeId,totalPrice);
+                    try {
+                        if (discountCode.getText().toString().matches("")) {
+                            goToPaying(null, null);
+                        } else if (!discountCode.getText().toString().matches("")) {
+                            checkCode(discountCode.getText().toString(), store.storeId, totalPrice);
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
                     }
                 } else if (totalPrice > 10000000) {
-                    invalidPrice.setText(R.string.overflowed_price);
-                    invalidPrice.setVisibility(View.VISIBLE);
+                    try {
+                        invalidPrice.setText(R.string.overflowed_price);
+                        invalidPrice.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
+                    }
                 } else {
-                    invalidPrice.setText(R.string.invalid_price);
-                    invalidPrice.setVisibility(View.VISIBLE);
+                    try {
+                        invalidPrice.setText(R.string.invalid_price);
+                        invalidPrice.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG);
+                    }
+
                 }
             }
         });
@@ -534,7 +548,7 @@ public class StoreActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
 
         Call<ApiResponse> call =
-                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId,amount);
+                providerApiInterface.checkDiscountCode("bearer " + authToken, Code, branchId, amount);
 
         showDialogProgreeBar();
 

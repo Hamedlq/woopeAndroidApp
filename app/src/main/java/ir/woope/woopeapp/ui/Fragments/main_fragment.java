@@ -124,8 +124,38 @@ public class main_fragment extends Fragment {
         category_recycler.setItemAnimator(new DefaultItemAnimator());
         category_recycler.setAdapter(categoryAdapter);
 
+//        toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
         toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_gift);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_store:
+                        Profile userobj = ((MainActivity) getActivity()).getUserProfile();
+                        Intent giftIntent = new Intent(getActivity(), GiftActivity.class);
+                        giftIntent.putExtra(PREF_PROFILE, userobj);
+                        getActivity().startActivityForResult(giftIntent, SHOULD_GET_PROFILE);
+                        getActivity().overridePendingTransition(R.anim.slide_down, R.anim.no_change);
+                        break;
+
+                    case R.id.nav_help:
+                        Intent intentContactUs = new Intent(getActivity(), ContactUsActivity.class);
+                        getActivity().startActivityForResult(intentContactUs, SHOULD_GET_PROFILE);
+                        getActivity().overridePendingTransition(R.anim.slide_down, R.anim.no_change);
+                        break;
+
+                    default:
+                        break;
+                }
+                return true;
+
+            }
+        });
 
 //        all_button.setOnTouchListener(new View.OnTouchListener() {
 //            @Override

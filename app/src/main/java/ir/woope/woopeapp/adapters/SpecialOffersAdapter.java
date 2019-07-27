@@ -1,12 +1,16 @@
 package ir.woope.woopeapp.adapters;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
+import android.os.Build;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +38,8 @@ import ir.woope.woopeapp.ui.Fragments.product_home_fragment;
 public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdapter.MyViewHolder> {
 
     private Context context;
+
+    int lineCount;
 
     private List<SpecialOfferItem> Items;
 
@@ -73,9 +79,15 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         TextView offerDate;
         private SliderLayout productImage;
         //private SparkButton likeButton;
-        private RelativeLayout storeNameLayout;
-        RelativeLayout weekDayLayout;
+        private CardView storeNameLayout;
+        CardView weekDayLayout;
         TextView weekDay;
+        TextView showMore;
+        LinearLayout detailsLayout;
+
+        CardView discountLayout;
+        TextView discountText;
+
 //        private Button sendOnlineRequest;
 
         public MyViewHolder(final View view) {
@@ -83,7 +95,7 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 
             storeName = view.findViewById(R.id.store_name_product_home_item);
 
-            storeTitle=view.findViewById(R.id.title_product_home_item);
+            storeTitle = view.findViewById(R.id.title_product_home_item);
 
             storeNameLayout = view.findViewById(R.id.storeNameLayout_product_home_item);
 
@@ -119,6 +131,23 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 
             weekDay = view.findViewById(R.id.weekDay_offer_item);
             weekDayLayout = view.findViewById(R.id.weekDay_layout_offer_item);
+
+            showMore = view.findViewById(R.id.productDescription_showMore);
+
+            showMore.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View arg0) {
+
+                    productDescription.setMaxLines(99);
+                    showMore.setVisibility(View.GONE);
+
+                }
+            });
+
+            detailsLayout = view.findViewById(R.id.linear_detailsLayout_specialOffer);
+
+            discountLayout = view.findViewById(R.id.store_discount_layout_special_offer_item);
+            discountText = view.findViewById(R.id.store_discount_special_offer_item);
 
 //            productImage.setOnClickListener(new DoubleClickListener() {
 //
@@ -211,6 +240,11 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            holder.detailsLayout.getLayoutTransition()
+//                    .enableTransitionType(LayoutTransition.CHANGING);
+//        }
+
 //        if (Items.get(position).countLike == 0) {
 //            holder.likeCount.setText("");
 //        } else {
@@ -218,6 +252,18 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 //        }
 
         holder.productDescription.setText(Items.get(position).description);
+
+        holder.productDescription.post(new Runnable() {
+            @Override
+            public void run() {
+                lineCount = holder.productDescription.getLineCount();
+                // Use lineCount here
+                if (lineCount > 2) {
+                    holder.productDescription.setMaxLines(2);
+                    holder.showMore.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         holder.storeName.setText(Items.get(position).storeName);
 
@@ -233,16 +279,16 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 
         if (Items.get(position).listOfImageAddress != null)
             holder.productImage.removeAllSliders();
-            for (int i = 0; i < Items.get(position).listOfImageAddress.size(); i++) {
-                DefaultSliderView textSliderView = new DefaultSliderView(context);
+        for (int i = 0; i < Items.get(position).listOfImageAddress.size(); i++) {
+            DefaultSliderView textSliderView = new DefaultSliderView(context);
 
-                textSliderView
-                        .image(Constants.GlobalConstants.LOGO_URL + Items.get(position).listOfImageAddress.get(i))
-                        .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+            textSliderView
+                    .image(Constants.GlobalConstants.LOGO_URL + Items.get(position).listOfImageAddress.get(i))
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
 
-                holder.productImage.addSlider(textSliderView);
+            holder.productImage.addSlider(textSliderView);
 
-            }
+        }
 
         holder.offerDate.setText("از " + Items.get(position).persianRegisterDate + " تا " + Items.get(position).persianExpireDate);
 
@@ -250,6 +296,16 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
             holder.weekDayLayout.setVisibility(View.VISIBLE);
             holder.weekDay.setText(Items.get(position).weekDayName);
         }
+
+        if (Items.get(position).discountPercent != 0) {
+            holder.discountLayout.setVisibility(View.VISIBLE);
+            holder.discountText.setText(Items.get(position).discountPercent + "٪ تخفیف");
+        }
+
+        if (Items.get(position).listOfImageAddress.size() <= 1)
+            holder.productImage.stopAutoCycle();
+        else
+            holder.productImage.startAutoCycle();
 
 //        if(Items.get(position).canBeSold)
 //            holder.sendOnlineRequest.setVisibility(View.VISIBLE);
@@ -303,6 +359,11 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
     public List<SpecialOfferItem> getProductList() {
         return Items;
     }
+
+    public void notifyAdapter() {
+        notifyDataSetChanged();
+    }
+
 
     public void LikeProduct(int position) {
         if (Items.get(position).isLiked) {

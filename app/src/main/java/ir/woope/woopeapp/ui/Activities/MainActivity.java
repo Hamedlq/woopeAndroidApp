@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Stack;
 
 import ir.metrix.sdk.Metrix;
 import ir.woope.woopeapp.R;
@@ -128,96 +129,9 @@ public class MainActivity extends AppCompatActivity {
     final Fragment profileFragment = new profile_fragment();
     final Fragment loginSelectFragment = new login_select_fragment();
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = homeFragment;
+    Fragment active = productHomeFragment;
 
-//    FragmentManager fragmentManager = getSupportFragmentManager();
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.navigation_home:
-//                    if (!IsOnHome) {
-//                        //mTextMessage.setText(R.string.title_home);
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                            break;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        fragmentManager.beginTransaction()
-//                                .replace(R.id.frame_layout, new main_fragment(), HOME_FRAGMENT)
-//                                .commit();
-//                        IsOnHome = true;
-//                        IsOnSearch = false;
-//                        IsOnProfile = false;
-//                        IsOnFavorite = false;
-//                        return true;
-//                    } else break;
-//                case R.id.navigation_‌search:
-//                    if (!IsOnSearch) {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                            break;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        fragmentManager.beginTransaction()
-//                                .replace(R.id.frame_layout, new search_fragment(), SEARCH_FRAGMENT)
-//                                .commit();
-//                        IsOnSearch = true;
-//                        IsOnHome = false;
-//                        IsOnProfile = false;
-//                        IsOnFavorite = false;
-//                        return true;
-//                    } else break;
-//                case R.id.navigation_favorite:
-//                    if (!IsOnFavorite) {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                            break;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        fragmentManager.beginTransaction()
-//                                .replace(R.id.frame_layout, new profileBookmarkFragment(), SEARCH_FRAGMENT)
-//                                .commit();
-//                        IsOnFavorite = true;
-//                        IsOnSearch = false;
-//                        IsOnHome = false;
-//                        IsOnHome = false;
-//                        IsOnProfile = false;
-//                        return true;
-//                    } else break;
-//                case R.id.navigation_profile:
-//                    if (!IsOnProfile) {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                            break;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        //mTextMessage.setText(R.string.title_notifications);
-//                        fragmentManager.beginTransaction()
-//                                .replace(R.id.frame_layout, new profile_fragment(), PROFILE_FRAGMENT)
-//                                .commit();
-//                        IsOnProfile = true;
-//                        IsOnHome = false;
-//                        IsOnSearch = false;
-//                        IsOnFavorite = false;
-//                        return true;
-//                    } else break;
-//                case R.id.navigation_woope:
-//                    if (!IsOnProfile) {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                            break;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        //mTextMessage.setText(R.string.title_notifications);
-//
-//                        IsOnProfile = false;
-//                        IsOnHome = false;
-//                        IsOnSearch = false;
-//                        IsOnFavorite = false;
-//                        return true;
-//                    } else break;
-//            }
-//            return false;
-//        }
-//    };
+    Stack<Fragment> pages;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -230,38 +144,52 @@ public class MainActivity extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_home);
                     fm.beginTransaction().hide(active).show(homeFragment).commit();
                     active = homeFragment;
+                    if (pages.get(pages.size() - 1) != homeFragment)
+                        pages.push(homeFragment);
                     return true;
 
                 case R.id.navigation_‌search:
 
                     fm.beginTransaction().hide(active).show(searchFragment).commit();
                     active = searchFragment;
+                    if (pages.get(pages.size() - 1) != searchFragment)
+                        pages.push(searchFragment);
                     return true;
 
                 case R.id.navigation_favorite:
-                    if(IsLogedIn()) {
+                    if (IsLogedIn()) {
                         fm.beginTransaction().hide(active).show(favoritesFragment).commit();
                         active = favoritesFragment;
-                    }else{
+                        if (pages.get(pages.size() - 1) != favoritesFragment)
+                            pages.push(favoritesFragment);
+                    } else {
                         fm.beginTransaction().hide(active).show(loginSelectFragment).commit();
                         active = loginSelectFragment;
+                        if (pages.get(pages.size() - 1) != loginSelectFragment)
+                            pages.push(loginSelectFragment);
                     }
 
                     return true;
 
                 case R.id.navigation_profile:
-                    if(IsLogedIn()) {
+                    if (IsLogedIn()) {
                         fm.beginTransaction().hide(active).show(profileFragment).commit();
                         active = profileFragment;
-                    }else{
+                        if (pages.get(pages.size() - 1) != profileFragment)
+                            pages.push(profileFragment);
+                    } else {
                         fm.beginTransaction().hide(active).show(loginSelectFragment).commit();
                         active = loginSelectFragment;
+                        if (pages.get(pages.size() - 1) != loginSelectFragment)
+                            pages.push(loginSelectFragment);
                     }
                     return true;
 
                 case R.id.navigation_woope:
                     fm.beginTransaction().hide(active).show(productHomeFragment).commit();
                     active = productHomeFragment;
+                    if (pages != null)
+                        pages.push(productHomeFragment);
                     return true;
 
             }
@@ -269,12 +197,21 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void switchToSearch(){
+    public void switchToSearch() {
         View v = navigation.findViewById(R.id.navigation_‌search);
+        if (pages.get(pages.size() - 1) != searchFragment)
+            pages.push(searchFragment);
         v.performClick();
     }
 
-    public void switchPage(int ItemId){
+    public void switchToOffers() {
+        View v = navigation.findViewById(R.id.navigation_woope);
+        if (pages.get(pages.size() - 1) != productHomeFragment)
+            pages.push(productHomeFragment);
+        v.performClick();
+    }
+
+    public void switchPage(int ItemId) {
 
         switch (ItemId) {
             case R.id.navigation_home:
@@ -313,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,15 +258,17 @@ public class MainActivity extends AppCompatActivity {
 
         main = this;
 
-        fm.beginTransaction().add(R.id.frame_layout, productHomeFragment, "3").hide(productHomeFragment).commit();
+        pages = new Stack();
+
+        fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").hide(homeFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, searchFragment, "2").hide(searchFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
 
-        if(!IsLogedIn()) {
+        if (!IsLogedIn()) {
             fm.beginTransaction().add(R.id.frame_layout, loginSelectFragment, LOGIN_SELECT_FRAGMENT).hide(loginSelectFragment).commit();
         }
-        fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").commit();
+        fm.beginTransaction().add(R.id.frame_layout, productHomeFragment, "3").commit();
 
         layout = findViewById(R.id.activity_main);
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -347,6 +285,11 @@ public class MainActivity extends AppCompatActivity {
         //mTextMessage = (TextView) findViewById(R.id.message);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        if (savedInstanceState == null) {
+            navigation.setSelectedItemId(R.id.navigation_woope);
+//            pages.push(productHomeFragment);
+            // change to whichever id should be default
+        }
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
         try {
             Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
@@ -404,7 +347,6 @@ public class MainActivity extends AppCompatActivity {
 //                        .commit();
 
 
-
                 View v = navigation.findViewById(R.id.navigation_woope);
                 v.performClick();
 
@@ -435,9 +377,9 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences prefs =
                 this.getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
         String tokenString = prefs.getString(TOKEN, null);
-        if(tokenString==null){
+        if (tokenString == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -545,9 +487,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
+
+//        if (pages.size() > 1) {
+//            View view = navigation.findViewById(pages.get(pages.size() - 2).getId());
+//            view.performClick();
+//            Fragment id = pages.get(pages.size() - 2);
+//            int tag = Integer.valueOf(id.getTag());
+//            navigation.getMenu().getItem(tag).setChecked(true);
+
+//            navigation.setSelectedItemId(pages.get(pages.size() - 2).getId());
+//            fm.beginTransaction().hide(pages.get(pages.size() - 1)).show((Fragment) pages.get(pages.size() - 2)).commit();
+//            pages.pop();
+//            return;
+//        }
+//        if (pages.size() == 1) {
             System.exit(1);
             return;
+//        }
+//            fm.beginTransaction().add(R.id.frame_layout, (Fragment) pages.get(pages.size() - 2)).hide((Fragment) pages.get(pages.size() - 1)).commit();
+
+
         //}
 //        Toast.makeText(MainActivity.this, R.string.press_again_to_exit, Toast.LENGTH_LONG).show();
         /*Utility.showSnackbar(layout, R.string.press_again_to_exit, Snackbar.LENGTH_LONG);
@@ -559,6 +518,8 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 4000);*/
+//        super.onBackPressed();
+
     }
 
     public void galleryIntent() {
@@ -656,6 +617,7 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bm = null;
         if (data != null) {
             try {
+
                 bm = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bm.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
