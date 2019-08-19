@@ -2,13 +2,17 @@ package ir.woope.woopeapp.ui.Fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
+import ir.woope.woopeapp.Utils.SimpleDividerItemDecoration;
 import ir.woope.woopeapp.adapters.CategoryAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.interfaces.StoreInterface;
@@ -117,11 +123,16 @@ public class main_fragment extends Fragment {
 //        categoryTab =(TabLayout) mRecycler.findViewById(R.id.categoryTabLayout);
 
         categoryList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(getContext(), categoryList,categoryTouchListener);
+        categoryAdapter = new CategoryAdapter(getContext(), categoryList, categoryTouchListener);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         category_recycler.setLayoutManager(layoutManager);
         category_recycler.setItemAnimator(new DefaultItemAnimator());
+        DividerItemDecoration verticalDecoration = new DividerItemDecoration(category_recycler.getContext(),
+                DividerItemDecoration.HORIZONTAL);
+        Drawable verticalDivider = ContextCompat.getDrawable(getActivity(), R.drawable.line_divider);
+        verticalDecoration.setDrawable(verticalDivider);
+        category_recycler.addItemDecoration(verticalDecoration);
         category_recycler.setAdapter(categoryAdapter);
 
 //        toolbar = (Toolbar) mRecycler.findViewById(R.id.home_fragment_toolbar);
@@ -177,7 +188,7 @@ public class main_fragment extends Fragment {
 //        setupTabView(categoryNames,categoryIcons);
 
         getListItems();
-        getCategories();
+//        getCategories();
         //getStoresByPage(MOST_WOOPE_FILTER);
         //getStoresByPage(MOST_PURCHASE_FILTER);
 
@@ -186,14 +197,14 @@ public class main_fragment extends Fragment {
             public void onCategoryTap(View v, int position) {
                 search_fragment.getInstance().categoryId = categoryList.get(position).id;
                 search_fragment.getInstance().adapter.emptyList();
-                search_fragment.getInstance().findStoresByPage("",0,null,categoryList.get(position).id,null);
+                search_fragment.getInstance().findStoresByPage("", 0, null, categoryList.get(position).id, null);
                 search_fragment.getInstance().categoryButton.setText(categoryList.get(position).name);
                 search_fragment.getInstance().categoryId = categoryList.get(position).id;
                 search_fragment.getInstance().categoryAdapter.deselectItem(search_fragment.getInstance().selectedCategory);
                 search_fragment.getInstance().categoryAdapter.selectItem(position);
                 search_fragment.getInstance().selectedCategory = position;
 //                ((MainActivity)getActivity()).switchPage(R.id.navigation_‌search);
-                ((MainActivity)getActivity()).switchToSearch();
+                ((MainActivity) getActivity()).switchToSearch();
             }
         };
 
@@ -354,7 +365,10 @@ public class main_fragment extends Fragment {
         });
     }
 
+    Boolean isFirst = true;
+
     private void showLists() {
+
         for (MainListModel ml : mainFilterList) {
 //            if (ml.listType == ListTypes.MallList) {
 //                FrameLayout childLayout = new FrameLayout(getContext());
@@ -363,6 +377,15 @@ public class main_fragment extends Fragment {
 //                container_layout.addView(childLayout, parentParams);
 //                getMalls(childLayout, ml);
 //            }
+
+            if (isFirst) {
+                AppCompatButton btnTag = new AppCompatButton(getContext());
+                btnTag.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (70 * getContext().getResources().getDisplayMetrics().density)));
+                btnTag.setText("");
+                btnTag.setBackgroundColor(getResources().getColor(R.color.transparent));
+                container_layout.addView(btnTag);
+                isFirst = false;
+            }
             if (ml.listType == ListTypes.StoreList) {
                 FrameLayout childLayout = new FrameLayout(getContext());
                 childLayout.setId(ml.listOrder);
@@ -370,13 +393,11 @@ public class main_fragment extends Fragment {
                 container_layout.addView(childLayout, parentParams);
                 getStores(childLayout, ml);
             } else if (ml.listType == ListTypes.BannerList) {
-
                 FrameLayout childLayout = new FrameLayout(getContext());
                 childLayout.setId(ml.listOrder);
                 FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 container_layout.addView(childLayout, parentParams);
                 getBanners(childLayout, ml);
-
             }
         }
     }
@@ -508,8 +529,8 @@ public class main_fragment extends Fragment {
             public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
                 int code = response.code();
                 if (code == 200) {
-                    categoryList =  response.body();
-                    categoryAdapter = new CategoryAdapter(getContext(), categoryList,categoryTouchListener);
+                    categoryList = response.body();
+                    categoryAdapter = new CategoryAdapter(getContext(), categoryList, categoryTouchListener);
                     category_recycler.setAdapter(categoryAdapter);
                 }
             }

@@ -3,8 +3,9 @@ package ir.woope.woopeapp.Utils;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class SquareLayout extends LinearLayout {
+public class SquareLayout extends RelativeLayout {
 
 
     public SquareLayout(Context context) {

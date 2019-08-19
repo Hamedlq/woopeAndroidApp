@@ -1,26 +1,19 @@
 package ir.woope.woopeapp.ui.Fragments;
 
-import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.graphics.pdf.PdfDocument;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,26 +23,14 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import net.igenius.customcheckbox.CustomCheckBox;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +40,9 @@ import butterknife.ButterKnife;
 import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.adapters.CategoryAdapter;
 import ir.woope.woopeapp.adapters.SortAdapter;
-import ir.woope.woopeapp.adapters.StoreSearchAdapter;
 import ir.woope.woopeapp.adapters.StoreSearchAdapter_v2;
-import ir.woope.woopeapp.adapters.StoresAdapter;
 import ir.woope.woopeapp.adapters.ZoneAdapter;
 import ir.woope.woopeapp.helpers.Constants;
-import ir.woope.woopeapp.helpers.ListPaddingDecoration;
 import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.StoreInterface;
 import ir.woope.woopeapp.models.ApiResponse;
@@ -73,9 +51,7 @@ import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.SortType;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.models.ZoneModel;
-import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
-import ir.woope.woopeapp.ui.Activities.TransactionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,7 +59,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PREF_PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.PROFILE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.RELOAD_LIST;
@@ -130,7 +105,7 @@ public class search_fragment extends Fragment {
     @BindView(R.id.searchEditText)
     EditText searchText;
 
-//SEARCH
+    //SEARCH
     private List<Store> albumList;
     private RecyclerView recyclerView;
     public StoreSearchAdapter_v2 adapter;
@@ -141,20 +116,20 @@ public class search_fragment extends Fragment {
     int PageNumber = 0;
     String newquery;
 
-//ZONE
+    //ZONE
     ZoneAdapter zoneAdapter;
     private List<ZoneModel> zoneList;
     List<Long> searchableZoneList = new ArrayList<>();
     ZoneTouchListener zoneTouchListener;
 
-//CATEGORY
+    //CATEGORY
     CategoryAdapter categoryAdapter;
     public main_fragment.CategoryTouchListener categoryTouchListener;
     int selectedCategory;
     public Long categoryId = null;
     private List<CategoryModel> categoryList = new ArrayList<>();
 
-//SORT
+    //SORT
     public SortAdapter sortAdapter;
     List<SortType> sortTypesList = new ArrayList<>();
     List<ZoneModel> sortedZoneList;
@@ -223,13 +198,13 @@ public class search_fragment extends Fragment {
 
                 if (((CustomCheckBox) v).isChecked()) {
                     for (int i = 0; i <= zoneList.size(); i++)
-                        if (zoneAdapter.getList().get(position).id==zoneList.get(i).id) {
+                        if (zoneAdapter.getList().get(position).id == zoneList.get(i).id) {
                             zoneList.get(i).isChecked = true;
                             break;
                         }
                 } else if (!((CustomCheckBox) v).isChecked())
                     for (int i = 0; i <= zoneList.size(); i++)
-                        if (zoneAdapter.getList().get(position).id==zoneList.get(i).id) {
+                        if (zoneAdapter.getList().get(position).id == zoneList.get(i).id) {
                             zoneList.get(i).isChecked = false;
                             break;
                         }
@@ -572,7 +547,6 @@ public class search_fragment extends Fragment {
         Call<ApiResponse> call =
                 providerApiInterface.followStore("bearer " + authToken, s.storeId);
 
-
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -638,56 +612,58 @@ public class search_fragment extends Fragment {
 
     }
 
-    private void findStores(String storeQuery) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.HTTP.BASE_URL)
-                .build();
-        StoreInterface providerApiInterface =
-                retrofit.create(StoreInterface.class);
+//    private void findStores(String storeQuery) {
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .baseUrl(Constants.HTTP.BASE_URL)
+//                .build();
+//        StoreInterface providerApiInterface =
+//                retrofit.create(StoreInterface.class);
+//
+//        SharedPreferences prefs =
+//                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+//
+//        showProgreeBar();
+//        if (!searchInProgress) {
+//            searchInProgress = true;
+//            Call<List<Store>> call =
+//                    providerApiInterface.FindStore("bearer " + authToken, storeQuery);
+//
+//            call.enqueue(new Callback<List<Store>>() {
+//                @Override
+//                public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+//                    hideProgreeBar();
+//                    searchInProgress = false;
+//                    int code = response.code();
+//                    if (code == 200) {
+//                        albumList = response.body();
+//                        //adapter.notifyDataSetChanged();
+//
+//                        adapter = new StoreSearchAdapter_v2(getActivity(), albumList, itemTouchListener);
+//                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+//                    ordersList.setLayoutManager(mLayoutManager);*/
+//                        recyclerView.setAdapter(adapter);
+//
+//
+//                        //prepareAlbums();
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<List<Store>> call, Throwable t) {
+//                    searchInProgress = false;
+//                    //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+//                    hideProgreeBar();
+//                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
+//
+//                }
+//            });
+//        }
+//    }
 
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
-
-        showProgreeBar();
-        if (!searchInProgress) {
-            searchInProgress = true;
-            Call<List<Store>> call =
-                    providerApiInterface.FindStore("bearer " + authToken, storeQuery);
-
-            call.enqueue(new Callback<List<Store>>() {
-                @Override
-                public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                    hideProgreeBar();
-                    searchInProgress = false;
-                    int code = response.code();
-                    if (code == 200) {
-                        albumList = response.body();
-                        //adapter.notifyDataSetChanged();
-
-                        adapter = new StoreSearchAdapter_v2(getActivity(), albumList, itemTouchListener);
-                    /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-                    ordersList.setLayoutManager(mLayoutManager);*/
-                        recyclerView.setAdapter(adapter);
-
-
-                        //prepareAlbums();
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Store>> call, Throwable t) {
-                    searchInProgress = false;
-                    //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
-                    hideProgreeBar();
-                    Utility.showSnackbar(layout, R.string.network_error, Snackbar.LENGTH_LONG);
-
-                }
-            });
-        }
-    }
+    Boolean isFirst=true;
 
     public void findStoresByPage(String storeQuery, int pageNumber, @Nullable List<Long> zones, @Nullable Long categoryId, @Nullable Short sortType) {
 
@@ -699,6 +675,7 @@ public class search_fragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(Constants.HTTP.BASE_URL)
                 .build();
+
         StoreInterface providerApiInterface =
                 retrofit.create(StoreInterface.class);
 
@@ -710,7 +687,7 @@ public class search_fragment extends Fragment {
         if (!searchInProgress) {
             searchInProgress = true;
             Call<List<Store>> call =
-                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery, pageNumber, zones, categoryId, sortType);
+                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery, pageNumber, zones, categoryId, sortType,false);
 
             call.enqueue(new Callback<List<Store>>() {
                 @Override
@@ -724,7 +701,11 @@ public class search_fragment extends Fragment {
 
                         itShouldLoadMore = true;
 
-                        adapter.addItem(response.body());
+                        if (response.body().size()<=9) {
+                            adapter.addItem(makeSpace());
+                            isFirst=false;
+                        }
+                        adapter.addList(response.body());
 
                         PageNumber++;
 
@@ -754,6 +735,12 @@ public class search_fragment extends Fragment {
                 }
             });
         }
+    }
+
+    public Store makeSpace() {
+        Store s = new Store();
+        s.isSpace = true;
+        return s;
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -932,7 +919,7 @@ public class search_fragment extends Fragment {
     }
 
     private void showZoneCard() {
-        hideSortTypes();
+//        hideSortTypes();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -949,7 +936,7 @@ public class search_fragment extends Fragment {
     }
 
     private void hideZoneCard() {
-        showSortTypes();
+//        showSortTypes();
         YoYo.with(Techniques.SlideOutUp)
                 .duration(600)
                 .playOn(zoneCard);
@@ -964,7 +951,7 @@ public class search_fragment extends Fragment {
     }
 
     private void showCategoryCard() {
-        hideSortTypes();
+//        hideSortTypes();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -982,7 +969,7 @@ public class search_fragment extends Fragment {
     }
 
     private void hideCategoryCard() {
-        showSortTypes();
+//        showSortTypes();
         YoYo.with(Techniques.SlideOutUp)
                 .duration(600)
                 .playOn(categoryCard);

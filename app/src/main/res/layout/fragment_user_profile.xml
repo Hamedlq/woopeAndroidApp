@@ -312,7 +312,6 @@
                     card_view:cardCornerRadius="5dp">
 
                     <RelativeLayout
-
                         android:id="@+id/history_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -341,6 +340,51 @@
 
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/btn_BookmarkedStores"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="1"
+                    android:elevation="13dp"
+                    card_view:cardBackgroundColor="@color/white"
+                    card_view:cardCornerRadius="5dp">
+
+                    <RelativeLayout
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/left_arrow" />
+
+                        <TextView
+                            android:id="@+id/BookmarkedStores_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:text="فروشگاه های نشان شده"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
             </LinearLayout>
 
         </android.support.design.widget.AppBarLayout>

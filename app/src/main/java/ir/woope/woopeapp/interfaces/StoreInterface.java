@@ -37,7 +37,8 @@ public interface StoreInterface {
                                       @Field("pageNumber") int pageNumber,
                                       @Nullable @Field("Zones") List<Long> zones,
                                       @Nullable @Field("CategoryId") Long categoryId,
-                                      @Nullable @Field("SortType") Short sortType );
+                                      @Nullable @Field("SortType") Short sortType,
+                                      @Nullable @Field("Shareable") Boolean shareable);
 
     @POST(Constants.Actions.FOLLOW_STORE)
     @FormUrlEncoded
@@ -50,6 +51,11 @@ public interface StoreInterface {
     @POST(Constants.Actions.GET_STORE)
     @FormUrlEncoded
     Call<Store> getStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
+                         @Field("branchId") long s);
+
+    @POST(Constants.Actions.GET_USER_STORE)
+    @FormUrlEncoded
+    Call<Store> getUserStore(@Header(Constants.Actions.PARAM_AUTHORIZATION) String authToken,
                          @Field("branchId") long s);
 
     @POST("api/Store/GetStoresbyPage")

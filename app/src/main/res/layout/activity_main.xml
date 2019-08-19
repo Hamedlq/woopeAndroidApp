@@ -60,8 +60,9 @@
         android:layout_centerInParent="true"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/woope_icon"
-        app:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/ic_launcher"
+        android:scaleType="fitXY"
+        app:backgroundTint="#a84dfc"
         app:fabSize="normal" />
 
 </RelativeLayout>

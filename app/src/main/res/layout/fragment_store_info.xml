@@ -229,7 +229,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="40dp"
                 android:visibility="visible"
                 app:cardBackgroundColor="@color/alizarin"
                 app:cardCornerRadius="5dp"

@@ -32,7 +32,7 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.models.Store;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
 
-public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<StoreSearchAdapter_v2.MyViewHolder> {
+public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int MAX_CLICK_DURATION = 200;
     private Context mContext;
@@ -41,8 +41,10 @@ public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<StoreSearchAdapt
     private float mDownX;
     private float mDownY;
     private search_fragment.ItemTouchListener onItemTouchListener;
+    Boolean isFirst = true;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
         public TextView storeName, pointCount, pointBrief, zone;
         public CardView zoneLayout;
         public RelativeLayout pointCountLayout;
@@ -105,6 +107,23 @@ public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<StoreSearchAdapt
         }
     }
 
+    public class SpaceViewHolder extends RecyclerView.ViewHolder {
+
+        public SpaceViewHolder(View view) {
+            super(view);
+
+
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (albumList.get(position).isSpace!=null && albumList.get(position).isSpace) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 
     public StoreSearchAdapter_v2(Context mContext, List<Store> albumList, search_fragment.ItemTouchListener onItemTouchListener) {
         this.mContext = mContext;
@@ -113,7 +132,13 @@ public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<StoreSearchAdapt
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == 0) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.space_layout, parent, false);
+
+            return new SpaceViewHolder(itemView);
+        }
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.search_card_v2, parent, false);
 
@@ -121,33 +146,49 @@ public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<StoreSearchAdapt
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Store store = albumList.get(position);
-        holder.storeName.setText(store.storeName);
-        if (store.zone != null) {
-            holder.zoneLayout.setVisibility(View.VISIBLE);
-            holder.zone.setText(store.zone);
+    public void onBindViewHolder(final RecyclerView.ViewHolder vholder, int position) {
+
+
+        switch (vholder.getItemViewType()) {
+            case 0:
+
+                SpaceViewHolder advHolder = (SpaceViewHolder) vholder;
+
+                break;
+
+            case 1:
+                MyViewHolder holder = (MyViewHolder) vholder;
+                Store store = albumList.get(position);
+                holder.storeName.setText(store.storeName);
+                if (store.zone != null) {
+                    holder.zoneLayout.setVisibility(View.VISIBLE);
+                    holder.zone.setText(store.zone);
+                }
+
+                holder.pointCountLayout.setVisibility(View.VISIBLE);
+                holder.pointCount.setText(store.returnPoint + " ووپ");
+//                holder.pointCount.setText(String.valueOf(store.returnCashGift));
+
+                if (store.returnPoint != 0) {
+                    holder.pointBrief.setVisibility(View.VISIBLE);
+                    holder.pointBrief.setText("به ازای هر " + Utility.commaSeprate(store.basePrice) + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
+                } else if (store.storeDescription != null) {
+                    holder.pointBrief.setText(store.storeDescription);
+                }
+
+                if (store.zone == null)
+                    holder.zoneLayout.setVisibility(View.GONE);
+                else if (store.returnPoint != 0) {
+                    holder.zoneLayout.setVisibility(View.VISIBLE);
+                    holder.zone.setText(store.zone);
+                }
+
+                // loading album cover using Glide library
+                Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
+
+                break;
         }
 
-        holder.pointCountLayout.setVisibility(View.VISIBLE);
-        holder.pointCount.setText(store.returnPoint + " ووپ");
-
-        if (store.returnPoint != 0) {
-            holder.pointBrief.setVisibility(View.VISIBLE);
-            holder.pointBrief.setText("به ازای هر " + Utility.commaSeprate(store.basePrice) + " تومان خرید " + store.returnPoint + " عدد ووپ هدیه بگیرید");
-        } else if (store.storeDescription != null) {
-            holder.pointBrief.setText(store.storeDescription);
-        }
-
-        if (store.zone == null)
-            holder.zoneLayout.setVisibility(View.GONE);
-        else if (store.returnPoint != 0) {
-            holder.zoneLayout.setVisibility(View.VISIBLE);
-            holder.zone.setText(store.zone);
-        }
-
-        // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
 
     }
 
@@ -185,7 +226,14 @@ public class StoreSearchAdapter_v2 extends RecyclerView.Adapter<StoreSearchAdapt
         return albumList.size();
     }
 
-    public void addItem(final List<Store> list) {
+    public void addItem(Store s) {
+
+        albumList.add(s);
+        notifyDataSetChanged();
+
+    }
+
+    public void addList(final List<Store> list) {
 
 //        final int oldsize = albumList.size();
 //        for (int i = list.size() - 1; i >= 0; i--) {

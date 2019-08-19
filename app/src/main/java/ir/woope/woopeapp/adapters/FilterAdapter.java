@@ -4,8 +4,10 @@ package ir.woope.woopeapp.adapters;
  * Created by Hamed on 6/10/2018.
  */
 
+import android.animation.Animator;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -49,56 +54,76 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         public TextView title, count, pointCount;
         public RelativeLayout pointCountLayout;
         public ImageView thumbnail;
+        CardView card;
+        MaterialRippleLayout ripple;
 
         public MyViewHolder(View view) {
             super(view);
+            card = view.findViewById(R.id.card_view);
+            ripple = view.findViewById(R.id.rippleLayout);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
 //            point = (TextView) view.findViewById(R.id.point);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            thumbnail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemTouchListener.onCardViewTap(view, getPosition());
+                }
+            });
             pointCount = (TextView) view.findViewById(R.id.storePointCountText);
             pointCountLayout = (RelativeLayout) view.findViewById(R.id.storePointCountLayout);
             //overflow = (ImageView) view.findViewById(R.id.overflow);
-            thumbnail.setOnTouchListener(new View.OnTouchListener() {
+//            thumbnail.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_DOWN: {
+//                            startClickTime = Calendar.getInstance().getTimeInMillis();
+//                            break;
+//                        }
+//                        case MotionEvent.ACTION_UP: {
+//                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+//                            if (clickDuration < MAX_CLICK_DURATION) {
+//                                onItemTouchListener.onCardViewTap(v, getPosition());
+//                            }
+//                            break;
+//                        }
+//                        default:
+//                            break;
+//                    }
+//                    return true;
+//                }
+//            });
+//            ripple.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    switch (event.getAction()) {
+//                        case MotionEvent.ACTION_DOWN: {
+//                            startClickTime = Calendar.getInstance().getTimeInMillis();
+//                            break;
+//                        }
+//                        case MotionEvent.ACTION_UP: {
+//                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+//                            if (clickDuration < MAX_CLICK_DURATION) {
+//
+////                                YoYo.with(Techniques.Flash)
+////                                        .duration(1250)
+////                                        .playOn(card);
+//                            }
+//                            break;
+//                        }
+//                        default:
+//                            break;
+//                    }
+//                    return true;
+//                }
+//            });
+
+            ripple.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN: {
-                            startClickTime = Calendar.getInstance().getTimeInMillis();
-                            break;
-                        }
-                        case MotionEvent.ACTION_UP: {
-                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                            if (clickDuration < MAX_CLICK_DURATION) {
-                                onItemTouchListener.onCardViewTap(v, getPosition());
-                            }
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    return true;
-                }
-            });
-            view.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN: {
-                            startClickTime = Calendar.getInstance().getTimeInMillis();
-                            break;
-                        }
-                        case MotionEvent.ACTION_UP: {
-                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                            if (clickDuration < MAX_CLICK_DURATION) {
-                                onItemTouchListener.onCardViewTap(v, getPosition());
-                            }
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    return true;
+                public void onClick(View view) {
+                    onItemTouchListener.onCardViewTap(view, getPosition());
                 }
             });
 
@@ -131,7 +156,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.MyViewHold
         holder.pointCount.setText(store.returnPoint + " ووپ");
 
         // loading album cover using Glide library
-        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).transform(new CircleTransformation()).into(holder.thumbnail);
+        Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
     }
 
     @Override

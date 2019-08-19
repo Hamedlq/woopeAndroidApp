@@ -173,6 +173,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 //    }
 
     String logoUrl;
+    int giftPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +198,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
             profile = (Profile) getIntent().getExtras().getSerializable(PREF_PROFILE);
             savedPayListModel = (PayListModel) getIntent().getExtras().getSerializable(PAY_LIST_ITEM);
             logoUrl = getIntent().getExtras().getString("LogoUrl");
+            giftPrice = getIntent().getExtras().getInt("giftPrice", 0);
             if (savedPayListModel == null) {
                 //fetch from shared preferences because of going to bank page and return
                 profile = getUserProfile();
@@ -353,28 +355,28 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
 
         return_woope.setText(String.valueOf(rw));
         if (!isOnline) {
-            pay_price.setText(commaSeprate(totalPrice));
-            btn.setText("پرداخت (" + commaSeprate(totalPrice) + " تومان)");
+            pay_price.setText(commaSeprate(totalPrice - giftPrice));
+            btn.setText("پرداخت (" + commaSeprate(totalPrice - giftPrice) + " تومان)");
             payPriceValue = totalPrice;
             toman_use.setText("0");
             woope_use.setText("0");
             remain_toman.setText("0");
-            giftWoope.setText(savedPayListModel.extraDiscountWoope);
+            giftWoope.setText(String.valueOf(giftPrice));
         } else {
-            long alpha = totalPrice - profile.getTomanCredit();
-            long beta = totalPrice - (profile.getWoopeCredit() * 1000);
-            long gama = totalPrice - profile.getTomanCredit() - (profile.getWoopeCredit() * 1000);
+            long alpha = totalPrice - giftPrice - profile.getTomanCredit();
+            long beta = totalPrice - giftPrice - (profile.getWoopeCredit() * 1000);
+            long gama = totalPrice - giftPrice - profile.getTomanCredit() - (profile.getWoopeCredit() * 1000);
 
             //    long  remainToman=profile.getTomanCredit()-totalprice;
             toman_use.setText("0");
             if (!switch_credit.isChecked() && !switch_woope.isChecked()) {
-                pay_price.setText(commaSeprate(totalPrice));
-                btn.setText("پرداخت (" + commaSeprate(totalPrice) + " تومان)");
+                pay_price.setText(commaSeprate(totalPrice - giftPrice));
+                btn.setText("پرداخت (" + commaSeprate(totalPrice - giftPrice) + " تومان)");
                 payPriceValue = totalPrice;
                 toman_use.setText("0");
                 woope_use.setText("0");
                 remain_toman.setText("0");
-                giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                giftWoope.setText(String.valueOf(giftPrice));
             }
             if (switch_credit.isChecked() && !switch_woope.isChecked()) {
                 if (alpha == 0) {
@@ -384,7 +386,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 } else if (alpha < 0) {
                     pay_price.setText("0");
                     btn.setText("پرداخت (" + "0" + " تومان)");
@@ -392,7 +394,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 } else if (alpha > 0) {
                     pay_price.setText(commaSeprate(alpha));
                     btn.setText("پرداخت (" + commaSeprate(alpha) + " تومان)");
@@ -400,7 +402,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(profile.getTomanCredit()));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 }
             }
             if (!switch_credit.isChecked() && switch_woope.isChecked()) {
@@ -411,7 +413,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 } else if (beta < 0) {
                     double integerPart = Math.ceil((double) totalPrice / 1000);
                     int remainder = (int) Math.abs(beta % 1000);
@@ -421,7 +423,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText("0");
                     woope_use.setText(String.valueOf(Math.abs(integerPart)));
                     remain_toman.setText(commaSeprate(remainder));
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 } else if (beta > 0) {
                     pay_price.setText(commaSeprate(beta));
                     btn.setText("پرداخت (" + commaSeprate(beta) + " تومان)");
@@ -429,7 +431,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                     toman_use.setText("0");
                     remain_toman.setText("0");
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 }
             }
             if (switch_credit.isChecked() && switch_woope.isChecked()) {
@@ -440,7 +442,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     toman_use.setText(commaSeprate(totalPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
-                    giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                    giftWoope.setText(String.valueOf(giftPrice));
                 } else {
                     if (gama == 0) {
                         pay_price.setText("0");
@@ -449,7 +451,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
-                        giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                        giftWoope.setText(String.valueOf(giftPrice));
                     } else if (gama > 0) {
                         pay_price.setText(commaSeprate(gama));
                         btn.setText("پرداخت (" + commaSeprate(gama) + " تومان)");
@@ -457,7 +459,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(commaSeprate(profile.getWoopeCredit()));
                         remain_toman.setText("0");
-                        giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                        giftWoope.setText(String.valueOf(giftPrice));
                     } else if (gama < 0) {
                         double integerPart = Math.ceil((double) alpha / 1000);
                         int remainder = (int) Math.abs(gama % 1000);
@@ -467,7 +469,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                         toman_use.setText(commaSeprate(profile.getTomanCredit()));
                         woope_use.setText(String.valueOf(Math.abs(integerPart)));
                         remain_toman.setText(String.valueOf(remainder));
-                        giftWoope.setText(savedPayListModel.extraDiscountWoope);
+                        giftWoope.setText(String.valueOf(giftPrice));
                     }
                 }
             }
@@ -887,7 +889,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
         Intent myIntent = new Intent(PayActivity.this, PayCodeActivity.class);
         myIntent.putExtra(PAY_LIST_ITEM, trans); //Optional parameters
         myIntent.putExtra(PREF_PROFILE, profile);
-        myIntent.putExtra("LogoUrl",logoUrl);
+        myIntent.putExtra("LogoUrl", logoUrl);
         //myIntent.putExtra(POINTS_PAYED, payedPoints);
         startActivity(myIntent);
         this.finish();

@@ -59,12 +59,15 @@ import ir.woope.woopeapp.helpers.Utility;
 import ir.woope.woopeapp.interfaces.ProfileInterface;
 import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.Profile;
+import ir.woope.woopeapp.ui.Fragments.home_fragment;
 import ir.woope.woopeapp.ui.Fragments.login_select_fragment;
 import ir.woope.woopeapp.ui.Fragments.main_fragment;
+import ir.woope.woopeapp.ui.Fragments.main_fragment_v2;
 import ir.woope.woopeapp.ui.Fragments.product_home_fragment;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 import ir.woope.woopeapp.ui.Fragments.profile_fragment;
 import ir.woope.woopeapp.ui.Fragments.search_fragment;
+import ir.woope.woopeapp.ui.Fragments.selectActionFragment;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -92,7 +95,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static Activity main;
+    public static MainActivity main;
 
     //boolean doubleBackToExitPressedOnce = false;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
@@ -122,16 +125,20 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView navigation;
 
-    final Fragment homeFragment = new main_fragment();
+    final Fragment homeFragment = new selectActionFragment();
     final Fragment searchFragment = new search_fragment();
-    final Fragment favoritesFragment = new profileBookmarkFragment();
+    final Fragment favoritesFragment = new main_fragment();
     final Fragment productHomeFragment = new product_home_fragment();
     final Fragment profileFragment = new profile_fragment();
     final Fragment loginSelectFragment = new login_select_fragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment active = productHomeFragment;
 
-    Stack<Fragment> pages;
+//    Stack<Fragment> pages;
+
+    Boolean canIntent = true;
+
+//    private static MainActivity instance = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -144,29 +151,29 @@ public class MainActivity extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_home);
                     fm.beginTransaction().hide(active).show(homeFragment).commit();
                     active = homeFragment;
-                    if (pages.get(pages.size() - 1) != homeFragment)
-                        pages.push(homeFragment);
+//                    if (pages.get(pages.size() - 1) != homeFragment)
+//                        pages.push(homeFragment);
                     return true;
 
                 case R.id.navigation_‌search:
 
                     fm.beginTransaction().hide(active).show(searchFragment).commit();
                     active = searchFragment;
-                    if (pages.get(pages.size() - 1) != searchFragment)
-                        pages.push(searchFragment);
+//                    if (pages.get(pages.size() - 1) != searchFragment)
+//                        pages.push(searchFragment);
                     return true;
 
                 case R.id.navigation_favorite:
                     if (IsLogedIn()) {
                         fm.beginTransaction().hide(active).show(favoritesFragment).commit();
                         active = favoritesFragment;
-                        if (pages.get(pages.size() - 1) != favoritesFragment)
-                            pages.push(favoritesFragment);
+//                        if (pages.get(pages.size() - 1) != favoritesFragment)
+//                            pages.push(favoritesFragment);
                     } else {
                         fm.beginTransaction().hide(active).show(loginSelectFragment).commit();
                         active = loginSelectFragment;
-                        if (pages.get(pages.size() - 1) != loginSelectFragment)
-                            pages.push(loginSelectFragment);
+//                        if (pages.get(pages.size() - 1) != loginSelectFragment)
+//                            pages.push(loginSelectFragment);
                     }
 
                     return true;
@@ -175,21 +182,21 @@ public class MainActivity extends AppCompatActivity {
                     if (IsLogedIn()) {
                         fm.beginTransaction().hide(active).show(profileFragment).commit();
                         active = profileFragment;
-                        if (pages.get(pages.size() - 1) != profileFragment)
-                            pages.push(profileFragment);
+//                        if (pages.get(pages.size() - 1) != profileFragment)
+//                            pages.push(profileFragment);
                     } else {
                         fm.beginTransaction().hide(active).show(loginSelectFragment).commit();
                         active = loginSelectFragment;
-                        if (pages.get(pages.size() - 1) != loginSelectFragment)
-                            pages.push(loginSelectFragment);
+//                        if (pages.get(pages.size() - 1) != loginSelectFragment)
+//                            pages.push(loginSelectFragment);
                     }
                     return true;
 
                 case R.id.navigation_woope:
                     fm.beginTransaction().hide(active).show(productHomeFragment).commit();
                     active = productHomeFragment;
-                    if (pages != null)
-                        pages.push(productHomeFragment);
+//                    if (pages.size() == 0 || pages.get(pages.size() - 1) != productHomeFragment)
+//                        pages.push(productHomeFragment);
                     return true;
 
             }
@@ -199,15 +206,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToSearch() {
         View v = navigation.findViewById(R.id.navigation_‌search);
-        if (pages.get(pages.size() - 1) != searchFragment)
-            pages.push(searchFragment);
+//        if (pages.get(pages.size() - 1) != searchFragment)
+//            pages.push(searchFragment);
         v.performClick();
     }
 
     public void switchToOffers() {
         View v = navigation.findViewById(R.id.navigation_woope);
-        if (pages.get(pages.size() - 1) != productHomeFragment)
-            pages.push(productHomeFragment);
+//        if (pages.get(pages.size() - 1) != productHomeFragment)
+//            pages.push(productHomeFragment);
         v.performClick();
     }
 
@@ -258,12 +265,12 @@ public class MainActivity extends AppCompatActivity {
 
         main = this;
 
-        pages = new Stack();
+//        pages = new Stack();
 
         fm.beginTransaction().add(R.id.frame_layout, homeFragment, "1").hide(homeFragment).commit();
         fm.beginTransaction().add(R.id.frame_layout, searchFragment, "2").hide(searchFragment).commit();
-        fm.beginTransaction().add(R.id.frame_layout, profileFragment, PROFILE_FRAGMENT).hide(profileFragment).commit();
-        fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, SEARCH_FRAGMENT).hide(favoritesFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, profileFragment, "5").hide(profileFragment).commit();
+        fm.beginTransaction().add(R.id.frame_layout, favoritesFragment, "4").hide(favoritesFragment).commit();
 
         if (!IsLogedIn()) {
             fm.beginTransaction().add(R.id.frame_layout, loginSelectFragment, LOGIN_SELECT_FRAGMENT).hide(loginSelectFragment).commit();
@@ -346,10 +353,8 @@ public class MainActivity extends AppCompatActivity {
 //                        .replace(R.id.frame_layout, new product_home_fragment(), PRODUCT_HOME_FRAGMENT)
 //                        .commit();
 
-
                 View v = navigation.findViewById(R.id.navigation_woope);
                 v.performClick();
-
 
 //                IsOnHome = false;
 //                IsOnSearch = false;
@@ -383,7 +388,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
-
 
     public Profile getUserProfile() {
         if (profile == null) {
@@ -489,21 +493,45 @@ public class MainActivity extends AppCompatActivity {
         //if (doubleBackToExitPressedOnce) {
 
 //        if (pages.size() > 1) {
-//            View view = navigation.findViewById(pages.get(pages.size() - 2).getId());
-//            view.performClick();
-//            Fragment id = pages.get(pages.size() - 2);
-//            int tag = Integer.valueOf(id.getTag());
-//            navigation.getMenu().getItem(tag).setChecked(true);
-
-//            navigation.setSelectedItemId(pages.get(pages.size() - 2).getId());
-//            fm.beginTransaction().hide(pages.get(pages.size() - 1)).show((Fragment) pages.get(pages.size() - 2)).commit();
-//            pages.pop();
-//            return;
+//            if (pages.get(pages.size() - 2).getTag() == "1") {
+//                View view = navigation.findViewById(R.id.navigation_home);
+//                view.performClick();
+//                pages.pop();
+//                pages.pop();
+//                return;
+//            } else if (pages.get(pages.size() - 2).getTag() == "2") {
+//                View view = navigation.findViewById(R.id.navigation_‌search);
+//                view.performClick();
+//                pages.pop();
+//                pages.pop();
+//                return;
+//            } else if (pages.get(pages.size() - 2).getTag() == "3") {
+//                View view = navigation.findViewById(R.id.navigation_woope);
+//                view.performClick();
+//                pages.pop();
+//                pages.pop();
+//                return;
+//            } else if (pages.get(pages.size() - 2).getTag() == "4") {
+//                View view = navigation.findViewById(R.id.navigation_favorite);
+//                view.performClick();
+//                pages.pop();
+//                pages.pop();
+//                return;
+//            } else if (pages.get(pages.size() - 2).getTag() == "5") {
+//                View view = navigation.findViewById(R.id.navigation_profile);
+//                view.performClick();
+//                pages.pop();
+//                pages.pop();
+//                return;
+//            }
 //        }
-//        if (pages.size() == 1) {
+        if (active == homeFragment) {
             System.exit(1);
             return;
-//        }
+        } else {
+            View view = navigation.findViewById(R.id.navigation_home);
+            view.performClick();
+        }
 //            fm.beginTransaction().add(R.id.frame_layout, (Fragment) pages.get(pages.size() - 2)).hide((Fragment) pages.get(pages.size() - 1)).commit();
 
 
@@ -609,9 +637,13 @@ public class MainActivity extends AppCompatActivity {
 
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 final Throwable cropError = UCrop.getError(data);
+            } else if (requestCode == 10) {
+
             }
+
         }
     }
+
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;
@@ -718,7 +750,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(
             final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -747,7 +778,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
-
 
     public boolean checkPermission_image_capture(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -848,7 +878,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void sendPicToServer(final Bitmap bitmap, final String filePath) {
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -895,5 +924,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void shareText(String text) {
+
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");// Plain format text
+
+        // You can add subject also
+        /*
+         * sharingIntent.putExtra( android.content.Intent.EXTRA_SUBJECT,
+         * "Subject Here");
+         */
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+        startActivityForResult(Intent.createChooser(sharingIntent, "اشتراک گذاری با"), 10);
+    }
+
+
+    public static MainActivity getInstance() {
+        return main;
+    }
 
 }

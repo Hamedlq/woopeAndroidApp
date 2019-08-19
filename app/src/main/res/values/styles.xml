@@ -47,4 +47,9 @@
     <style name="whiteButton" parent="Widget.AppCompat.Button"> <item name="colorButtonNormal">@color/white</item> </style>
     <style name="greenButton" parent="Widget.AppCompat.Button"> <item name="colorButtonNormal">@color/emerald</item> </style>
 
+    <style name="DialogAnimation_2">
+        <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
+        <item name="android:windowExitAnimation">@anim/slide_down_dialog</item>
+    </style>
+
 </resources>

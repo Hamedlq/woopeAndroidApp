@@ -138,7 +138,7 @@ public class profileBookmarkFragment extends Fragment {
         //initCollapsingToolbar();
 
         albumList = new ArrayList<>();
-        adapter = new ProfileBookmarkAdapter(getActivity(), albumList, itemTouchListener);
+//        adapter = new ProfileBookmarkAdapter(getActivity(), albumList, itemTouchListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new ListPaddingDecoration());
@@ -250,7 +250,7 @@ public class profileBookmarkFragment extends Fragment {
 
 
                     //adapter.notifyDataSetChanged();
-                    adapter = new ProfileBookmarkAdapter(getActivity(), albumList, itemTouchListener);
+//                    adapter = new ProfileBookmarkAdapter(getActivity(), albumList, itemTouchListener);
                     /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                     ordersList.setLayoutManager(mLayoutManager);*/
                     recyclerView.setAdapter(adapter);

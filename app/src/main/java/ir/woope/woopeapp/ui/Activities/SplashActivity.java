@@ -8,11 +8,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -76,6 +80,9 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.splash_connecting)
     TextView connecting;
 
+    @BindView(R.id.img_wplogo_eye)
+    ImageView woopeEye;
+
     Retrofit retrofit_splash;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Get the view from new_activity.xml
         setContentView(R.layout.activity_splash);
+
+
 
         Metrix.initialize(this, METRIX_APP_ID);
         Metrix.getInstance().enableLogging(true);
@@ -92,7 +101,15 @@ public class SplashActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        checkVersion();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                checkVersion();
+            }
+        }, 2500);
+
         //GetProfileFromServer();
 
         retry.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +130,11 @@ public class SplashActivity extends AppCompatActivity {
                 .duration(1500)
                 .repeat(9999999)
                 .playOn(connecting);
+
+        YoYo.with(Techniques.FadeIn)
+                .duration(1500)
+                .repeat(9999999)
+                .playOn(woopeEye);
 
     }
 

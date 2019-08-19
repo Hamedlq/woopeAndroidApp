@@ -306,6 +306,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     SharedPreferences settings = getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString(TOKEN, null);
+                    editor.putString(PROFILE, null);
                     editor.apply();
                     Intent goto_splash = new Intent(EditProfileActivity.this,
                             SplashActivity.class);

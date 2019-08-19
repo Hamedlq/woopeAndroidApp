@@ -79,6 +79,7 @@ import ir.woope.woopeapp.ui.Activities.EditProfileActivity;
 import ir.woope.woopeapp.ui.Activities.LoginActivity;
 import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.SplashActivity;
+import ir.woope.woopeapp.ui.Activities.StoreBookmarkActivity;
 import ir.woope.woopeapp.ui.Activities.TransHistoryActivity;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -153,6 +154,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
     public TextView woopeCredit;
     public TextView giftWoope;
     public RelativeLayout history_layout;
+    public CardView storeBookmark_layout;
 
 
     private int avatarSize;
@@ -228,6 +230,7 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
         giftWoope = mRecycler.findViewById(R.id.giftWoopeCount);
 
         history_layout = mRecycler.findViewById(R.id.history_layout);
+        storeBookmark_layout = mRecycler.findViewById(R.id.btn_BookmarkedStores);
         //rvUserProfile=mRecycler.findViewById(R.id.rvUserProfile);
         ivUserProfilePhoto = mRecycler.findViewById(R.id.ivUserProfilePhoto);
         //tlUserProfileTabs = mRecycler.findViewById(R.id.tlUserProfileTabs);
@@ -304,6 +307,16 @@ public class profile_fragment extends Fragment implements RevealBackgroundView.O
                 Intent goto_history = new Intent(getActivity(),
                         TransHistoryActivity.class);
                 getActivity().startActivityForResult(goto_history, 110);
+
+            }
+        });
+        storeBookmark_layout.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+
+                Intent goto_bookmark = new Intent(getActivity(),
+                        StoreBookmarkActivity.class);
+                getActivity().startActivity(goto_bookmark);
 
             }
         });

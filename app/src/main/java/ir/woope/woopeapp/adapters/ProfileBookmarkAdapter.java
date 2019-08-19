@@ -28,6 +28,7 @@ import ir.woope.woopeapp.R;
 import ir.woope.woopeapp.Utils.CircleTransformation;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.StoreBookmarkActivity;
 import ir.woope.woopeapp.ui.Fragments.profileBookmarkFragment;
 
 /**
@@ -40,7 +41,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
     private long startClickTime;
     private float mDownX;
     private float mDownY;
-    private profileBookmarkFragment.BookmarkTouchListener onItemTouchListener;
+    private StoreBookmarkActivity.BookmarkTouchListener onItemTouchListener;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -147,7 +148,7 @@ public class ProfileBookmarkAdapter extends RecyclerView.Adapter<ProfileBookmark
     }
 
 
-    public ProfileBookmarkAdapter(Context mContext, List<Store> albumList, profileBookmarkFragment.BookmarkTouchListener onItemTouchListener) {
+    public ProfileBookmarkAdapter(Context mContext, List<Store> albumList, StoreBookmarkActivity.BookmarkTouchListener onItemTouchListener) {
         this.mContext = mContext;
         this.albumList = albumList;
         this.onItemTouchListener = onItemTouchListener;

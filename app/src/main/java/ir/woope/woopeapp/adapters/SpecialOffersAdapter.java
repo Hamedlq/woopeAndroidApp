@@ -84,7 +84,6 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         TextView weekDay;
         TextView showMore;
         LinearLayout detailsLayout;
-
         CardView discountLayout;
         TextView discountText;
 
@@ -92,6 +91,7 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 
         public MyViewHolder(final View view) {
             super(view);
+            setIsRecyclable(false);
 
             storeName = view.findViewById(R.id.store_name_product_home_item);
 

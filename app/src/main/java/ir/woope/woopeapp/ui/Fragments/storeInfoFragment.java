@@ -135,7 +135,7 @@ public class storeInfoFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_store_info, container, false);
 
         layout = rootView.findViewById(R.id.info_layout);
-        logo = rootView.findViewById(R.id.logo);
+//        logo = rootView.findViewById(R.id.logo);
         backdrop = rootView.findViewById(R.id.backdrop);
         store_name = rootView.findViewById(R.id.store_name);
         store_desc = rootView.findViewById(R.id.store_desc);
@@ -572,11 +572,12 @@ public class storeInfoFragment extends Fragment {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 hideShareProgreeBar();
-                int code = response.body().status;
-                giftWoopeLayout.setEnabled(true);
-                if (code == 101) {
-
-                    shareText(response.body().getMessage());
+                if (response.body() != null) {
+                    int code = response.body().status;
+                    giftWoopeLayout.setEnabled(true);
+                    if (code == 101) {
+                        shareText(response.body().getMessage());
+                    }
                 }
             }
 

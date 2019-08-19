@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,11 +28,20 @@ import ir.woope.woopeapp.adapters.FilterAdapter;
 import ir.woope.woopeapp.adapters.ProfileBookmarkAdapter;
 import ir.woope.woopeapp.helpers.Constants;
 import ir.woope.woopeapp.helpers.ListPaddingDecoration;
+import ir.woope.woopeapp.helpers.Utility;
+import ir.woope.woopeapp.interfaces.StoreInterface;
+import ir.woope.woopeapp.models.ApiResponse;
 import ir.woope.woopeapp.models.MainListModel;
 import ir.woope.woopeapp.models.Profile;
 import ir.woope.woopeapp.models.Store;
+import ir.woope.woopeapp.ui.Activities.MainActivity;
 import ir.woope.woopeapp.ui.Activities.StoreActivity;
 import ir.woope.woopeapp.ui.Activities.StoreListActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 import static ir.woope.woopeapp.helpers.Constants.GlobalConstants.LIST_BRANCHES;
@@ -88,9 +98,9 @@ public class filter_fragment extends Fragment {
         filter_recycler.setItemAnimator(new DefaultItemAnimator());
         filter_recycler.setAdapter(adapter);
 
-        if(hasMoreBranches)
+        if (hasMoreBranches)
             more_store.setVisibility(View.VISIBLE);
-        else if(!hasMoreBranches||hasMoreBranches==null)
+        else if (!hasMoreBranches || hasMoreBranches == null)
             more_store.setVisibility(View.GONE);
 
         more_store.setOnTouchListener(new View.OnTouchListener() {
@@ -113,16 +123,18 @@ public class filter_fragment extends Fragment {
             @Override
             public void onCardViewTap(View view, int position) {
 
+
                 Store s = stores.get(position);
-                final SharedPreferences prefs =
-                        getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
-                Gson gson = new Gson();
-                String json = prefs.getString(PROFILE, "");
-                Profile obj = gson.fromJson(json, Profile.class);
-                Intent myIntent = new Intent(getContext(), StoreActivity.class);
-                myIntent.putExtra(PREF_PROFILE, obj);
-                myIntent.putExtra(STORE, s); //Optional parameters
-                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
+//                final SharedPreferences prefs =
+//                        getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+//                Gson gson = new Gson();
+//                String json = prefs.getString(PROFILE, "");
+//                Profile obj = gson.fromJson(json, Profile.class);
+//                Intent myIntent = new Intent(getContext(), StoreActivity.class);
+//                myIntent.putExtra(PREF_PROFILE, obj);
+//                myIntent.putExtra(STORE, s); //Optional parameters
+//                getActivity().startActivityForResult(myIntent, RELOAD_LIST);
+                shareStore(s.storeId);
 
             }
         };
@@ -130,6 +142,47 @@ public class filter_fragment extends Fragment {
         filter_recycler.setAdapter(adapter);
 
         return mRecycler;
+    }
+
+    private void shareStore(long branchId) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .build();
+        StoreInterface providerApiInterface =
+                retrofit.create(StoreInterface.class);
+
+        SharedPreferences prefs = getContext().getSharedPreferences(Constants.GlobalConstants.MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        String authToken = prefs.getString(Constants.GlobalConstants.TOKEN, "null");
+
+        Call<ApiResponse> call =
+                providerApiInterface.shareStore("bearer " + authToken, branchId);
+
+//        showShareProgreeBar();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+//                hideShareProgreeBar();
+                int code = response.body().status;
+                if (code == 101)
+                    shareText(response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                //Toast.makeText(getActivity(), "failure", Toast.LENGTH_LONG).show();
+//                hideShareProgreeBar();
+                Utility.showSnackbar(getView().findViewById(R.id.main_content), R.string.network_error, Snackbar.LENGTH_LONG);
+            }
+        });
+    }
+
+    private void shareText(String text) {
+
+        if (((MainActivity) getActivity()) != null)
+            ((MainActivity) getActivity()).shareText(text);
+
     }
 
     public interface ItemTouchListener {

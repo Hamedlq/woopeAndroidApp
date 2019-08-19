@@ -51,4 +51,6 @@ public class ApiResponse {
         return status;
     }
 
+    public int giftPrice;
+
 }

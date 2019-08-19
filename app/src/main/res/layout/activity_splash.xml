@@ -5,19 +5,39 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background">
+    android:background="#8c31e0">
+
 
     <ImageView
-        android:id="@+id/img_wplogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/img_wplogo_eye"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
         android:contentDescription=""
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/splash_woope" />
+        android:layout_marginBottom="25dp"
+        app:srcCompat="@drawable/woope_eye"
+        android:layout_marginRight="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/img_wplogo"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:contentDescription=""
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="10dp"
+        app:srcCompat="@drawable/white_woope" />
+
+
 
     <!--<ProgressBar-->
     <!--android:id="@+id/progressBar_splash"-->
@@ -62,7 +82,7 @@
         android:layout_marginBottom="50dp"
         android:background="@drawable/button_border"
         android:text="تلاش مجدد"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="خطای اتصال"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btn_retry"

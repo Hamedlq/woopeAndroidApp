@@ -16,6 +16,7 @@
     <string name="enter_phone_number">شماره موبایل خود را وارد کنید</string>
     <string name="accept">تایید</string>
     <string name="pay">پرداخت</string>
+    <string name="share">به اشتراک بزار</string>
     <string name="username">نام کاربری (Ali1397)</string>
     <string name="password">رمز عبور</string>
     <string name="enter">ورود</string>
@@ -47,7 +48,7 @@
     <string name="support_phoneNumber">021-40445086</string>
     <string name="support_telegram_id">t.me/woope</string>
     <string name="support_website">woope.ir</string>
-    <string name="support_instagram">@woope.ir</string>
+    <string name="support_instagram">woope.ir</string>
     <string name="contact_woope_support">تماس با پشتیبانی ووپ</string>
     <string name="name">نام</string>
     <string name="familyName">نام خانوادگی</string>
@@ -152,7 +153,7 @@ info@woope.ir
     <string name="useWoope">استفاده از ووپ</string>
     <string name="returnWooope">ووپ بازگشتی</string>
     <string name="remainingToman">باقیمانده تومانی</string>
-    <string name="giftWoope">ووپ هدیه</string>
+    <string name="giftWoope">هدیه</string>
 
     <string name="woope">با معرفی این فروشگاه به دوستانتان 5 ووپ به آنها هدیه دهید
         \n
@@ -161,5 +162,22 @@ info@woope.ir
     <string name="chooseZone">انتخاب محله</string>
     <string name="chooseCategory">انتخاب دسته بندی</string>
     <string name="showMore">نمایش بیشتر</string>
+
+
+    <!--<string name="payDialog">فروشگاه ها رو تو شبکه های مجازی-->
+        <!--\n-->
+        <!--به دوستات معرفی کن و ووپ بگیر!</string>-->
+
+    <string name="payDialog">فروشگاه ها رو توی شبکه های مجازی\nبه دوستات معرفی کن و درآمد کسب کن!</string>
+    <string name="earnDialog_1">فروشگاه ها رو تو شبکه های مجازی</string>
+    <string name="earnDialog_2">به دوستات معرفی کن و ووپ بگیر!</string>
+
+    <!--<string name="payDialog_1">پول هایی رو که با معرفی فروشگاه ها</string>-->
+    <!--<string name="payDialog_2">جمع کردی،خرج کن!</string>-->
+
+    <string name="payDialog_1">به فروشگاه ها پرداخت کن</string>
+    <string name="payDialog_2">و از تخفیفاتشون استفاده کن</string>
+
+
 
 </resources>
