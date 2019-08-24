@@ -175,6 +175,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
     String logoUrl;
     int giftPrice;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -383,7 +384,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     pay_price.setText("0");
                     btn.setText("پرداخت (" + "0" + " تومان)");
                     payPriceValue = 0;
-                    toman_use.setText(commaSeprate(totalPrice));
+                    toman_use.setText(commaSeprate(totalPrice-giftPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     giftWoope.setText(String.valueOf(giftPrice));
@@ -391,7 +392,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     pay_price.setText("0");
                     btn.setText("پرداخت (" + "0" + " تومان)");
                     payPriceValue = 0;
-                    toman_use.setText(commaSeprate(totalPrice));
+                    toman_use.setText(commaSeprate(totalPrice-giftPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     giftWoope.setText(String.valueOf(giftPrice));
@@ -439,7 +440,7 @@ public class PayActivity extends AppCompatActivity implements View.OnTouchListen
                     pay_price.setText("0");
                     btn.setText("پرداخت (" + "0" + " تومان)");
                     payPriceValue = 0;
-                    toman_use.setText(commaSeprate(totalPrice));
+                    toman_use.setText(commaSeprate(totalPrice-giftPrice));
                     woope_use.setText("0");
                     remain_toman.setText("0");
                     giftWoope.setText(String.valueOf(giftPrice));

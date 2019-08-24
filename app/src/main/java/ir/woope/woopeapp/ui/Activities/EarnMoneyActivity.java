@@ -378,7 +378,7 @@ public class EarnMoneyActivity extends AppCompatActivity {
         if (!searchInProgress) {
             searchInProgress = true;
             Call<List<Store>> call =
-                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery, pageNumber, zones, categoryId, sortType,true);
+                    providerApiInterface.FindStoreByPage("bearer " + authToken, storeQuery, pageNumber, zones, categoryId, sortType, true);
 
             call.enqueue(new Callback<List<Store>>() {
                 @Override
@@ -563,7 +563,7 @@ public class EarnMoneyActivity extends AppCompatActivity {
 
     private List<CategoryModel> categoryList = new ArrayList<>();
     int catWhich = 0;
-
+    Boolean CatFirst=true;
     private void getCategories() {
         showProgreeBar();
         Retrofit retrofit = new Retrofit.Builder()
@@ -589,7 +589,9 @@ public class EarnMoneyActivity extends AppCompatActivity {
                 if (code == 200) {
                     hideProgreeBar();
                     categoryList = response.body();
+                    if(CatFirst){
                     selectedCat.setText(categoryList.get(0).name);
+                    CatFirst=false;}
                     categoryId = categoryList.get(0).id;
                     List<CategoryModel> list = response.body();
                     ArrayList<String> arrList = new ArrayList<>();
@@ -617,6 +619,7 @@ public class EarnMoneyActivity extends AppCompatActivity {
                                                     PageNumber = 0;
                                                     findStoresByPage("", PageNumber, searchableZoneList, categoryId, sortId);
                                                     dialog.dismiss();
+                                                    getCategories();
                                                     break;
                                                 }
                                             }
@@ -638,6 +641,7 @@ public class EarnMoneyActivity extends AppCompatActivity {
 
     private List<SortType> sortList = new ArrayList<>();
     int sortWhich = 0;
+    Boolean SortFirst = true;
 
     private void getSortTypes() {
         showProgreeBar();
@@ -665,7 +669,10 @@ public class EarnMoneyActivity extends AppCompatActivity {
                 if (code == 200) {
                     hideProgreeBar();
                     sortList = response.body();
-                    selectedSort.setText(sortList.get(0).name);
+                    if (SortFirst) {
+                        selectedSort.setText(sortList.get(0).name);
+                        SortFirst = false;
+                    }
                     sortId = sortList.get(0).id;
                     List<SortType> list = response.body();
                     ArrayList<String> arrList = new ArrayList<>();
@@ -692,6 +699,7 @@ public class EarnMoneyActivity extends AppCompatActivity {
                                                     findStoresByPage("", PageNumber, searchableZoneList, categoryId, sortId);
                                                     selectedSort.setText(item[which]);
                                                     dialog.dismiss();
+                                                    getSortTypes();
                                                     break;
                                                 }
                                             }

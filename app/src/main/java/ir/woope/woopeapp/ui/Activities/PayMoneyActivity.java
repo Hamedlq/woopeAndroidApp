@@ -794,7 +794,7 @@ public class PayMoneyActivity extends AppCompatActivity {
 
     private List<CategoryModel> categoryList = new ArrayList<>();
     int catWhich = 0;
-
+    Boolean CatFirst = true;
     private void getCategories() {
         showProgreeBar();
         Retrofit retrofit = new Retrofit.Builder()
@@ -820,7 +820,9 @@ public class PayMoneyActivity extends AppCompatActivity {
                 if (code == 200) {
                     hideProgreeBar();
                     categoryList = response.body();
-                    selectedCat.setText(categoryList.get(0).name);
+                    if(CatFirst){
+                        selectedCat.setText(categoryList.get(0).name);
+                        CatFirst=false;}
                     categoryId = categoryList.get(0).id;
                     List<CategoryModel> list = response.body();
                     ArrayList<String> arrList = new ArrayList<>();
@@ -846,6 +848,7 @@ public class PayMoneyActivity extends AppCompatActivity {
                                                     categoryId = s.id;
                                                     adapter.emptyList();
                                                     PageNumber = 0;
+                                                    isFirst=true;
                                                     findStoresByPage("", PageNumber, searchableZoneList, categoryId, sortId);
                                                     dialog.dismiss();
                                                     break;
@@ -869,7 +872,7 @@ public class PayMoneyActivity extends AppCompatActivity {
 
     private List<SortType> sortList = new ArrayList<>();
     int sortWhich = 0;
-
+    Boolean SortFirst = true;
     private void getSortTypes() {
         showProgreeBar();
 
@@ -896,7 +899,10 @@ public class PayMoneyActivity extends AppCompatActivity {
                 if (code == 200) {
                     hideProgreeBar();
                     sortList = response.body();
-                    selectedSort.setText(sortList.get(0).name);
+                    if (SortFirst) {
+                        selectedSort.setText(sortList.get(0).name);
+                        SortFirst = false;
+                    }
                     sortId = sortList.get(0).id;
                     List<SortType> list = response.body();
                     ArrayList<String> arrList = new ArrayList<>();
@@ -920,6 +926,7 @@ public class PayMoneyActivity extends AppCompatActivity {
                                                     sortId = s.id;
                                                     adapter.emptyList();
                                                     PageNumber = 0;
+                                                    isFirst=true;
                                                     findStoresByPage("", PageNumber, searchableZoneList, categoryId, sortId);
                                                     selectedSort.setText(item[which]);
                                                     dialog.dismiss();

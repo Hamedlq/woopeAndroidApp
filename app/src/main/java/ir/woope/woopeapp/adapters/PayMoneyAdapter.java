@@ -178,7 +178,7 @@ public class PayMoneyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                }
 
                 // loading album cover using Glide library
-                Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.coverSrc).into(holder.thumbnail);
+                Picasso.with(mContext).load(Constants.GlobalConstants.LOGO_URL + store.logoSrc).into(holder.thumbnail);
 
                 break;
         }

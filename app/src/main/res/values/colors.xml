@@ -18,7 +18,7 @@
     <color name="btn_send_pressed">#006633</color>
 
     <color name="gray">#f0f4f4f4</color>
-    <color name="dark_gray_trans">#64787878</color>
+    <color name="dark_gray_trans">#c8787878</color>
     <color name="grayy">#96d7d7d7</color>
 
     <color name="btn_logout_normal">#c70209</color>
